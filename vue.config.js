@@ -11,7 +11,7 @@ module.exports = {
                 "productName": "E-SCHOOL",
                 "publish":{
                     "provider":"github",
-                    "token":""
+                    "owner":"channvuthy271",
                 },
                 "win": {
                     "target": [

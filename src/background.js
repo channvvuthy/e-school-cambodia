@@ -6,8 +6,38 @@ const ytdl = require('ytdl-core');
 let {CookieMap} = require('cookiefile/http-cookiefile')
 let cookieFile = new CookieMap(path.join(__static, 'cookies.txt'));
 const cookies = cookieFile.toRequestHeader().replace('Cookie: ', '');
+const {autoUpdater} = require('electron-updater')
 
-const {autoUpdater} = require('electron-updater');
+// Setup logger
+autoUpdater.logger = require('electron-log')
+autoUpdater.logger.transports.file.level = 'info'
+
+// Setup updater events
+autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for updateds ...')
+});
+autoUpdater.on('update-available', (info) => {
+    console.log('Update available')
+    console.log('Version', info.version)
+    console.log('Release date', info.releaseDate)
+});
+
+autoUpdater.on("update-not-available", () => {
+    console.log('Update not available')
+});
+
+autoUpdater.on('download-progress', (progress) => {
+    console.log(`Progress ${Math.floor(progress.percentage)}`);
+})
+
+autoUpdater.on("update-downloaded", () => {
+    console.log('Update downloaded')
+    autoUpdater.quitAndInstall()
+});
+autoUpdater.on('err', (error) => {
+    console.error(error)
+})
+
 
 import {
     app,
@@ -142,10 +172,6 @@ async function createWindow() {
     win.setTitle("E-SCHOOL")
     win.setMenu(null);
     win.maximize();
-    win.once('ready-to-show', () => {
-        autoUpdater.checkForUpdatesAndNotify();
-    })
-
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
@@ -153,9 +179,11 @@ async function createWindow() {
         if (!process.env.IS_loadingScreen) win.webContents.openDevTools()
     } else {
 
+
         createProtocol('app');
         // Load the index.html when not in development
         win.loadURL('app://./index.html')
+        autoUpdater.checkForUpdates();
     }
 }
 // Quit when all windows are closed.
