@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@font-face {
+    font-family: 'khmer os';
+    src: url('./../../../public/font/battambang.ttf')
+}
+@font-face {
+    font-family: 'Mukta.ttf';
+    src: url('./../../../public/font/Mukta.ttf')
+}
+
+@tailwind utilities;
