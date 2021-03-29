@@ -123,7 +123,7 @@
             },
 
             log(err){
-
+                console.log(err)
             },
             showListData(){
                 this.showList = !this.showList

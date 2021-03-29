@@ -22,7 +22,7 @@
                         </div>
                         <div>
                             <div v-if="partner.type === 1">
-                                <div v-for="(pk, key) in partner.packages">
+                                <div v-for="(pk, key) in partner.packages" :key="pk">
                                     <div class="flex justify-center p-0">
                                         <img :src="pk.thumbnail" class="img w-full rounded-b-lg"
                                              :style="{maxHeight:image.height?`${image.height}px`:''}"
