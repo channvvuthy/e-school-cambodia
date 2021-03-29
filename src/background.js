@@ -14,7 +14,7 @@ autoUpdater.logger.transports.file.level = 'info'
 
 // Setup updater events
 autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for updateds ...')
+    console.log('Checking for updates ...')
 });
 autoUpdater.on('update-available', (info) => {
     console.log('Update available')
