@@ -14,7 +14,6 @@ publish:
   owner: channvuthy271
   host: github.com
   protocol: https
-  token: <stripped sensitive data>
   releaseType: release
 win:
   target:

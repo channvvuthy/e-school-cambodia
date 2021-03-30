@@ -15,7 +15,6 @@ module.exports = {
                     "owner":"channvuthy271",
                     "host":"github.com",
                     "protocol":"https",
-                    "token":"0be5711f8255e99370fc465ae1a6305ae811b10c",
                    "releaseType":"release",
                 },
                 "win": {
