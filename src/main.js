@@ -45,6 +45,6 @@ new Vue({
     store,
     render: h => h(App),
     created(){
-        store.dispatch('online/onlineOffline')
+        store.dispatch('online/onlineOffline');
     }
 }).$mount('#app');

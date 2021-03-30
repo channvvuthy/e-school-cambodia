@@ -29,6 +29,9 @@
                 </div>
             </div>
         </div>
+        <UpdateVersion v-if="showUpdate" :version="version" @dismiss="dismiss"
+                       @updateVersion="updateVersion"></UpdateVersion>
+        <DownloadingNewVersion v-if="showDownloading"></DownloadingNewVersion>
     </div>
 </template>
 <script>
@@ -37,12 +40,26 @@
     import Search from "./views/Search/Search.vue";
     import FilterClass from "./views/Filter/FilterClass.vue";
     import {mapState, mapActions} from "vuex"
+    import axios from 'axios'
+    import config from "./config"
+    import UpdateVersion from "./components/UpdateVersion"
+    import DownloadingNewVersion from "./components/DownloadingNewVersion"
+    const {ipcRenderer} = require('electron')
 
 
     export default {
         components: {
             Sidebar,
-            Menu, Search, FilterClass
+            Menu, Search, FilterClass,
+            UpdateVersion,
+            DownloadingNewVersion
+        },
+        data(){
+            return {
+                showUpdate: false,
+                showDownloading: false,
+                version: "",
+            }
         },
 
         computed: {
@@ -50,7 +67,25 @@
         },
 
         methods: {
-            ...mapActions('auth', ['getStudentProfile'])
+            ...mapActions('auth', ['getStudentProfile']),
+            ...mapActions('setting', ['checkingAppVersion']),
+
+            dismiss(){
+                this.showUpdate = false
+            },
+
+            updateVersion(){
+                this.showUpdate = false
+                ipcRenderer.send("updateVersion", this.version)
+            }
+        },
+        mounted(){
+            axios.get(config.checkingVersionUrl).then(res => {
+                if (res.data[0].version !== config.appVersion) {
+                    this.showUpdate = true
+                    this.version = res.data[0].version
+                }
+            })
         },
         created(){
             if (!this.stProfile.first_name && !this.stProfile.last_name) {
@@ -58,6 +93,9 @@
                     this.getStudentProfile(JSON.parse(localStorage.getItem('stProfile')))
                 }
             }
+            ipcRenderer.on("checking-for-update", (event, arg) => {
+                this.showDownloading = true
+            })
 
         }
     };

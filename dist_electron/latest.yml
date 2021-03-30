@@ -1,8 +1,8 @@
-version: 3.2.3
+version: 3.3.4
 files:
-  - url: E-SCHOOL-Setup-3.2.3.exe
-    sha512: UQe13r0XTo/0OCGiGYVuIYUwqQSr32DcwYxwdeqJm/AliXuV/sNLAymCD1OjB1mqg8P3BqvowBFXVQH6E9N9UA==
-    size: 99063358
-path: E-SCHOOL-Setup-3.2.3.exe
-sha512: UQe13r0XTo/0OCGiGYVuIYUwqQSr32DcwYxwdeqJm/AliXuV/sNLAymCD1OjB1mqg8P3BqvowBFXVQH6E9N9UA==
-releaseDate: '2021-03-30T07:01:52.420Z'
+  - url: E-SCHOOL-Setup-3.3.4.exe
+    sha512: S9lkaduZRvGhGVEZuLlnMvr+GeNeGd1jenvVV7bfYNBkqAxTBrHXxK+zozbt9enJNc4Lo4lO6mFIU4ClIfVPiw==
+    size: 99063052
+path: E-SCHOOL-Setup-3.3.4.exe
+sha512: S9lkaduZRvGhGVEZuLlnMvr+GeNeGd1jenvVV7bfYNBkqAxTBrHXxK+zozbt9enJNc4Lo4lO6mFIU4ClIfVPiw==
+releaseDate: '2021-03-30T15:45:43.385Z'

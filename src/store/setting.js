@@ -42,7 +42,6 @@ export  default {
                 })
             }
         },
-
         getSchool({commit}, province_id){
             commit("gettingSchool", true)
             return new Promise((resolve, reject) => {

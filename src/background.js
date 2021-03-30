@@ -7,45 +7,12 @@ let {CookieMap} = require('cookiefile/http-cookiefile')
 let cookieFile = new CookieMap(path.join(__static, 'cookies.txt'));
 const cookies = cookieFile.toRequestHeader().replace('Cookie: ', '');
 const {autoUpdater} = require('electron-updater')
-
-// Setup logger
-autoUpdater.logger = require('electron-log')
-autoUpdater.logger.transports.file.level = 'info'
-
-// Setup updater events
-autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for updates ...')
-});
-autoUpdater.on('update-available', (info) => {
-    console.log('Update available')
-    console.log('Version', info.version)
-    console.log('Release date', info.releaseDate)
-});
-
-autoUpdater.on("update-not-available", () => {
-    console.log('Update not available')
-});
-
-autoUpdater.on('download-progress', (progress) => {
-    console.log(`Progress ${Math.floor(progress.percentage)}`);
-})
-
-autoUpdater.on("update-downloaded", () => {
-    console.log('Update downloaded')
-    autoUpdater.quitAndInstall()
-});
-autoUpdater.on('err', (error) => {
-    console.error(error)
-})
-
-
 import {
     app,
     protocol,
     BrowserWindow,
     ipcMain,
     shell,
-    dialog,
 } from 'electron'
 
 import {
@@ -54,6 +21,10 @@ import {
 
 
 import axios from "axios"
+
+// Setup logger
+autoUpdater.logger = require('electron-log')
+autoUpdater.logger.transports.file.level = 'info'
 
 const downloadFile = async (fileUrl, info) => {
     // Get the file name
@@ -101,6 +72,9 @@ protocol.registerSchemesAsPrivileged([{
     }
 }]);
 
+ipcMain.on("updateVersion", (event, arg) => {
+    autoUpdater.checkForUpdates()
+})
 
 ipcMain.on("download", (event, arg) => {
     ytdl.getBasicInfo("https://www.youtube.com/watch?v=" + arg.video_youtube, opt).then(res => {
@@ -183,7 +157,6 @@ async function createWindow() {
         createProtocol('app');
         // Load the index.html when not in development
         win.loadURL('app://./index.html')
-        autoUpdater.checkForUpdates();
     }
 }
 // Quit when all windows are closed.
@@ -223,3 +196,17 @@ if (isDevelopment) {
         })
     }
 }
+
+
+// Setup updater events
+autoUpdater.on('checking-for-update', () => {
+    win.webContents.send("checking-for-update")
+});
+
+autoUpdater.on("update-downloaded", () => {
+    autoUpdater.quitAndInstall()
+});
+
+autoUpdater.on('err', (error) => {
+    console.error(error)
+})
