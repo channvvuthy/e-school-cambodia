@@ -80,12 +80,14 @@
             }
         },
         mounted(){
-            axios.get(config.checkingVersionUrl).then(res => {
-                if (res.data[0].version !== config.appVersion) {
-                    this.showUpdate = true
-                    this.version = res.data[0].version
-                }
-            })
+            if (localStorage.getItem("stProfile") !== undefined || localStorage.getItem("stProfile") !== null) {
+                axios.get(config.checkingVersionUrl).then(res => {
+                    if (res.data[0].version !== config.appVersion) {
+                        this.showUpdate = true
+                        this.version = res.data[0].version
+                    }
+                })
+            }
         },
         created(){
             if (!this.stProfile.first_name && !this.stProfile.last_name) {

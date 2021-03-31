@@ -5,6 +5,7 @@ Vue.use(VueSweetalert2);
 import helper from "./helper";
 import store from "./../store"
 import router from "./../router/"
+const {ipcRenderer} = require('electron')
 
 const err = (msg, type = 1) => {
     Vue.swal.fire({
@@ -28,6 +29,17 @@ const connectionErr = (msg) => {
         confirmButtonText: helper.gender() === "F" ? 'ចាស់' : 'បាទ',
     }).then((result) => {
         if (result.isConfirmed) {
+            console.log("connectionError")
+        }
+    })
+}
+const congratulation = (msg, url) => {
+    Vue.swal.fire({
+        title: msg,
+        confirmButtonText: helper.gender() === "F" ? 'ចាស់' : 'បាទ',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            ipcRenderer.send("openLink", url)
         }
     })
 }
@@ -43,5 +55,6 @@ const forgotPassword = (msg) => {
 export default {
     err,
     forgotPassword,
-    connectionErr
+    connectionErr,
+    congratulation
 }

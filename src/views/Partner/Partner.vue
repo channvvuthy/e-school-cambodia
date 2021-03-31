@@ -22,7 +22,7 @@
                         </div>
                         <div>
                             <div v-if="partner.type === 1">
-                                <div v-for="(pk, key) in partner.packages" :key="pk">
+                                <div v-for="(pk, key) in partner.packages" :key="key">
                                     <div class="flex justify-center p-0">
                                         <img :src="pk.thumbnail" class="img w-full rounded-b-lg"
                                              :style="{maxHeight:image.height?`${image.height}px`:''}"
@@ -96,6 +96,7 @@
     import Message from "./../MyCourse/components/Message"
     import Cart from "./../MyCourse/components/Cart"
     const {ipcRenderer} = require('electron')
+    import err from "./../../helper/err"
     export default{
         components: {
             Loading,
@@ -151,7 +152,12 @@
                         }
                         this.errMessage = response.msg
                     } else {
-                        ipcRenderer.send("openLink", response.data.url)
+                        if (response.data.msg !== undefined) {
+                            err.congratulation(response.data.msg, response.data.url)
+                        } else {
+                            ipcRenderer.send("openLink", response.data.url)
+                        }
+
                     }
                 })
             },
