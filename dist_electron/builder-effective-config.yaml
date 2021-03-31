@@ -22,4 +22,6 @@ win:
         - x64
         - ia32
   icon: build/icons/icon.ico
+linux:
+  target: deb
 electronVersion: 7.3.3

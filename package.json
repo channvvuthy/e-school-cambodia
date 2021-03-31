@@ -1,7 +1,12 @@
 {
   "name": "e-school",
   "version": "3.2.5",
-  "author": "e-school",
+  "author":{
+    "name": "e-school",
+    "email":"channvuthyit@gmail.com"
+    
+  },
+  "maintainer":"channvuthy",
   "description": " E-SCHOOL CAMBODIA. ជាគេហទំព័រសម្រាប់ រៀនគួរត្រៀមប្រលងបាក់ឌុប តាម Online",
   "repository": {
     "type": "git",

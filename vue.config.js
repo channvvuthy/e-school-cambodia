@@ -29,6 +29,9 @@ module.exports = {
                     ],
                     "icon":"build/icons/icon.ico"
                 },
+                "linux":{
+                    "target":"deb"
+                }
             }
         }
     }
