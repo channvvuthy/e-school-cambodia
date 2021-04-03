@@ -31,7 +31,18 @@ module.exports = {
                 },
                 "linux":{
                     "target":"deb"
-                }
+                },
+                "mac":{
+                    "target": [
+                        "dmg",
+                        "zip"
+                    ],
+                    "category":"education",
+                    "icon":"build/icons/icon.icns"
+                },
+                "dmg": {
+                    "sign": false
+                },
             }
         }
     }

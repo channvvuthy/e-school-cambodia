@@ -1,12 +1,11 @@
 {
   "name": "e-school",
   "version": "3.2.5",
-  "author":{
+  "author": {
     "name": "e-school",
-    "email":"channvuthyit@gmail.com"
-    
+    "email": "channvuthyit@gmail.com"
   },
-  "maintainer":"channvuthy",
+  "maintainer": "channvuthy",
   "description": " E-SCHOOL CAMBODIA. ជាគេហទំព័រសម្រាប់ រៀនគួរត្រៀមប្រលងបាក់ឌុប តាម Online",
   "repository": {
     "type": "git",
@@ -50,6 +49,7 @@
     "sass-loader": "^10.1.1",
     "socket.io": "^3.1.1",
     "socket.io-client": "^3.1.1",
+    "sudo-prompt": "^9.2.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "vue": "^2.6.11",
     "vue-axios-cors": "^1.0.1",

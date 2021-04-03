@@ -24,4 +24,12 @@ win:
   icon: build/icons/icon.ico
 linux:
   target: deb
+mac:
+  target:
+    - dmg
+    - zip
+  category: education
+  icon: build/icons/icon.icns
+dmg:
+  sign: false
 electronVersion: 7.3.3

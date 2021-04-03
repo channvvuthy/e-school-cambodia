@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <UpdateVersion v-if="showUpdate" :version="version" @dismiss="dismiss"
+        <UpdateVersion v-if="showUpdate" @dismiss="dismiss"
                        @updateVersion="updateVersion"></UpdateVersion>
         <DownloadingNewVersion v-if="showDownloading"></DownloadingNewVersion>
     </div>
@@ -58,7 +58,6 @@
             return {
                 showUpdate: false,
                 showDownloading: false,
-                version: "",
             }
         },
 
@@ -81,12 +80,13 @@
         },
         mounted(){
             if (localStorage.getItem("stProfile") !== undefined || localStorage.getItem("stProfile") !== null) {
-                axios.get(config.checkingVersionUrl).then(res => {
-                    if (res.data[0].version !== config.appVersion) {
+                axios.get(config.checkingVersionUrl+"update?os=mac&version="+config.appVersion).then(res => {
+                    if (res.data.data.is_update ===1 ) {
                         this.showUpdate = true
-                        this.version = res.data[0].version
+                        
                     }
                 })
+
             }
         },
         created(){
@@ -95,7 +95,7 @@
                     this.getStudentProfile(JSON.parse(localStorage.getItem('stProfile')))
                 }
             }
-            ipcRenderer.on("checking-for-update", (event, arg) => {
+            ipcRenderer.on("checking-for-update", () => {
                 this.showDownloading = true
             })
 

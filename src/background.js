@@ -6,6 +6,9 @@ const ytdl = require('ytdl-core');
 let {CookieMap} = require('cookiefile/http-cookiefile')
 let cookieFile = new CookieMap(path.join(__static, 'cookies.txt'));
 const cookies = cookieFile.toRequestHeader().replace('Cookie: ', '');
+
+var sudo = require("sudo-prompt");
+
 const {autoUpdater} = require('electron-updater')
 import {
     app,
@@ -26,6 +29,26 @@ import axios from "axios"
 autoUpdater.logger = require('electron-log')
 autoUpdater.logger.transports.file.level = 'info'
 
+function chmodDirectory(directory){
+    fs.access(directory, fs.constants.R_OK | fs.constants.W_OK, (err)=>{
+        if(err){
+            var options = {
+                name:"ESCHOOL",
+                icon: path.join(__static,'icon.png')
+            }
+
+            sudo.exec(`chmod -R 777 ${directory}`,options,function(error, stdout,stderr){
+                if(error) throw error
+                return error
+
+            })
+        }else{
+            return false
+        }
+    });
+}
+
+
 const downloadFile = async (fileUrl, info) => {
     // Get the file name
     const fileName = info._id
@@ -33,9 +56,12 @@ const downloadFile = async (fileUrl, info) => {
     const myInstalledDir = path.join(app.getAppPath(), "..", "..", "ESCHOOL", fileName);
     //write something to root installation folder
     let dir = path.join(app.getAppPath(), "..", "..", "ESCHOOL");
+    chmodDirectory(path.join(app.getAppPath(), "..", ".."))
+
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
+    
     try {
         const response = await axios({
             method: "GET",
@@ -134,7 +160,6 @@ async function createWindow() {
     win = new BrowserWindow({
         minWidth: 1250,
         minHeight: 760,
-        show: false,
         webPreferences: {
             devTools: true,
             webSecurity: false,
