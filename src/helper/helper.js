@@ -38,7 +38,7 @@ const deviceId = () => {
 
 // Get os of platform
 const deviceOs = () => {
-    return os.platform()
+    return "windows"
 }
 
 // Calculate price in duration

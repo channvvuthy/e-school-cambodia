@@ -15,6 +15,8 @@ module.exports = {
         colors: {
             transparent: 'transparent',
             current: 'currentColor',
+            primary: '#0f3c7a',
+
             custom: '#00a0e4',
             success: '#40b366',
             black: colors.black,
@@ -113,7 +115,7 @@ module.exports = {
         borderColor: (theme) => ({
             ...theme('colors'),
             DEFAULT: theme('colors.gray.200', 'currentColor'),
-            'primary': '#00a0e4',
+            'primary': '#0f3c7a',
         }),
         borderOpacity: (theme) => theme('opacity'),
         borderRadius: {

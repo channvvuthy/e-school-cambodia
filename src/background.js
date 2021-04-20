@@ -13,6 +13,8 @@ import {
     BrowserWindow,
     ipcMain,
     shell,
+    Tray,
+    Menu
 } from 'electron'
 
 import {
@@ -126,9 +128,11 @@ ipcMain.on("nextVideo", async (event, arg) => {
 })
 
 let win
+let appIcon = null
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
 })
+
 async function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
@@ -146,6 +150,10 @@ async function createWindow() {
     win.setTitle("E-SCHOOL")
     win.setMenu(null);
     win.maximize();
+    win.on("close", (event) => {
+        win.hide()
+        event.preventDefault()
+    })
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
@@ -159,6 +167,22 @@ async function createWindow() {
         win.loadURL('app://./index.html')
     }
 }
+
+const gotTheLock = app.requestSingleInstanceLock()
+
+if (!gotTheLock) {
+    app.quit()
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (win) {
+            if (win.isMinimized()) win.restore()
+            win.show()
+        }
+    })
+}
+
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
@@ -167,7 +191,6 @@ app.on('window-all-closed', () => {
         app.quit()
     }
 });
-
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -180,6 +203,24 @@ app.on('ready', async () => {
     createWindow()
 });
 app.name = "E-SCHOOL"
+
+app.whenReady().then(() => {
+    appIcon = new Tray(path.join(__static, 'icon.ico'))
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Exit', type: 'normal', click: () => {
+            app.exit(0)
+        }
+        },
+    ])
+    appIcon.setToolTip('E-SCHOOL')
+    appIcon.setContextMenu(contextMenu)
+
+    appIcon.on("click", () => {
+        win.isVisible() ? win.hide() : win.show()
+    })
+
+})
 
 
 // Exit cleanly on request from parent process in development mode.

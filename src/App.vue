@@ -1,110 +1,49 @@
 <template>
-    <div id="app">
-        <div v-if="$route.name == 'login' || $route.name == 'change-password'  ">
-            <router-view/>
-        </div>
-        <div class="flex  max-h-screen" v-else>
-            <div class="w-60 fixed border border-b-0 border-l-0 border-gray-200 min-h-screen">
-                <sidebar :stProfile="stProfile"/>
+    <div>
+        <div class="flex">
+            <div>
+                <!--Sidebar-->
+                <Sidebar/>
             </div>
-            <div class="ml-60 flex-1">
-                <div class="border border-b-0 border-l-0 border-gray-200">
-                    <Menu/>
-                    <div class="flex justify-between items-center px-5 bg-white"
-                         :class="$route.name !=='change-profile' && $route.name !=='about' &&
-                          $route.name !=='lock' && $route.name !=='discuss'&& $route.name !=='test'
-                           && $route.name !=='term' && $route.name !=='guardian'
-                            && $route.name !=='insurance' && $route.name !=='invoice' && $route.name !=='course-detail'
-                             && $route.name !=='help'  && $route.name !=='partner'
-                             && $route.name !=='download'  && $route.name !=='download-detail'
-                           && $route.name !=='other'?'border border-t-0 border-r-0 border-l-0 border-gray-200 ':''">
-                        <Search/>
-                        <div>
-                            <FilterClass/>
+            <div class="w-full bg-white shadow-md h-32 flex items-end"
+                 :style="isHide?{marginLeft:'0px'}:{marginLeft:'385px'}">
+                <div class="menu px-14">
+                    <div class="grid grid-cols-5 gap-20">
+                        <div class="flex flex-col justify-center items-center cursor-pointer">
+                            <img src="/icon/Menu/Group 3@2x.png" class="h-6"/>
+                            <p class="py-1 text-sm color-primary">Home</p>
+                            <div class="border border-primary border-r-0 border-l-0 bg-primary w-full"></div>
                         </div>
-                    </div>
-                    <div>
-                        <router-view/>
+                        <div class="flex flex-col justify-center items-center cursor-pointer">
+                            <img src="/icon/Menu/Video@2x.png" class="h-6"/>
+                            <p class="py-1 text-sm">Video</p>
+                        </div>
+                        <div class="flex flex-col justify-center items-center cursor-pointer">
+                            <img src="/icon/Menu/Library@2x.png" class="h-6"/>
+                            <p class="py-1 text-sm">Library</p>
+                        </div>
+                        <div class="flex flex-col justify-center items-center cursor-pointer">
+                            <img src="/icon/Menu/Partner@2x.png" class="h-6"/>
+                            <p class="py-1 text-sm">Partner</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <UpdateVersion v-if="showUpdate" :version="version" @dismiss="dismiss"
-                       @updateVersion="updateVersion"></UpdateVersion>
-        <DownloadingNewVersion v-if="showDownloading"></DownloadingNewVersion>
     </div>
 </template>
 <script>
-    import Sidebar from "./views/Sidebar/Sidebar.vue";
-    import Menu from "./views/Menu/Menu.vue";
-    import Search from "./views/Search/Search.vue";
-    import FilterClass from "./views/Filter/FilterClass.vue";
-    import {mapState, mapActions} from "vuex"
-    import axios from 'axios'
-    import config from "./config"
-    import UpdateVersion from "./components/UpdateVersion"
-    import DownloadingNewVersion from "./components/DownloadingNewVersion"
-    const {ipcRenderer} = require('electron')
-
-
-    export default {
-        components: {
-            Sidebar,
-            Menu, Search, FilterClass,
-            UpdateVersion,
-            DownloadingNewVersion
-        },
+    import Sidebar from "./views/Sidebar/Sidebar.vue"
+    import {mapState} from "vuex"
+    export default{
         data(){
-            return {
-                showUpdate: false,
-                showDownloading: false,
-                version: "",
-            }
+            return {}
         },
-
+        components: {
+            Sidebar
+        },
         computed: {
-            ...mapState('auth', ['stProfile']),
+            ...mapState('setting', ['isHide'])
         },
-
-        methods: {
-            ...mapActions('auth', ['getStudentProfile']),
-            ...mapActions('setting', ['checkingAppVersion']),
-
-            dismiss(){
-                this.showUpdate = false
-            },
-
-            updateVersion(){
-                this.showUpdate = false
-                ipcRenderer.send("updateVersion", this.version)
-            }
-        },
-        mounted(){
-            if (localStorage.getItem("stProfile") !== undefined || localStorage.getItem("stProfile") !== null) {
-                axios.get(config.checkingVersionUrl).then(res => {
-                    if (res.data[0].version !== config.appVersion) {
-                        this.showUpdate = true
-                        this.version = res.data[0].version
-                    }
-                })
-            }
-        },
-        created(){
-            if (!this.stProfile.first_name && !this.stProfile.last_name) {
-                if (JSON.parse(localStorage.getItem('stProfile'))) {
-                    this.getStudentProfile(JSON.parse(localStorage.getItem('stProfile')))
-                }
-            }
-            ipcRenderer.on("checking-for-update", (event, arg) => {
-                this.showDownloading = true
-            })
-
-        }
-    };
-</script>
-<style lang="scss">
-    body {
-        overflow-x: hidden;
     }
-</style>
-
+</script>

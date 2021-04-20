@@ -6,9 +6,13 @@ export  default {
         provinces: [],
         loadingProvince: false,
         loadingSchool: false,
-        schools: []
+        schools: [],
+        isHide: false
     },
     mutations: {
+        toggleSidebar(state, status){
+            state.isHide = status
+        },
         gettingProvince(state, status){
             state.loadingProvince = status
         },

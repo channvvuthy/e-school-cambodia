@@ -1,5 +1,5 @@
 <template>
-    <VideoList/>
+    <div>d</div>
 </template>
 
 <script>

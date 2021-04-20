@@ -132,29 +132,29 @@ const router = new VueRouter({
     routes
 });
 // eslint-disable-next-line no-unused-vars
-router.beforeEach((to, from, next) => {
-    if (to.name === 'login') {
-        if (auth()) {
-            next({
-                name: 'home'
-            })
-        } else {
-            next()
-        }
-    } else {
-        if (auth()) {
-
-            store.commit("course/getFilterByGradeID","")
-            store.commit("course/getQueryString","")
-
-            next()
-        } else {
-            next({
-                name: 'login'
-            })
-        }
-    }
-    next()
-});
+// router.beforeEach((to, from, next) => {
+//     if (to.name === 'login') {
+//         if (auth()) {
+//             next({
+//                 name: 'home'
+//             })
+//         } else {
+//             next()
+//         }
+//     } else {
+//         if (auth()) {
+//
+//             store.commit("course/getFilterByGradeID","")
+//             store.commit("course/getQueryString","")
+//
+//             next()
+//         } else {
+//             next({
+//                 name: 'login'
+//             })
+//         }
+//     }
+//     next()
+// });
 
 export default router
