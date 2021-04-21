@@ -1,8 +1,8 @@
 <template>
-    <div class="fixed bg-white" style="width: 385px;" :style="isHide?{marginLeft:'-385px'}:{marginLeft:'0px'}">
+    <div class="fixed bg-white font-khmer_os" style="width: 385px;" :style="isHide?{marginLeft:'-385px'}:{marginLeft:'0px'}">
         <div class="sidebar relative h-screen shadow">
             <div class="toggle bg-primary absolute rounded py-4 top-8 cursor-pointer"
-                 :class="!isHide?'pl-5 pr-2 -right-8':'pl-2 pr-6 -right-14'"
+                 :class="!isHide?'pl-5 pr-2 -right-8':'pl-2 pr-6 -right-12'"
                  @click="switchSidebar">
                 <template v-if="!isHide">
                     <div class="bg-white rounded-full absolute h-3 w-3 left-0 top-5 flex justify-center items-center">
@@ -57,6 +57,7 @@
     import Privacy from "./components/Privacy.vue"
     import eSchool from "./components/eSchool.vue"
 
+
     export default{
         data(){
             return {
@@ -71,6 +72,7 @@
             Study,
             eSchool
         },
+
         methods: {
             switchSidebar(){
                 this.isHide = !this.isHide

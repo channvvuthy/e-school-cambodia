@@ -1,5 +1,6 @@
 import config from "./../config"
 import axios from "axios"
+import i18n from "./../i18n"
 export  default {
     namespaced: true,
     state: {
@@ -7,11 +8,18 @@ export  default {
         loadingProvince: false,
         loadingSchool: false,
         schools: [],
-        isHide: false
+        isHide: false,
+        localize: localStorage.getItem('localize') ? localStorage.getItem('localize') : "en"
     },
     mutations: {
         toggleSidebar(state, status){
             state.isHide = status
+        },
+        setLocalize(state, localize){
+            localStorage.setItem('localize', localize)
+            state.localize = localize
+            i18n.locale = localize
+
         },
         gettingProvince(state, status){
             state.loadingProvince = status
