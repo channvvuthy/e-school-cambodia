@@ -84,6 +84,7 @@
   "2118": "Total Question",
   "2119": "Duration",
   "2120": "Min Point",
+  "2020":"Points",
   "2121": "Start Exam",
   "2122": "Prepare by",
   "2123": "School",
@@ -147,5 +148,6 @@
   "4117": "Cart cannot be empty",
   "4118": "Please set your school to continue",
   "4119": "Cannot process payment without amount",
-  "4120":"Network"
+  "4120":"Network",
+  "all":"All"
 }

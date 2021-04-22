@@ -36,7 +36,7 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['app-version'] = config.appVersion;
 
-axios.defaults.headers.common['Authorization'] = `Basic ZS1zY2hvb2wtYXBwOmUtc2Nob29sLWFwcC1QQCQkdzByZCE=`;
+axios.defaults.headers.common['Authorization'] = config.auth;
 
 
 Vue.config.productionTip = false;

@@ -33,7 +33,7 @@
                 <div class="h-5 border border-white border-t-0 border-b-0 border-r-0 border-opacity-30"></div>
                 <div class="flex flex-col justify-center items-center text-center">
                     <img src="/icon/Menu/point.png" class="h-8">
-                    <div class="mt-3">100 Points</div>
+                    <div class="mt-3">100 {{$t('2020')}}</div>
                 </div>
             </div>
             <div class="px-5 py-3 overflow-y-scroll h-screen pb-40">

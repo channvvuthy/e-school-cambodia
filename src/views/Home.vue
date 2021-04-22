@@ -12,6 +12,7 @@
     import FilterList from "./Filter/FilterList.vue"
     import VideoList from "./Video/VideoList.vue"
     import Story from "./Story/Story.vue"
+    import {mapActions} from "vuex"
 
     export default {
         name: 'Home',
@@ -19,6 +20,14 @@
             Story,
             FilterList,
             VideoList
+        },
+        methods: {
+            ...mapActions('home', ['getList'])
+        },
+        created(){
+            this.getList({
+                filter_id: ""
+            })
         }
     }
 </script>

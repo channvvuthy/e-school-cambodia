@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="font-khmer_os">
         <div class="flex">
             <div>
                 <!--Sidebar-->
@@ -8,7 +8,6 @@
             <div class="w-full bg-white border border-gray-300 border-t-0 h-32 flex items-end"
                  :style="isHide?{marginLeft:'0px'}:{marginLeft:'385px'}">
                 <Menu/>
-
             </div>
         </div>
         <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'385px'}">

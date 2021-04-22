@@ -1,0 +1,15 @@
+<template>
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+         width="18" height="18"
+         viewBox="0 0 172 172"
+         style=" fill:#000000;">
+        <g fill="none" fill-rule="nsonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
+           stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
+           font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+            <path d="M0,172v-172h172v172z" fill="none"></path>
+            <g fill="#ffffff">
+                <path d="M28.66667,21.5c-7.83362,0 -14.33333,6.49972 -14.33333,14.33333v100.33333c0,7.83362 6.49972,14.33333 14.33333,14.33333h114.66667c7.83362,0 14.33333,-6.49972 14.33333,-14.33333v-100.33333c0,-7.83362 -6.49972,-14.33333 -14.33333,-14.33333zM28.66667,35.83333h114.66667v100.33333h-114.66667zM64.5,57.33333v57.33333l50.16667,-28.66667z"></path>
+            </g>
+        </g>
+    </svg>
+</template>

@@ -1,11 +1,11 @@
 <template>
     <div class="bg-white shadow">
         <div class="px-5 py-5">
-            <div class="flex text-primary  text-2xl gap-4">
+            <div class="flex text-primary  text-md gap-4">
                 <div>
-                    <img src="/icon/" alt="">
+                    <img src="/icon/icon/smile.svg" class="mr-3">
                 </div>
-                <div>Hello Kamal Perez!</div>
+                <div>{{$t('2003')}} <span class="font-semibold">Kamal Perez!</span></div>
             </div>
             <div class="list mt-5">
                 <div class="w-full overflow-x-scroll flex overflow-y-hidden box-list-story">
@@ -19,7 +19,9 @@
                         <div class="bg-primary w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-7 cursor-pointer">
                             <AddIcon :size="16"/>
                         </div>
-                        <p class="mt-3">Create Story </p>
+                        <p class="mt-3" :class="localize==='en'?'text-sm':'text-xs'">
+                            {{$t('2004')}}
+                        </p>
                     </div>
                     <div class="text-center text-sm mr-5" v-for="i in 30">
                         <div class="box-story relative h-36 bg-black w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative">
@@ -36,9 +38,15 @@
 
 <script>
     import AddIcon from "./../../components/AddIcon.vue"
+    import {mapState} from "vuex"
+    import Loading from "./../../components/Loading.vue"
     export default{
         components:{
-            AddIcon
+            AddIcon,
+            Loading
+        },
+        computed: {
+            ...mapState('setting', ['localize'])
         }
     }
 </script>

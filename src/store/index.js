@@ -2,6 +2,7 @@ import auth from "./auth";
 import course from "./course"
 import favorite from "./favorite"
 import playVideo from "./playVideo"
+import home from "./home"
 import payment from "./payment"
 import  setting from "./setting"
 import guardian from "./guardian"
@@ -38,6 +39,7 @@ export default  new Vuex.Store({
         receipt,
         online,
         forum,
+        home,
         partner
     }
 });
