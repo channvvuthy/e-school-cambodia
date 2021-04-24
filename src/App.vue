@@ -1,6 +1,6 @@
 <template>
     <div class="font-khmer_os">
-        <div class="flex">
+        <div class="flex" v-if="!escapeRoute()">
             <div>
                 <!--Sidebar-->
                 <Sidebar/>
@@ -31,5 +31,15 @@
         computed: {
             ...mapState('setting', ['isHide'])
         },
+        methods: {
+            escapeRoute(){
+                if (this.$route.name === 'login' || this.$route.name === 'register') {
+                    this.$store.commit('setting/toggleSidebar', true);
+                    return true;
+
+                }
+                return false;
+            }
+        }
     }
 </script>

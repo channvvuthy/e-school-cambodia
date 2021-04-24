@@ -5,7 +5,7 @@
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="w-2/5 inline-block align-bottom bg-white rounded overflow-hidden shadow-xl transform transition-all  sm:align-middle px-5"
+            <div class="w-2/5 inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all  sm:align-middle px-5 pb-5"
                  role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="bg-white" @click="closeTermAndCondition">
                     <div v-if="loadingTerm" class="p-5">
@@ -65,5 +65,12 @@
         scrollbar-highlight-color: #ffffff;
         scrollbar-shadow-color: #ffffff;
         scrollbar-track-color: #000000;
+    }
+
+    ._status_bar > a {
+        position: initial !important;
+    }
+    .section-bottom-border.login-signup {
+        margin-top: 45px !important;;
     }
 </style>

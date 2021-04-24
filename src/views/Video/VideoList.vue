@@ -1,5 +1,5 @@
 <template>
-    <div class="m-5">
+    <div class="m-5 flex flex-col" :class="list.length <=0?'h-full':''">
         <div v-if="homeLoading">
             <Loading></Loading>
         </div>
@@ -27,7 +27,7 @@
                 <!--End vdo-->
                 <!--Ads-->
                 <div class="relative" v-if="view.type ==='ads'">
-                    <div class="absolute top-0 right-0 bg-white bg-opacity-70 p-1 text-sm">{{$t('1005')}}</div>
+                    <div class="absolute top-0 right-0 bg-white bg-opacity-50 p-1 text-sm">{{$t('1005')}}</div>
                     <img :src="view.ads.banner.thumbnail" alt="">
                     <div class="flex p-3 items-center justify-start">
                         <img :src="view.ads.logo" class="h-10 rounded mr-3">
@@ -42,24 +42,35 @@
                 <!--End ads-->
             </div>
         </div>
-
+        <template v-if="list.length <= 0">
+            <Empty/>
+        </template>
     </div>
 </template>
 <script>
     import HeartIcon from "./../../components/HeartIcon.vue"
     import Loading from "./../../components/Loading"
+    import Empty from "./../Component/Empty.vue"
     import {mapState} from "vuex"
     export default{
         components: {
             HeartIcon,
-            Loading
+            Loading,
+            Empty
         },
         computed: {
             ...mapState('setting', ['isHide']),
             ...mapState('home', ['list', 'homeLoading'])
         },
         created(){
-            console.log(this.list)
+
         }
     }
 </script>
+<style>
+    body {
+        height: 100%;
+        margin: 0;
+    }
+
+</style>

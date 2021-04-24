@@ -9,9 +9,13 @@ export  default {
         loadingSchool: false,
         schools: [],
         isHide: false,
-        localize: localStorage.getItem('localize') ? localStorage.getItem('localize') : "en"
+        localize: localStorage.getItem('localize') ? localStorage.getItem('localize') : "en",
+        page: 1
     },
     mutations: {
+        setPagination(state, payload){
+            state.page = payload
+        },
         toggleSidebar(state, status){
             state.isHide = status
         },

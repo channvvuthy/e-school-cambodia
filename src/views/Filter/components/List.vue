@@ -17,22 +17,22 @@
                         </div>
                         <div class="text-md overflow-y-scroll pb-10 h-85">
                             <div class="grid grid-cols-3 gap-x-10 gap-y-5 font-medium">
-                                <div class="px-5 cursor-pointer flex items-center border border-t-0 border-l-0 border-r-0 border-gray-500 py-3">
+                                <div @click="selectFilter('all')"
+                                     class="px-5 cursor-pointer flex items-center border border-t-0 border-l-0 border-r-0 border-gray-500 py-3">
                                     <div class="bg-primary rounded-full flex justify-center items-center w-8 h-8">
                                         <WatchIcon></WatchIcon>
                                     </div>
                                     <div class="flex justify-start flex-1">
                                         <span class="pl-5">{{$t('all')}}</span>
                                     </div>
-                                    <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center"
-                                         @click="selectFilter('all')">
+                                    <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center">
                                         <div class="w-2 h-2 bg-primary rounded-full "
-                                             v-if="selectedFilter==='all'"></div>
+                                             v-if="filter_id==='all'"></div>
                                     </div>
                                 </div>
                                 <div v-for="(list,index) in filter"
                                      class="px-5 cursor-pointer flex justify-between items-center border border-t-0 border-l-0 border-r-0 border-gray-500 py-3"
-                                     :key="index" @click="selectFilter(list._id)">
+                                     :key="index" @click="selectFilter(list)">
                                     <div class="bg-primary rounded-full flex justify-center items-center w-8 h-8">
                                         <WatchIcon></WatchIcon>
                                     </div>
@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center">
                                         <div class="w-2 h-2 bg-primary rounded-full"
-                                             v-if="selectedFilter ===list._id "></div>
+                                             v-if="filter_id ===list._id "></div>
                                     </div>
                                 </div>
                             </div>
@@ -56,12 +56,8 @@
 <script>
     import WatchIcon from "./../../../components/WatchIcon.vue"
     import CloseIcon from "./../../../components/CloseIcon.vue"
+    import {mapState, mapActions} from "vuex"
     export default{
-        data(){
-            return {
-                selectedFilter: 'all'
-            }
-        },
         components: {
             WatchIcon,
             CloseIcon
@@ -73,12 +69,31 @@
                 }
             }
         },
+        computed: {
+            ...mapState('home', ['filter_id', 's'])
+        },
         methods: {
+            ...mapActions('home', ['getList']),
             closeFilter(){
                 this.$emit("closeFilter")
             },
-            selectFilter(filter){
-                this.selectedFilter = filter
+
+            selectFilter(list){
+                if (typeof list !== "object") {
+                    list = {
+                        _id: "all",
+                        name: "all"
+                    }
+                }
+                this.$store.commit('home/receiveFilter', list._id);
+                this.$store.commit('home/selectedFilterName', list.name);
+                this.getList({
+                    filter_id: list._id,
+                    s: this.s
+                }).then(() => {
+                    this.$store.commit('setting/setPagination', 1)
+                });
+
                 this.$emit("closeFilter")
             }
         }

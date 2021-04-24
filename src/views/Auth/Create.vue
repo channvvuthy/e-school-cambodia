@@ -1,89 +1,114 @@
 <template>
-    <div class="font-khmer_os">
-        <div v-if="success" class="flex items-center bg-success text-white text-sm font-bold px-4 py-3 mb-3 rounded"
-             role="alert">
-            <p>គណនីត្រូវបានបង្កើតរួចរាល់</p>
-        </div>
-        <form class="flex-col text-sm font-khmer_os">
-            <div class="relative">
-                <input
-                        type="text"
-                        placeholder="នាមត្រកូល"
-                        class="p-2 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4"
-                        v-model="studentInfo.first_name"
-                />
-                <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
-            </div>
-            <div class="relative">
-                <input
-                        type="text"
-                        placeholder="នាមខ្លួន"
-                        class="p-2 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4"
-                        v-model="studentInfo.last_name"
-                />
-                <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
-            </div>
-        </form>
-        <div class="flex justify-center items-center text-sm font-khmer_os">
-            <label class="flex mr-10">
-                <input type="radio" class="mr-2" name="gender" value="M" v-model="studentInfo.gender"/>
-                <span>ប្រុស</span>
-            </label>
-            <label>
-                <input type="radio" class="mr-2" name="gender" value="F" v-model="studentInfo.gender"/>
-                <span>ស្រី</span>
-            </label>
-        </div>
-
-        <div class="border border-1 border-gray-300 mt-6 relative rounded">
-            <div class="absolute t-0 w-full text-center">
-                <div style="margin-top:-10px;">
-                    <span style="background-color:#fff;padding:0px 5px;">ពត៏មានផ្ទាល់ខ្លួន</span>
+    <div class="flex justify-center items-center min-h-screen bg-white">
+        <div class="flex-col rounded-3xl w-96 p-6 shadow-2xl bg-white">
+            <div class="flex justify-between items-center">
+                <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
+                    <ChevronIcon></ChevronIcon>
+                </div>
+                <div class="flex-1 text-center text-md">
+                    {{$t('2008')}}
                 </div>
             </div>
-            <form class="flex-col text-sm font-khmer_os w-full p-5">
+            <div class="h-10"></div>
+            <form class="flex-col text-sm font-khmer_os">
                 <div class="relative">
-                    <span class="absolute l-0 buttom-0 mt-2 text-sm font-medium text-gray-500 ">+855</span>
-                    <input type="text" placeholder="លេខទូរស័ព្ទ"
-                           v-model="studentInfo.phone"
-                           @keypress="isNumber($event)"
-                           class="p-2 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-10"/>
-                    <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
+                    <div class="opacity-50 absolute left-0 top-2">
+                        <img src="/icon/icon/user.png" class="h-5">
+                    </div>
+                    <input
+                            type="text"
+                            placeholder="នាមត្រកូល"
+                            class="p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8 h-10 placeholder-gray-500"
+                            v-model="studentInfo.first_name"
+                    />
                 </div>
                 <div class="relative">
-                    <input type="password" placeholder="ពាក្យសម្ងាត់"
-                           v-model="studentInfo.password"
-                           class="p-2 px-0 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4"/>
-                    <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
-                </div>
-                <div class="relative">
-                    <input type="password" placeholder="បញ្ចូលពាក្យសម្ងាត់ផ្ទៀងផ្ទាត់"
-                           v-model="studentInfo.confirm_password"
-                           class="p-2 px-0 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4"/>
-                    <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
+                    <div class="opacity-50 absolute left-0 top-2">
+                        <img src="/icon/icon/user.png" class="h-5">
+                    </div>
+                    <input
+                            type="text"
+                            placeholder="នាមខ្លួន"
+                            class="p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8 h-10 placeholder-gray-500"
+                            v-model="studentInfo.last_name"
+                    />
                 </div>
             </form>
-        </div>
-        <div class="flex justify-center items-center mt-4">
-            <label class="flex text-sm">
-                <input type="radio" class="mr-3 cursor-pointer" v-model="studentInfo.accepted_term"
-                       :checked="studentInfo.accepted_term"
-                       value="1"
-                       name="term"
-                >
-                <div class="flex"><span class="pr-3">ខ្ញុំយល់ព្រមទៅនឹង</span><span class="text-blue-700 cursor-pointer"
-                                                                                   @click="showTermAndCondition">លក្ខខណ្ឌនៃការប្រើប្រាស់</span>
+            <div class="flex justify-start mt-2 items-center text-sm font-khmer_os">
+                <label class="flex mr-10">
+                    <div @click="setGender('male')"
+                         class="mr-4 flex justify-center items-center border border-gray-500 w-4 h-4 rounded-full">
+                        <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.gender==='M'"></div>
+                    </div>
+                    <input type="radio" class="mr-2 hidden" name="gender" value="M" v-model="studentInfo.gender"
+                           ref="male"/>
+                    <span>{{$t('2015')}}</span>
+                </label>
+                <label class="flex">
+                    <div @click="setGender('female')"
+                         class="mr-4 flex justify-center items-center border border-gray-500 w-4 h-4 rounded-full">
+                        <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.gender==='F'"></div>
+                    </div>
+                    <input type="radio" class="mr-2 hidden" name="gender" value="F" v-model="studentInfo.gender"
+                           ref="female"/>
+                    <span>{{$t('2016')}}</span>
+                </label>
+            </div>
+            <div class="h-5"></div>
+            <form class="flex-col text-sm font-khmer_os w-full">
+                <div class="relative">
+                    <span class="absolute left-0 mt-2 text-sm font-medium opacity-40">
+                        <PhoneIcon size="22"></PhoneIcon>
+                    </span>
+                    <input type="text" :placeholder="$t('2009')"
+                           v-model="studentInfo.phone"
+                           @keypress="isNumber($event)"
+                           class="h-10 placeholder-gray-500 p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
                 </div>
-            </label>
+                <div class="relative">
+                    <span class="absolute left-0 mt-2 text-sm font-medium opacity-50">
+                            <img src="/icon/icon/lock.png">
+                        </span>
+                    <input type="password" :placeholder="$t('2010')"
+                           v-model="studentInfo.password"
+                           class="h-10 placeholder-gray-500 p-2 px-0 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
+
+                </div>
+                <div class="relative">
+                    <span class="absolute left-0 mt-2 text-sm font-medium opacity-50">
+                            <img src="/icon/icon/lock.png">
+                        </span>
+                    <input type="password" :placeholder="$t('2017')"
+                           v-model="studentInfo.confirm_password"
+                           class="h-10 placeholder-gray-500 p-2 px-0 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
+                </div>
+            </form>
+            <div class="flex justify-start items-center mt-4">
+                <label class="flex text-sm">
+                    <div @click="()=>{studentInfo.accepted_term=true}"
+                         class="mr-4 flex justify-center items-center border border-gray-500 w-4 h-4 rounded-full">
+                        <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.accepted_term"></div>
+                    </div>
+                    <input type="radio" class="mr-3 cursor-pointer hidden" v-model="studentInfo.accepted_term"
+                           :checked="studentInfo.accepted_term"
+                           value="1"
+                           name="term"
+                    >
+                    <div class="flex"><span class="pr-1">{{$t('2018')}}</span><span
+                            class="text-blue-700 cursor-pointer"
+                            @click="showTermAndCondition">{{$t('2019')}}</span>
+                    </div>
+                </label>
+            </div>
+            <div class="h-5"></div>
+            <button class="p-3 mt-4 text-center text-white rounded-lg bg-primary h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                    @click="createAccount" :disabled="(loadingRegister || success)">
+                បង្កើតគណនីថ្មី
+                <Loader v-if="loadingRegister" :size="10"></Loader>
+            </button>
+            <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
+            <TermAndCondition v-if="showTerm" @closeTermAndCondition="closeTermAndCondition"></TermAndCondition>
         </div>
-        <button class="p-3 mt-4 text-center bg-blue-700 text-white rounded w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                @click="createAccount" :disabled="(loadingRegister || success)"
-                :class="(loadingRegister || success)?'bg-opacity-70':'hover:bg-blue-800'">
-            បង្កើតគណនីថ្មី
-            <Loader v-if="loadingRegister" :size="10"></Loader>
-        </button>
-        <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
-        <TermAndCondition v-if="showTerm" @closeTermAndCondition="closeTermAndCondition"></TermAndCondition>
     </div>
 </template>
 
@@ -93,11 +118,16 @@
     import Loader from "./../../components/Loader"
     import helper from "./../../helper/helper"
     import TermAndCondition from "./components/TermAndCondition"
+    import ChevronIcon from "./../../components/ChevronIcon.vue"
+    import PhoneIcon from "./../../components/PhoneIcon.vue"
+
     import config from "./../../config"
     export default{
         name: "Create",
         components: {
             ErrMessage,
+            PhoneIcon,
+            ChevronIcon,
             Loader,
             TermAndCondition
         },
@@ -143,6 +173,14 @@
 
             isNumber(evt){
                 return helper.isNumber(evt)
+            },
+            setGender(gender){
+                if (gender === 'male') {
+                    this.$refs.male.click()
+                } else {
+                    this.$refs.female.click()
+                }
+
             },
 
             createAccount(){

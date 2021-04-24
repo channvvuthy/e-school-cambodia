@@ -7,9 +7,33 @@ export default {
     state: {
         list: [],
         filter: [],
-        homeLoading: false
+        homeLoading: false,
+        paginationLoading: false,
+        filter_id: 'all',
+        s: "",
+        selectedFilterName: "all"
     },
     mutations: {
+        paginationLoading(state, status){
+            state.paginationLoading = status
+        },
+        receivePagination(state, payload){
+            if (payload.list.length) {
+                for (let i = 0; i < payload.list.length; i++) {
+                    state.list.push(payload.list[i])
+                }
+            }
+        },
+
+        selectedFilterName(state, payload){
+            state.selectedFilterName = payload
+        },
+        receiveFilter(state, payload){
+            state.filter_id = payload
+        },
+        receiveS(state, payload){
+            state.s = payload
+        },
         homeLoading(state, status){
             state.homeLoading = status
         },
@@ -30,6 +54,23 @@ export default {
                     commit("receiveList", response.data.data)
                     resolve(response)
                 }).catch(err => {
+                    commit("homeLoading", false)
+                    reject(err)
+                })
+            })
+        },
+        getListPagination({commit}, payload){
+            let qs = Object.keys(payload)
+                .map(key => `${key}=${payload[key]}`)
+                .join('&');
+            commit("paginationLoading", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `home?${qs}`).then(response => {
+                    commit("paginationLoading", false)
+                    commit("receivePagination", response.data.data)
+                    resolve(response)
+                }).catch(err => {
+                    commit("paginationLoading", false)
                     reject(err)
                 })
             })

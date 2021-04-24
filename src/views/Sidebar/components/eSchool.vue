@@ -54,10 +54,11 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-11 cursor-pointer w-full">
-                        <img src="/icon/icon/en.png" class="h-5 m-auto" @click="setLocalization('en')"
+                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-11 w-full cursor-pointer"
+                         @click="setLocalization(localize==='kh'?'en':'kh')">
+                        <img src="/icon/icon/en.png" class="h-5 m-auto"
                              v-if="localize==='kh'">
-                        <img src="/icon/icon/kh.png" class="h-6 m-auto" @click="setLocalization('kh')" v-else>
+                        <img src="/icon/icon/kh.png" class="h-6 m-auto" v-else>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
