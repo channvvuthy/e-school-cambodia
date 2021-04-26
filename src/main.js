@@ -59,6 +59,9 @@ new Vue({
     i18n,
     render: h => h(App),
     created(){
+        if (localStorage.getItem('token')) {
+            store.commit('auth/studentProfile', JSON.parse(localStorage.getItem('stProfile')))
+        }
         store.dispatch('online/onlineOffline');
         if (!localStorage.getItem('localize')) {
             localStorage.setItem('localize', 'en')

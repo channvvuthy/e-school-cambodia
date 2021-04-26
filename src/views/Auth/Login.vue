@@ -13,6 +13,7 @@
                             <PhoneIcon></PhoneIcon>
                         </span>
                         <input type="text" :placeholder="$t('2009')" v-model="auth.phone" @keypress="isNumber($event)"
+                               ref="phone"
                                class="py-3 placeholder-gray-500 border border-solid border-1 border-gray-400 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-10"/>
                     </div>
                     <div class="h-5"></div>
@@ -22,19 +23,20 @@
                         </span>
                         <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="auth.password"
                                v-on:keyup.enter="studentLogin"
+                               ref="password"
                                class="py-3 placeholder-gray-500 border border-solid border-1 border-gray-400 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-10"/>
                     </div>
                     <div class="h-3"></div>
-                    <div class="text-right font-medium text-gray-500 cursor-pointer mb-4" @click="showForgotPassword()">
+                    <div class="text-right text-gray-500 cursor-pointer mb-4" @click="goTo('forgot-password')">
                         {{$t('2011')}}?
                     </div>
                     <div class="h-3"></div>
                 </form>
 
                 <div class="bg-primary h-11 p-3 text-center flex justify-center items-center text-white rounded-lg w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                     @click="studentLogin">
+                     @click="studentLogin" :disabled="loginLoading" :class="loginLoading?'bg-opacity-70':''">
                     <div class="pl-2">
-                        <span v-if="!loginLoading">ចូលគណនី</span>
+                        <span v-if="!loginLoading">{{$t('2007')}}</span>
                         <span v-else>{{$t('2007')}} &nbsp;<Loader :size="10"/></span>
                     </div>
                 </div>
@@ -91,12 +93,6 @@
             changePasswordSuccess(){
                 this.forgotPassword = false
             },
-
-            showForgotPassword(){
-                this.auth.password = null
-                this.forgotPassword = true;
-            },
-
             cancel(){
                 this.forgotPassword = false;
             },
@@ -124,15 +120,12 @@
                     this.login(this.auth).then(response => {
 
                         if (response.data.status !== 0) {
-                            this.errorMessage = response.data.msg;
+                            helper.errorMessage(response.data.msg)
                             return;
                         }
-
                         let data = response.data.data;
-
                         localStorage.setItem('token', data.token);
-                        let stProfile = studentProfileData
-
+                        let stProfile = studentProfileData.studentProfileData
                         stProfile._id = data._id
                         stProfile.first_name = data.first_name
                         stProfile.gender = data.gender
@@ -160,11 +153,11 @@
                                 name: "E-School"
                             }
                         }
-
                         localStorage.setItem('stProfile', JSON.stringify(stProfile));
-
                         this.getStudentProfile(stProfile)
                         this.getToken(data.token)
+                        this.$store.commit('auth/receivingToken', data.token)
+                        this.$store.commit("setting/toggleSidebar", false)
                         this.$router.push({
                             name: "home"
                         })
@@ -174,11 +167,15 @@
                 }
 
                 if (!this.auth.phone) {
-                    this.errorMessage = "សូមបញ្ចូលលេខទូរស័ព្ទ";
+                    helper.errorMessage('please_enter_phone_number')
+                    this.$refs.phone.focus()
+                    return;
                 }
 
                 if (!this.auth.password) {
-                    this.errorMessage = "សូមបញ្ចូលពាក្យសម្ងាត់";
+                    helper.errorMessage('please_enter_password')
+                    this.$refs.password.focus()
+                    return;
                 }
             }
         }

@@ -26,7 +26,7 @@
                 </div>
                 <!--End vdo-->
                 <!--Ads-->
-                <div class="relative" v-if="view.type ==='ads'">
+                <div class="relative" v-if="view.type ==='ads'" @click="viewAds(view)">
                     <div class="absolute top-0 right-0 bg-white bg-opacity-50 p-1 text-sm">{{$t('1005')}}</div>
                     <img :src="view.ads.banner.thumbnail" alt="">
                     <div class="flex p-3 items-center justify-start">
@@ -45,6 +45,9 @@
         <template v-if="list.length <= 0">
             <Empty/>
         </template>
+        <template v-if="showAds">
+            <VideoADS/>
+        </template>
     </div>
 </template>
 <script>
@@ -52,15 +55,27 @@
     import Loading from "./../../components/Loading"
     import Empty from "./../Component/Empty.vue"
     import {mapState} from "vuex"
+    import VideoADS from "./../Video/ads/VideoADS.vue"
     export default{
         components: {
             HeartIcon,
             Loading,
-            Empty
+            Empty,
+            VideoADS
+        },
+        data(){
+            return {
+                showAds: false
+            }
         },
         computed: {
             ...mapState('setting', ['isHide']),
             ...mapState('home', ['list', 'homeLoading'])
+        },
+        methods: {
+            viewAds(video){
+                console.log(video)
+            },
         },
         created(){
 

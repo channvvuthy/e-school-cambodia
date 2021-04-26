@@ -24,10 +24,19 @@ export default {
         loadingNotification: false,
         loadingNotificationPagination: false,
         readingNotice: false,
-        token: localStorage.getItem('token')
+        token: localStorage.getItem('token'),
+        story: [],
+        loadingStory: false
+
     },
 
     mutations: {
+        loadingStory(state, status){
+            state.loadingStory = status
+        },
+        receivingStory(state, payload){
+            state.story = payload
+        },
         receivingToken(state, token){
             state.token = token
         },
@@ -108,6 +117,18 @@ export default {
                 })
             })
         },
+        getStory({commit}){
+            commit("loadingStory", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + 'story').then(response => {
+                    commit("loadingStory", false);
+                    commit("receivingStory", response.data.data);
+                    resolve(response);
+                }).catch(err => {
+                    commit("loadingStory", false)
+                })
+            })
+        },
         checkPhoneExist({commit}, phone){
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
@@ -159,13 +180,13 @@ export default {
 
         async  logout({commit}){
             delete axios.defaults.headers.common['xtoken'];
-            await  axios.get(config.apiUrl + 'user/logout').then(() => {
+            await  axios.get(config.apiUrl + 'me/logout').then(() => {
 
                 localStorage.removeItem('token');
                 localStorage.removeItem('stProfile');
                 localStorage.removeItem('provinces');
-
-                commit('userLogout', true)
+                commit('receivingToken', "");
+                commit('userLogout', true);
             })
         },
 

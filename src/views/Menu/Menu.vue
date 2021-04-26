@@ -36,14 +36,14 @@
             </div>
             <div class="flex justify-end">
                 <div class="flex justify-between items-end flex-1">
-                    <div class="flex flex-col justify-center items-center cursor-pointer ">
-                        <img src="/icon/Home/Cart@2x.png" class="h-6"/>
+                    <div class="flex flex-col justify-center items-center cursor-pointer opacity-60 ">
+                        <img src="/icon/Home/shopping-cart.png"/>
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-12">
-                        <img src="/icon/Home/Chat@2x.png" class="h-6"/>
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60">
+                        <img src="/icon/Home/chat-bubbles-with-ellipsis.png"/>
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-12">
-                        <img src="/icon/Home/Notification@2x.png" class="h-6"/>
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60">
+                        <img src="/icon/Home/bell.png"/>
                     </div>
                 </div>
             </div>

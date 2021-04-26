@@ -1,4 +1,3 @@
-
 <template>
     <div>
         <div class="text-primary font-semibold text-sm">
@@ -46,7 +45,7 @@
                         {{$t('1125')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
+                <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
                     <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-11 cursor-pointer w-full">
                         <img src="/icon/icon/logout.png" class="h-6 m-auto">
                     </div>
@@ -58,3 +57,16 @@
         </div>
     </div>
 </template>
+<script>
+    import {mapActions} from "vuex"
+    export default{
+        methods: {
+            ...mapActions('auth', ['logout']),
+            logoutUser(){
+                this.logout().then(() => {
+                    this.$forceUpdate()
+                })
+            }
+        }
+    }
+</script>

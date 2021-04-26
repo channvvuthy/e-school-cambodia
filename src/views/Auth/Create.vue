@@ -17,7 +17,8 @@
                     </div>
                     <input
                             type="text"
-                            placeholder="នាមត្រកូល"
+                            ref="first_name"
+                            :placeholder="$t('2013')"
                             class="p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8 h-10 placeholder-gray-500"
                             v-model="studentInfo.first_name"
                     />
@@ -28,7 +29,8 @@
                     </div>
                     <input
                             type="text"
-                            placeholder="នាមខ្លួន"
+                            ref="last_name"
+                            :placeholder="$t('2014')"
                             class="p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8 h-10 placeholder-gray-500"
                             v-model="studentInfo.last_name"
                     />
@@ -61,6 +63,7 @@
                         <PhoneIcon size="22"></PhoneIcon>
                     </span>
                     <input type="text" :placeholder="$t('2009')"
+                           ref="phone"
                            v-model="studentInfo.phone"
                            @keypress="isNumber($event)"
                            class="h-10 placeholder-gray-500 p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
@@ -71,6 +74,7 @@
                         </span>
                     <input type="password" :placeholder="$t('2010')"
                            v-model="studentInfo.password"
+                           ref="password"
                            class="h-10 placeholder-gray-500 p-2 px-0 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
 
                 </div>
@@ -79,6 +83,7 @@
                             <img src="/icon/icon/lock.png">
                         </span>
                     <input type="password" :placeholder="$t('2017')"
+                           ref="confirm_password"
                            v-model="studentInfo.confirm_password"
                            class="h-10 placeholder-gray-500 p-2 px-0 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
                 </div>
@@ -101,9 +106,10 @@
                 </label>
             </div>
             <div class="h-5"></div>
-            <button class="p-3 mt-4 text-center text-white rounded-lg bg-primary h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                    @click="createAccount" :disabled="(loadingRegister || success)">
-                បង្កើតគណនីថ្មី
+            <button class="focus:outline-none p-3 mt-4 text-center text-white rounded-lg bg-primary h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                    @click="createAccount" :disabled="(loadingRegister)"
+                    :class="(loadingRegister)?'bg-opacity-60':''">
+                {{$t('2008')}}
                 <Loader v-if="loadingRegister" :size="10"></Loader>
             </button>
             <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
@@ -120,7 +126,10 @@
     import TermAndCondition from "./components/TermAndCondition"
     import ChevronIcon from "./../../components/ChevronIcon.vue"
     import PhoneIcon from "./../../components/PhoneIcon.vue"
-
+    import Vue from 'vue';
+    import VueToast from 'vue-toast-notification';
+    import 'vue-toast-notification/dist/theme-sugar.css';
+    Vue.use(VueToast);
     import config from "./../../config"
     export default{
         name: "Create",
@@ -136,7 +145,6 @@
                 err: false,
                 message: null,
                 showTerm: false,
-                success: false,
                 studentInfo: {
                     first_name: null,
                     last_name: null,
@@ -190,63 +198,60 @@
                 this.studentInfo.device_os = platform
 
                 if (!this.studentInfo.first_name) {
-                    this.message = "សូមបញ្ចូលនាមត្រកូល"
-                    this.err = true
+                    helper.errorMessage('please_enter_first_name');
+                    this.$refs.first_name.focus();
                     return false
                 }
 
                 if (!this.studentInfo.last_name) {
-                    this.message = "សូមបញ្ចូលនាមខ្លួន"
-                    this.err = true
+                    helper.errorMessage('please_enter_last_name');
+                    this.$refs.last_name.focus();
                     return false
                 }
 
                 if (!this.studentInfo.gender) {
-                    this.message = "សូមជ្រើរើសភេទ"
-                    this.err = true
+                    helper.errorMessage('please_select_gender')
                     return false
                 }
 
                 if (!this.studentInfo.phone) {
-                    this.message = "សូមបញ្ចូលលេខទូរស័ព្ទ"
-                    this.err = true
+                    helper.errorMessage('please_enter_phone_number')
+                    this.$refs.phone.focus();
                     return false
                 }
 
                 if (!this.studentInfo.password) {
-                    this.message = "សូមបញ្ចូលលេខសម្ងាត់"
-                    this.err = true
+                    helper.errorMessage('please_enter_password');
+                    this.$refs.password.focus();
                     return false
                 }
 
                 if (!this.studentInfo.confirm_password) {
-                    this.message = "សូមបញ្ចូលលេខសម្ងាត់ផ្ទៀងផ្ទាត់"
-                    this.err = true
+                    helper.errorMessage('please_enter_confirm_password')
+                    this.$refs.confirm_password.focus();
                     return false
                 }
 
 
                 if (this.studentInfo.confirm_password !== this.studentInfo.password) {
-                    this.message = "ពាក្យសម្ងាត់ និងផ្ទៀងផ្ទាត់ពាក្យសម្ងាត់មិនដូចគ្នា"
-                    this.err = true
+                    helper.errorMessage('confirm_password_no_match')
+                    this.$refs.confirm_password.focus();
                     return false
                 }
-
                 if (!this.studentInfo.accepted_term) {
-                    this.message = "សូមធ្វើការត្រួតពិនិត្យលក្ខណ្ឌ"
-                    this.err = true
+                    helper.errorMessage('please_check_term_and_condition')
                     return false
                 }
 
                 this.register(this.studentInfo).then(response => {
                     if (response.status === 1) {
-                        this.message = response.msg
-                        this.err = true
+                        helper.errorMessage(response.msg)
+                        return false
                     } else {
-                        this.success = true
-                        setTimeout(() => {
-                            this.$emit("registerSuccess")
-                        }, 3000)
+                        Vue.$toast.success(this.$i18n.t('account_created'), {
+                            position: "top-right"
+                        })
+                        this.$router.push({name: 'login'});
                     }
                 }).catch(err => {
                     this.message = err
@@ -258,3 +263,11 @@
         }
     }
 </script>
+<style>
+    .swal2-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px;
+    }
+</style>

@@ -1,4 +1,8 @@
-import os from 'os';
+import Vue from 'vue';
+import VueToast from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
+Vue.use(VueToast);
+import i18n from "./../i18n"
 import {machineIdSync} from 'node-machine-id'
 
 // Validate only number
@@ -12,7 +16,6 @@ const isNumber = (evt) => {
         return true;
     }
 };
-
 // Cut string with dot
 const cutString = function (text, limit) {
     if (text.length > limit)
@@ -22,7 +25,6 @@ const cutString = function (text, limit) {
     else
         return text;
 };
-
 // Format display view like Facebook (1k)
 const kFormatter = (num) => {
     if (!num) {
@@ -30,17 +32,14 @@ const kFormatter = (num) => {
     }
     return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
 };
-
 // Get device id
 const deviceId = () => {
     return machineIdSync()
 }
-
 // Get os of platform
 const deviceOs = () => {
     return "windows"
 }
-
 // Calculate price in duration
 const durationCalculate = (duration, pricePerMonth, pricePerYear) => {
     if (duration === 12) {
@@ -48,8 +47,6 @@ const durationCalculate = (duration, pricePerMonth, pricePerYear) => {
     }
     return "$" + (pricePerMonth * duration) + "/" + duration + " ខែ"
 }
-
-
 const gender = () => {
     let stProfile = localStorage.getItem('stProfile')
 
@@ -59,7 +56,6 @@ const gender = () => {
     }
     return "F"
 }
-
 const numDay = (oldDate, currentDate) => {
     let date1 = new Date(oldDate);
     let date2 = new Date(currentDate);
@@ -70,13 +66,16 @@ const numDay = (oldDate, currentDate) => {
 // To calculate the no. of days between two dates
     return Math.round(Difference_In_Time / (1000 * 3600 * 24));
 }
-
 const clearDevice = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('stProfile');
     localStorage.removeItem('provinces');
 }
-
+const errorMessage = (message) => {
+    Vue.$toast.error(i18n.t(message), {
+        position: "top-right",
+    })
+}
 export default{
     isNumber,
     cutString,
@@ -86,5 +85,6 @@ export default{
     durationCalculate,
     gender,
     numDay,
-    clearDevice
+    clearDevice,
+    errorMessage
 }

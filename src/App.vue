@@ -33,13 +33,13 @@
         },
         methods: {
             escapeRoute(){
-                if (this.$route.name === 'login' || this.$route.name === 'register') {
+                if (this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password') {
                     this.$store.commit('setting/toggleSidebar', true);
                     return true;
 
                 }
                 return false;
             }
-        }
+        },
     }
 </script>

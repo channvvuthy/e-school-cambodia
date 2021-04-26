@@ -1,7 +1,11 @@
 <template>
     <div class="mt-5 overflow-y-scroll pb-40 h-screen" @scroll="onScroll" ref="feed" id="feed">
-        <!--<Story></Story>-->
-        <Signin></Signin>
+        <template v-if="token">
+            <Story></Story>
+        </template>
+        <template v-else>
+            <Signin></Signin>
+        </template>
         <FilterList></FilterList>
         <VideoList></VideoList>
     </div>
@@ -29,7 +33,8 @@
         },
         computed: {
             ...mapState('home', ['filter_id', 's']),
-            ...mapState('setting', ['page'])
+            ...mapState('setting', ['page']),
+            ...mapState('auth', ['token'])
         },
         methods: {
             ...mapActions('home', ['getList', 'getListPagination']),

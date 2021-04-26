@@ -70,7 +70,7 @@
     ._status_bar > a {
         position: initial !important;
     }
-    .section-bottom-border.login-signup {
-        margin-top: 45px !important;;
+    .login-signup {
+        margin-top: 45px !important;
     }
 </style>
