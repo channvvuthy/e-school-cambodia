@@ -91,8 +91,5 @@
                 this.$store.commit('setting/toggleSidebar', this.isHide)
             }
         },
-        created(){
-            console.log(this.stProfile)
-        }
     }
 </script>

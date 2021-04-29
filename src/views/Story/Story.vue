@@ -58,7 +58,7 @@
         },
         created(){
             this.getStory().then(response => {
-                console.log(response.data.data)
+
             })
         }
     }

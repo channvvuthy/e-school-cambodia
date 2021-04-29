@@ -164,5 +164,9 @@
   "please_check_term_and_condition": "Please check term and condition",
   "reset_password_des":"Please enter your phone number to reset your password",
   "account_created":"Your account has been created successfully",
-  "unname":"Unname"
+  "unname":"Unname",
+  "playback_speed":"Playback speed",
+  "quality":"Quality",
+  "normal":"Normal",
+  "auto":"Auto"
 }

@@ -1,6 +1,6 @@
 <template>
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-         width="22" height="22"
+         :width="size" :height="size"
          viewBox="0 0 172 172"
          style=" fill:#000000;">
         <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
@@ -15,6 +15,13 @@
 </template>
 <script>
     export default{
-        name: "MutedIcon"
+        name: "MutedIcon",
+        props: {
+            size: {
+                default: function () {
+                    return 22
+                }
+            }
+        }
     }
 </script>

@@ -6,8 +6,23 @@
         <div class="grid gap-4" :class="isHide?'grid-cols-4':'grid-cols-3'" v-else>
             <div v-for="(view,index) in list" class="bg-white shadow cursor-pointer" :key="index">
                 <!--Vdo-->
-                <div v-if="view.type ==='vdo'">
-                    <img :src="view.vdo.thumbnail" alt="">
+                <div v-if="view.type ==='vdo'" @click="viewVideo(view)" @mouseover="hideAndShowDuration(view.vdo._id)"
+                     @mouseleave="hideAndShowDuration('')">
+                    <div class="relative">
+                        
+                        <div class="absolute z-30 w-full h-full flex justify-center items-center">
+                            <video :src="playWhenOver(view.vdo.video)" autoplay="autoplay"
+                                   class="flex justify-center items-center"
+                                   controlsList="nodownload" v-if="hideDuration===view.vdo._id" muted></video>
+                        </div>
+                        <div class="absolute right-3 bottom-2 rounded px-2 py-1 bg-black text-white bg-opacity-60 text-xs"
+                             v-if="millisToMinutesAndSeconds(view.vdo.duration) && hideDuration!==view.vdo._id">
+                            {{millisToMinutesAndSeconds(view.vdo.duration)}}
+                        </div>
+                        <img :src="view.vdo.thumbnail" alt="">
+                        <div class="absolute bottom-0 left-0 bg-red-600 h-1" v-if="view.vdo.last_watch" :style="{width:Math.round(view.vdo.last_watch.percentage) + `%`}"></div>
+                    </div>
+                   
                     <div class="flex p-3 items-center justify-start">
                         <img :src="view.vdo.teacher.photo" class="h-10 rounded mr-3">
                         <div>
@@ -26,9 +41,19 @@
                 </div>
                 <!--End vdo-->
                 <!--Ads-->
-                <div class="relative" v-if="view.type ==='ads'" @click="viewAds(view)">
+                <div class="relative" v-if="view.type ==='ads'" @click="viewAds(view)"
+                     @mouseover="hideAndShowDuration(view.ads._id)"
+                     @mouseleave="hideAndShowDuration('')">
                     <div class="absolute top-0 right-0 bg-white bg-opacity-50 p-1 text-sm">{{$t('1005')}}</div>
-                    <img :src="view.ads.banner.thumbnail" alt="">
+                    <div class="relative">
+                        <div class="absolute z-30 w-full h-full flex justify-center items-center"
+                             v-if="view.ads.banner.type ===1">
+                            <video :src="playWhenOver(view.ads.banner.video)" autoplay="autoplay"
+                                   class="flex justify-center items-center"
+                                   controlsList="nodownload" v-if="hideDuration===view.ads._id" muted></video>
+                        </div>
+                        <img :src="view.ads.banner.thumbnail" alt="">
+                    </div>
                     <div class="flex p-3 items-center justify-start">
                         <img :src="view.ads.logo" class="h-10 rounded mr-3">
                         <div>
@@ -43,49 +68,101 @@
             </div>
         </div>
         <template v-if="list.length <= 0">
-            <Empty/>
+            <Empty></Empty>
         </template>
-        <template v-if="showAds">
-            <VideoADS/>
-        </template>
+        <div v-if="showAds">
+            <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)"></VideoADS>
+        </div>
     </div>
 </template>
 <script>
-    import HeartIcon from "./../../components/HeartIcon.vue"
-    import Loading from "./../../components/Loading"
-    import Empty from "./../Component/Empty.vue"
-    import {mapState} from "vuex"
-    import VideoADS from "./../Video/ads/VideoADS.vue"
-    export default{
-        components: {
-            HeartIcon,
-            Loading,
-            Empty,
-            VideoADS
-        },
-        data(){
-            return {
-                showAds: false
-            }
-        },
-        computed: {
-            ...mapState('setting', ['isHide']),
-            ...mapState('home', ['list', 'homeLoading'])
-        },
-        methods: {
-            viewAds(video){
-                console.log(video)
-            },
-        },
-        created(){
+import HeartIcon from "./../../components/HeartIcon.vue";
+import Loading from "./../../components/Loading";
+import Empty from "./../Component/Empty.vue";
+import { mapState, mapActions } from "vuex";
+import VideoADS from "./../Video/ads/VideoADS.vue";
+export default {
+  components: {
+    HeartIcon,
+    Loading,
+    Empty,
+    VideoADS
+  },
+  data() {
+    return {
+      showAds: false,
+      hideDuration: "",
+      videoUrl: "",
+      id: ""
+    };
+  },
+  computed: {
+    ...mapState("setting", ["isHide"]),
+    ...mapState("home", ["list", "homeLoading"])
+  },
+  methods: {
+    ...mapActions("playVideo", ["stopWatch", "playVideo"]),
 
-        }
+    lastWatchVideo(event) {
+      event.id = this.id;
+      this.stopWatch(event);
+    },
+    bgLastWatch(percentage) {
+      percentage = Math.round(percentage);
+      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214, 214, 214) ${percentage}%)`;
+    },
+    hideAndShowDuration(id = "") {
+      this.hideDuration = id;
+    },
+    millisToMinutesAndSeconds(millis) {
+      if (millis !== undefined) {
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      }
+      return false;
+    },
+    viewVideo(video) {
+      this.id = video.vdo._id;
+      this.playVideo(this.id);
+      this.showAds = true;
+
+      if(video.vdo.last_watch){
+          this.$store.commit('playVideo/setLastWatched',video.vdo.last_watch.mark)
+      }
+      
+      this.$store.commit("playVideo/getVideoUrl", video.vdo.video);
+    },
+    closeAds() {
+      this.showAds = false;
+    },
+    playWhenOver(video) {
+      if (typeof video === "object") {
+        let len = video.length - 1;
+        return video[len]["url"];
+      }
+      return false;
+    },
+    viewAds(video) {
+      console.log(video);
     }
+  }
+};
 </script>
 <style>
-    body {
-        height: 100%;
-        margin: 0;
-    }
-
+.last-watch {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 3px;
+  outline: none;
+  box-shadow: 0px 1px 10px black;
+  cursor: pointer;
+}
+.last-watch::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 3px;
+  height: 3px;
+  background: #ff0e09;
+  cursor: pointer;
+}
 </style>

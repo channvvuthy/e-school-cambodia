@@ -1,74 +1,51 @@
-import axios from "axios"
-import config from "./../config"
+import axios from "axios";
+import config from "./../config";
 export default {
     namespaced: true,
     state: {
-        video: [],
-        loadingVideo: false,
-        stop_watch: 0,
-        loadingNextVideo: false,
+        videoUrl: "",
+        defaultVolumeRange: 100,
+        stopWatch: false,
+        videoPlay: "",
+        lastWatched: 0,
+
     },
 
     mutations: {
-        loadingPlay(state, status){
-            state.loadingVideo = status
+        setLastWatched(state, payload) {
+            state.lastWatched = payload
         },
-        stopWatching(){
-
+        setDefaultVolumeRange(state, payload) {
+            state.defaultVolumeRange = payload
         },
-
-        getVideoFromLink(state, video){
-            state.video = video.streamingData
+        getVideoUrl(state, payload) {
+            state.videoUrl = payload
         },
-
-        setUserLastWatch(state, stop_watch){
-            state.stop_watch = stop_watch
+        stopWatch(state, payload) {
+            state.stopWatch = payload
         },
-        NextVideo(state, status){
-            state.loadingNextVideo = status
+        playVideo(state, payload) {
+            state.videoPlay = payload
         }
-
     },
 
     actions: {
-        gettingNextVideo({commit}, status){
-            commit("NextVideo", status)
-        },
-        setLastWatch({commit}, lastWatch){
-            commit("setUserLastWatch", lastWatch)
-        },
-        getVideoLink({commit, dispatch}, ytId){
-            commit("loadingPlay", true)
-            return new Promise((resolve, reject) => {
-                axios.get(config.videoApi + ytId).then(response => {
-                    commit("loadingPlay", false)
-                    dispatch("getVideoSuccess", response.data)
-                    let jsonOffset = response.data.indexOf('{');
-                    let result = response.data.substring(jsonOffset);
-                    let videos = JSON.parse(result)
-
-                    resolve(videos.player_response.streamingData.formats)
-
-                }).catch((error) => {
-                    commit("loadingPlay", false)
-                    reject(error)
-                })
+        stopWatch({
+            commit
+        }, payload) {
+            let qs = Object.keys(payload)
+                .map(key => `${key}=${payload[key]}`)
+                .join('&');
+            axios.get(config.apiUrl + `video/stop?${qs}`).then(() => {
+                commit("stopWatch", true)
             })
         },
-
-        getVideoSuccess({commit}, video){
-            commit("getVideoFromLink", video)
-        },
-        stopWatch({commit}, params){
-
-            commit("stopWatching")
-            return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + '/lesson/stop_watch?lesson_id=' + params.lesson_id + "&mark=" + parseInt(params.mark) + "&duration=" + params.duration).then(response => {
-                    resolve(response)
-                }).catch(err => {
-                    reject(err)
-                })
+        playVideo({
+            commit
+        }, payload) {
+            axios.get(config.apiUrl + `video/play?id=${payload}`).then(() => {
+                commit("playVideo", payload)
             })
-        },
+        }
     }
 }
