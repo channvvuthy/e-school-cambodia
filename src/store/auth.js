@@ -26,69 +26,91 @@ export default {
         readingNotice: false,
         token: localStorage.getItem('token'),
         story: [],
-        loadingStory: false
+        loadingStory: false,
+        storyDetail: "",
+        storyIndex: 0
 
     },
 
     mutations: {
-        loadingStory(state, status){
+        setStoryIndex(state, payload){
+            state.storyIndex = payload
+        },
+        loadingStory(state, status) {
             state.loadingStory = status
         },
-        receivingStory(state, payload){
+        receivingStory(state, payload) {
             state.story = payload
         },
-        receivingToken(state, token){
+        receiveMoreStory(state, payload) {
+            if (payload.length) {
+                for (let i = 0; i < payload.length; i++) {
+                    state.story.push(payload[i])
+                }
+            }
+        },
+        receivingMoreStoryDetail(state, payload){
+            console.log("payload", payload)
+        },
+        gettingStoryDetail(state, payload){
+            state.loadingStory = payload
+        },
+        receivingStoryDetail(state, payload){
+            state.storyDetail = payload
+        },
+        receivingToken(state, token) {
             state.token = token
         },
-        readingNotification(state, status){
+        readingNotification(state, status) {
             state.readingNotice = status
         },
-        loadingNotification(state, status){
+        loadingNotification(state, status) {
             state.loadingNotification = status
         },
-        loadingNotificationPagination(state, status){
+        loadingNotificationPagination(state, status) {
             state.loadingNotificationPagination = status
         },
-        receiveNotification(state, notifications){
+        receiveNotification(state, notifications) {
             state.notifications = notifications
         },
-        receiveNotificationPagination(state, notifications){
+        receiveNotificationPagination(state, notifications) {
             for (let index = 0; index < notifications.length; index++) {
                 state.notifications.push(notifications[index])
             }
         },
+
         loging(state, payload) {
             state.loginLoading = payload
         },
 
-        changingForgotPassword(state, status){
+        changingForgotPassword(state, status) {
             state.changing = status
         },
 
-        studentProfile(state, stProfile){
+        studentProfile(state, stProfile) {
             state.stProfile = stProfile
         },
 
-        checkingPhone(state, status){
+        checkingPhone(state, status) {
             state.checking = status
         },
-        getPhoneNumber(state, phone){
+        getPhoneNumber(state, phone) {
             state.phone = phone
         },
 
-        registering(state, status){
+        registering(state, status) {
             state.loadingRegister = status
         },
-        userLogout(state, status){
+        userLogout(state, status) {
             state.logout = status
         },
-        changingProfile(state, status){
+        changingProfile(state, status) {
             state.updatingPhoto = status
         },
-        userChangingProfile(state, status){
+        userChangingProfile(state, status) {
             state.ifUpdate = status
         },
-        userChangePassword(state, status){
+        userChangePassword(state, status) {
             state.userChangingPassword = status
         },
 
@@ -97,8 +119,8 @@ export default {
 
     actions: {
         login({
-                  commit
-              }, auth) {
+            commit
+        }, auth) {
             commit("loging", true);
             return new Promise((resolve, reject) => {
 
@@ -117,19 +139,50 @@ export default {
                 })
             })
         },
-        getStory({commit}){
+        getStory({
+            commit
+        }, page = 1) {
             commit("loadingStory", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'story').then(response => {
+                axios.get(config.apiUrl + `story?p=${page}`).then(response => {
                     commit("loadingStory", false);
-                    commit("receivingStory", response.data.data);
+                    if (page > 1) {
+                        commit("receiveMoreStory", response.data.data);
+                    } else {
+                        commit("receivingStory", response.data.data);
+                    }
                     resolve(response);
                 }).catch(err => {
                     commit("loadingStory", false)
+                    reject(err)
                 })
             })
         },
-        checkPhoneExist({commit}, phone){
+        viewStory({
+            commit
+        }, payload) {
+            let qs = Object.keys(payload)
+                .map(key => `${key}=${payload[key]}`)
+                .join('&');
+            commit("gettingStoryDetail", true);
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `story/view?${qs}`).then(response => {
+                    resolve(response)
+                    commit("gettingStoryDetail", false);
+                    if(payload.p > 1){
+                        commit("receivingMoreStoryDetail", response.data.data)
+                    }else{
+                        commit("receivingStoryDetail", response.data.data)
+                    }
+                }).catch(err => {
+                    reject(err)
+                    commit("gettingStoryDetail", false);
+                })
+            })
+        },
+        checkPhoneExist({
+            commit
+        }, phone) {
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'user/check-exist-phone?phone=' + phone).then(response => {
@@ -142,7 +195,9 @@ export default {
                 })
             })
         },
-        changeForgotPassword({commit}, params){
+        changeForgotPassword({
+            commit
+        }, params) {
             commit("changingForgotPassword", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'user/password/forget-reset', params).then(response => {
@@ -155,15 +210,21 @@ export default {
             })
         },
 
-        getPhone({commit}, phone){
+        getPhone({
+            commit
+        }, phone) {
             commit("getPhoneNumber", phone)
         },
 
-        getStudentProfile({commit}, stProfile){
+        getStudentProfile({
+            commit
+        }, stProfile) {
             commit("studentProfile", stProfile)
         },
 
-        register({commit}, params){
+        register({
+            commit
+        }, params) {
             commit("registering", true)
             return new Promise((resolve, reject) => {
                 delete axios.defaults.headers.common["xtoken"];
@@ -178,9 +239,11 @@ export default {
             })
         },
 
-        async  logout({commit}){
+        async logout({
+            commit
+        }) {
             delete axios.defaults.headers.common['xtoken'];
-            await  axios.get(config.apiUrl + 'me/logout').then(() => {
+            await axios.get(config.apiUrl + 'me/logout').then(() => {
 
                 localStorage.removeItem('token');
                 localStorage.removeItem('stProfile');
@@ -190,12 +253,13 @@ export default {
             })
         },
 
-        changeProfilePhotoPhoto({commit}, formData){
+        changeProfilePhotoPhoto({
+            commit
+        }, formData) {
             commit('changingProfile', true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'user/change-photo',
-                    formData,
-                    {
+                    formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
@@ -215,7 +279,9 @@ export default {
             })
         },
 
-        changeProfile({commit}, params){
+        changeProfile({
+            commit
+        }, params) {
             commit("userChangingProfile", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'user/change-profile', params).then(response => {
@@ -234,7 +300,9 @@ export default {
                 })
             })
         },
-        userChangePassword({commit}, params){
+        userChangePassword({
+            commit
+        }, params) {
             commit("userChangePassword", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + "user/change-password", params).then(response => {
@@ -254,7 +322,9 @@ export default {
             })
         },
 
-        getNotification({commit}, page = 1){
+        getNotification({
+            commit
+        }, page = 1) {
             if (page === 1) {
                 commit("loadingNotification", true)
                 return new Promise((resolve, reject) => {
@@ -292,7 +362,9 @@ export default {
             }
         },
 
-        async readingNotification({commit}, id){
+        async readingNotification({
+            commit
+        }, id) {
             commit('readingNotification', true)
             await axios.get(config.apiUrl + '/notification/read?id=' + id).then(() => {
                 commit('readingNotification', false)
@@ -301,7 +373,9 @@ export default {
             })
         },
 
-        getToken({commit}, token){
+        getToken({
+            commit
+        }, token) {
             commit("receivingToken", token)
         }
     }

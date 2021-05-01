@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="grid gap-4" :class="isHide?'grid-cols-4':'grid-cols-3'">
-            <div v-for="i in 12" class="cursor-pointer h-36 w-full box-loading">
+            <div v-for="i in 12" class="cursor-pointer h-36 w-full box-loading" :key="i">
                 <div class="flex flex-col justify-between">
                     <div class="line-1"></div>
                     <div class="line-2 mt-3"></div>

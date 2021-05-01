@@ -6,10 +6,9 @@
         <div class="grid gap-4" :class="isHide?'grid-cols-4':'grid-cols-3'" v-else>
             <div v-for="(view,index) in list" class="bg-white shadow cursor-pointer" :key="index">
                 <!--Vdo-->
-                <div v-if="view.type ==='vdo'" @click="viewVideo(view)" @mouseover="hideAndShowDuration(view.vdo._id)"
+                <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"
                      @mouseleave="hideAndShowDuration('')">
-                    <div class="relative">
-                        
+                    <div class="relative" @click="viewVideo(view)">
                         <div class="absolute z-30 w-full h-full flex justify-center items-center">
                             <video :src="playWhenOver(view.vdo.video)" autoplay="autoplay"
                                    class="flex justify-center items-center"
@@ -23,18 +22,24 @@
                         <div class="absolute bottom-0 left-0 bg-red-600 h-1" v-if="view.vdo.last_watch" :style="{width:Math.round(view.vdo.last_watch.percentage) + `%`}"></div>
                     </div>
                    
-                    <div class="flex p-3 items-center justify-start">
+                    <div class="flex p-3 items-center justify-start cursor-text">
                         <img :src="view.vdo.teacher.photo" class="h-10 rounded mr-3">
                         <div>
-                            <div class="text-primary text-sm">{{view.vdo.title}}</div>
+                            <div class="text-primary text-sm">{{cutString(view.vdo.title,20)}}</div>
                             <div class="flex font-khmer_os text-xs opacity-50">
                                 <div>{{view.vdo.teacher.name}}</div>
-                                <div class="ml-7">1.6k view</div>
+                                <div class="ml-7">{{ kFormatter(view.vdo.view) }} view</div>
                             </div>
                         </div>
                         <div class="flex-1">
-                            <div class="float-right">
-                                <HeartIcon/>
+                            <div class="float-right cursor-pointer">
+                        
+                                <div v-if="(view.vdo.is_favorite || isFavorite(view.vdo._id))" @click="removeMyFavorite(view.vdo._id)">
+                                    <HeartIcon/>
+                                </div>
+                                <div @click="addFavorite(view.vdo._id)" v-else>
+                                    <HeartIcon fill="#D1D5DB"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -81,6 +86,8 @@ import Loading from "./../../components/Loading";
 import Empty from "./../Component/Empty.vue";
 import { mapState, mapActions } from "vuex";
 import VideoADS from "./../Video/ads/VideoADS.vue";
+import helper from "./../../helper/helper"
+const {ipcRenderer} = require('electron')
 export default {
   components: {
     HeartIcon,
@@ -98,19 +105,43 @@ export default {
   },
   computed: {
     ...mapState("setting", ["isHide"]),
-    ...mapState("home", ["list", "homeLoading"])
+    ...mapState("home", ["list", "homeLoading"]),
+    ...mapState('favorite', ['temporaryFavorites'])
   },
   methods: {
     ...mapActions("playVideo", ["stopWatch", "playVideo"]),
+    ...mapActions('favorite', ['add','removeFavorite']),
 
     lastWatchVideo(event) {
       event.id = this.id;
       this.stopWatch(event);
     },
-    bgLastWatch(percentage) {
-      percentage = Math.round(percentage);
-      return `linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214, 214, 214) ${percentage}%)`;
+    cutString(text, limit){
+      return helper.cutString(text, limit)
     },
+    kFormatter(num){
+      return helper.kFormatter(num)
+    },
+    isFavorite(id){
+        return this.temporaryFavorites.filter(item => item === id).length
+    },
+    
+    removeMyFavorite(id){
+        this.removeFavorite(id).then(()=>{
+            this.$store.commit('favorite/removeTemporaryFavorite',id)
+            if(!this.isFavorite(id)){
+                this.$store.commit("home/removeFavorite",id)
+            }
+           
+        })
+    },
+
+    addFavorite(id){
+        this.add(id).then(()=>{
+            this.$store.commit('favorite/addTemporaryFavorite',id)
+        })
+    },
+
     hideAndShowDuration(id = "") {
       this.hideDuration = id;
     },
@@ -130,7 +161,7 @@ export default {
       if(video.vdo.last_watch){
           this.$store.commit('playVideo/setLastWatched',video.vdo.last_watch.mark)
       }
-      
+
       this.$store.commit("playVideo/getVideoUrl", video.vdo.video);
     },
     closeAds() {
@@ -144,7 +175,15 @@ export default {
       return false;
     },
     viewAds(video) {
-      console.log(video);
+      if(video.ads.banner.type ===1){
+          this.id = video.ads._id;
+          this.playVideo(this.id);
+          this.showAds = true;
+          this.$store.commit("playVideo/getVideoUrl", video.ads.banner.video);
+          this.$store.commit('playVideo/setLastWatched',0)
+      }else{
+          ipcRenderer.send("openLink",video.ads.banner.url)
+      }
     }
   }
 };

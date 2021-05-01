@@ -8,25 +8,32 @@ export default {
         loading: false,
         favorites: [],
         paginationLoading: false,
+        temporaryFavorites: [],
     },
 
     mutations: {
-        loading(state, status){
+        addTemporaryFavorite(state, payload) {
+            state.temporaryFavorites.push(payload)
+        },
+        removeTemporaryFavorite(state, payload) {
+            state.temporaryFavorites = state.temporaryFavorites.filter(item => item != payload)
+        },
+        loading(state, status) {
             state.loading = status
         },
 
-        getAddedFavorite(state, favorite){
+        getAddedFavorite(state, favorite) {
             state.favorites = favorite
         },
 
-        removeFav(state, lesson_id){
+        removeFav(state, lesson_id) {
             state.favorites = state.favorites.filter(favorite => favorite._id !== lesson_id)
         },
 
-        pagesLoading(state, status){
+        pagesLoading(state, status) {
             state.paginationLoading = status
         },
-        loadMoreFavorite(state, favorites){
+        loadMoreFavorite(state, favorites) {
             if (favorites.length) {
                 for (let i = 0; i < favorites.length; i++) {
                     state.favorites.push(favorites[i])
@@ -37,18 +44,22 @@ export default {
     },
 
     actions: {
-        add({commit}, params){
+        async add({
+            commit
+        }, payload) {
             commit("loading", true)
-            axios.post(config.apiUrl + 'favorite/add', {lesson_id: params}).then(() => {
-
-
+            await axios.post(config.apiUrl + 'favorite/video', {
+                id: payload
+            }).then(() => {
                 commit("loading", false)
             }).catch(() => {
                 commit("loading", false);
             })
         },
 
-        getFavorite({commit}){
+        getFavorite({
+            commit
+        }) {
             commit("loading", true)
             axios.get(config.apiUrl + 'favorite').then(response => {
 
@@ -64,9 +75,12 @@ export default {
             })
         },
 
-        favoritePagination({commit, dispatch}, page = 1){
+        favoritePagination({
+            commit,
+            dispatch
+        }, page = 1) {
             commit("pagesLoading", true)
-            return new Promise((resolve, reject) =>{
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'favorite?p=' + page).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
@@ -74,7 +88,7 @@ export default {
                     }
 
                     resolve(response.data.data)
-    
+
                     commit("pagesLoading", false)
                     dispatch("loadMoreFavorite", response.data.data)
                 }).catch(err => {
@@ -82,18 +96,24 @@ export default {
                     reject(err)
                 })
             })
-            
+
         },
-        loadMoreFavorite({commit}, favorite){
+        loadMoreFavorite({
+            commit
+        }, favorite) {
             commit("loadMoreFavorite", favorite)
         },
 
 
-        removeFavorite({commit}, params){
+        async removeFavorite({
+            commit
+        }, payload) {
             commit("loading", true)
-            axios.post(config.apiUrl + 'favorite/remove', {lesson_id: params}).then(() => {
+            await axios.delete(config.apiUrl + 'favorite/remove', {
+                id: payload
+            }).then(() => {
                 commit("loading", false)
-                commit("removeFav", params)
+                commit("removeFav", payload)
 
             }).catch(() => {
                 commit("loading", false)

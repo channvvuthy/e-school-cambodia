@@ -44,8 +44,6 @@
     import helper from "./../../helper/helper"
     import ChevronIcon from "./../../components/ChevronIcon.vue"
     import PhoneIcon from "./../../components/PhoneIcon.vue"
-
-    import config from "./../../config"
     export default{
         name: "Create",
         components: {

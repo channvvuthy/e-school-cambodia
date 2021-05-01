@@ -146,7 +146,7 @@ async function createWindow() {
         },
         icon: path.join(__static, 'icon.png')
     });
-    win.setContentProtection(true)
+    // win.setContentProtection(true)
     win.setTitle("E-SCHOOL")
     win.setMenu(null);
     win.maximize();

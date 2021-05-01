@@ -24,11 +24,7 @@
     </div>
 </template>
 <script>
-    import KeyIcon from "./../../components/KeyIcon.vue"
     export default{
-        components: {
-            KeyIcon
-        },
         methods: {
             goTo(page){
                 this.$router.push({name: page})

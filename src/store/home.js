@@ -14,10 +14,22 @@ export default {
         selectedFilterName: "all"
     },
     mutations: {
-        paginationLoading(state, status){
+        removeFavorite(state, payload) {
+            let updateList = state.list.filter(item => {
+                if(item.type==='vdo'){
+                    if(item.vdo._id === payload){
+                        item.vdo.is_favorite = 0
+                    }
+                }
+                return item
+            })
+
+            state.list = updateList
+        },
+        paginationLoading(state, status) {
             state.paginationLoading = status
         },
-        receivePagination(state, payload){
+        receivePagination(state, payload) {
             if (payload.list.length) {
                 for (let i = 0; i < payload.list.length; i++) {
                     state.list.push(payload.list[i])
@@ -25,25 +37,27 @@ export default {
             }
         },
 
-        selectedFilterName(state, payload){
+        selectedFilterName(state, payload) {
             state.selectedFilterName = payload
         },
-        receiveFilter(state, payload){
+        receiveFilter(state, payload) {
             state.filter_id = payload
         },
-        receiveS(state, payload){
+        receiveS(state, payload) {
             state.s = payload
         },
-        homeLoading(state, status){
+        homeLoading(state, status) {
             state.homeLoading = status
         },
-        receiveList(state, payload){
+        receiveList(state, payload) {
             state.list = payload.list
             state.filter = payload.filter
         }
     },
     actions: {
-        getList({commit}, payload){
+        getList({
+            commit
+        }, payload) {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');
@@ -59,7 +73,9 @@ export default {
                 })
             })
         },
-        getListPagination({commit}, payload){
+        getListPagination({
+            commit
+        }, payload) {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');

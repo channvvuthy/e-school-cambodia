@@ -10,7 +10,7 @@
                 </span></div>
             </div>
             <div class="list mt-5">
-                <div class="w-full overflow-x-scroll flex overflow-y-hidden box-list-story">
+                <div class="w-full overflow-x-scroll flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative">
                         <div class="box-story relative h-36 bg-black w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative">
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
@@ -24,7 +24,7 @@
                             {{$t('2004')}}
                         </p>
                     </div>
-                    <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index">
+                    <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index" @click="getStoryDetail(my_story,index)">
                         <div class="w-10 h-10 border-3 border-primary rounded-full bg-cover absolute z-50 left-2 top-2 bg-white flex justify-center items-center"
                              :style="{backgroundImage:`url(${my_story.user.photo})`}"
                         >
@@ -39,27 +39,52 @@
                 </div>
             </div>
         </div>
+        <StoryDetail v-if="showStory" @closeStory="closeStory"></StoryDetail>
     </div>
 </template>
 
 <script>
     import AddIcon from "./../../components/AddIcon.vue"
+    import StoryDetail from "./StoryDetail.vue"
     import {mapState, mapActions} from "vuex"
     export default{
         components: {
             AddIcon,
+            StoryDetail
+        },
+        data(){
+            return{
+                page: 1,
+                showStory:false
+            }
         },
         computed: {
             ...mapState('setting', ['localize']),
-            ...mapState('auth', ['token', 'stProfile', 'story'])
+            ...mapState('auth', ['token', 'stProfile', 'story','loadingStory'])
         },
         methods: {
-            ...mapActions('auth', ['getStory'])
+            ...mapActions('auth', ['getStory','viewStory']),
+            onScroll ({target: {scrollLeft, clientWidth, scrollWidth}}) {
+                if (scrollLeft + clientWidth >= scrollWidth) {
+                    this.page ++
+                    this.getStory(this.page).then(response =>{
+                        console.log(response.data.data)
+                    });
+                }
+            },
+            getStoryDetail(story,index = 0){
+                let payload = {id:story._id}
+                this.$store.commit("auth/setStoryIndex", index);
+                this.viewStory(payload).then(()=>{
+                    this.showStory = true
+                });
+            },
+            closeStory(){
+                this.showStory = false
+            }
         },
         created(){
-            this.getStory().then(response => {
-
-            })
+            this.getStory()
         }
     }
 </script>

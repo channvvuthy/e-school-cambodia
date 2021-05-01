@@ -5,9 +5,9 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
-import {auth} from './../middlware/auth'
+// import {auth} from './../middlware/auth'
 import CourseDetail from "../views/MyCourse/CourseDetail"
-import store from "../store"
+// import store from "../store"
 
 Vue.use(VueRouter);
 

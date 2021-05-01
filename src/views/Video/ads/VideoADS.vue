@@ -21,7 +21,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <video autoplay  controlsList="nodownload" id="eVideo" class="m-auto w-full" ref="eVideo" @click="playPause()" poster="/poster.png"
+                            <div class="absolute w-full h-full flex justify-center items-center" v-if="loading"><LoadingWhite></LoadingWhite></div>
+                            <video autoplay  controlsList="nodownload" id="eVideo" class="m-auto w-full" ref="eVideo" @click="playPause()" poster="/poster-home.png"
                                    @timeupdate="timeUpdate()"
                                     @pause="pause()"
                                    @mouseover="()=>{this.showSound = false,this.showToolbar = true}"
@@ -177,7 +178,7 @@
 import CloseIcon from "./../../../components/CloseIcon";
 import EnlargeIcon from "./../../../components/EnlargeIcon.vue";
 import ChevronIcon from "./../../../components/ChevronIcon.vue";
-// import LoadingWhite from "./../../../components/LoadingWhite"
+import LoadingWhite from "./../../../components/LoadingWhite.vue"
 import PlayIcon from "./../../MyCourse/components/media/PlayIcon.vue";
 import PauseIcon from "./../../MyCourse/components/media/PauseIcon.vue";
 import SettingIcon from "./../../MyCourse/components/media/SettingIcon.vue";
@@ -187,7 +188,7 @@ import { mapState } from "vuex";
 export default {
   components: {
     CloseIcon,
-    // LoadingWhite,
+    LoadingWhite,
     PlayIcon,
     PauseIcon,
     SettingIcon,
@@ -328,6 +329,17 @@ export default {
           this.currentDuration = document.getElementById("currentDuration");
           this.seekSlider = document.getElementById("seekSlider");
           this.volumeSlider = document.getElementById("volumn");
+          
+          this.vid.addEventListener('loadstart', () => {
+              this.loading = true
+          })
+          this.vid.addEventListener('canplaythrough', () => {
+              this.loading = false
+          })
+          this.vid.addEventListener('waiting', () => {
+              this.loading = true
+          })
+
           this.seekSlider.addEventListener(
             "input",
             event => {
