@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-primary font-semibold text-sm">
+        <div class="text-primary font-semibold text-sm" :class="darkMode?'text-textSecondary':''">
             {{$t('1127')}}
         </div>
         <div class="px-3 my-3 mt-5">
@@ -45,12 +45,12 @@
                         {{$t('1132')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
+                <div class="text-center flex flex-col justify-center items-center" @click="setDarkMode(darkMode)">
                     <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-11 cursor-pointer w-full">
                         <img src="/icon/icon/mode.png" class="h-6 m-auto">
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
-                        {{$t('1133')}}
+                        {{darkMode?$t('light_mode'):$t('1133')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
@@ -73,11 +73,15 @@
     import {mapState} from "vuex"
     export default{
         computed: {
-            ...mapState('setting', ['localize'])
+            ...mapState('setting', ['localize','darkMode'])
         },
         methods: {
             setLocalization(lang){
                 this.$store.commit('setting/setLocalize', lang)
+            },
+            setDarkMode(mode){
+                let darkMode = !mode
+                this.$store.commit('setting/setDarkMode',darkMode)
             }
         }
     }

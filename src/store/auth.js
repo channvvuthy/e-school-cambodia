@@ -28,11 +28,22 @@ export default {
         story: [],
         loadingStory: false,
         storyDetail: "",
-        storyIndex: 0
+        storyIndex: 0,
+        imgUrl:"",
+        addingStory:false,
 
     },
 
     mutations: {
+        addedStory(state, payload){
+            // state.story.unshift(payload)
+        },
+        addingStory(state, payload){
+            state.addingStory = payload
+        },
+        setImgUrl(state, payload){
+            state.imgUrl = payload
+        },
         setStoryIndex(state, payload){
             state.storyIndex = payload
         },
@@ -179,6 +190,20 @@ export default {
                     commit("gettingStoryDetail", false);
                 })
             })
+        },
+        addMyStory({commit}, payload){
+            commit("addingStory", true)
+            return new Promise((resolve, reject) =>{
+                axios.post(config.apiUrl + "story",payload).then(response =>{
+                    resolve(response)
+                    commit("addingStory",false)
+                    commit("addedStory",response.data.data)
+                }).catch(err =>{
+                    commit("addingStory",false)
+                    reject(err)
+                })
+            });
+
         },
         checkPhoneExist({
             commit

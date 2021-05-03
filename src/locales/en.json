@@ -168,5 +168,8 @@
   "playback_speed":"Playback speed",
   "quality":"Quality",
   "normal":"Normal",
-  "auto":"Auto"
+  "auto":"Auto",
+  "preview":"Preview",
+  "share_to_story":"Share to Story",
+  "light_mode":"Light Mode"
 }

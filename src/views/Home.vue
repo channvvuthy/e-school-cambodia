@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-5 overflow-y-scroll pb-40 h-screen" @scroll="onScroll" ref="feed" id="feed">
+    <div class="mt-3 overflow-y-scroll pb-40 h-screen" @scroll="onScroll" ref="feed" id="feed">
         <template v-if="token">
             <Story></Story>
         </template>

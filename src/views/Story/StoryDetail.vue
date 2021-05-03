@@ -5,7 +5,7 @@
                 <div class="absolute inset-0 bg-black bg-opacity-95"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-opacity-0  overflow-hidden  transform transition-all  sm:align-middle  w-7/12"
+            <div class="inline-block align-bottom bg-opacity-0 transform transition-all  sm:align-middle  w-7/12"
                  role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="text-gray-50 flex justify-center items-center">
                     <div class="relative" @mouseover="()=>{this.showCloseIcon = true}" @mouseleave="()=>{this.showCloseIcon = false}">
@@ -23,8 +23,8 @@
 
                         </div>
                         <!-- Close -->
-                        <div class="absolute right-3 top-4 cursor-pointer opacity-80 z-50" @click="closeStory" v-if="showCloseIcon">
-                            <close-icon fill="#ffffff"></close-icon>
+                        <div class="absolute right-3 top-4 cursor-pointer z-50" @click="closeStory" v-if="showCloseIcon">
+                            <close-icon :fill="darkMode?'#afb0b4':'#ffffff'"></close-icon>
                         </div>
                         <!-- Indicator -->
                         <div class="flex w-full h-full absolute left-0 top-0 z-1 justify-between items-center">
@@ -50,23 +50,24 @@
                         </div>
                         <!-- End viewer -->
                         <!-- List viewer -->
-                        <div class="absolute top-14 z-50 left-0 bg-white w-full h-full rounded-2xl shadow-md" v-if="showViewer">
-                            <div class="absolute right-3 top-4 cursor-pointer opacity-80 z-50" @click="()=>{this.showViewer = false}">
-                                <close-icon fill="#000000" :width="15" :height="15"></close-icon>
+                        <div :class="darkMode?'bg-secondary text-textSecondary':'bg-white'" class="absolute top-14 z-50 left-0 w-full h-full overflow-y-scroll rounded-t-2xl shadow-md" @scroll="onScroll" v-if="showViewer">
+                            <div class="top-0 sticky relative pt-14"> 
+                                <div class="absolute right-3 top-0 cursor-pointer opacity-70 z-50 top-4" @click="()=>{this.showViewer = false}">
+                                    <close-icon :fill="darkMode?'#afb0b4':'#000000'" :width="16" :height="16"></close-icon>
+                                </div>
+                                <div class="flex ml-5 text-xs font-semibold">
+                                    <span><Eye></Eye></span>
+                                    <span class="px-1"> {{countView(storyDetail.viewer)}}</span>
+                                    <span class="pr-1">{{$t('1004')}}</span>
+                                </div>
                             </div>
-                            <div class="flex text-black mt-5 ml-5 text-xs font-semibold mt-12">
-                                <span><Eye></Eye></span>
-                                <span class="px-1"> {{countView(storyDetail.viewer)}}</span>
-                                <span class="pr-1">{{$t('1004')}}</span>
-                                <span><ChevronIcon fill="#ffffff" :size="18"></ChevronIcon></span>
-                            </div>
-                            <div class="mt-5 overflow-y-scroll h-full" @scroll="onScroll">
+                            <div class="mt-5">
                                 <div v-for="(viewer,index) in storyDetail.viewer" :key="index" class="text-black text-xs font-semibold">
                                     <div class="flex items-center mb-5 px-5">
                                         <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5" :style="{backgroundImage:`url(${viewer.photo})`}"></div>
-                                        <div>{{viewer.name}}</div>
+                                        <div :class="darkMode?'text-textSecondary':''">{{viewer.name}}</div>
                                     </div>
-                                   
+                                     
                                 </div>
                             </div>
                         </div>
@@ -100,7 +101,9 @@ export default {
       }
   },
   computed: {
-    ...mapState("auth", ["storyDetail","storyIndex","story"])
+    ...mapState("auth", ["storyDetail","storyIndex","story"]),
+    ...mapState("setting", ["darkMode"]),
+    
   },
   methods: {
     ...mapActions('auth', ['viewStory']),
@@ -135,14 +138,15 @@ export default {
     },
     previousStory(){
         let storyIndex = this.storyIndex - 1
+        if(storyIndex <= 0){
+            this.previous = false
+        }
         this.next = true
 
         if(this.story[storyIndex]!==undefined){
             let payload = {id:this.story[storyIndex]._id}
             this.$store.commit("auth/setStoryIndex", storyIndex);
-            this.viewStory(payload).then((response)=>{
-                console.log(response)
-            });
+            this.viewStory(payload);
         }else{
             this.previous = false
         }
@@ -154,9 +158,11 @@ export default {
         if(this.story[storyIndex]!==undefined){
             let payload = {id:this.story[storyIndex]._id}
             this.$store.commit("auth/setStoryIndex", storyIndex);
-            this.viewStory(payload).then((response)=>{
-                console.log(response)
-            });
+            this.viewStory(payload);
+            if(storyIndex + 1 >= this.story.length){
+                this.next = false
+                return
+            }
         }else{
             this.next = false
         }
@@ -164,7 +170,9 @@ export default {
     }
   },
   created() {
-    console.log(this.storyDetail);
+      if(this.storyIndex <= 0){
+          this.previous = false
+      }
   }
 };
 </script>

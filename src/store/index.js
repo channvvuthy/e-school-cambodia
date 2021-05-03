@@ -1,5 +1,6 @@
 import auth from "./auth";
 import course from "./course"
+import video from "./video"
 import favorite from "./favorite"
 import playVideo from "./playVideo"
 import home from "./home"
@@ -22,6 +23,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 export default  new Vuex.Store({
     modules: {
+        video,
         auth,
         course,
         favorite,

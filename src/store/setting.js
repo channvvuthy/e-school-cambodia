@@ -1,6 +1,7 @@
 import config from "./../config"
 import axios from "axios"
 import i18n from "./../i18n"
+import { stat } from "fs"
 export  default {
     namespaced: true,
     state: {
@@ -10,9 +11,14 @@ export  default {
         schools: [],
         isHide: false,
         localize: localStorage.getItem('localize') ? localStorage.getItem('localize') : "en",
-        page: 1
+        page: 1,
+        darkMode: false
     },
     mutations: {
+        setDarkMode(state, payload){
+            state.darkMode = payload
+            localStorage.setItem("darkMode", payload)
+        },
         setPagination(state, payload){
             state.page = payload
         },

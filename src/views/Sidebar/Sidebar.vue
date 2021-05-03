@@ -1,6 +1,9 @@
 <template>
-    <div class="fixed bg-white font-khmer_os" style="width: 385px;"
-         :style="isHide?{marginLeft:'-385px'}:{marginLeft:'0px'}">
+    <div class="fixed font-khmer_os" style="width: 385px;"
+         :style="isHide?{marginLeft:'-385px'}:{marginLeft:'0px'}"
+         :class="darkMode?'bg-secondary text-gray-300':'bg-white text-black'"
+         
+         >
         <div class="sidebar relative h-screen shadow">
             <div class="toggle bg-primary absolute rounded py-4 top-8 cursor-pointer"
                  :class="!isHide?'pl-5 pr-2 -right-8':'pl-2 pr-6 -right-12'"
@@ -82,7 +85,7 @@
         },
         computed: {
             ...mapState('auth', ['token', 'stProfile']),
-            ...mapState('setting', ['localize'])
+            ...mapState('setting', ['localize','darkMode'])
         },
 
         methods: {

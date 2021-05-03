@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-primary font-semibold text-sm">
+        <div class="text-primary font-semibold text-sm" :class="darkMode?'text-textSecondary':''">
             {{$t('1120')}}
         </div>
         <div class="px-3 my-3 mt-5">
@@ -58,8 +58,11 @@
     </div>
 </template>
 <script>
-    import {mapActions} from "vuex"
+    import {mapActions,mapState} from "vuex"
     export default{
+        computed: {
+            ...mapState('setting', ['darkMode'])
+        },
         methods: {
             ...mapActions('auth', ['logout']),
             logoutUser(){

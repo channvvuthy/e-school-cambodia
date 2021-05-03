@@ -62,6 +62,13 @@ new Vue({
         if (localStorage.getItem('token')) {
             store.commit('auth/studentProfile', JSON.parse(localStorage.getItem('stProfile')))
         }
+        
+        if (localStorage.getItem('darkMode')) {
+            store.commit('setting/setDarkMode', localStorage.getItem('darkMode'))
+        }else{
+            store.commit('setting/setDarkMode', localStorage.setItem('darkMode',false))
+        }
+
         store.dispatch('online/onlineOffline');
         if (!localStorage.getItem('localize')) {
             localStorage.setItem('localize', 'en')

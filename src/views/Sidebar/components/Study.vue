@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-primary font-semibold text-sm">
+        <div class="text-primary font-semibold text-sm" :class="darkMode?'text-textSecondary':''">
             {{$t('1106')}}
         </div>
         <div class="px-3 my-3 mt-5">
@@ -73,3 +73,11 @@
         </div>
     </div>
 </template>
+<script>
+    import {mapState} from "vuex"
+    export default{
+        computed: {
+            ...mapState('setting', ['darkMode'])
+        },
+    }
+</script>

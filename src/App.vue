@@ -5,7 +5,8 @@
                 <!--Sidebar-->
                 <Sidebar/>
             </div>
-            <div class="w-full bg-white border border-gray-300 border-t-0 h-32 flex items-end"
+            <div class="w-full border border-t-0 h-32 flex items-end"
+                :class="darkMode?'bg-secondary border-secondary text-textSecondary':'bg-white border-gray-300'"
                  :style="isHide?{marginLeft:'0px'}:{marginLeft:'385px'}">
                 <Menu/>
             </div>
@@ -29,7 +30,7 @@
             Menu
         },
         computed: {
-            ...mapState('setting', ['isHide'])
+            ...mapState('setting', ['isHide', 'darkMode'])
         },
         methods: {
             escapeRoute(){

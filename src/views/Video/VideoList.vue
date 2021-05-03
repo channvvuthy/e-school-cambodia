@@ -4,7 +4,7 @@
             <Loading></Loading>
         </div>
         <div class="grid gap-4" :class="isHide?'grid-cols-4':'grid-cols-3'" v-else>
-            <div v-for="(view,index) in list" class="bg-white shadow cursor-pointer" :key="index">
+            <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'bg-secondary text-textSecondary':'bg-white shadow'">
                 <!--Vdo-->
                 <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"
                      @mouseleave="hideAndShowDuration('')">
@@ -25,7 +25,7 @@
                     <div class="flex p-3 items-center justify-start cursor-text">
                         <img :src="view.vdo.teacher.photo" class="h-10 rounded mr-3">
                         <div>
-                            <div class="text-primary text-sm">{{cutString(view.vdo.title,20)}}</div>
+                            <div class="text-primary text-sm" :class="darkMode?'text-textSecondary':''">{{cutString(view.vdo.title,20)}}</div>
                             <div class="flex font-khmer_os text-xs opacity-50">
                                 <div>{{view.vdo.teacher.name}}</div>
                                 <div class="ml-7">{{ kFormatter(view.vdo.view) }} view</div>
@@ -62,7 +62,7 @@
                     <div class="flex p-3 items-center justify-start">
                         <img :src="view.ads.logo" class="h-10 rounded mr-3">
                         <div>
-                            <div class="text-primary text-sm">{{view.ads.title}}</div>
+                            <div class="text-primary text-sm" :class="darkMode?'text-textSecondary':''">{{view.ads.title}}</div>
                             <div class="flex font-khmer_os text-xs opacity-50">
                                 <div>{{view.ads.company}}</div>
                             </div>
@@ -104,7 +104,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("setting", ["isHide"]),
+    ...mapState("setting", ["isHide","darkMode"]),
     ...mapState("home", ["list", "homeLoading"]),
     ...mapState('favorite', ['temporaryFavorites'])
   },
