@@ -364,6 +364,7 @@ export default {
       }, 200);
     },
     changeVideoQuality(quality) {
+
       let refreshVideoQuality;
       if (quality === 1) {
         refreshVideoQuality = this.videoUrl
@@ -501,5 +502,6 @@ export default {
   margin-top: -4px;
   -webkit-appearance: none;
   border-radius: 100%;
+  
 }
 </style>
