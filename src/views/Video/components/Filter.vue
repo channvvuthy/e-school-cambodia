@@ -1,13 +1,13 @@
 <template>
     <div class="relative">
-        <div class="p-5 mt-3 mb-1" :class="darkMode?'bg-secondary border border-l-2':'bg-white'">
+        <div class="p-5 mt-3 mb-1" :class="darkMode?'bg-secondary border border-l-2':'bg-white shadow'">
             <div class="flex justify-between w-3/5 ">
                 <div class="flex-1 relative">
-                    <input type="text" :placeholder="$t('1001')" v-model="s" :class="darkMode?'text-textSecondary border-gray-700':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8">
+                    <input type="text"  v-on:keyup.enter="filterSearch" :placeholder="$t('1001')" v-model="s" :class="darkMode?'text-textSecondary border-gray-700':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8">
                     <div>
-                        <div v-if="s" class="absolute left-0 top-0 cursor-pointer"
+                        <div v-if="s" class="absolute left-0 top-4 cursor-pointer"
                             :title="$t('clear')" @click="clear">
-                            <CloseIcon :width="20" :height="20"></CloseIcon>
+                            <CloseIcon :width="20" :height="20" :fill="darkMode?'#afb0b4':'#000000'"></CloseIcon>
                         </div>
                         <div class="h-5 absolute left-0 top-4" v-else>
                             <SearchIcon :fill="darkMode?'#afb0b4':'#000000'"></SearchIcon>
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <List :filter="filter" v-if="showFilterForm"/>
+        <List :filter="filter" v-if="showFilterForm" @closeFilter="closeFilter"/>
     </div>
 </template>
 
@@ -56,12 +56,23 @@
             ...mapState('home', ['filter', 'selectedFilterName', 'filter_id'])
         },
         methods: {
-            ...mapActions('home', ['getList']),
+            ...mapActions('video', ['getVideo']),
             showFilter(){
                 this.showFilterForm = !this.showFilterForm
             },
             closeFilter(){
                 this.showFilterForm = false
+                let payload = {}
+
+                if(this.s.length){
+                    payload.s = this.s 
+                }
+            
+                if(this.filter_id !== "all"){
+                    payload.filter_id = this.filter_id
+                }
+
+                this.getVideo(payload);
             },
             clear(){
                 this.s = ""
@@ -71,12 +82,14 @@
             },
             filterSearch(){
                 this.$store.commit("home/receiveS", this.s);
-                this.getList({
-                    s: this.s,
-                    filter_id: this.filter_id
-                }).then(() => {
-                    this.$store.commit('setting/setPagination', 1)
-                })
+                let payload = {}
+                payload.s = this.s 
+
+                if(this.filter_id !== "all"){
+                    payload.filter_id = this.filter_id
+                }
+
+                this.getVideo(payload);
             }
         },
         watch: {

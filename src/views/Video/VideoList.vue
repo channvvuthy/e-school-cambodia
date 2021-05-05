@@ -35,7 +35,7 @@
                             <div class="float-right cursor-pointer">
                         
                                 <div v-if="(view.vdo.is_favorite || isFavorite(view.vdo._id))" @click="removeMyFavorite(view.vdo._id)">
-                                    <HeartIcon/>
+                                    <HeartIcon :fill="darkMode?`#ff3333`:`#c1272d`"/>
                                 </div>
                                 <div @click="addFavorite(view.vdo._id)" v-else>
                                     <HeartIcon fill="#D1D5DB"/>

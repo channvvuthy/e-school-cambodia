@@ -53,14 +53,18 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import HomeIcon from "./../../components/HomeIcon.vue"
 export default {
-  computed: {
-    ...mapState("setting", ["localize","darkMode"])
-  },
-  methods: {
-    goTo(page) {
-      this.$router.push({ name: page });
+    components:{
+        HomeIcon
+    },
+    computed: {
+        ...mapState("setting", ["localize","darkMode"])
+    },
+    methods: {
+        goTo(page) {
+        this.$router.push({ name: page });
+        }
     }
-  }
 };
 </script>

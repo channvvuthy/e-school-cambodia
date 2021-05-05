@@ -18,6 +18,8 @@ module.exports = {
             primary: '#0f3c7a',
             secondary:"#252527",
             textSecondary:"#afb0b4",
+            skyBlue:"#0092cc",
+            hyper:"#ff3333",
             custom: '#00a0e4',
             success: '#40b366',
             lightGray:"#afb0b4",

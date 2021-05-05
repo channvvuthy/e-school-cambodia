@@ -1,29 +1,73 @@
 <template>
-    <div class="overflow-y-scroll h-screen">
+    <div class="overflow-y-scroll h-screen pb-40" @scroll="onScroll">
         <BoxFilter></BoxFilter>
-        <div class="mt-5 px-5">
+        <div class="mt-10 px-5">
             <div v-if="loading">
                 <Loading></Loading>
             </div>
             <div v-else>
                 <div class="grid gap-4" :class="isHide?`grid-cols-4`:`grid-cols-3`">
                     <div v-for="(video, index) in videos.list" :key="index">
-                        <div class="relative rounded-2xl" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white shadow`">
+                        <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white shadow`">
+                            <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
                             <img :src="video.thumbnail" class="rounded-t-2xl" onerror="this.onerror=null; this.src='http://staging-admin.e-schoolcambodia.com/files/img/202007z5ec27d8281768d3272313b9cm1594720414m9181.png'"/>
                             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
-                               <div class="w-14 h-14 rounded-md bg-cover bg-gray-300" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
-                               <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ video.title }})</div>
-                               <div class="w-full flex justify-between">
-                                   <div><YoutubeIcon :fill="darkMode?`#afb0b4`:`#000000`"></YoutubeIcon></div>
-                                   <div><YoutubeIcon></YoutubeIcon></div>
-                                   <div><YoutubeIcon></YoutubeIcon></div>
-                                   <div><CertificateIcon></CertificateIcon></div>
+                               <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
+                               <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
+                               <div class="flex items-end w-full justify-between mt-3 text-center text-sm">
+                                   <div class="cursor-pointer">
+                                       <YoutubeIcon :fill="darkMode?`#afb0b4`:`#000000`"></YoutubeIcon>
+                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                                            {{ video.total_video?video.total_video: 0}}
+                                       </div>
+                                    </div>
+                                   <div class="cursor-pointer">
+                                       <PdfIcon :fill="darkMode?`#afb0b4`:`#000000`"></PdfIcon>
+                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                                            {{ video.total_pdf?video.total_pdf:0 }}
+                                       </div>
+                                   </div>
+                                   <div class="cursor-pointer">
+                                       <ChatIcon :fill="darkMode?`#afb0b4`:`#000000`"></ChatIcon>
+                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                           {{ video.has_support?$t('1008'):$t('1009') }}
+                                       </div>   
+                                    </div>
+                                   <div class="cursor-pointer">
+                                       <TestIcon :fill="darkMode?`#afb0b4`:`#000000`"></TestIcon>
+                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                            {{ video.has_quiz?$t('1008'):$t('1009') }}
+                                       </div>
+                                    </div>
+                                   <div class="cursor-pointer">
+                                       <CertificateIcon :fill="darkMode?`#afb0b4`:`#000000`"></CertificateIcon>
+                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                           {{ video.has_certificate?$t('1008'):$t('1009') }}
+                                       </div>
+                                    </div>
+                               </div>
+                               <div class="flex w-full justify-between items-center relative top-5 mt-5">
+                                   <template v-if="video.price.year">
+                                        <div>{{$t('1006')}} : <del>{{video.price.highlight}} USD</del>&nbsp; <span :class="darkMode?`text-hyper`:`text-red-700`">{{video.price.year}} USD</span></div>
+                                        <div>
+                                            <CartIcon :fill="darkMode?`#afb0b4`:`#000000`"></CartIcon>
+                                        </div>
+                                   </template>
+                                   <template v-else>
+                                        <div class="text-red-700">{{$t('1007')}}</div>
+                                   </template>
                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div v-if="loadingMore">
+                <Loading></Loading>
+            </div>
+            <template v-if="videos.list.length <= 0">
+            <Empty></Empty>
+        </template>
         </div>
     </div>
 </template>
@@ -32,27 +76,66 @@
 import BoxFilter from "./components/Filter.vue"
 import Loading from "./../../components/Loading.vue"
 import CertificateIcon from "./../../components/CertificateIcon.vue"
+import TestIcon from "./../../components/TestIcon.vue"
+import PdfIcon from "./../../components/PdfIcon.vue"
+import ChatIcon from "./../../components/ChatIcon.vue"
+import CartIcon from "./../../components/CartIcon.vue"
 import YoutubeIcon from "./../../components/YoutubeIcon.vue"
+import NewIcon from "./../../components/NewIcon.vue"
 import {mapState, mapActions} from "vuex"
+import helper from "./../../helper/helper"
+import Empty from "./../Component/Empty.vue";
 export default {
     components:{
         BoxFilter,
         Loading,
         CertificateIcon,
-        YoutubeIcon
+        YoutubeIcon,
+        TestIcon,
+        PdfIcon,
+        ChatIcon,
+        CartIcon,
+        NewIcon,
+        Empty
+    },
+    data(){
+        return{
+            page: 1
+        }
     },
     computed:{
-        ...mapState("video", ["videos", "loading"]),
+        ...mapState("video", ["videos", "loading","loadingMore"]),
         ...mapState("setting", ["darkMode","isHide"]),
+        ...mapState('home', ['filter', 'selectedFilterName', 'filter_id', 's'])
     },
     methods:{
-        ...mapActions('video', ['getVideo'])
+        ...mapActions('video', ['getVideo','getVideoWithPagination']),
+        cutString(text, limit){
+            return helper.cutString(text, limit)
+        },
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if (scrollTop + clientHeight >= scrollHeight) {
+                this.page ++ 
+
+                let payload = {}
+
+                if(this.s.length){
+                    payload.s = this.s
+                }
+
+                if(this.filter_id !== "all"){
+                    payload.filter_id = this.filter_id
+                }
+
+                payload.page = this.page
+
+                this.getVideoWithPagination(payload)
+            }
+        },
     },
 
     created(){
-        this.getVideo({filter_id:""}).then(response =>{
-            console.log(response.data.data)
-        })
+        this.getVideo({filter_id:""});
     }
 
 }

@@ -3,9 +3,11 @@
         <div class="px-5 py-5">
             <div class="flex text-primary  text-md gap-4">
                 <div>
-                    <img src="/icon/icon/smile.svg" class="mr-3">
+                    <div class="mr-3">
+                        <SmileIcon :fill="darkMode?`#afb0b4`:`#0f3c7a`"></SmileIcon>
+                    </div>
                 </div>
-                <div class="text-base font-medium" :class="darkMode?'text-textSecondary':''">{{$t('2003')}} <span>
+                <div class="text-base font-medium" :class="darkMode?'text-textSecondary':''"><span class="uppercase">{{$t('2003')}}</span> <span>
                     {{token ? stProfile.first_name + " " + stProfile.last_name : $t('1127')}}
                 </span></div>
             </div>
@@ -46,6 +48,7 @@
 
 <script>
     import AddIcon from "./../../components/AddIcon.vue"
+    import SmileIcon from "./../../components/SmileIcon.vue"
     import StoryDetail from "./StoryDetail.vue"
     import AddStory from "./AddStory.vue"
     import {mapState, mapActions} from "vuex"
@@ -53,7 +56,8 @@
         components: {
             AddIcon,
             StoryDetail,
-            AddStory
+            AddStory,
+            SmileIcon
         },
         data(){
             return{
