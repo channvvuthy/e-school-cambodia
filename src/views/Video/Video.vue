@@ -1,5 +1,5 @@
 <template>
-    <div class="overflow-y-scroll h-screen pb-40" @scroll="onScroll">
+    <div class="mt-3 overflow-y-scroll h-screen pb-40" @scroll="onScroll">
         <BoxFilter></BoxFilter>
         <div class="mt-10 px-5">
             <div v-if="loading">
@@ -10,42 +10,44 @@
                     <div v-for="(video, index) in videos.list" :key="index">
                         <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white shadow`">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
-                            <img :src="video.thumbnail" class="rounded-t-2xl" onerror="this.onerror=null; this.src='http://staging-admin.e-schoolcambodia.com/files/img/202007z5ec27d8281768d3272313b9cm1594720414m9181.png'"/>
+                            <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-2xl" onerror="this.onerror=null; this.src='/poster.png'"/>
                             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
-                               <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
-                               <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
-                               <div class="flex items-end w-full justify-between mt-3 text-center text-sm">
-                                   <div class="cursor-pointer">
-                                       <YoutubeIcon :fill="darkMode?`#afb0b4`:`#000000`"></YoutubeIcon>
-                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
-                                            {{ video.total_video?video.total_video: 0}}
-                                       </div>
+                            <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
+                                <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
+                                <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
+                                <div class="flex items-end w-full justify-between mt-3 text-center text-sm">
+                                    <div class="cursor-pointer">
+                                        <YoutubeIcon :fill="darkMode?`#afb0b4`:`#000000`"></YoutubeIcon>
+                                        <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                                                {{ video.total_video?video.total_video: 0}}
+                                        </div>
+                                        </div>
+                                    <div class="cursor-pointer">
+                                        <PdfIcon :fill="darkMode?`#afb0b4`:`#000000`"></PdfIcon>
+                                        <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                                                {{ video.total_pdf?video.total_pdf:0 }}
+                                        </div>
                                     </div>
-                                   <div class="cursor-pointer">
-                                       <PdfIcon :fill="darkMode?`#afb0b4`:`#000000`"></PdfIcon>
-                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
-                                            {{ video.total_pdf?video.total_pdf:0 }}
-                                       </div>
-                                   </div>
-                                   <div class="cursor-pointer">
-                                       <ChatIcon :fill="darkMode?`#afb0b4`:`#000000`"></ChatIcon>
-                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
-                                           {{ video.has_support?$t('1008'):$t('1009') }}
-                                       </div>   
-                                    </div>
-                                   <div class="cursor-pointer">
-                                       <TestIcon :fill="darkMode?`#afb0b4`:`#000000`"></TestIcon>
-                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
-                                            {{ video.has_quiz?$t('1008'):$t('1009') }}
-                                       </div>
-                                    </div>
-                                   <div class="cursor-pointer">
-                                       <CertificateIcon :fill="darkMode?`#afb0b4`:`#000000`"></CertificateIcon>
-                                       <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
-                                           {{ video.has_certificate?$t('1008'):$t('1009') }}
-                                       </div>
-                                    </div>
-                               </div>
+                                    <div class="cursor-pointer">
+                                        <ChatIcon :fill="darkMode?`#afb0b4`:`#000000`"></ChatIcon>
+                                        <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                            {{ video.has_support?$t('1008'):$t('1009') }}
+                                        </div>   
+                                        </div>
+                                    <div class="cursor-pointer">
+                                        <TestIcon :fill="darkMode?`#afb0b4`:`#000000`"></TestIcon>
+                                        <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                                {{ video.has_quiz?$t('1008'):$t('1009') }}
+                                        </div>
+                                        </div>
+                                    <div class="cursor-pointer">
+                                        <CertificateIcon :fill="darkMode?`#afb0b4`:`#000000`"></CertificateIcon>
+                                        <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                            {{ video.has_certificate?$t('1008'):$t('1009') }}
+                                        </div>
+                                        </div>
+                                </div>
+                            </div>
                                <div class="flex w-full justify-between items-center relative top-5 mt-5">
                                    <template v-if="video.price.year">
                                         <div>{{$t('1006')}} : <del>{{video.price.highlight}} USD</del>&nbsp; <span :class="darkMode?`text-hyper`:`text-red-700`">{{video.price.year}} USD</span></div>
@@ -54,7 +56,7 @@
                                         </div>
                                    </template>
                                    <template v-else>
-                                        <div class="text-red-700">{{$t('1007')}}</div>
+                                        <div :class="darkMode?`text-hyper`:`text-red-700`">{{$t('1007')}}</div>
                                    </template>
                                </div>
                             </div>
@@ -112,6 +114,9 @@ export default {
         ...mapActions('video', ['getVideo','getVideoWithPagination']),
         cutString(text, limit){
             return helper.cutString(text, limit)
+        },
+        gotToPlayList(videoCourse){
+            this.$router.push({ name: 'video-detail', params: { course: videoCourse } })
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight) {

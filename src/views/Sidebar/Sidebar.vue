@@ -1,6 +1,6 @@
 <template>
-    <div class="fixed font-khmer_os" style="width: 385px;"
-         :style="isHide?{marginLeft:'-385px'}:{marginLeft:'0px'}"
+    <div class="fixed font-khmer_os" style="width: 350px;"
+         :style="isHide?{marginLeft:'-350px'}:{marginLeft:'0px'}"
          :class="darkMode?'bg-secondary text-gray-300':'bg-white text-black'"
          
          >
@@ -27,7 +27,7 @@
                          :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}">
                     </div>
                     <div class="flex justify-between items-end mt-3  cursor-pointer"
-                         :class="localize==='en'?'text-base':'text-sm'">
+                         :class="localize==='en'?'text-xs':'text-xs'">
                         <p class="name">
                             {{token ? stProfile.first_name + " " + stProfile.last_name : $t('unname')}}
                         </p>

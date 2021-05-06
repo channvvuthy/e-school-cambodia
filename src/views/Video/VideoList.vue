@@ -35,10 +35,10 @@
                             <div class="float-right cursor-pointer">
                         
                                 <div v-if="(view.vdo.is_favorite || isFavorite(view.vdo._id))" @click="removeMyFavorite(view.vdo._id)">
-                                    <HeartIcon :fill="darkMode?`#ff3333`:`#c1272d`"/>
+                                    <FavoriteFill/>
                                 </div>
                                 <div @click="addFavorite(view.vdo._id)" v-else>
-                                    <HeartIcon fill="#D1D5DB"/>
+                                    <FavoriteIcon :fill="darkMode?`#afb0b4`:`#4A4A4A`"/>
                                 </div>
                             </div>
                         </div>
@@ -82,6 +82,8 @@
 </template>
 <script>
 import HeartIcon from "./../../components/HeartIcon.vue";
+import FavoriteIcon from "./../../components/FavoriteIcon.vue";
+import FavoriteFill from "./../../components/FavoriteFill.vue";
 import Loading from "./../../components/Loading";
 import Empty from "./../Component/Empty.vue";
 import { mapState, mapActions } from "vuex";
@@ -93,7 +95,9 @@ export default {
     HeartIcon,
     Loading,
     Empty,
-    VideoADS
+    VideoADS,
+    FavoriteIcon,
+    FavoriteFill
   },
   data() {
     return {
@@ -125,7 +129,6 @@ export default {
     isFavorite(id){
         return this.temporaryFavorites.filter(item => item === id).length
     },
-    
     removeMyFavorite(id){
         this.removeFavorite(id).then(()=>{
             this.$store.commit('favorite/removeTemporaryFavorite',id)

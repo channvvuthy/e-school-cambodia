@@ -1,6 +1,6 @@
 <template>
     <div class="relative">
-        <div class="p-5 mt-3 mb-1" :class="darkMode?'bg-secondary border border-l-2':'bg-white shadow'">
+        <div class="p-5 mb-1" :class="darkMode?'bg-secondary border border-l-2':'bg-white shadow'">
             <div class="flex justify-between w-3/5 ">
                 <div class="flex-1 relative">
                     <input type="text"  v-on:keyup.enter="filterSearch" :placeholder="$t('1001')" v-model="s" :class="darkMode?'text-textSecondary border-gray-700':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8">

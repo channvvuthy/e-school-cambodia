@@ -109,9 +109,16 @@ export default {
             commit
         }, payload) {
             commit("loading", true)
-            await axios.delete(config.apiUrl + 'favorite/remove', {
-                id: payload
-            }).then(() => {
+            await axios.delete(config.apiUrl + 'favorite/video',
+            {
+                headers: {
+                 
+                },
+                data: {
+                  id: payload
+                }
+              }
+            ).then(() => {
                 commit("loading", false)
                 commit("removeFav", payload)
 

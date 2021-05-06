@@ -36,7 +36,7 @@
                         >
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                         </div>
-                        <p class="mt-3 font-medium">{{my_story.user.name}}</p>
+                        <p class="mt-3">{{my_story.user.name}}</p>
                     </div>
                 </div>
             </div>

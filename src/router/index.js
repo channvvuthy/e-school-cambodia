@@ -69,6 +69,11 @@ const routes = [
         component: () => import('../views/Video/Video'),
     },
     {
+        path: '/video-detail/:course',
+        name: 'video-detail',
+        component: () => import('../views/Video/CoursePlayList'),
+    },
+    {
         path: '/course-play-list/:course_id',
         name: 'course-play-list',
         component: () => import('../views/Video/CoursePlayList'),

@@ -6,12 +6,13 @@
                 <Sidebar/>
             </div>
             <div class="w-full border border-t-0 h-32 flex items-end"
+                v-if="!hideMenu()"
                 :class="darkMode?'bg-secondary border-secondary text-textSecondary':'bg-white border-gray-300'"
-                 :style="isHide?{marginLeft:'0px'}:{marginLeft:'385px'}">
+                :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}">
                 <Menu/>
             </div>
         </div>
-        <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'385px'}">
+        <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}">
             <router-view></router-view>
         </div>
 
@@ -33,6 +34,12 @@
             ...mapState('setting', ['isHide', 'darkMode'])
         },
         methods: {
+            hideMenu(){
+                if(this.$route.name === 'video-detail'){
+                    return true
+                }
+                return false
+            },
             escapeRoute(){
                 if (this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password') {
                     this.$store.commit('setting/toggleSidebar', true);
