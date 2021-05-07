@@ -1,6 +1,6 @@
 <template>
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-         width="20" height="20"
+         :width="size" :height="size"
          viewBox="0 0 172 172"
          style=" fill:#ffffff;">
         <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
@@ -13,3 +13,14 @@
         </g>
     </svg>
 </template>
+<script>
+    export default{
+        props:{
+            size:{
+                default:() =>{
+                    return 20
+                }
+            }
+        }
+    }
+</script>

@@ -1,23 +1,36 @@
 <template>
-    <div class="ml-5 mt-3 h-screen overflow-y-scroll pb-60 font-khmer_os">
+    <div class="ml-5 mt-3 h-screen overflow-y-scroll pb-60 font-khmer_os" @scroll="onScroll">
         <div v-for="(list,index) in playlist.list" :key="index">
-            <div class="flex justify-between items-center bg-white p-4 mb-3 rounded-md shadow">
-                <img :src="list.thumbnail" onerror="this.onerror=null; this.src='/poster.png'" class="w-2/5 rounded-md mr-3 cursor-pointer"/>
-                <div class="flex-1">
-                    <div class="font-semibold text-primary cursor-pointer"> {{(index+1)+". "+cutString(list.title,40)}}</div>
-                    <div class="flex mt-3 justify-between items-center">
+            <div class="flex justify-between items-center p-4 mb-3 rounded-md shadow"
+            :class="list.order === order?`bg-gray-200`:`bg-white`"
+             :style="canWatch(list.free_watch)?{}:{opacity:`0.5`}">
+                <img :src="list.thumbnail" onerror="this.onerror=null; this.src='/poster.png'" class="w-2/5 rounded-md mr-3"
+                @click="nextVideo(list)"
+                :title="list.title"
+                 :class="canWatch(list.free_watch)?`cursor-pointer`:`cursor-default`"/>
+                <div class="flex-1 flex flex-col justify-between">
+                    <div class="font-semibold text-primary mb-3" 
+                     @click="nextVideo(list)"
+                     :title="list.title"
+                    :class="canWatch(list.free_watch)?`cursor-pointer`:`cursor-default`"> {{(index+1)+". "+cutString(list.title,40)}}</div>
+                    <div class="flex justify-between items-center text-sm items-center">
                         <div class="flex">
-                            <Eye :width="22" :height="22"></Eye>
+                            <Eye :width="20" :height="20"></Eye>
                             <div class="mx-2 opacity-50">{{list.view}}</div>
                             <div class="opacity-50">{{$t('2107')}}</div>
                         </div>
                         <div class="flex">
-                            <div class="mr-5 cursor-pointer"  @click="list.is_favorite?removeMyFavorite(list._id):addFavorite(list._id)">
-                                <FavoriteFill :size="22" v-if="list.is_favorite"></FavoriteFill>
-                                <FavoriteIcon :size="22" v-else></FavoriteIcon>
-                            </div>
-                            <div>
-                                <DownloadIcon :size="20"></DownloadIcon>
+                            <template v-if="canWatch(list.free_watch)">
+                                <div class="mr-5 cursor-pointer"  @click="list.is_favorite?removeMyFavorite(list._id):addFavorite(list._id)">
+                                    <FavoriteFill :size="20" v-if="list.is_favorite"></FavoriteFill>
+                                    <FavoriteIcon :size="20" v-else></FavoriteIcon>
+                                </div>
+                                <div>
+                                    <DownloadIcon :size="18"></DownloadIcon>
+                                </div>
+                            </template>
+                            <div v-else>
+                                <LockIcon :width="20" :height="20"></LockIcon>
                             </div>
                         </div>
                     </div>
@@ -30,6 +43,7 @@
 <script>
 import Eye from "./../../../components/Eye.vue"
 import DownloadIcon from "./../../../components/DownloadIcon.vue"
+import LockIcon from "./../../../components/LockIcon.vue"
 import FavoriteIcon from "./../../../components/FavoriteIcon.vue"
 import FavoriteFill from "./../../../components/FavoriteFill.vue"
 import helper from "./../../../helper/helper"
@@ -39,7 +53,8 @@ export default {
         Eye,
         DownloadIcon,
         FavoriteIcon,
-        FavoriteFill
+        FavoriteFill,
+        LockIcon
     },
     props:{
         playlist:{
@@ -48,26 +63,56 @@ export default {
             }
         }
     },
+    data(){
+        return{
+            page: 1,
+        }
+    },
     computed:{
-        ...mapState('favorite', ['temporaryFavorites'])
+        ...mapState('favorite', ['temporaryFavorites']),
+        ...mapState('video', ['order'])
     },
     methods:{
-        ...mapActions('favorite', ['add', 'removeMyFavorite','removeFavorite']),
+        ...mapActions('favorite', ['add','removeFavorite']),
+        ...mapActions('video', ['getPlaylistWithPagination']),
         cutString(text, limit){
             return helper.cutString(text, limit)
         },
     
         addFavorite(id){
             this.add(id).then(()=>{
-                 
+                 this.$store.commit("video/addFavoriteVideo", id)
             })
+        },
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if (scrollTop + clientHeight >= scrollHeight) {
+                this.page ++
+                let len = this.playlist.list.length - 1
+                this.getPlaylistWithPagination({
+                    p: this.page,
+                    id: this.$route.params.course._id,
+                    order: this.playlpist.list[len].order
+                })
+            }
         },
         removeMyFavorite(id){
             this.removeFavorite(id).then(()=>{
-                
+                this.$store.commit("video/removeFavoriteVideo", id)
             })
         },
-    }
+        nextVideo(video){
+            if(this.canWatch(video.free_watch)){
+                this.$emit("nextVideo", video);
+            }
+            
+        },
+        canWatch(free_watch){
+            if((this.$route.params.course.is_buy || free_watch)){
+                return true
+            }
+            return false
+        }
+    },
 }
 </script>
 

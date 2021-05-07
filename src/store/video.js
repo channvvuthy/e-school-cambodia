@@ -6,11 +6,31 @@ export default {
         videos:[],
         loading:false,
         loadingMore:false,
-        playlist: []
+        playlist: [],
+        order: 1
 
     },
 
     mutations: {
+        setOrder(state, payload){
+            state.order = payload
+        },
+        removeFavoriteVideo(state, payload){
+            state.playlist.list.filter(item =>{
+                if(item._id === payload){
+                    item.is_favorite = 0;
+                }
+                return item
+            });
+        },
+        addFavoriteVideo(state, payload){
+            state.playlist.list.filter(item =>{
+                if(item._id === payload){
+                    item.is_favorite = 1;
+                }
+                return item
+            });
+        },
         gettingVideo(state, payload){
             state.loading = payload
         },
@@ -30,6 +50,12 @@ export default {
 
         gettingPlaylist(state, payload){
             state.playlist = payload
+        },
+        gettingMorePlaylist(state, payload){
+            console.log(payload)
+            for(let i =0; i < payload.length; i++){
+                state.playlist.list.push(payload[i]);
+            }
         }
     },
 
@@ -77,6 +103,21 @@ export default {
             axios.get(config.apiUrl + `video/playlist?${qs}`).then(response =>{
                 commit("gettingVideo", false);
                 commit("gettingPlaylist", response.data.data);
+                resolve(response)
+            }).catch(err =>{
+                reject(err)
+            })
+        })
+       },
+       getPlaylistWithPagination({commit},payload){
+        let qs = Object.keys(payload)
+        .map(key => `${key}=${payload[key]}`)
+        .join('&');
+        // commit("gettingVideo", true);
+        return new Promise((resolve, reject) =>{
+            axios.get(config.apiUrl + `video/playlist?${qs}`).then(response =>{
+                // commit("gettingVideo", false);
+                commit("gettingMorePlaylist", response.data.data.list);
                 resolve(response)
             }).catch(err =>{
                 reject(err)

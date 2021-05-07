@@ -1,11 +1,11 @@
 <template>
   <div class="flex justify-center items-center text-center">
       <div>
-          <div class="relative">
+          <div class="relative" @mouseleave="()=>{this.showToolbar = false}">
               <div class="w-11/12 relative m-auto">
                   <div class="flex justify-center items-center bg-black bg-opacity-70 rounded py-1 px-2 absolute top-5 cursor-pointer z-50" v-if="showToolbar" @click="toggleFullScreen">
-                      <div class="border border-white opacity-80 m-1">
-                          <EnlargeIcon></EnlargeIcon>
+                      <div class="border border-white opacity-80 m-1 rounded" style="padding:1px;">
+                          <EnlargeIcon :size="20"></EnlargeIcon>
                       </div>
                   </div>
               </div>
@@ -14,146 +14,149 @@
                       @timeupdate="timeUpdate()"
                       @pause="pause()"
                       @mouseover="()=>{this.showSound = false,this.showToolbar = true}"
+                      @ended="endedVideo"
                       >
                   <source :src="url"/>
               </video>
-              <div class="bg-black text-white rounded-md text-sm bg-opacity-70 h-10 flex justify-between px-5 items-center w-11/12 relative -top-14 m-auto" :class="showToolbar?'visible':'invisible'">
-                  <button id="playPauseBtn" class="bg-transparent focus:outline-none opacity-80"
-                          @click="playPause()">
-                      <PlayIcon v-if="showPlay"></PlayIcon>
-                      <PauseIcon v-else></PauseIcon>
-                  </button>
-                  <div class="px-5 opacity-80">
-                      <span id="currentTime"></span>
-                      <span id="currentDuration"></span>
-                  </div>
-                  <div class="flex-1 opacity-80 relative">
-                      <input type="range" min="0" max="100" id="seekSlider" value="0" step="1"
-                              ref="seekSlider"
-                              class="w-full seekSlider z-50"/>
-                      <div class="absolute w-full bg-white left-0 rounded-lg" id="range"
-                            :style="{width:rangeSliderWidth+'%',top:11.5+'px',zIndex:'-1',height:'4px'}"></div>
-                  </div>
+              <div class="absolute bottom-3 w-full px-5">
+                <div class="bg-black text-white rounded-md text-sm bg-opacity-70 h-10 flex justify-between px-5 items-center m-auto" :class="showToolbar?'visible':'invisible'">
+                    <button id="playPauseBtn" class="bg-transparent focus:outline-none opacity-80"
+                            @click="playPause()">
+                        <PlayIcon v-if="showPlay"></PlayIcon>
+                        <PauseIcon v-else></PauseIcon>
+                    </button>
+                    <div class="px-5 opacity-80">
+                        <span id="currentTime"></span>
+                        <span id="currentDuration"></span>
+                    </div>
+                    <div class="flex-1 opacity-80 relative">
+                        <input type="range" min="0" max="100" id="seekSlider" value="0" step="1"
+                                ref="seekSlider"
+                                class="w-full seekSlider z-50"/>
+                        <div class="absolute w-full bg-white left-0 rounded-lg" id="range"
+                              :style="{width:rangeSliderWidth+'%',top:11.5+'px',zIndex:'-1',height:'4px'}"></div>
+                    </div>
 
-                  <div class="px-5 0 cursor-pointer relative">
-                      <div class="opacity-80" @click="showSettingModal">
-                          <SettingIcon></SettingIcon>
-                      </div>
-                      <!--Setting-->
-                      <div class="bg-black absolute bottom-8 w-48 right-5 px-3 bg-opacity-70 rounded-md py-2"
-                            v-if="showSetting">
-                          <div class="flex justify-between items-center h-10 leading-10"
-                                @click="showPlaybackModal">
-                              <div>{{$t('playback_speed')}}</div>
-                              <div class="transform -rotate-90">
-                                  <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
-                              </div>
-                          </div>
-                          <div class="flex justify-between items-center h-10 leading-10"
-                                @click="showQualityModal">
-                              <div>{{$t('quality')}}</div>
-                              <div class="transform -rotate-90">
-                                  <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
-                              </div>
-                          </div>
-                      </div>
-                      <!--End setting-->
-                      <!--Playback speed-->
-                      <div class="bg-black absolute bottom-8 w-48 right-5 bg-opacity-70 rounded-md pt-2 overflow-hidden"
-                            v-if="showPlayback">
-                          <div class="flex items-center h-10 leading-10 px-3" @click="playbackBack">
-                              <div class="transform rotate-90 mr-3">
-                                  <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
-                              </div>
-                              <div>{{$t('playback_speed')}}</div>
-                          </div>
-                          <hr class="opacity-30">
-                          <div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(0.25)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===0.25">&#10003;</span>0.25
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(0.5)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===0.5">&#10003;</span>
-                                  0.5
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(0.75)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===0.75">&#10003;</span>
-                                  0.75
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(1)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===1">&#10003;</span>
-                                  {{$t('normal')}}
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(1.25)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===1.25">&#10003;</span>
-                                  1.25
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(1.5)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===1.5">&#10003;</span>
-                                  1.5
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(1.75)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===1.75">&#10003;</span>
-                                  1.75
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
-                                    @click="playbackRate(2)">
-                                  <span class="text-base absolute left-5" v-if="defaultSpeed ===2">&#10003;</span>
-                                  2
-                              </div>
-                          </div>
-                      </div>
-                      <!--End playback speed-->
-                      <!--Quality-->
-                      <div class="bg-black absolute bottom-8 w-48 right-5 bg-opacity-70 rounded-md pt-2 overflow-hidden"
-                            v-if="showQuality">
-                          <div class="flex items-center h-10 leading-10 px-3" @click="backQuality">
-                              <div class="transform rotate-90 mr-3">
-                                  <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
-                              </div>
-                              <div>{{$t('quality')}}</div>
-                          </div>
-                          <hr class="opacity-30">
-                          <div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(1)">
-                                  <span class="text-base absolute left-5" v-if="defaultQuality ===1">&#10003;</span>{{$t('auto')}}
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(360)">
-                                  <span class="text-base absolute left-5" v-if="defaultQuality ===360">&#10003;</span>360p
-                              </div>
-                              <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(720)">
-                                  <span class="text-base absolute left-5" v-if="defaultQuality ===720">&#10003;</span>720p
-                              </div>
-                          </div>
-                      </div>
-                      <!--End quality-->
-                  </div>
-                  <div class="relative">
-                      <div class="absolute h-40 w-16 bottom-0 -right-8 z-2" 
-                          @mouseover="()=>{ (this.showSetting || this.showQuality || this.showPlayback)?this.showSound= false:this.showSound= true}"
-                          @mouseout="()=>{this.showSound= false}"
-                          >
-                      </div>
-                      <div class="opacity-80 cursor-pointer z-40" @click="showSoundModal" @mouseover="()=>{this.showSound= true,this.showSetting= false}">
-                          <SoundIcon v-if="!muted"></SoundIcon>
-                          <MutedIcon :size="20" v-else></MutedIcon>
-                      </div>
-                      <div class="range-slider absolute -left-7 bottom-16 opacity-80"
-                            :class="showSound?'visible':'invisible'"
-                            @mouseover="()=>{this.showSound= true}">
-                          <input type="range" min="0" max="100" step="1" :value="defaultVolumeRange"
-                                  id="volumn"
-                                  class="cursor-pointer"
-                                  @change="setVolume($event)">
-                      </div>
-                  </div>
+                    <div class="px-5 0 cursor-pointer relative">
+                        <div class="opacity-80" @click="showSettingModal">
+                            <SettingIcon></SettingIcon>
+                        </div>
+                        <!--Setting-->
+                        <div class="bg-black absolute bottom-8 w-48 right-5 px-3 bg-opacity-70 rounded-md py-2"
+                              v-if="showSetting">
+                            <div class="flex justify-between items-center h-10 leading-10"
+                                  @click="showPlaybackModal">
+                                <div>{{$t('playback_speed')}}</div>
+                                <div class="transform -rotate-90">
+                                    <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center h-10 leading-10"
+                                  @click="showQualityModal">
+                                <div>{{$t('quality')}}</div>
+                                <div class="transform -rotate-90">
+                                    <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                </div>
+                            </div>
+                        </div>
+                        <!--End setting-->
+                        <!--Playback speed-->
+                        <div class="bg-black absolute bottom-8 w-48 right-5 bg-opacity-70 rounded-md pt-2 overflow-hidden"
+                              v-if="showPlayback">
+                            <div class="flex items-center h-10 leading-10 px-3" @click="playbackBack">
+                                <div class="transform rotate-90 mr-3">
+                                    <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                </div>
+                                <div>{{$t('playback_speed')}}</div>
+                            </div>
+                            <hr class="opacity-30">
+                            <div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(0.25)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===0.25">&#10003;</span>0.25
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(0.5)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===0.5">&#10003;</span>
+                                    0.5
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(0.75)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===0.75">&#10003;</span>
+                                    0.75
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(1)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1">&#10003;</span>
+                                    {{$t('normal')}}
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(1.25)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1.25">&#10003;</span>
+                                    1.25
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(1.5)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1.5">&#10003;</span>
+                                    1.5
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(1.75)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1.75">&#10003;</span>
+                                    1.75
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                      @click="playbackRate(2)">
+                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===2">&#10003;</span>
+                                    2
+                                </div>
+                            </div>
+                        </div>
+                        <!--End playback speed-->
+                        <!--Quality-->
+                        <div class="bg-black absolute bottom-8 w-48 right-5 bg-opacity-70 rounded-md pt-2 overflow-hidden"
+                              v-if="showQuality">
+                            <div class="flex items-center h-10 leading-10 px-3" @click="backQuality">
+                                <div class="transform rotate-90 mr-3">
+                                    <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                </div>
+                                <div>{{$t('quality')}}</div>
+                            </div>
+                            <hr class="opacity-30">
+                            <div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(1)">
+                                    <span class="text-base absolute left-5" v-if="defaultQuality ===1">&#10003;</span>{{$t('auto')}}
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(360)">
+                                    <span class="text-base absolute left-5" v-if="defaultQuality ===360">&#10003;</span>360p
+                                </div>
+                                <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(720)">
+                                    <span class="text-base absolute left-5" v-if="defaultQuality ===720">&#10003;</span>720p
+                                </div>
+                            </div>
+                        </div>
+                        <!--End quality-->
+                    </div>
+                    <div class="relative">
+                        <div class="absolute h-40 w-16 bottom-0 -right-8 z-2" 
+                            @mouseover="()=>{ (this.showSetting || this.showQuality || this.showPlayback)?this.showSound= false:this.showSound= true}"
+                            @mouseout="()=>{this.showSound= false}"
+                            >
+                        </div>
+                        <div class="opacity-80 cursor-pointer z-40" @click="showSoundModal" @mouseover="()=>{this.showSound= true,this.showSetting= false}">
+                            <SoundIcon v-if="!muted"></SoundIcon>
+                            <MutedIcon :size="20" v-else></MutedIcon>
+                        </div>
+                        <div class="range-slider absolute -left-7 bottom-16 opacity-80"
+                              :class="showSound?'visible':'invisible'"
+                              @mouseover="()=>{this.showSound= true}">
+                            <input type="range" min="0" max="100" step="1" :value="defaultVolumeRange"
+                                    id="volumn"
+                                    class="cursor-pointer"
+                                    @change="setVolume($event)">
+                        </div>
+                    </div>
+                </div>
               </div>
           </div>
       </div>
@@ -371,6 +374,9 @@ export default {
 
       this.vid.src = this.url
       this.vid.currentTime = this.lastWatched
+    },
+    endedVideo(){
+      this.$emit("endedVideo")
     },
     setVolume(event) {
       this.vid.volume = this.volumeSlider.value / 100;

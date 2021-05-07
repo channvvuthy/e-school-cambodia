@@ -4,11 +4,13 @@
         <div class="flex m-5">
             <div class="w-3/5">
                 <div v-if="loading">
-                    Loading...
+                    <video poster="/poster-home.png">
+                        <source src=""/>
+                    </video>
                 </div>
                 <div class="bg-white rounded-b-2xl shadow pb-2" v-else>
-                    <VideoPlaylist :videoUrl="videoUrl"></VideoPlaylist>
-                    <div class="mx-5">
+                    <VideoPlaylist @endedVideo="endedVideo"></VideoPlaylist>
+                    <div class="mx-5 mt-6">
                         <div class="font-semibold text-primary text-base">{{ video.order }}. {{ video.title }}</div>
                             <div class="flex mt-5 text-base">
                                 <div class="flex mb-3">
@@ -46,7 +48,7 @@
                     </div>
                 
                 </div>
-                <Playlist :playlist="playlist" v-if="active === 'video'"></Playlist>
+                <Playlist :playlist="playlist" v-if="active === 'video'"  @nextVideo="nextVideo($event)"></Playlist>
             </div>
             
         </div>
@@ -60,13 +62,15 @@
     import Eye from "./../../components/Eye.vue"
     import VideoPlaylist from "./ads/VideoPlaylist.vue"
     import {mapState, mapActions} from "vuex"
+import { setTimeout } from 'timers';
     export default{
         data(){
             return{
                 hasFree: false,
                 videoUrl: "",
                 video: {},
-                active: "video"
+                active: "video",
+                loading: false
             }
         },
         components:{
@@ -75,10 +79,11 @@
             FavoriteIcon,
             Eye,
             Playlist,
-            FavoriteFill
+            FavoriteFill,
+            
         },
         computed:{
-            ...mapState('video', ['playlist', 'loading'])
+            ...mapState('video', ['playlist'])
         },
         methods:{
             ...mapActions('video', ['getPlaylist']),
@@ -93,15 +98,50 @@
                   this.video.is_favorite = 1
                 })
             },
+            endedVideo(){
+               let nextOrder = parseInt(this.video.order) + 1
+               let nextVideo = this.playlist.list.filter(item => item.order === nextOrder)
+               if(nextVideo.length){
+                   nextVideo = nextVideo[0]
+                   if(this.canWatch(nextVideo.free_watch)){
+                       this.nextVideo(nextVideo)
+                   } 
+               }
+            },
+            canWatch(free_watch){
+                if((this.$route.params.course.is_buy || free_watch)){
+                    return true
+                }
+                return false
+            },
+            nextVideo(event){
+                this.$store.commit("video/setOrder", event.order)
+                this.loading = true
+                this.video = event
+                this.$store.commit("playVideo/getVideoUrl", event.video);
+                setTimeout(()=>{
+                    this.loading = false
+                },200)
+               
+            }
         },
         created(){
+            this.loading = true
             this.getPlaylist({id:this.$route.params.course._id}).then(response =>{
                 let freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
+                let minOrder = freeVideo.map(item => item.order)
+               
+                minOrder = Math.min(...minOrder)
+                this.$store.commit("video/setOrder", minOrder)
+                freeVideo = freeVideo.filter(item => item.order === minOrder)
+
                 if(freeVideo.length >= 1){
                     this.hasFree = true
                     let video = freeVideo.map(item => item)[0]
                     this.video = video
                     this.$store.commit("playVideo/getVideoUrl", video.video);
+                    this.loading = false
+                    
                 }
             })
         }
