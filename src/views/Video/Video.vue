@@ -11,6 +11,7 @@
                         <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white shadow`">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
                             <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-2xl" onerror="this.onerror=null; this.src='/poster.png'"/>
+                            <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1" :style="{width:`${video.last_watch.percentage}%`}"></div>
                             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
                             <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
                                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
@@ -67,7 +68,7 @@
             <div v-if="loadingMore">
                 <Loading></Loading>
             </div>
-            <template v-if="videos.list.length <= 0">
+            <template v-if="videos.list && videos.list.length <= 0">
             <Empty></Empty>
         </template>
         </div>

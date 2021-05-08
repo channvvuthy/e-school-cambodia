@@ -187,7 +187,7 @@ export default {
   },
   data() {
     return {
-      loading: true,
+      loading: false,
       url: "",
       showPlay: false,
       rangeSliderWidth: 0,
@@ -376,6 +376,7 @@ export default {
       this.vid.currentTime = this.lastWatched
     },
     endedVideo(){
+      this.lastWatchVideo();
       this.$emit("endedVideo")
     },
     setVolume(event) {

@@ -12,6 +12,14 @@ export default {
     },
 
     mutations: {
+        updatingProgressbar(state, payload){
+            state.playlist.list.filter(item =>{
+                if(item._id === payload.id){
+                    item['last_watch'] = payload
+                }
+                return item
+            });
+        },
         setOrder(state, payload){
             state.order = payload
         },
@@ -52,10 +60,12 @@ export default {
             state.playlist = payload
         },
         gettingMorePlaylist(state, payload){
-            console.log(payload)
-            for(let i =0; i < payload.length; i++){
-                state.playlist.list.push(payload[i]);
-            }
+           if(payload.length){
+                for(let i =0; i < payload.length; i++){
+                    state.playlist.list.push(payload[i]);
+                }
+           }
+            
         }
     },
 

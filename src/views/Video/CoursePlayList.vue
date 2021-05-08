@@ -8,47 +8,49 @@
                         <source src=""/>
                     </video>
                 </div>
-                <div class="bg-white rounded-b-2xl shadow pb-2" v-else>
-                    <VideoPlaylist @endedVideo="endedVideo"></VideoPlaylist>
+                <div class="rounded-b-2xl shadow pb-2" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white `" v-else>
+                    <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)"></VideoPlaylist>
                     <div class="mx-5 mt-6">
-                        <div class="font-semibold text-primary text-base">{{ video.order }}. {{ video.title }}</div>
+                        <div class="font-semibold text-base" :class="darkMode?`text-skyBlue`:`text-primary`">{{ video.order }}. {{ video.title }}</div>
                             <div class="flex mt-5 text-base">
                                 <div class="flex mb-3">
                                     <div class="cursor-pointer" @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
                                         <FavoriteFill v-if="video.is_favorite" :size="24"></FavoriteFill>
-                                        <FavoriteIcon v-else :size="24"></FavoriteIcon>
+                                        <FavoriteIcon v-else :size="24" :fill="darkMode?`#afb0b4`:`#4A4A4A`"></FavoriteIcon>
                                     </div>
                                     <div class="mx-3">
                                         {{$t('1109')}}
                                     </div>
                                 </div>
                             <div class="flex mx-20">
-                                    <div><Eye></Eye></div>
+                                    <div><Eye :fill="darkMode?`#afb0b4`:`#4A4A4A`"></Eye></div>
                                     <div class="mx-2">{{video.view}}</div>
-                                    <div>{{$t('2107')}}</div>
+                                    <div>{{$t('1003')}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
             </div>
             <div class="flex-1">
-                <div class="bg-white h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium">
-                    <div class="flex flex-col flex-1 justify-center cursor-pointer">
-                        Video   
-                        <div v-if="active === 'video'" class="border border-b-4 border-gray-400"></div>
+                <div class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" :class="active === 'video' && darkMode?`text-skyBlue`:`text-primary`" >
+                        {{ $t('2108') }}   
+                        <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'video' && darkMode ?`bg-skyBlue`:`bg-primary`"></div>
+                        </div>
                     </div>
                     <div class="flex flex-1 justify-center cursor-pointer">
-                        Document   
+                        {{ $t('1112') }}   
                     </div>
                     <div class="flex flex-1 justify-center cursor-pointer">
-                        Forum   
+                        {{ $t('2110') }}   
                     </div>
                     <div class="flex flex-1 justify-center cursor-pointer">
-                        Quize   
+                        {{ $t('2111') }}   
                     </div>
                 
                 </div>
-                <Playlist :playlist="playlist" v-if="active === 'video'"  @nextVideo="nextVideo($event)"></Playlist>
+                <Playlist v-if="active === 'video'"  @nextVideo="nextVideo($event)"></Playlist>
             </div>
             
         </div>
@@ -83,10 +85,12 @@ import { setTimeout } from 'timers';
             
         },
         computed:{
-            ...mapState('video', ['playlist'])
+            ...mapState('video', ['playlist']),
+            ...mapState('setting', ['darkMode']),
         },
         methods:{
             ...mapActions('video', ['getPlaylist']),
+            ...mapActions('playVideo', ['playVideo','stopWatch']),
             ...mapActions('favorite', ['add','removeFavorite']),
             removeMyFavorite(id){
                 this.removeFavorite(id).then(()=>{
@@ -115,6 +119,16 @@ import { setTimeout } from 'timers';
                 return false
             },
             nextVideo(event){
+                if(event.order === this.video.order){
+                    return
+                }
+
+                if(event.last_watch){
+                    this.$store.commit("playVideo/setLastWatched", event.last_watch.mark)
+                }else{
+                    this.$store.commit("playVideo/setLastWatched", 0)
+                }
+
                 this.$store.commit("video/setOrder", event.order)
                 this.loading = true
                 this.video = event
@@ -123,17 +137,34 @@ import { setTimeout } from 'timers';
                     this.loading = false
                 },200)
                
+            },
+            lastWatchVideo(event){
+                event.id = this.video._id
+                this.stopWatch(event).then(() =>{
+                    let percentage = (event.mark*100)/event.duration 
+                    percentage = Math.round(percentage)
+                    event.percentage = percentage
+                    this.$store.commit("video/updatingProgressbar", event)
+                })
             }
         },
         created(){
             this.loading = true
+
             this.getPlaylist({id:this.$route.params.course._id}).then(response =>{
                 let freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
-                let minOrder = freeVideo.map(item => item.order)
-               
-                minOrder = Math.min(...minOrder)
-                this.$store.commit("video/setOrder", minOrder)
-                freeVideo = freeVideo.filter(item => item.order === minOrder)
+                let order
+                if(this.$route.params.course.last_watch){
+                    order = this.$route.params.course.last_watch.order
+                    this.$store.commit("playVideo/setLastWatched", this.$route.params.course.last_watch.mark)
+                }else{
+                    order = freeVideo.map(item => item.order)
+                    order = Math.min(...order)
+                    this.$store.commit("playVideo/setLastWatched", 0)
+
+                }
+                this.$store.commit("video/setOrder", order)
+                freeVideo = freeVideo.filter(item => item.order === order)
 
                 if(freeVideo.length >= 1){
                     this.hasFree = true
@@ -141,6 +172,7 @@ import { setTimeout } from 'timers';
                     this.video = video
                     this.$store.commit("playVideo/getVideoUrl", video.video);
                     this.loading = false
+                    this.playVideo(this.video._id)
                     
                 }
             })

@@ -5,7 +5,7 @@
             <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer"
             :class="isHide?`ml-7`:`ml-3`"
              @click="()=>{this.$router.go(-1)}">
-                <BackIcon :width="20" :height="20"></BackIcon>
+                <BackIcon :width="20" :height="20" :fill="darkMode?`#afb0b4`:`#000000`"></BackIcon>
             </div>
             <div class="text-base font-mediums">{{$t('2126')}}</div>
         </div>
