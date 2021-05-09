@@ -33,24 +33,34 @@
             </div>
             <div class="flex-1">
                 <div class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
-                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" :class="active === 'video' && darkMode?`text-skyBlue`:`text-primary`" >
+                    <div @click="switchMenu('video')" class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" :class="active === 'video'?darkMode?`text-skyBlue`:`text-primary`:``" >
                         {{ $t('2108') }}   
                         <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'video' && darkMode ?`bg-skyBlue`:`bg-primary`"></div>
+                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'video'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
                         </div>
                     </div>
-                    <div class="flex flex-1 justify-center cursor-pointer">
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" @click="switchMenu('document')" :class="active === 'document'?darkMode?`text-skyBlue`:`text-primary`:``">
                         {{ $t('1112') }}   
+                        <div v-if="active === 'document'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'document'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                        </div>
                     </div>
-                    <div class="flex flex-1 justify-center cursor-pointer">
-                        {{ $t('2110') }}   
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" @click="switchMenu('forum')" :class="active === 'forum'?darkMode?`text-skyBlue`:`text-primary`:``">
+                        {{ $t('2110') }} 
+                        <div v-if="active === 'forum'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'forum'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                        </div>  
                     </div>
-                    <div class="flex flex-1 justify-center cursor-pointer">
-                        {{ $t('2111') }}   
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" @click="switchMenu('quiz')" :class="active === 'quiz'?darkMode?`text-skyBlue`:`text-primary`:``">
+                        {{ $t('2111') }}
+                        <div v-if="active === 'quiz'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'quiz'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                        </div>   
                     </div>
                 
                 </div>
                 <Playlist v-if="active === 'video'"  @nextVideo="nextVideo($event)"></Playlist>
+                <Document v-if="active === 'document'" :id="video._id"></Document>
             </div>
             
         </div>
@@ -59,6 +69,7 @@
 <script>
     import VideoHeader from "./components/Header.vue"
     import Playlist from "./components/Playlist.vue"
+    import Document from "./components/Document.vue"
     import FavoriteIcon from "./../../components/FavoriteIcon.vue"
     import FavoriteFill from "./../../components/FavoriteFill.vue"
     import Eye from "./../../components/Eye.vue"
@@ -82,6 +93,7 @@ import { setTimeout } from 'timers';
             Eye,
             Playlist,
             FavoriteFill,
+            Document
             
         },
         computed:{
@@ -146,6 +158,9 @@ import { setTimeout } from 'timers';
                     event.percentage = percentage
                     this.$store.commit("video/updatingProgressbar", event)
                 })
+            },
+            switchMenu(active){
+                this.active = active
             }
         },
         created(){

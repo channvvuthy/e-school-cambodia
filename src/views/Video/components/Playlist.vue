@@ -3,7 +3,7 @@
         <div v-for="(list,index) in playlist.list" :key="index">
             <div class="flex justify-between items-center p-4 mb-3 rounded-md shadow"
             :class="list.order === order?`bg-gray-200`:darkMode?`bg-secondary text-textSecondary`:`bg-white`"
-             :style="canWatch(list.free_watch)?{}:{opacity:`0.5`}">
+             :style="canWatch(list.free_watch)?{}:{opacity:`1`}">
                 <div class="relative w-2/5 mr-3">
                     <img :src="list.thumbnail" onerror="this.onerror=null; this.src='/poster.png'" class="rounded-md "
                     @click="nextVideo(list)"
@@ -15,7 +15,9 @@
                     <div class="font-semibold text-primary mb-3" 
                      @click="nextVideo(list)"
                      :title="list.title"
-                    :class="canWatch(list.free_watch)?`cursor-pointer ${darkMode && list.order != order?'text-skyBlue':''}`:`cursor-default`"> {{(index+1)+". "+cutString(list.title,40)}}</div>
+                    :class="canWatch(list.free_watch)?`cursor-pointer ${darkMode && list.order != order?'text-skyBlue':''}`:`cursor-default ${darkMode && list.order != order?'text-skyBlue':''}`">
+                        {{(index+1)+". "+cutString(list.title,40)}}
+                     </div>
                     <div class="flex justify-between items-center text-sm items-center">
                         <div class="flex">
                             <Eye :width="20" :height="20" :fill="(list.order != order && darkMode)?`#afb0b4`:`#4A4A4A`"></Eye>
@@ -112,7 +114,8 @@ export default {
                 return true
             }
             return false
-        }
+        },
+        
     },
 }
 </script>
