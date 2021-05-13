@@ -8,136 +8,219 @@
                         <source src=""/>
                     </video>
                 </div>
-                <div class="rounded-b-2xl shadow pb-2" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white `" v-else>
+                <div class="rounded-b-2xl shadow pb-2 flex-1" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white `"
+                     v-else>
                     <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)"></VideoPlaylist>
                     <div class="mx-5 mt-6">
-                        <div class="font-semibold text-base" :class="darkMode?`text-skyBlue`:`text-primary`">{{ video.order }}. {{ video.title }}</div>
-                            <div class="flex mt-5 text-base">
-                                <div class="flex mb-3">
-                                    <div class="cursor-pointer" @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
-                                        <FavoriteFill v-if="video.is_favorite" :size="24"></FavoriteFill>
-                                        <FavoriteIcon v-else :size="24" :fill="darkMode?`#afb0b4`:`#4A4A4A`"></FavoriteIcon>
-                                    </div>
-                                    <div class="mx-3">
-                                        {{$t('1109')}}
-                                    </div>
+                        <div class="font-semibold text-base" :class="darkMode?`text-skyBlue`:`text-primary`">
+                            {{ video.order }}. {{ video.title }}
+                        </div>
+                        <div class="flex mt-5 text-base">
+                            <div class="flex mb-3">
+                                <div class="cursor-pointer"
+                                     @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
+                                    <FavoriteFill v-if="video.is_favorite" :size="24"></FavoriteFill>
+                                    <FavoriteIcon v-else :size="24" :fill="darkMode?`#afb0b4`:`#4A4A4A`"></FavoriteIcon>
                                 </div>
+                                <div class="mx-3">
+                                    {{$t('1109')}}
+                                </div>
+                            </div>
                             <div class="flex mx-20">
-                                    <div><Eye :fill="darkMode?`#afb0b4`:`#4A4A4A`"></Eye></div>
-                                    <div class="mx-2">{{video.view}}</div>
-                                    <div>{{$t('1003')}}</div>
+                                <div>
+                                    <Eye :fill="darkMode?`#afb0b4`:`#4A4A4A`"></Eye>
                                 </div>
+                                <div class="mx-2">{{video.view}}</div>
+                                <div>{{$t('1003')}}</div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
             <div class="flex-1">
-                <div class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
-                    <div @click="switchMenu('video')" class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" :class="active === 'video'?darkMode?`text-skyBlue`:`text-primary`:``" >
+                <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium"
+                     :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
+                    <div @click="switchMenu('video')"
+                         class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
+                         :class="active === 'video'?darkMode?`text-skyBlue`:`text-primary`:``">
                         {{ $t('2108') }}   
                         <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'video'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                            <div class="h-full h-1 w-10/12 m-auto"
+                                 :class="active === 'video'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
                         </div>
                     </div>
-                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" @click="switchMenu('document')" :class="active === 'document'?darkMode?`text-skyBlue`:`text-primary`:``">
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
+                         @click="switchMenu('document')"
+                         :class="active === 'document'?darkMode?`text-skyBlue`:`text-primary`:``">
                         {{ $t('1112') }}   
                         <div v-if="active === 'document'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'document'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                            <div class="h-full h-1 w-10/12 m-auto"
+                                 :class="active === 'document'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
                         </div>
                     </div>
-                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" @click="switchMenu('forum')" :class="active === 'forum'?darkMode?`text-skyBlue`:`text-primary`:``">
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
+                         @click="switchMenu('forum')"
+                         :class="active === 'forum'?darkMode?`text-skyBlue`:`text-primary`:``">
                         {{ $t('2110') }} 
                         <div v-if="active === 'forum'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'forum'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div>  
+                            <div class="h-full h-1 w-10/12 m-auto"
+                                 :class="active === 'forum'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                        </div>
                     </div>
-                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full" @click="switchMenu('quiz')" :class="active === 'quiz'?darkMode?`text-skyBlue`:`text-primary`:``">
+                    <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
+                         @click="switchMenu('quiz')"
+                         :class="active === 'quiz'?darkMode?`text-skyBlue`:`text-primary`:``">
                         {{ $t('2111') }}
                         <div v-if="active === 'quiz'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto" :class="active === 'quiz'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div>   
+                            <div class="h-full h-1 w-10/12 m-auto"
+                                 :class="active === 'quiz'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
+                        </div>
                     </div>
-                
+
                 </div>
-                <Playlist v-if="active === 'video'"  @nextVideo="nextVideo($event)"></Playlist>
-                <Document v-if="active === 'document'" :id="video._id"></Document>
+                <div  v-if="!showMenu" class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center " :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
+                    <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer" @click="backMenu">
+                        <BackIcon :width="20" :height="20" :fill="darkMode?`#afb0b4`:`#000000`"></BackIcon>
+                    </div>
+                    <div class="text-center flex-1">
+                        {{video.order}}. {{cutString(video.title,20)}}
+                    </div>
+                </div>
+                <Playlist v-if="active === 'video'" @nextVideo="nextVideo($event)"></Playlist>
+                <Document v-if="active === 'document'" :id="video._id" @openDoc="openDoc($event)"></Document>
+                <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"></Forum>
             </div>
-            
+        </div>
+        <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
+             v-if="showDoc">
+            <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
+                <div class="flex justify-between items-center bg-primary p-4">
+                    <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
+                        <EnlargeIcon :size="16"></EnlargeIcon>
+                    </div>
+                    <div class="text-white text-sm">{{video.title}}</div>
+                    <div class="cursor-pointer" @click="closeDock">
+                        <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                    </div>
+                </div>
+                <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
+                    <SinglePdf :pdfUrl="pdfUrl"></SinglePdf>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
     import VideoHeader from "./components/Header.vue"
+    import EnlargeIcon from "./../../components/EnlargeIcon.vue";
+    import CloseIcon from "./../../components/CloseIcon.vue";
+    import BackIcon from "./../../components/BackIcon.vue"
     import Playlist from "./components/Playlist.vue"
     import Document from "./components/Document.vue"
+    import Forum from "./components/Forum.vue"
     import FavoriteIcon from "./../../components/FavoriteIcon.vue"
     import FavoriteFill from "./../../components/FavoriteFill.vue"
     import Eye from "./../../components/Eye.vue"
     import VideoPlaylist from "./ads/VideoPlaylist.vue"
+    import SinglePdf from "./../Component/SinglePdf.vue"
     import {mapState, mapActions} from "vuex"
-import { setTimeout } from 'timers';
+    import helper from "./../../helper/helper"
     export default{
         data(){
-            return{
+            return {
                 hasFree: false,
                 videoUrl: "",
                 video: {},
                 active: "video",
-                loading: false
+                loading: false,
+                showDoc: false,
+                pdfUrl: "",
+                showMenu: true,
             }
         },
-        components:{
+        components: {
             VideoHeader,
             VideoPlaylist,
             FavoriteIcon,
             Eye,
             Playlist,
             FavoriteFill,
-            Document
-            
+            Document,
+            SinglePdf,
+            EnlargeIcon,
+            CloseIcon,
+            Forum,
+            BackIcon
+
         },
-        computed:{
+        computed: {
             ...mapState('video', ['playlist']),
             ...mapState('setting', ['darkMode']),
         },
-        methods:{
+        methods: {
             ...mapActions('video', ['getPlaylist']),
-            ...mapActions('playVideo', ['playVideo','stopWatch']),
-            ...mapActions('favorite', ['add','removeFavorite']),
+            ...mapActions('playVideo', ['playVideo', 'stopWatch']),
+            ...mapActions('favorite', ['add', 'removeFavorite']),
             removeMyFavorite(id){
-                this.removeFavorite(id).then(()=>{
-                   this.video.is_favorite = 0 
+                this.removeFavorite(id).then(() => {
+                    this.video.is_favorite = 0
                 })
+            },
+            cutString(text, limit){
+              return helper.cutString(text, limit)
+            },
+            openFullscreen() {
+                var elem = document.getElementById("fullScreen");
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) { /* Safari */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE11 */
+                    elem.msRequestFullscreen();
+                }
+            },
+            closeDock(){
+                this.showDoc = false
+            },
+            openDoc(pdfUrl){
+                this.pdfUrl = pdfUrl
+                this.showDoc = true
             },
             addFavorite(id){
-                this.add(id).then(()=>{
-                  this.video.is_favorite = 1
+                this.add(id).then(() => {
+                    this.video.is_favorite = 1
                 })
             },
+            forumDetail($event){
+                this.showMenu = false
+            },
+            backMenu(){
+                this.showMenu = true
+            },
             endedVideo(){
-               let nextOrder = parseInt(this.video.order) + 1
-               let nextVideo = this.playlist.list.filter(item => item.order === nextOrder)
-               if(nextVideo.length){
-                   nextVideo = nextVideo[0]
-                   if(this.canWatch(nextVideo.free_watch)){
-                       this.nextVideo(nextVideo)
-                   } 
-               }
+                let nextOrder = parseInt(this.video.order) + 1
+                let nextVideo = this.playlist.list.filter(item => item.order === nextOrder)
+                if (nextVideo.length) {
+                    nextVideo = nextVideo[0]
+                    if (this.canWatch(nextVideo.free_watch)) {
+                        this.nextVideo(nextVideo)
+                    }
+                }
             },
             canWatch(free_watch){
-                if((this.$route.params.course.is_buy || free_watch)){
+                if ((this.$route.params.course.is_buy || free_watch)) {
                     return true
                 }
                 return false
             },
             nextVideo(event){
-                if(event.order === this.video.order){
+                if (event.order === this.video.order) {
                     return
                 }
 
-                if(event.last_watch){
+                if (event.last_watch) {
                     this.$store.commit("playVideo/setLastWatched", event.last_watch.mark)
-                }else{
+                } else {
                     this.$store.commit("playVideo/setLastWatched", 0)
                 }
 
@@ -145,15 +228,15 @@ import { setTimeout } from 'timers';
                 this.loading = true
                 this.video = event
                 this.$store.commit("playVideo/getVideoUrl", event.video);
-                setTimeout(()=>{
+                setTimeout(() => {
                     this.loading = false
-                },200)
-               
+                }, 200)
+
             },
             lastWatchVideo(event){
                 event.id = this.video._id
-                this.stopWatch(event).then(() =>{
-                    let percentage = (event.mark*100)/event.duration 
+                this.stopWatch(event).then(() => {
+                    let percentage = (event.mark * 100) / event.duration
                     percentage = Math.round(percentage)
                     event.percentage = percentage
                     this.$store.commit("video/updatingProgressbar", event)
@@ -166,13 +249,13 @@ import { setTimeout } from 'timers';
         created(){
             this.loading = true
 
-            this.getPlaylist({id:this.$route.params.course._id}).then(response =>{
+            this.getPlaylist({id: this.$route.params.course._id}).then(response => {
                 let freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
                 let order
-                if(this.$route.params.course.last_watch){
+                if (this.$route.params.course.last_watch) {
                     order = this.$route.params.course.last_watch.order
                     this.$store.commit("playVideo/setLastWatched", this.$route.params.course.last_watch.mark)
-                }else{
+                } else {
                     order = freeVideo.map(item => item.order)
                     order = Math.min(...order)
                     this.$store.commit("playVideo/setLastWatched", 0)
@@ -181,14 +264,14 @@ import { setTimeout } from 'timers';
                 this.$store.commit("video/setOrder", order)
                 freeVideo = freeVideo.filter(item => item.order === order)
 
-                if(freeVideo.length >= 1){
+                if (freeVideo.length >= 1) {
                     this.hasFree = true
                     let video = freeVideo.map(item => item)[0]
                     this.video = video
                     this.$store.commit("playVideo/getVideoUrl", video.video);
                     this.loading = false
                     this.playVideo(this.video._id)
-                    
+
                 }
             })
         }

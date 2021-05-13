@@ -118,7 +118,7 @@
             shareStory(){
                 let formData = new FormData();
                 formData.append("photo", this.file)
-                this.addMyStory(formData).then(response =>{
+                this.addMyStory(formData).then(() =>{
                      this.showAddStory = false
                 })
             },

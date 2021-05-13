@@ -76,6 +76,15 @@ const errorMessage = (message) => {
         position: "top-right",
     })
 }
+
+const q = (payload) => {
+    if (!payload) {
+        return ""
+    }
+    return Object.keys(payload)
+        .map(key => `${key}=${payload[key]}`)
+        .join('&');
+}
 export default{
     isNumber,
     cutString,
@@ -86,5 +95,6 @@ export default{
     gender,
     numDay,
     clearDevice,
-    errorMessage
+    errorMessage,
+    q
 }

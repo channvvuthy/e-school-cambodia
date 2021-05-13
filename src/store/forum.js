@@ -1,6 +1,7 @@
 import axios from "axios"
 import config from "./../config"
 import err from "./../helper/err"
+import helper from "./../helper/helper"
 export default {
     namespaced: true,
     state: {
@@ -60,17 +61,15 @@ export default {
     actions: {
         getForum({commit}, params){
             commit("loadingForum", true)
-            return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'forum?s=' + params.s + "&p=" + params.p + "&lesson_id=" + params.lesson_id).then(response => {
-
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `forum?${helper.q(params)}`).then(response =>{
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
-
                     commit("loadingForum", false)
                     commit("gettingForum", response.data.data)
                     resolve(response)
-                }).catch(err => {
+                }).catch(err =>{
                     commit("loadingForum", false)
                     reject(err)
                 })

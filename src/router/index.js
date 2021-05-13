@@ -124,9 +124,9 @@ const routes = [
         component: () => import('../views/Test/Test'),
     },
     {
-        path: '/lock',
-        name: 'lock',
-        component: () => import('../views/Lock/Lock'),
+        path: '/library',
+        name: 'library',
+        component: () => import('../views/Component/Pdfviewer'),
     },
     {
         path: '/change-profile',

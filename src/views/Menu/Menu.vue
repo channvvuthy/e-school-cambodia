@@ -16,7 +16,7 @@
                     </p>
                     <div class="border border-r-0 border-l-0 w-full" v-if="$route.name === 'video'" :class="darkMode?'border-lightGray bg-lightGray':'bg-primary border-primary'"></div>
                 </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer">
+                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
                     <img src="/icon/Menu/Library@2x.png" class="h-6"/>
                     <p class="mt-2" :class="localize==='en'?'text-sm':'text-xs'">
                         {{$t('2200')}}
@@ -53,11 +53,7 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import HomeIcon from "./../../components/HomeIcon.vue"
 export default {
-    components:{
-        HomeIcon
-    },
     computed: {
         ...mapState("setting", ["localize","darkMode"])
     },

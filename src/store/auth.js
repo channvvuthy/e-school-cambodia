@@ -4,6 +4,7 @@ import axios from 'axios'
 import config from "./../config"
 import studentProfileData from "./../data/student"
 import err from "./../helper/err"
+import helper from "./../helper/helper"
 
 Vue.use(Vuex);
 
@@ -35,8 +36,8 @@ export default {
     },
 
     mutations: {
-        addedStory(state, payload){
-            // state.story.unshift(payload)
+        addedStory(){
+           
         },
         addingStory(state, payload){
             state.addingStory = payload
@@ -140,6 +141,7 @@ export default {
                         axios.defaults.headers.common['xtoken'] = response.data.data.token;
                     } else {
                         delete axios.defaults.headers.common['xtoken']
+                        helper.errorMessage(response.data.data.status)
                     }
                     commit("loging", false);
                     resolve(response)

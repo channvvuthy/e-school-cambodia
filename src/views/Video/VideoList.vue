@@ -81,7 +81,7 @@
     </div>
 </template>
 <script>
-import HeartIcon from "./../../components/HeartIcon.vue";
+// import HeartIcon from "./../../components/HeartIcon.vue";
 import FavoriteIcon from "./../../components/FavoriteIcon.vue";
 import FavoriteFill from "./../../components/FavoriteFill.vue";
 import Loading from "./../../components/Loading";
@@ -92,7 +92,7 @@ import helper from "./../../helper/helper"
 const {ipcRenderer} = require('electron')
 export default {
   components: {
-    HeartIcon,
+    // HeartIcon,
     Loading,
     Empty,
     VideoADS,

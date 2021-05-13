@@ -26,6 +26,7 @@
     "axios": "^0.21.1",
     "basic-authorization-header": "^0.2.7",
     "cookiefile": "^1.0.10",
+    "pdfjs-dist": "2.0.943",
     "core-js": "^3.6.5",
     "electron-dl": "^3.2.1",
     "electron-log": "^4.3.2",

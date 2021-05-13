@@ -35,12 +35,12 @@
 </template>
 <script>
 import WatchIcon from "./../../../components/WatchIcon.vue";
-import CloseIcon from "./../../../components/CloseIcon.vue";
+// import CloseIcon from "./../../../components/CloseIcon.vue";
 import { mapState, mapActions } from "vuex";
 export default {
   components: {
     WatchIcon,
-    CloseIcon
+    // CloseIcon
   },
   props: {
     filter: {
