@@ -75,6 +75,22 @@ export default {
                 })
             })
         },
+        getCommentForum({commit}, params = ""){
+            commit("loadingForum", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `forum/comment?${helper.q(params)}`).then(response =>{
+                    if (response.data.status && response.data.status === 2) {
+                        helper.errorMessage(response.data.msg)
+                    }
+                    resolve(response.data.data)
+                    commit("loadingForum", false)
+                }).catch(err =>{
+                    commit("loadingForum", false)
+                    reject(err)
+                })
+            })
+        },
+
         addForum({commit}, data){
             commit("addingForum", true)
             return new Promise((resolve, reject) => {
@@ -150,7 +166,7 @@ export default {
         addComment({commit}, params){
             commit("addingComment", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'forum/comment/add', params).then(response => {
+                axios.post(config.apiUrl + `forum`, params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

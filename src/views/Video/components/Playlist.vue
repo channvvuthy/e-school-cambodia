@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-5 mt-3 h-screen overflow-y-scroll pb-60 font-khmer_os" @scroll="onScroll">
+    <div class="ml-5 pt-3 px-3 h-screen overflow-y-scroll pb-60 font-khmer_os bg-cover mt-1 bg-img-primary " @scroll="onScroll">
         <div v-for="(list,index) in playlist.list" :key="index">
             <div class="flex justify-between items-center p-4 mb-3 rounded-md shadow"
             :class="list.order === order?`bg-gray-200`:darkMode?`bg-secondary text-textSecondary`:`bg-white`"

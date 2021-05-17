@@ -24,6 +24,8 @@ module.exports = {
             success: '#40b366',
             lightGray:"#afb0b4",
             lightBlue:"#eaf3ff",
+            softGray:"#eaeaea",
+            darkYellow:"#f5a623",
             black: colors.black,
             white: colors.white,
             gray: colors.coolGray,
@@ -91,6 +93,7 @@ module.exports = {
         },
         backgroundColor: (theme) => theme('colors'),
         backgroundImage: {
+            'img-primary': "url('/bg.jpg')",
             none: 'none',
             'gradient-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
             'gradient-to-tr': 'linear-gradient(to top right, var(--tw-gradient-stops))',

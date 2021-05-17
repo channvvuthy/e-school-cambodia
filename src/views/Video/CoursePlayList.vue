@@ -1,7 +1,7 @@
 <template>
     <div>
         <VideoHeader></VideoHeader>
-        <div class="flex m-5">
+        <div class="flex mt-5 ml-5">
             <div class="w-3/5">
                 <div v-if="loading">
                     <video poster="/poster-home.png">
@@ -39,7 +39,8 @@
             </div>
             <div class="flex-1">
                 <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium"
-                     :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
+                     :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`"
+                >
                     <div @click="switchMenu('video')"
                          class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          :class="active === 'video'?darkMode?`text-skyBlue`:`text-primary`:``">
@@ -89,6 +90,7 @@
                 <Playlist v-if="active === 'video'" @nextVideo="nextVideo($event)"></Playlist>
                 <Document v-if="active === 'document'" :id="video._id" @openDoc="openDoc($event)"></Document>
                 <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"></Forum>
+                <ForumComment v-if="!showMenu" :comments="comments" :loading="loadingComment"></ForumComment>
             </div>
         </div>
         <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
@@ -117,6 +119,7 @@
     import BackIcon from "./../../components/BackIcon.vue"
     import Playlist from "./components/Playlist.vue"
     import Document from "./components/Document.vue"
+    import ForumComment from "./components/ForumComment.vue"
     import Forum from "./components/Forum.vue"
     import FavoriteIcon from "./../../components/FavoriteIcon.vue"
     import FavoriteFill from "./../../components/FavoriteFill.vue"
@@ -136,6 +139,8 @@
                 showDoc: false,
                 pdfUrl: "",
                 showMenu: true,
+                comments:[],
+                loadingComment: false
             }
         },
         components: {
@@ -150,7 +155,8 @@
             EnlargeIcon,
             CloseIcon,
             Forum,
-            BackIcon
+            BackIcon,
+            ForumComment
 
         },
         computed: {
@@ -159,6 +165,7 @@
         },
         methods: {
             ...mapActions('video', ['getPlaylist']),
+            ...mapActions('forum', ['getCommentForum']),
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
             removeMyFavorite(id){
@@ -193,6 +200,11 @@
             },
             forumDetail($event){
                 this.showMenu = false
+                this.loadingComment = true
+                this.getCommentForum({id:$event._id}).then(response =>{
+                    this.comments = response
+                    this.loadingComment = false
+                })
             },
             backMenu(){
                 this.showMenu = true
