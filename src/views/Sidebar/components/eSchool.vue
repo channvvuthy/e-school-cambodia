@@ -6,55 +6,67 @@
         <div class="px-3 my-3 mt-5">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 cursor-pointer w-full">
-                        <img src="/icon/icon/chat.png" class="h-5 m-auto">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
+                        <!-- <img src="/icon/icon/chat.png" class="h-5 m-auto"> -->
+                        <div><ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ChatIcon></div>
+
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1128')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 cursor-pointer w-full">
-                        <img src="/icon/icon/policy.png" class="h-5 m-auto">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
+                        <!-- <img src="/icon/icon/policy.png" class="h-5 m-auto"> -->
+                        <div><PolicyIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PolicyIcon></div>
+
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1129')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 cursor-pointer w-full">
-                        <img src="/icon/icon/help.png" class="h-5 m-auto">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
+                        <!-- <img src="/icon/icon/help.png" class="h-5 m-auto"> -->
+                        <div><HelpIcon :fill="darkMode?`#909090`:`#0f3c7a`"></HelpIcon></div>
+
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1130')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 cursor-pointer w-full">
-                        <img src="/icon/icon/about.png" class="h-5 m-auto">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
+                        <!-- <img src="/icon/icon/about.png" class="h-5 m-auto"> -->
+                        <div><AboutIcon :fill="darkMode?`#909090`:`#0f3c7a`"></AboutIcon></div>
+
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1131')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 cursor-pointer w-full">
-                        <img src="/icon/icon/share.png" class="h-5 m-auto">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
+                        <!-- <img src="/icon/icon/share.png" class="h-5 m-auto"> -->
+                        <div><ShareIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ShareIcon></div>
+
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1132')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="setDarkMode(darkMode)">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 cursor-pointer w-full">
-                        <img src="/icon/icon/mode.png" class="h-5 m-auto">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
+                        <!-- <img src="/icon/icon/mode.png" class="h-5 m-auto"> -->
+                        <div><ModeIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ModeIcon></div>
+
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{darkMode?$t('light_mode'):$t('1133')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col bg-gray-100 shadow-md rounded flex justify-center items-center h-10 w-full cursor-pointer"
+                    <div class="flex-col rounded flex justify-center items-center h-10 w-full cursor-pointer" :class="darkMode?``:`bg-gray-100 shadow-md `"
                          @click="setLocalization(localize==='kh'?'en':'kh')">
                         <img src="/icon/icon/en.png" class="h-5 m-auto"
                              v-if="localize==='kh'">
@@ -71,7 +83,22 @@
 </template>
 <script>
     import {mapState} from "vuex"
+    import ChatIcon from "./../../../components/ChatIcon"
+    import PolicyIcon from "./../../../components/PolicyIcon"
+    import HelpIcon from "./../../../components/HelpIcon"
+    import AboutIcon from "./../../../components/AboutIcon"
+    import ShareIcon from "./../../../components/ShareIcon"
+    import ModeIcon from "./../../../components/ModeIcon"
+
     export default{
+        components:{
+            ChatIcon,
+            PolicyIcon,
+            HelpIcon,
+            AboutIcon,
+            ShareIcon,
+            ModeIcon
+        },
         computed: {
             ...mapState('setting', ['localize','darkMode'])
         },

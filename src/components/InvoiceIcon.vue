@@ -1,16 +1,4 @@
 <template>
-    <!--<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"-->
-    <!--:width="size" :height="size"-->
-    <!--viewBox="0 0 172 172">-->
-    <!--<g :fill="fill" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"-->
-    <!--stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"-->
-    <!--font-size="none" text-anchor="none" style="mix-blend-mode: normal">-->
-    <!--<path d="M0,172v-172h172v172z" fill="none"></path>-->
-    <!--<g :fill="fill">-->
-    <!--<path d="M20.64,6.88v158.24h3.44h127.28v-158.24zM27.52,13.76h116.96v144.48h-116.96zM44.72,37.84v6.88h82.56v-6.88zM44.72,86v6.88h13.76v-6.88zM68.8,86v6.88h58.48v-6.88zM44.72,106.64v6.88h13.76v-6.88zM68.8,106.64v6.88h58.48v-6.88zM44.72,127.28v6.88h13.76v-6.88zM68.8,127.28v6.88h58.48v-6.88z"></path>-->
-    <!--</g>-->
-    <!--</g>-->
-    <!--</svg>-->
     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
          :width="size" :height="size"
          viewBox="0 0 172 172">

@@ -138,7 +138,6 @@ async function createWindow() {
     win = new BrowserWindow({
         minWidth: 1250,
         minHeight: 760,
-        show: false,
         webPreferences: {
             devTools: true,
             webSecurity: false,
@@ -204,23 +203,23 @@ app.on('ready', async () => {
 });
 app.name = "E-SCHOOL"
 
-app.whenReady().then(() => {
-    appIcon = new Tray(path.join(__static, 'icon.ico'))
-    const contextMenu = Menu.buildFromTemplate([
-        {
-            label: 'Exit', type: 'normal', click: () => {
-            app.exit(0)
-        }
-        },
-    ])
-    appIcon.setToolTip('E-SCHOOL')
-    appIcon.setContextMenu(contextMenu)
+// app.whenReady().then(() => {
+//     appIcon = new Tray(path.join(__static, 'icon.ico'))
+//     const contextMenu = Menu.buildFromTemplate([
+//         {
+//             label: 'Exit', type: 'normal', click: () => {
+//             app.exit(0)
+//         }
+//         },
+//     ])
+//     appIcon.setToolTip('E-SCHOOL')
+//     appIcon.setContextMenu(contextMenu)
 
-    appIcon.on("click", () => {
-        win.isVisible() ? win.hide() : win.show()
-    })
+//     appIcon.on("click", () => {
+//         win.isVisible() ? win.hide() : win.show()
+//     })
 
-})
+// })
 
 
 // Exit cleanly on request from parent process in development mode.

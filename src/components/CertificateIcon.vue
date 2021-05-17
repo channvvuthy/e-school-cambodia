@@ -1,6 +1,6 @@
 <template>
 
-<svg width="30" height="30" viewBox="0 0 14 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg :height="size" viewBox="0 0 14 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
     <title>Certificate</title>
     <desc>Created with Sketch.</desc>
@@ -22,6 +22,11 @@
             fill:{
                 default:() =>{
                     return "#000000"
+                }
+            },
+            size:{
+                default:() =>{
+                    return 30
                 }
             }
         }

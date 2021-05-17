@@ -116,7 +116,7 @@
                 this.text = ""
             },
             comment($event, forum){
-                console.log(event)
+                console.log($event,forum)
             },
 
             onSelectedPhoto(event){
