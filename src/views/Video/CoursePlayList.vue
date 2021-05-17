@@ -1,6 +1,7 @@
 <template>
     <div>
         <VideoHeader></VideoHeader>
+        <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
         <div class="flex mt-5 ml-5">
             <div class="w-3/5">
                 <div v-if="loading">
@@ -44,7 +45,7 @@
                     <div @click="switchMenu('video')"
                          class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          :class="active === 'video'?darkMode?`text-skyBlue`:`text-primary`:``">
-                        {{ $t('2108') }}   
+                        {{ $t('2108') }}
                         <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
                                  :class="active === 'video'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
@@ -53,7 +54,7 @@
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('document')"
                          :class="active === 'document'?darkMode?`text-skyBlue`:`text-primary`:``">
-                        {{ $t('1112') }}   
+                        {{ $t('1112') }}
                         <div v-if="active === 'document'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
                                  :class="active === 'document'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
@@ -62,7 +63,7 @@
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('forum')"
                          :class="active === 'forum'?darkMode?`text-skyBlue`:`text-primary`:``">
-                        {{ $t('2110') }} 
+                        {{ $t('2110') }}
                         <div v-if="active === 'forum'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
                                  :class="active === 'forum'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
@@ -89,7 +90,8 @@
                 </div>
                 <Playlist v-if="active === 'video'" @nextVideo="nextVideo($event)"></Playlist>
                 <Document v-if="active === 'document'" :id="video._id" @openDoc="openDoc($event)"></Document>
-                <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"></Forum>
+                <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"
+                       @openModal="openModal($event)" @postComment="postComment($event)"></Forum>
                 <ForumComment v-if="!showMenu" :comments="comments" :loading="loadingComment"></ForumComment>
             </div>
         </div>
@@ -108,6 +110,7 @@
                 <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
                     <SinglePdf :pdfUrl="pdfUrl"></SinglePdf>
                 </div>
+
             </div>
         </div>
     </div>
@@ -119,6 +122,7 @@
     import BackIcon from "./../../components/BackIcon.vue"
     import Playlist from "./components/Playlist.vue"
     import Document from "./components/Document.vue"
+    import ModalPhoto from "./components/ModalPhoto.vue"
     import ForumComment from "./components/ForumComment.vue"
     import Forum from "./components/Forum.vue"
     import FavoriteIcon from "./../../components/FavoriteIcon.vue"
@@ -140,7 +144,10 @@
                 pdfUrl: "",
                 showMenu: true,
                 comments:[],
-                loadingComment: false
+                loadingComment: false,
+                showModalPhoto: false,
+                imgUrl: "",
+                photo: null
             }
         },
         components: {
@@ -156,7 +163,8 @@
             CloseIcon,
             Forum,
             BackIcon,
-            ForumComment
+            ForumComment,
+            ModalPhoto
 
         },
         computed: {
@@ -165,7 +173,7 @@
         },
         methods: {
             ...mapActions('video', ['getPlaylist']),
-            ...mapActions('forum', ['getCommentForum']),
+            ...mapActions('forum', ['getCommentForum','addComment']),
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
             removeMyFavorite(id){
@@ -245,6 +253,15 @@
                 }, 200)
 
             },
+            openModal(event){
+                this.showModalPhoto = true
+                this.photo = event.target.files[0]
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    this.imgUrl = e.target.result
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            },
             lastWatchVideo(event){
                 event.id = this.video._id
                 this.stopWatch(event).then(() => {
@@ -256,6 +273,30 @@
             },
             switchMenu(active){
                 this.active = active
+            },
+            cancel(){
+                this.showModalPhoto = false
+            },
+            postComment(event){
+                let formData = new FormData();
+                formData.append("id", this.video._id)
+                if(event){
+                    formData.append("text", event);
+                }
+                this.addComment(formData)
+            },
+            send(event){
+                let formData = new FormData();
+                formData.append("photo", this.photo);
+                formData.append("id", this.video._id)
+
+                if(event){
+                    formData.append("text", event);
+                }
+
+                this.addComment(formData).then(response =>{
+                    this.showModalPhoto = false
+                })
             }
         },
         created(){

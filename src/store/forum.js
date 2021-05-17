@@ -180,6 +180,16 @@ export default {
                     reject(err)
                 })
             })
+        },
+        replyComment({commit}, payload){
+            commit("addingComment", false)
+            return new Promise((resolve, reject) =>{
+                axios.post(config.apiUrl + 'forum/comment', payload).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
         }
     }
 }
