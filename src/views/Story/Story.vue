@@ -1,24 +1,24 @@
 <template>
-    <div :class="darkMode?'bg-secondary border border-l-2 border-gray-50 text-textSecondary':'bg-white shadow'">
+    <div :class="darkMode?'bg-youtube border border-l-2 border-gray-50 text-textSecondary':'bg-white shadow'">
         <div class="px-5 py-5">
             <div class="flex text-primary  text-md gap-4">
                 <div>
                     <div class="mr-3">
-                        <SmileIcon :fill="darkMode?`#afb0b4`:`#0f3c7a`"></SmileIcon>
+                        <SmileIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SmileIcon>
                     </div>
                 </div>
-                <div class="text-base font-medium" :class="darkMode?'text-textSecondary':''"><span class="uppercase">{{$t('2003')}}</span> <span>
+                <div class="text-base font-medium" :class="darkMode?'text-white':''"><span class="uppercase">{{$t('2003')}}</span> <span>
                     {{token ? stProfile.first_name + " " + stProfile.last_name : $t('1127')}}
                 </span></div>
             </div>
-            <div class="list mt-5">
+            <div class="list mt-5" :class="darkMode?`text-gray-300`:``">
                 <div class="w-full overflow-x-scroll flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative" @click="addStory()">
                         <div class="box-story relative h-36 bg-black w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative">
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                             <div class="h-full w-full bg-contain bg-no-repeat bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                         </div>
-                        <div class="bg-primary w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-7 cursor-pointer">
+                        <div class="bg-primary w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-12 cursor-pointer">
                             <AddIcon :size="16"/>
                         </div>
                         <p class="mt-3" :class="localize==='en'?'text-sm':'text-xs'">

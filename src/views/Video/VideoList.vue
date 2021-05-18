@@ -4,7 +4,7 @@
             <Loading></Loading>
         </div>
         <div class="grid gap-4" :class="isHide?'grid-cols-4':'grid-cols-3'" v-else>
-            <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'bg-secondary text-textSecondary':'bg-white shadow'">
+            <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'bg-youtube text-textSecondary':'bg-white shadow'">
                 <!--Vdo-->
                 <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"
                      @mouseleave="hideAndShowDuration('')">
@@ -25,8 +25,8 @@
                     <div class="flex p-3 items-center justify-start cursor-text">
                         <img :src="view.vdo.teacher.photo" class="h-10 rounded mr-3">
                         <div>
-                            <div class="text-primary text-sm" :class="darkMode?'text-textSecondary':''">{{cutString(view.vdo.title,20)}}</div>
-                            <div class="flex font-khmer_os text-xs opacity-50">
+                            <div class="text-primary text-sm" :class="darkMode?'text-white':''">{{cutString(view.vdo.title,20)}}</div>
+                            <div class="flex font-khmer_os text-xs" :class="darkMode?`text-gray-400`:`opacity-50`">
                                 <div>{{view.vdo.teacher.name}}</div>
                                 <div class="ml-7">{{ kFormatter(view.vdo.view) }} view</div>
                             </div>
@@ -35,10 +35,10 @@
                             <div class="float-right cursor-pointer">
                         
                                 <div v-if="(view.vdo.is_favorite || isFavorite(view.vdo._id))" @click="removeMyFavorite(view.vdo._id)">
-                                    <FavoriteFill/>
+                                    <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
                                 </div>
                                 <div @click="addFavorite(view.vdo._id)" v-else>
-                                    <FavoriteIcon :fill="darkMode?`#afb0b4`:`#4A4A4A`"/>
+                                    <FavoriteIcon :fill="darkMode?`#ffffff`:`#4A4A4A`"/>
                                 </div>
                             </div>
                         </div>
@@ -62,8 +62,8 @@
                     <div class="flex p-3 items-center justify-start">
                         <img :src="view.ads.logo" class="h-10 rounded mr-3">
                         <div>
-                            <div class="text-primary text-sm" :class="darkMode?'text-textSecondary':''">{{view.ads.title}}</div>
-                            <div class="flex font-khmer_os text-xs opacity-50">
+                            <div class="text-primary text-sm" :class="darkMode?'text-white':''">{{view.ads.title}}</div>
+                            <div class="flex font-khmer_os text-xs" :class="darkMode?`text-gray-400`:`opacity-50`">
                                 <div>{{view.ads.company}}</div>
                             </div>
                         </div>

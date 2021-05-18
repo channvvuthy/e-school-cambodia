@@ -9,19 +9,19 @@
                         <source src=""/>
                     </video>
                 </div>
-                <div class="rounded-b-2xl shadow pb-2 flex-1" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white `"
+                <div class="rounded-b-2xl shadow pb-2 flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `"
                      v-else>
                     <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)"></VideoPlaylist>
                     <div class="mx-5 mt-6">
-                        <div class="font-semibold text-base" :class="darkMode?`text-skyBlue`:`text-primary`">
+                        <div class="font-semibold text-base" :class="darkMode?`text-white`:`text-primary`">
                             {{ video.order }}. {{ video.title }}
                         </div>
                         <div class="flex mt-5 text-base">
                             <div class="flex mb-3">
                                 <div class="cursor-pointer"
                                      @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
-                                    <FavoriteFill v-if="video.is_favorite" :size="24"></FavoriteFill>
-                                    <FavoriteIcon v-else :size="24" :fill="darkMode?`#afb0b4`:`#4A4A4A`"></FavoriteIcon>
+                                    <FavoriteFill v-if="video.is_favorite" :size="24" :fill="darkMode?`#E5E7EB`:`#c0272d`"></FavoriteFill>
+                                    <FavoriteIcon v-else :size="24" :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></FavoriteIcon>
                                 </div>
                                 <div class="mx-3">
                                     {{$t('1109')}}
@@ -29,7 +29,7 @@
                             </div>
                             <div class="flex mx-20">
                                 <div>
-                                    <Eye :fill="darkMode?`#afb0b4`:`#4A4A4A`"></Eye>
+                                    <Eye :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></Eye>
                                 </div>
                                 <div class="mx-2">{{video.view}}</div>
                                 <div>{{$t('1003')}}</div>
@@ -40,47 +40,47 @@
             </div>
             <div class="flex-1">
                 <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium"
-                     :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`"
+                     :class="darkMode?`bg-youtube text-gray-300`:`bg-white`"
                 >
                     <div @click="switchMenu('video')"
                          class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
-                         :class="active === 'video'?darkMode?`text-skyBlue`:`text-primary`:``">
+                         :class="active === 'video'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('2108') }}
-                        <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                        <!-- <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
-                                 :class="active === 'video'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div>
+                                 :class="active === 'video'?darkMode?`bg-white`:`bg-primary`:``"></div>
+                        </div> -->
                     </div>
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('document')"
-                         :class="active === 'document'?darkMode?`text-skyBlue`:`text-primary`:``">
+                         :class="active === 'document'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('1112') }}
-                        <div v-if="active === 'document'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                        <!-- <div v-if="active === 'document'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
                                  :class="active === 'document'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('forum')"
-                         :class="active === 'forum'?darkMode?`text-skyBlue`:`text-primary`:``">
+                         :class="active === 'forum'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('2110') }}
-                        <div v-if="active === 'forum'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                        <!-- <div v-if="active === 'forum'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
                                  :class="active === 'forum'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('quiz')"
-                         :class="active === 'quiz'?darkMode?`text-skyBlue`:`text-primary`:``">
+                         :class="active === 'quiz'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('2111') }}
-                        <div v-if="active === 'quiz'" class="m-auto w-full rounded absolute bottom-0 h-1">
+                        <!-- <div v-if="active === 'quiz'" class="m-auto w-full rounded absolute bottom-0 h-1">
                             <div class="h-full h-1 w-10/12 m-auto"
                                  :class="active === 'quiz'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
-                <div  v-if="!showMenu" class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center " :class="darkMode?`bg-secondary text-textSecondary`:`bg-white`">
+                <div  v-if="!showMenu" class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center " :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
                     <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer" @click="backMenu">
                         <BackIcon :width="20" :height="20" :fill="darkMode?`#afb0b4`:`#000000`"></BackIcon>
                     </div>

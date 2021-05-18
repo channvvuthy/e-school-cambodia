@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-5 mb-5" :class="darkMode?'bg-secondary text-textSecondary':'bg-white'">          
+    <div class="mx-5 mb-5" :class="darkMode?'bg-secondary text-gray-300':'bg-white'">          
         <div class="text-md">
             <div class="grid grid-cols-3 gap-x-10 gap-y-5 font-medium">
                 <div @click="selectFilter('all')"

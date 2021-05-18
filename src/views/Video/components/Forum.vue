@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-5 mt-1 py-3 h-screen font-khmer_os bg-img-primary" :class="loadingForum?`overflow-y-scroll`:``">
+    <div class="ml-5 py-3 h-screen font-khmer_os" :class="loadingForum?`overflow-y-scroll`:darkMode?`bg-youtube px-4 rgba`:`mt-1`">
         <template v-if="loadingForum">
             <div class="flex mb-3 bg-white rounded-md p-3 shadow mx-4" v-for="i in 5" :key="i">
                 <div class="forum w-16 h-16 rounded-full"></div>
@@ -12,54 +12,56 @@
         </template>
         <template v-else>
             <div class="relative h-full">
-                <div class="absolute bottom-40  h-40 bg-white w-full my-shadow flex justify-between px-4 items-center">
+                <div class="absolute bottom-40  h-40 w-full my-shadow flex justify-between px-4 items-center" :class="darkMode?`bg-secondary`:`bg-white`">
                     <div class="opacity-50 cursor-pointer" @click="choosePhoto">
-                        <ImageIcon></ImageIcon>
+                        <ImageIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ImageIcon>
                     </div>
                     <form class="hidden">
                         <input type="file" id="photo" ref="photo" @change="onSelectedPhoto"
                                accept="image/png, image/gif, image/jpeg">
                     </form>
                     <textarea
-                            class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none border-gray-400 rounded-full"
+                            class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full" :class="darkMode?`bg-gray-300`:`border-gray-400`"
                             :placeholder="$t('2112')" @keyup.enter.exact="postComment" v-model="text"></textarea>
                 </div>
-                <div class="overflow-y-scroll h-4/5 pb-72 px-4">
+                <div class="overflow-y-scroll h-4/5 pb-72">
                     <div v-for="(forum,index) in forums" :key="index"
-                         class="bg-white rounded-md shadow mb-3 hover:bg-lightBlue">
+                         class=" mb-3" :class="darkMode?`bg-secondary rounded-md`:`bg-white rounded-md shadow hover:bg-lightBlue`">
                         <div class="mb-3 flex p-5 cursor-pointer" @click="forumDetail(forum)">
                             <div class="h-16 w-16 rounded-full bg-cover bg-gray-300"
                                  :style="{backgroundImage:`url(${forum.user.photo})`}"></div>
                             <div class="ml-4 flex-1 w-full">
                                 <div>
-                                    <div class="text-base font-semibold text-primary">{{forum.user.name}}</div>
+                                    <div class="text-base font-semibold" :class="darkMode?`text-byline`:`text-primary`">{{forum.user.name}}</div>
                                     <div class="text-gray-500">
                                         <vue-moments-ago prefix="" suffix="ago" :date="forum.date" lang="en"/>
                                     </div>
                                 </div>
                                 <div v-if="forum.content.photo">
-                                    <img :src="forum.content.photo.name" class="max-h-40 rounded">
+                                    <img :src="forum.content.photo.name" class="max-h-40 rounded my-2">
                                 </div>
-                                <div v-if="forum.content.text">{{cutString(forum.content.text, 100)}}</div>
+                                <div v-if="forum.content.text" :class="darkMode?`text-byline`:``">{{cutString(forum.content.text, 100)}}</div>
 
                             </div>
                         </div>
-                        <div class="border-t border-primay h-1 my-2"></div>
+                        <div class="h-1 my-2" :class="darkMode?`rgba`:`border-t border-primay `"></div>
                         <div class="flex px-5 items-center justify-between">
                             <div class="w-10 h-10 bg-gray-500 rounded-full bg-cover"
                                  :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                             <div>
                                 <textarea  :placeholder="$t('2114') + `...`"
-                                          class="h-10 pl-5 pt-3 focus:outline-none bg-transparent"
+                                          class="pl-5 h-10 pt-3 focus:outline-none bg-transparent"
+                                          :class="darkMode?`placeholder-gray-300 text-gray-300`:``"
                                           style="resize: none;"
+                                          :style="darkMode?`caret-color: #e5e7eb`:``"
                                           @keyup.enter.exact="comment(forum)"></textarea></div>
                             <div class="flex items-center">
-                                <Eye></Eye>
-                                <div class="ml-2">{{forum.view}}</div>
+                                <Eye :fill="darkMode?`#E5E7EB`:``"></Eye>
+                                <div class="ml-2" :class="darkMode?`text-gray-300`:``">{{forum.view}}</div>
                             </div>
                             <div class="flex items-center ml-10 mr-5">
-                                <ChatIcon :size="20"></ChatIcon>
-                                <div class="ml-2">{{forum.comment}}</div>
+                                <ChatIcon :size="20" :fill="darkMode?`#E5E7EB`:``"></ChatIcon>
+                                <div class="ml-2" :class="darkMode?`text-gray-300`:``">{{forum.comment}}</div>
                             </div>
                         </div>
                         <div class="h-3"></div>
@@ -99,7 +101,8 @@
         },
         computed: {
             ...mapState('forum', ['forums', 'loadingForum', 'replyComment']),
-            ...mapState('auth', ['stProfile'])
+            ...mapState('auth', ['stProfile']),
+            ...mapState('setting', ['darkMode'])
         },
         methods: {
             ...mapActions('forum', ['getForum']),
@@ -137,6 +140,9 @@
     }
 </script>
 <style>
+    .rgba{
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
     .forum {
         animation: box 1s infinite;
         background-color: #dfdfdf;

@@ -17,7 +17,7 @@
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md `">
                         <!-- <img src="/icon/icon/library.png" class="h-5 m-auto"> -->
-                        <div><LibraryIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryIcon></div>
+                        <div><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1108')}}
@@ -86,7 +86,7 @@
 <script>
     import {mapState} from "vuex"
     import MyCourseIcon from "./../../../components/MyCourseIcon"
-    import LibraryIcon from "./../../../components/LibraryIcon"
+    import LibraryThinIcon from "./../../../components/LibraryThinIcon"
     import HeartIcon from "./../../../components/HeartIcon"
     import DownloadIcon from "./../../../components/DownloadIcon"
     import NetworkIcon from "./../../../components/NetworkIcon"
@@ -96,7 +96,7 @@
     export default{
         components:{
             MyCourseIcon,
-            LibraryIcon,
+            LibraryThinIcon,
             HeartIcon,
             DownloadIcon,
             NetworkIcon,

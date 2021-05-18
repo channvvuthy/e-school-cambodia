@@ -1,50 +1,58 @@
 <template>
-    <div class="w-full" :class="darkMode?'bg-secondary':'bg-white'">
+    <div class="w-full text-xs pb-1" :class="darkMode?'bg-secondary':'bg-white'">
         <div class="pl-12 pr-5 flex justify-between items-center">
             <div class="grid grid-cols-5 gap-6">
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('home')">
-                    <img :src="$route.name === 'home'?'/icon/Menu/Group 3@2x.png':'/icon/Menu/Home@2x.png'" class="h-6"/>
-                    <p class="mt-2  color-primary" :class="localize==='en'?'text-sm':'text-xs'">
+                    <div v-if="$route.name === 'home'"><HomeFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></HomeFillIcon></div>
+                    <div v-else><HomeIcon :fill="darkMode?`#909090`:`#0f3c7a`"></HomeIcon></div>
+                    <p class="mt-2" :class="darkActive(darkMode,$route.name === 'home')">
                         {{$t('1101')}}
                     </p>
-                    <div class="border border-r-0 border-l-0 w-full" v-if="$route.name === 'home'" :class="darkMode?'border-lightGray bg-lightGray':'bg-primary border-primary'"></div>
                 </div>
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
-                    <img :src="$route.name === 'video'?'/icon/Menu/Video-Current@2x.png':'/icon/Menu/Video@2x.png'" class="h-6"/>
-                    <p class="mt-2 " :class="localize==='en'?'text-sm':'text-xs'">
+                    <div v-if="$route.name === 'video'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
+                    <div v-else><WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon></div>
+                    <p class="mt-2" :class="darkActive(darkMode,$route.name === 'video')">
                         {{$t('2108')}}
                     </p>
-                    <div class="border border-r-0 border-l-0 w-full" v-if="$route.name === 'video'" :class="darkMode?'border-lightGray bg-lightGray':'bg-primary border-primary'"></div>
                 </div>
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
-                    <img src="/icon/Menu/Library@2x.png" class="h-6"/>
-                    <p class="mt-2" :class="localize==='en'?'text-sm':'text-xs'">
+                    <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></LibraryIcon></div>
+                    <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
+                    <p class="mt-2" :class="darkActive(darkMode,$route.name === 'library')">
                         {{$t('2200')}}
                     </p>
                 </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer">
-                    <img src="/icon/Menu/Partner@2x.png" class="h-6"/>
-                    <p class="mt-2" :class="localize==='en'?'text-sm':'text-xs'">
+                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
+                    <div v-if="$route.name === 'partner'"><PartnershipFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`" :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon></div>
+                    <div v-else><PartnershipIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PartnershipIcon></div>
+                    <p class="mt-2" :class="darkActive(darkMode,$route.name === 'partner')">
                         {{$t('1104')}}
                     </p>
+                    
                 </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer">
-                    <img src="/icon/Menu/Support.svg" class="h-6"/>
-                    <p class="mt-2" :class="localize==='en'?'text-sm':'text-xs'">
+                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('support')">
+                    <div v-if="$route.name === 'support'"><SupporterIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SupporterIcon></div>
+                    <div v-else><SupporterIcon :fill="darkMode?`#909090`:`#0f3c7a`"></SupporterIcon></div>
+                    <p class="mt-2" :class="darkActive(darkMode,$route.name === 'support')">
                         {{$t('1105')}}
                     </p>
+                
                 </div>
             </div>
             <div class="flex justify-end">
                 <div class="flex justify-between items-end flex-1">
                     <div class="flex flex-col justify-center items-center cursor-pointer opacity-60 ">
-                        <img src="/icon/Home/shopping-cart.png"/>
+                        <div><CartIcon :fill="darkMode?`#909090`:`#0f3c7a`"></CartIcon></div>
+
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60">
-                        <img src="/icon/Home/chat-bubbles-with-ellipsis.png"/>
+                        <div><ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ChatIcon></div>
+
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60">
-                        <img src="/icon/Home/bell.png"/>
+                        <div><NotificationIcon :fill="darkMode?`#909090`:`#0f3c7a`"></NotificationIcon></div>
+
                     </div>
                 </div>
             </div>
@@ -53,13 +61,49 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import HomeIcon from "./../../components/HomeIcon"
+import HomeFillIcon from "./../../components/HomeFillIcon"
+import WatchVideoIcon from "./../../components/WatchVideoIcon"
+import WatchVideoFillIcon from "./../../components/WatchVideoFillIcon"
+import LibraryIcon from "./../../components/LibraryIcon"
+import LibraryThinIcon from "./../../components/LibraryThinIcon"
+import PartnershipIcon from "./../../components/PartnershipIcon"
+import PartnershipFillIcon from "./../../components/PartnershipFillIcon"
+import SupporterIcon from "./../../components/SupporterIcon"
+import NotificationIcon from "./../../components/NotificationIcon"
+import ChatIcon from "./../../components/ChatIcon"
+import CartIcon from "./../../components/CartIcon"
 export default {
+    components:{
+        HomeIcon,
+        HomeFillIcon,
+        WatchVideoIcon,
+        WatchVideoFillIcon,
+        LibraryIcon,
+        PartnershipIcon,
+        LibraryThinIcon,
+        PartnershipFillIcon,
+        SupporterIcon,
+        NotificationIcon,
+        ChatIcon,
+        CartIcon
+        
+    },
     computed: {
         ...mapState("setting", ["localize","darkMode"])
     },
     methods: {
         goTo(page) {
         this.$router.push({ name: page });
+        },
+        darkActive(darkMode, active){
+            if(darkMode && active){
+                return "text-white"
+            }
+            if(!darkMode && active){
+                return "text-primary"
+            }
+            
         }
     }
 };

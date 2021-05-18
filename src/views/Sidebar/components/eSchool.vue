@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="text-primary font-semibold text-sm" :class="darkMode?'text-textSecondary':''">
+        <div class="text-primary font-semibold text-sm" :class="darkMode?'text-white':''">
             {{$t('1127')}}
         </div>
-        <div class="px-3 my-3 mt-5">
+        <div class="px-3 my-3 mt-7">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?``:`bg-gray-100 shadow-md`">
@@ -68,9 +68,9 @@
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 w-full cursor-pointer" :class="darkMode?``:`bg-gray-100 shadow-md `"
                          @click="setLocalization(localize==='kh'?'en':'kh')">
-                        <img src="/icon/icon/en.png" class="h-5 m-auto"
-                             v-if="localize==='kh'">
-                        <img src="/icon/icon/kh.png" class="h-5 m-auto" v-else>
+                        <div v-if="localize==='en'"><KhIcon :fill="darkMode?`#909090`:`#0f3c7a`" ></KhIcon></div>
+                        <div v-else><EnIcon :fill="darkMode?`#909090`:`#0f3c7a`" ></EnIcon></div>
+
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -89,6 +89,8 @@
     import AboutIcon from "./../../../components/AboutIcon"
     import ShareIcon from "./../../../components/ShareIcon"
     import ModeIcon from "./../../../components/ModeIcon"
+    import KhIcon from "./../../../components/KhIcon"
+    import EnIcon from "./../../../components/EnIcon"
 
     export default{
         components:{
@@ -97,7 +99,9 @@
             HelpIcon,
             AboutIcon,
             ShareIcon,
-            ModeIcon
+            ModeIcon,
+            KhIcon,
+            EnIcon
         },
         computed: {
             ...mapState('setting', ['localize','darkMode'])

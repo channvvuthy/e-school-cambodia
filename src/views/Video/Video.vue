@@ -8,7 +8,7 @@
             <div v-else>
                 <div class="grid gap-4" :class="isHide?`grid-cols-4`:`grid-cols-3`">
                     <div v-for="(video, index) in videos.list" :key="index">
-                        <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-secondary text-textSecondary`:`bg-white shadow`">
+                        <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-youtube text-white`:`bg-white shadow`">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
                             <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-2xl" onerror="this.onerror=null; this.src='/poster.png'"/>
                             <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1" :style="{width:`${video.last_watch.percentage}%`}"></div>
@@ -18,31 +18,31 @@
                                 <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
                                 <div class="flex items-end w-full justify-between mt-3 text-center text-sm">
                                     <div class="cursor-pointer">
-                                        <YoutubeIcon :fill="darkMode?`#afb0b4`:`#000000`"></YoutubeIcon>
+                                        <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                                 {{ video.total_video?video.total_video: 0}}
                                         </div>
                                         </div>
                                     <div class="cursor-pointer">
-                                        <PdfIcon :fill="darkMode?`#afb0b4`:`#000000`"></PdfIcon>
+                                        <PdfIcon :fill="darkMode?`#909090`:`#000000`"></PdfIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                                 {{ video.total_pdf?video.total_pdf:0 }}
                                         </div>
                                     </div>
                                     <div class="cursor-pointer">
-                                        <ChatIcon :fill="darkMode?`#afb0b4`:`#000000`"></ChatIcon>
+                                        <ChatIcon :fill="darkMode?`#909090`:`#000000`"></ChatIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_support?$t('1008'):$t('1009') }}
                                         </div>   
                                         </div>
                                     <div class="cursor-pointer">
-                                        <TestIcon :fill="darkMode?`#afb0b4`:`#000000`"></TestIcon>
+                                        <TestIcon :fill="darkMode?`#909090`:`#000000`"></TestIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                                 {{ video.has_quiz?$t('1008'):$t('1009') }}
                                         </div>
                                         </div>
                                     <div class="cursor-pointer">
-                                        <CertificateIcon :fill="darkMode?`#afb0b4`:`#000000`"></CertificateIcon>
+                                        <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_certificate?$t('1008'):$t('1009') }}
                                         </div>
@@ -51,13 +51,13 @@
                             </div>
                                <div class="flex w-full justify-between items-center relative top-5 mt-5">
                                    <template v-if="video.price.year">
-                                        <div>{{$t('1006')}} : <del>{{video.price.highlight}} USD</del>&nbsp; <span :class="darkMode?`text-hyper`:`text-red-700`">{{video.price.year}} USD</span></div>
+                                        <div :class="darkMode?`text-gray-300`:``">{{$t('1006')}} : <del>{{video.price.highlight}} USD</del>&nbsp; <span :class="darkMode?`text-gray-300`:`text-red-700`">{{video.price.year}} USD</span></div>
                                         <div>
-                                            <CartIcon :fill="darkMode?`#afb0b4`:`#000000`"></CartIcon>
+                                            <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
                                         </div>
                                    </template>
                                    <template v-else>
-                                        <div :class="darkMode?`text-hyper`:`text-red-700`">{{$t('1007')}}</div>
+                                        <div :class="darkMode?`text-gray-300`:`text-red-700`">{{$t('1007')}}</div>
                                    </template>
                                </div>
                             </div>
