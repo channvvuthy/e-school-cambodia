@@ -12,7 +12,7 @@
         </template>
         <template v-else>
             <div class="relative h-full">
-                <div class="absolute bottom-40  h-40 w-full my-shadow flex justify-between px-4 items-center" :class="darkMode?`bg-secondary`:`bg-white`">
+                <div class="absolute bottom-40  h-40 w-full my-shadow flex justify-between px-4 items-center" :class="darkMode?`bg-youtube`:`bg-white`">
                     <div class="opacity-50 cursor-pointer" @click="choosePhoto">
                         <ImageIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ImageIcon>
                     </div>
@@ -21,10 +21,10 @@
                                accept="image/png, image/gif, image/jpeg">
                     </form>
                     <textarea
-                            class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full" :class="darkMode?`bg-gray-300`:`border-gray-400`"
+                            class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full" :class="darkMode?`bg-gray-300 placeholder-secondary`:`border-gray-400`"
                             :placeholder="$t('2112')" @keyup.enter.exact="postComment" v-model="text"></textarea>
                 </div>
-                <div class="overflow-y-scroll h-4/5 pb-72">
+                <div class="overflow-y-scroll h-4/5 pb-72" @scroll="onScroll" ref="feed">
                     <div v-for="(forum,index) in forums" :key="index"
                          class=" mb-3" :class="darkMode?`bg-secondary rounded-md`:`bg-white rounded-md shadow hover:bg-lightBlue`">
                         <div class="mb-3 flex p-5 cursor-pointer" @click="forumDetail(forum)">
@@ -41,6 +41,7 @@
                                     <img :src="forum.content.photo.name" class="max-h-40 rounded my-2">
                                 </div>
                                 <div v-if="forum.content.text" :class="darkMode?`text-byline`:``">{{cutString(forum.content.text, 100)}}</div>
+                            
 
                             </div>
                         </div>
@@ -54,7 +55,7 @@
                                           :class="darkMode?`placeholder-gray-300 text-gray-300`:``"
                                           style="resize: none;"
                                           :style="darkMode?`caret-color: #e5e7eb`:``"
-                                          @keyup.enter.exact="comment(forum)"></textarea></div>
+                                          @keyup.enter.exact="UserReplyComment($event,forum)" :id="forum._id"></textarea></div>
                             <div class="flex items-center">
                                 <Eye :fill="darkMode?`#E5E7EB`:``"></Eye>
                                 <div class="ml-2" :class="darkMode?`text-gray-300`:``">{{forum.view}}</div>
@@ -97,15 +98,16 @@
             return {
                 page: 1,
                 text: "",
+                page: 1
             }
         },
         computed: {
-            ...mapState('forum', ['forums', 'loadingForum', 'replyComment']),
+            ...mapState('forum', ['forums', 'loadingForum']),
             ...mapState('auth', ['stProfile']),
             ...mapState('setting', ['darkMode'])
         },
         methods: {
-            ...mapActions('forum', ['getForum']),
+            ...mapActions('forum', ['getForum', 'getForumPagination', 'replyComment']),
             cutString(text, limit){
                 return helper.cutString(text, limit)
             },
@@ -117,19 +119,43 @@
                     this.$emit("postComment", this.text)
                 }
                 this.text = ""
+                this.$refs.feed.scrollTop = this.$refs.feed.scrollHeight - this.$refs.feed.clientHeight
+                
             },
-            comment($event, forum){
-                console.log($event,forum)
+            UserReplyComment(event, forum){
+                let text = event.target.value
+                let id = forum._id
+                let payload = {id,text}
+                if(text.length){
+                    this.replyComment(payload).then(res =>{
+                        document.getElementById(`${id}`).value = ""
+                        this.forumDetail(forum);
+
+                    })
+                }
             },
 
             onSelectedPhoto(event){
                 if (event.target.value) {
+                    this.$emit("noReply", false)
                     this.$emit("openModal", event)
+                    
                 }
             },
             choosePhoto(){
                 this.$refs.photo.click()
-            }
+            },
+            onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+                if (scrollTop + clientHeight >= scrollHeight) {
+                    this.page ++ 
+                    let payload = {}
+                    let id = document.getElementById("video").value
+                    payload.id = id
+
+                    payload.p = this.page
+                    this.getForumPagination(payload);
+                }
+            },
         },
 
         created(){

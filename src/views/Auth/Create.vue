@@ -1,9 +1,9 @@
 <template>
-    <div class="flex justify-center items-center min-h-screen bg-white">
-        <div class="flex-col rounded-3xl w-96 p-6 shadow-2xl bg-white">
+    <div class="flex justify-center items-center min-h-screen" :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
+        <div class="flex-col rounded-3xl w-96 p-6 shadow-2xl" :class="darkMode?`bg-secondary`:``">
             <div class="flex justify-between items-center">
                 <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
-                    <ChevronIcon></ChevronIcon>
+                    <ChevronIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ChevronIcon>
                 </div>
                 <div class="flex-1 text-center text-md">
                     {{$t('2008')}}
@@ -12,26 +12,29 @@
             <div class="h-10"></div>
             <form class="flex-col text-sm font-khmer_os">
                 <div class="relative">
-                    <div class="opacity-50 absolute left-0 top-2">
-                        <img src="/icon/icon/user.png" class="h-5">
+                    <div class="opacity-50 absolute top-2" :class="darkMode?`left-2`:`left-0`">
+                       <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
                     </div>
                     <input
                             type="text"
                             ref="first_name"
                             :placeholder="$t('2013')"
-                            class="p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8 h-10 placeholder-gray-500"
+                            :class="darkMode?`h-10 rounded caret-white text-gray-300 rounded bg-black border border-gray-800`:`border-b border-solid  border-gray-500`"
+                            class="p-2 w-full focus:outline-none mb-4 pl-8 h-10 placeholder-gray-500"
                             v-model="studentInfo.first_name"
                     />
                 </div>
                 <div class="relative">
-                    <div class="opacity-50 absolute left-0 top-2">
-                        <img src="/icon/icon/user.png" class="h-5">
+                    <div class="opacity-50 absolute top-2" :class="darkMode?`left-2`:`left-0`">
+                        <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
                     </div>
                     <input
                             type="text"
                             ref="last_name"
                             :placeholder="$t('2014')"
-                            class="p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8 h-10 placeholder-gray-500"
+                            :class="darkMode?`h-10 rounded caret-white text-gray-300 rounded bg-black border border-gray-800`:`border-b border-solid  border-gray-500`"
+
+                            class="p-2 w-full focus:outline-none mb-4 pl-8 h-10 placeholder-gray-500"
                             v-model="studentInfo.last_name"
                     />
                 </div>
@@ -59,33 +62,38 @@
             <div class="h-5"></div>
             <form class="flex-col text-sm font-khmer_os w-full">
                 <div class="relative">
-                    <span class="absolute left-0 mt-2 text-sm font-medium opacity-40">
-                        <PhoneIcon size="22"></PhoneIcon>
+                    <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
+                        <PhoneIcon size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
                     </span>
                     <input type="text" :placeholder="$t('2009')"
                            ref="phone"
                            v-model="studentInfo.phone"
                            @keypress="isNumber($event)"
-                           class="h-10 placeholder-gray-500 p-2 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
+                            :class="darkMode?`h-10 rounded caret-white text-gray-300 rounded bg-black border border-gray-800`:`border-b border-solid  border-gray-500`"
+
+                           class="h-10 placeholder-gray-500 p-2 w-full focus:outline-none mb-4 pl-8"/>
                 </div>
                 <div class="relative">
-                    <span class="absolute left-0 mt-2 text-sm font-medium opacity-50">
-                            <img src="/icon/icon/lock.png">
+                    <span class="absolute mt-2 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
+                             <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                         </span>
                     <input type="password" :placeholder="$t('2010')"
                            v-model="studentInfo.password"
                            ref="password"
-                           class="h-10 placeholder-gray-500 p-2 px-0 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
+                            :class="darkMode?`h-10 rounded caret-white text-gray-300 rounded bg-black border border-gray-800`:`border-b border-solid  border-gray-500`"
+
+                           class="h-10 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4 pl-8"/>
 
                 </div>
                 <div class="relative">
-                    <span class="absolute left-0 mt-2 text-sm font-medium opacity-50">
-                            <img src="/icon/icon/lock.png">
+                    <span class="absolute mt-2 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
+                             <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                         </span>
                     <input type="password" :placeholder="$t('2017')"
                            ref="confirm_password"
                            v-model="studentInfo.confirm_password"
-                           class="h-10 placeholder-gray-500 p-2 px-0 border border-solid border-1 border-gray-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-8"/>
+                            :class="darkMode?`h-10 rounded caret-white text-gray-300 rounded bg-black border border-gray-800`:`border-b border-solid  border-gray-500`"
+                           class="h-10 placeholder-gray-500 p-2 px-0  w-full focus:outline-none mb-4 pl-8"/>
                 </div>
             </form>
             <div class="flex justify-start items-center mt-4">
@@ -100,17 +108,22 @@
                            name="term"
                     >
                     <div class="flex"><span class="pr-1">{{$t('2018')}}</span><span
-                            class="text-blue-700 cursor-pointer"
+                            class="cursor-pointer"
+                            :class="darkMode?`text-gray-300 underline`:`text-blue-700`"
                             @click="showTermAndCondition">{{$t('2019')}}</span>
                     </div>
                 </label>
             </div>
             <div class="h-5"></div>
-            <button class="focus:outline-none p-3 mt-4 text-center text-white rounded-lg bg-primary h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                    @click="createAccount" :disabled="(loadingRegister)"
-                    :class="(loadingRegister)?'bg-opacity-60':''">
-                {{$t('2008')}}
-                <Loader v-if="loadingRegister" :size="10"></Loader>
+            <button class="focus:outline-none p-3 mt-4 text-center relative text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                    @click="createAccount" :disabled="loadingRegister"
+                    :class="darkMode?`bg-button`:`bg-primary`"
+                    >
+                
+                <div class="absolute flex justify-center items-center w-full left-0 -top-2 " v-if="loadingRegister">
+                    <div class="loader"></div>
+                </div>
+                <span v-else>{{$t('2008')}}</span>
             </button>
             <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
             <TermAndCondition v-if="showTerm" @closeTermAndCondition="closeTermAndCondition"></TermAndCondition>
@@ -126,11 +139,13 @@
     import TermAndCondition from "./components/TermAndCondition"
     import ChevronIcon from "./../../components/ChevronIcon.vue"
     import PhoneIcon from "./../../components/PhoneIcon.vue"
+    import UserIcon from "./../../components/ProfileIcon.vue"
     import Vue from 'vue';
     import VueToast from 'vue-toast-notification';
     import 'vue-toast-notification/dist/theme-sugar.css';
     Vue.use(VueToast);
     import config from "./../../config"
+    import LockIcon from '../../components/LockIcon.vue'
     export default{
         name: "Create",
         components: {
@@ -138,7 +153,9 @@
             PhoneIcon,
             ChevronIcon,
             Loader,
-            TermAndCondition
+            TermAndCondition,
+            UserIcon,
+                LockIcon
         },
         data(){
             return {
@@ -162,7 +179,8 @@
             }
         },
         computed: {
-            ...mapState('auth', ['loadingRegister'])
+            ...mapState('auth', ['loadingRegister']),
+            ...mapState('setting', ['darkMode'])
         },
         methods: {
             ...mapActions('auth', ['register']),
@@ -263,11 +281,51 @@
         }
     }
 </script>
-<style>
+<style lang="scss">
     .swal2-header {
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 0px;
+    }
+    @keyframes load7 {
+        0%,80%,100% {
+            box-shadow: 0 2.5em 0 -1.3em;
+        }
+        40% {
+            box-shadow: 0 2.5em 0 0;
+        }
+    }
+    .loader {
+        border-radius: 50%;
+        width: 1em;
+        height: 1em;
+        animation: load7 1s infinite ease-in-out;
+        font-size: 10px;
+        position: relative;
+        text-indent: -9999em;
+        transform: translateZ(0);
+        animation-delay: -0.16s;
+        &:before {
+            border-radius: 50%;
+            width: 1em;
+            height: 1em;
+            animation: load7 1s infinite ease-in-out;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -2.5em;
+            animation-delay: -0.32s;
+        }
+        &:after {
+            border-radius: 50%;
+            width: 1em;
+            height: 1em;
+            animation: load7 1s infinite ease-in-out;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2.5em;
+        }
     }
 </style>

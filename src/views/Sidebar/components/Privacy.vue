@@ -95,6 +95,7 @@
             logoutUser(){
                 this.logout().then(() => {
                     this.$forceUpdate()
+                    this.$router.push('/')
                 })
             }
         }

@@ -2,7 +2,7 @@
     <div class="fixed z-10 inset-0 overflow-y-auto">
         <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                <div class="absolute inset-0 " :class="darkMode?`bg-youtube`:`bg-gray-500 opacity-75`"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
             <div class="w-2/5 inline-block align-bottom bg-white rounded-lg overflow-hidden shadow-xl transform transition-all  sm:align-middle px-5 pb-5"
@@ -36,6 +36,7 @@
         },
 
         computed: {
+            ...mapState('setting', ['darkMode']),
             ...mapState('view', ['termAndCondition', 'loadingTerm'])
         },
 

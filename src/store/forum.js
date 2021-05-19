@@ -22,10 +22,13 @@ export default {
             state.addingComment = status
         },
         gettingCommentReply(state, comment){
-            state.comments.push(comment)
+            state.comments.unshift(comment)
         },
         gettingComment(state, comments){
             state.comments = comments
+        },
+        addComment(state, payload){
+            state.forums.push(payload)
         },
         gettingCommentPagination(state, comment){
             if (comment && comment.length) {
@@ -112,8 +115,7 @@ export default {
         getForumPagination({commit}, params){
             commit("loadingForumPagination", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'forum?s=' + params.s + "&p=" + params.p + "&lesson_id=" + params.lesson_id).then(response => {
-
+                axios.get(config.apiUrl + `forum?${helper.q(params)}`).then(response =>{
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
                     }
@@ -148,15 +150,12 @@ export default {
         showCommentPagination({commit}, params){
             commit("showCommentPagination", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + "forum/comment?forum_id=" + params.forum_id + "&p=" + params.p).then(response => {
-
+                axios.get(config.apiUrl + `forum/comment?${helper.q(params)}`).then(response =>{
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
                     }
-
-                    commit("showCommentPagination", false)
-                    commit("gettingCommentPagination", response.data.data.comment)
                     resolve(response.data.data)
+                    commit("showCommentPagination", false)
                 }).catch(err => {
                     commit("showCommentPagination", false)
                     reject(err)
@@ -173,7 +172,7 @@ export default {
                     }
 
                     commit("addingComment", false)
-                    commit("gettingCommentReply", response.data.data)
+                    commit("addComment", response.data.data)
                     resolve(response.data.data)
                 }).catch(err => {
                     commit("addingComment", false)

@@ -141,7 +141,7 @@ export default {
                         axios.defaults.headers.common['xtoken'] = response.data.data.token;
                     } else {
                         delete axios.defaults.headers.common['xtoken']
-                        helper.errorMessage(response.data.data.status)
+                        // helper.errorMessage(response.data.data.status)
                     }
                     commit("loging", false);
                     resolve(response)

@@ -80,7 +80,7 @@
                     </div>
 
                 </div>
-                <div  v-if="!showMenu" class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center " :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
+                <div  v-if="!showMenu" class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center " :class="darkMode?`bg-youtube text-gray-300`:`bg-white bt-shadow`">
                     <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer" @click="backMenu">
                         <BackIcon :width="20" :height="20" :fill="darkMode?`#afb0b4`:`#000000`"></BackIcon>
                     </div>
@@ -91,8 +91,9 @@
                 <Playlist v-if="active === 'video'" @nextVideo="nextVideo($event)"></Playlist>
                 <Document v-if="active === 'document'" :id="video._id" @openDoc="openDoc($event)"></Document>
                 <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"
-                       @openModal="openModal($event)" @postComment="postComment($event)"></Forum>
-                <ForumComment v-if="!showMenu" :comments="comments" :loading="loadingComment"></ForumComment>
+                       @openModal="openModal($event)" @postComment="postComment($event)" @noReply="noReply"></Forum>
+                <ForumComment v-if="!showMenu" :comments="comments" :loading="loadingComment" @openModal="openModal($event)" @reply="reply" @replyTextComment="replyTextComment($event)" @loadMoreComment="loadMoreComment($event)"></ForumComment>
+                <Quiz v-if="active === 'quiz'"></Quiz>
             </div>
         </div>
         <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
@@ -108,11 +109,12 @@
                     </div>
                 </div>
                 <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
-                    <SinglePdf :pdfUrl="pdfUrl"></SinglePdf>
+                    <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"></SinglePdf>
                 </div>
 
             </div>
         </div>
+        <input type="hidden" id="video" :value="video._id"/>
     </div>
 </template>
 <script>
@@ -122,6 +124,7 @@
     import BackIcon from "./../../components/BackIcon.vue"
     import Playlist from "./components/Playlist.vue"
     import Document from "./components/Document.vue"
+    import Quiz from "./components/Quiz.vue"
     import ModalPhoto from "./components/ModalPhoto.vue"
     import ForumComment from "./components/ForumComment.vue"
     import Forum from "./components/Forum.vue"
@@ -147,7 +150,8 @@
                 loadingComment: false,
                 showModalPhoto: false,
                 imgUrl: "",
-                photo: null
+                photo: null,
+                isReply: false
             }
         },
         components: {
@@ -164,7 +168,8 @@
             Forum,
             BackIcon,
             ForumComment,
-            ModalPhoto
+            ModalPhoto,
+            Quiz
 
         },
         computed: {
@@ -173,7 +178,7 @@
         },
         methods: {
             ...mapActions('video', ['getPlaylist']),
-            ...mapActions('forum', ['getCommentForum','addComment']),
+            ...mapActions('forum', ['getCommentForum','addComment', 'replyComment','showCommentPagination']),
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
             removeMyFavorite(id){
@@ -206,12 +211,26 @@
                     this.video.is_favorite = 1
                 })
             },
+            reply(){
+                
+                this.isReply = true
+            },
+            noReply(){
+                this.isReply = false
+            },
             forumDetail($event){
                 this.showMenu = false
                 this.loadingComment = true
                 this.getCommentForum({id:$event._id}).then(response =>{
                     this.comments = response
                     this.loadingComment = false
+                })
+            },
+            loadMoreComment(payload){
+                this.showCommentPagination(payload).then(res =>{
+                    for(let i =0 ; i < res.comment.length; i++){
+                        this.comments.comment.push(res.comment[i]);
+                    }
                 })
             },
             backMenu(){
@@ -285,18 +304,31 @@
                 }
                 this.addComment(formData)
             },
+            replyTextComment(event){
+                this.replyComment(event).then(response =>{
+                    this.comments.comment.push(response.data.data)
+                })
+            },
             send(event){
                 let formData = new FormData();
-                formData.append("photo", this.photo);
-                formData.append("id", this.video._id)
-
                 if(event){
                     formData.append("text", event);
                 }
-
-                this.addComment(formData).then(response =>{
-                    this.showModalPhoto = false
-                })
+                if(this.isReply){
+                    formData.append("id", this.comments.forum._id)
+                    formData.append("photo", this.photo);
+                    this.replyComment(formData).then(response =>{
+                        this.comments.comment.push(response.data.data)
+                        this.showModalPhoto = false
+                    })
+                }else{
+                    formData.append("photo", this.photo);
+                    formData.append("id", this.video._id)
+                    this.addComment(formData).then(() =>{
+                        this.showModalPhoto = false
+                    })
+                }
+                    
             }
         },
         created(){
@@ -331,3 +363,8 @@
 
     }
 </script>
+<style>
+    .bt-shadow{
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+</style>
