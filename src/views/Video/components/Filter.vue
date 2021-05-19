@@ -90,6 +90,7 @@
                 }
 
                 this.getVideo(payload);
+                this.$emit("enableUserScroll", true)
             }
         },
         watch: {

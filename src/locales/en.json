@@ -173,5 +173,7 @@
   "share_to_story":"Share to Story",
   "light_mode":"Light Mode",
   "pdf_des":"Do you have Document file yet? <br/>Download PDF file here",
-  "send":"Send"
+  "send":"Send",
+  "colon":":",
+  "minute": "Minute"
 }

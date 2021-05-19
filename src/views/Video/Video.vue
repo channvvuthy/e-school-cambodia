@@ -1,6 +1,6 @@
 <template>
     <div class="mt-3 overflow-y-scroll h-screen pb-40" @scroll="onScroll">
-        <BoxFilter></BoxFilter>
+        <BoxFilter @enableUserScroll="enableUserScroll($event)"></BoxFilter>
         <div class="mt-10 px-5">
             <div v-if="loading">
                 <Loading></Loading>
@@ -103,7 +103,8 @@ export default {
     },
     data(){
         return{
-            page: 1
+            page: 1,
+            enableScroll: true
         }
     },
     computed:{
@@ -119,6 +120,10 @@ export default {
         gotToPlayList(videoCourse){
             this.$router.push({ name: 'video-detail', params: { course: videoCourse } })
         },
+        enableUserScroll(){
+            this.enableScroll = true
+            this.page = 1
+        },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight) {
                 this.page ++ 
@@ -133,9 +138,15 @@ export default {
                     payload.filter_id = this.filter_id
                 }
 
-                payload.page = this.page
+                payload.p = this.page
 
-                this.getVideoWithPagination(payload)
+                if(this.enableScroll){
+                    this.getVideoWithPagination(payload).then(res =>{
+                        if(res.data.data.list.length <= 0){
+                            this.enableScroll = false
+                        }
+                    })
+                }
             }
         },
     },

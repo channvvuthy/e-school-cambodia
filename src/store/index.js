@@ -3,6 +3,7 @@ import course from "./course"
 import video from "./video"
 import favorite from "./favorite"
 import playVideo from "./playVideo"
+import quiz from "./quiz"
 import home from "./home"
 import payment from "./payment"
 import  setting from "./setting"
@@ -42,6 +43,7 @@ export default  new Vuex.Store({
         online,
         forum,
         home,
-        partner
+        partner,
+        quiz
     }
 });
