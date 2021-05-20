@@ -2,7 +2,8 @@
     <div>
         <VideoHeader></VideoHeader>
         <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
-        <div class="flex mt-5 ml-5">
+        <div class="flex mt-5 ml-5 relative">
+            <Exam v-if="showExam"></Exam>
             <div class="w-3/5">
                 <div v-if="loading">
                     <video poster="/poster-home.png">
@@ -93,7 +94,7 @@
                 <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"
                        @openModal="openModal($event)" @postComment="postComment($event)" @noReply="noReply"></Forum>
                 <ForumComment v-if="!showMenu" :comments="comments" :loading="loadingComment" @openModal="openModal($event)" @reply="reply" @replyTextComment="replyTextComment($event)" @loadMoreComment="loadMoreComment($event)"></ForumComment>
-                <Quiz v-if="active === 'quiz'"></Quiz>
+                <Quiz v-if="active === 'quiz'" @startingExam="startingExam($event)"></Quiz>
             </div>
         </div>
         <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
@@ -135,6 +136,7 @@
     import SinglePdf from "./../Component/SinglePdf.vue"
     import {mapState, mapActions} from "vuex"
     import helper from "./../../helper/helper"
+    import Exam from "./components/Exam"
     export default{
         data(){
             return {
@@ -151,7 +153,8 @@
                 showModalPhoto: false,
                 imgUrl: "",
                 photo: null,
-                isReply: false
+                isReply: false,
+                showExam: false
             }
         },
         components: {
@@ -169,7 +172,8 @@
             BackIcon,
             ForumComment,
             ModalPhoto,
-            Quiz
+            Quiz,
+            Exam
 
         },
         computed: {
@@ -181,6 +185,9 @@
             ...mapActions('forum', ['getCommentForum','addComment', 'replyComment','showCommentPagination']),
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
+            startingExam(){
+                this.showExam = true
+            },
             removeMyFavorite(id){
                 this.removeFavorite(id).then(() => {
                     this.video.is_favorite = 0

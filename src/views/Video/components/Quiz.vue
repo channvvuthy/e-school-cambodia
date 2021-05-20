@@ -5,7 +5,8 @@
         </div>
         <div v-else>
             <div v-if="err" class="">{{$t(err)}}</div>
-            <div class="rounded-2xl px-10 py-5" :class="darkMode?`bg-button shadow`:`bg-white shadow-md border-t border-gray-100`">
+            <!-- Box note -->
+            <div class="rounded-2xl px-10 py-5" :class="darkMode?`bg-button shadow`:`bg-white shadow-md border-t border-gray-100`" v-else>
                 <div class="text-base font-semibold mb-7">{{$t('2116')}}</div>
                 <div class="mb-5 text-sm flex justify-between items-center">
                     <div>{{$t('2118')}} {{$t('colon')}}</div>
@@ -21,7 +22,7 @@
                     <div>{{quiz.pass_point}}/{{quiz.total}}</div>
                 </div>
                 <div class="mt-7">
-                    <button  class="focus:outline-none text-white rounded-md px-6 py-3 text-sm" :class="darkMode?`bg-black`:`bg-primary shadow-2xl`">
+                    <button  class="focus:outline-none text-white rounded-md px-6 py-3 text-sm​​ w-full" :class="darkMode?`bg-black`:`bg-primary shadow-2xl`" @click="startExam()">
                         {{$t('2121')}}
                     </button>
                 </div>
@@ -31,12 +32,14 @@
 </template>
 <script>
 import {mapActions, mapState } from "vuex";
+// import toHHMMSS from "./../../../helper/toHHMMSS"
+
 export default {
     data(){
         return{
             loading: false,
             quiz: "",
-            err: ""
+            err: "",
         }
     },
     computed:{
@@ -49,15 +52,16 @@ export default {
             let id = document.getElementById('video').value
             this.getQuiz({id}).then(res=>{
                 this.loading = false
-                // console.log(res.data)
                 if(res.data.status === 1){
                     this.err = res.data.msg
                 }else{
                     this.quiz = res.data.data
-                    console.log(this.quiz)
                 }
                 
             })
+        },
+        startExam(){
+            this.$emit('startingExam', this.quiz)
         }
     },
     mounted(){

@@ -16,7 +16,7 @@
                     <div class="text-center text-sm mr-5 relative" @click="addStory()">
                         <div class="box-story relative h-36 bg-black w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative">
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
-                            <div class="h-full w-full bg-contain bg-no-repeat bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                            <div class="h-full w-full bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                         </div>
                         <div class="bg-primary w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-12 cursor-pointer">
                             <AddIcon :size="16"/>
@@ -27,16 +27,17 @@
                         <input type="file" ref="file" class="hidden" accept="image/x-png,image/gif,image/jpeg" @change="chooseFilt">
                     </div>
                     <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index" @click="getStoryDetail(my_story,index)">
-                        <div class="w-10 h-10 border-3 border-primary rounded-full bg-cover absolute z-50 left-2 top-2 bg-white flex justify-center items-center"
+                        <div class="w-10 h-10 border-3 rounded-full bg-cover absolute z-50 left-2 top-2 bg-white flex justify-center items-center"
+                        :class="darkMode?``:`border-fb`"
                              :style="{backgroundImage:`url(${my_story.user.photo})`}"
                         >
                         </div>
-                        <div class="box-story relative h-36 bg-black w-24 bg-contain bg-no-repeat bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
+                        <div class="box-story relative h-36 bg-black w-24 bg-cover bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
                              :style="{backgroundImage:`url(${my_story.photo.name})`}"
                         >
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                         </div>
-                        <p class="mt-3">{{my_story.user.name}}</p>
+                        <p class="mt-3 ">{{my_story.user.name}}</p>
                     </div>
                 </div>
             </div>

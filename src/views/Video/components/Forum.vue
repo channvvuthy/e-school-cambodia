@@ -162,6 +162,7 @@
             this.getForum(
                 {id: this.id, p: this.page}
             )
+            
         }
     }
 </script>

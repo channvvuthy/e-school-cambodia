@@ -10,6 +10,9 @@ export default {
     mutations:{
         getQuiz(state, payload){
             state.quiz = payload
+        },
+        submittingQuiz(){
+
         }
     },
     actions:{
@@ -21,6 +24,18 @@ export default {
                 }).catch(err =>{
                     reject(err)
                 } )
+            })
+        },
+
+        submitQuiz({commit},payload){
+            commit("submittingQuiz", true);
+
+            return new Promise((resolve, reject) =>{
+                axios.post(config.apiUrl + `quiz/video`, payload).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
             })
         }
     }

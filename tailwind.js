@@ -23,6 +23,8 @@ module.exports = {
             active:"#303030",
             byline:"#aaaaaa",
             hyper:"#ff3333",
+            exam:"#f6f6f6",
+            fb:"#1977f2",
             custom: '#00a0e4',
             success: '#40b366',
             lightGray:"#afb0b4",
