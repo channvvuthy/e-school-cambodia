@@ -71,7 +71,7 @@
             </div>
         </div>
         <FailExam v-if="fail" :result="result" @exit="exit" @checkResult="checkResult"></FailExam>
-        <PassExam v-if="pass" :result="result" @exit="exit" @click="checkResult"></PassExam>
+        <PassExam v-if="pass" :result="result" @exit="exit" @checkResult="checkResult"></PassExam>
         <ViewExam :quiz="quiz" :result="result" v-if="showResult" :selectedQuiz="selectedQuiz" @exit="exit"></ViewExam>
     </div>
 </template>
