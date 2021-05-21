@@ -4,7 +4,7 @@
         <div class="flex px-10 items-center">
             <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer"
             :class="isHide?`ml-7`:`ml-3`"
-             @click="()=>{this.$router.go(-1)}">
+             @click="back()">
                 <BackIcon :width="20" :height="20" :fill="darkMode?`#D1D5DB`:`#000000`"></BackIcon>
             </div>
             <div class="text-base font-mediums">{{$t('2126')}}</div>
@@ -21,6 +21,22 @@
         },
         computed:{
             ...mapState('setting', ['isHide','darkMode'])
+        },
+        props:{
+            isExam:{
+                default:()=>{
+                    return false
+                }
+            }
+        },
+        methods:{
+            back(){
+                if(!this.isExam){
+                    this.$router.go(-1)
+                }else{
+                    this.$emit("exit")
+                }
+            }
         }
 
     }

@@ -1,9 +1,9 @@
 <template>
     <div>
-        <VideoHeader></VideoHeader>
+        <VideoHeader :isExam="showExam" @exit="exit"></VideoHeader>
         <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
         <div class="flex mt-5 ml-5 relative">
-            <Exam v-if="showExam"></Exam>
+            <Exam v-if="showExam" @exit="exit"></Exam>
             <div class="w-3/5">
                 <div v-if="loading">
                     <video poster="/poster-home.png">
@@ -336,6 +336,9 @@
                     })
                 }
                     
+            },
+            exit(){
+                this.showExam = false
             }
         },
         created(){

@@ -3,7 +3,7 @@
         <div class="p-5 mb-1" :class="darkMode?'bg-secondary border border-l-2':'bg-white shadow'">
             <div class="flex justify-between w-3/5 ">
                 <div class="flex-1 relative">
-                    <input type="text"  v-on:keyup.enter="filterSearch" :placeholder="$t('1001')" v-model="s" :class="darkMode?'text-gray-300 border-gray-700':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8">
+                    <input type="text"  v-on:keyup.enter="filterSearch" :placeholder="$t('1001')" v-model="s" :class="darkMode?'text-gray-300 border-gray-700':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8 text-sm">
                     <div>
                         <div v-if="s" class="absolute left-0 top-4 cursor-pointer"
                             :title="$t('clear')" @click="clear">

@@ -52,7 +52,7 @@
         methods: {
             ...mapActions('home', ['getList']),
             showFilter(){
-                this.showFilterForm = true
+                this.showFilterForm = !this.showFilterForm
             },
             closeFilter(){
                 this.showFilterForm = false
