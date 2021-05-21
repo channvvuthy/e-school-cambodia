@@ -24,7 +24,7 @@
                             class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full" :class="darkMode?`bg-gray-300 placeholder-secondary`:`border-gray-400`"
                             :placeholder="$t('2112')" @keyup.enter.exact="replyTextComment(comments.forum)" v-model="text"></textarea>
                 </div>
-                <div class="h-screen overflow-y-scroll pb-80 bg-red-500" ref="feed" @scroll="onScroll">
+                <div class="h-screen overflow-y-scroll pb-80"  :class="darkMode?`bg-secondary`:`bg-white`" ref="feed" @scroll="onScroll">
                     <div class="px-5 pl-4 pb-4" :class="darkMode?`bg-secondary rgba`:`bg-softGray `">
                         <div class="flex pt-7">
                             <div class="w-16 h-16 bg-white rounded-full bg-cover" :style="{backgroundImage:`url(${comments.forum.user.photo})`}"></div>

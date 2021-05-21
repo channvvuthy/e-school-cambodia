@@ -70,8 +70,9 @@
                 </div>
             </div>
         </div>
-        <FailExam v-if="fail" :result="result" @exit="exit"></FailExam>
-        <PassExam v-if="pass" :result="result" @exit="exit"></PassExam>
+        <FailExam v-if="fail" :result="result" @exit="exit" @checkResult="checkResult"></FailExam>
+        <PassExam v-if="pass" :result="result" @exit="exit" @click="checkResult"></PassExam>
+        <ViewExam :quiz="quiz" :result="result" v-if="showResult" :selectedQuiz="selectedQuiz" @exit="exit"></ViewExam>
     </div>
 </template>
 <script>
@@ -82,13 +83,15 @@ import toHHMMSS from "./../../../helper/toHHMMSS"
 import helper from "./../../../helper/helper"
 import FailExam from "./FailExam"
 import PassExam from "./PassExam"
+import ViewExam from "./ViewExam"
 
 export default {
     components:{
         LoadingTimeIcon,
         ChevronIcon,
         FailExam,
-        PassExam
+        PassExam,
+        ViewExam
     },
     data(){
         return{
@@ -106,6 +109,7 @@ export default {
             fail: false,
             pass: false,
             result: {},
+            showResult: false,
             startingCount: null,
             quizzes: {
                 id: "",
@@ -193,6 +197,9 @@ export default {
         },
         exit(){
             this.$emit("exit")
+        },
+        checkResult(){
+            this.showResult = true
         }
     },
     mounted(){

@@ -9,7 +9,7 @@
                     <div class="mt-5 font-semibold" style="color:#5aa20a">{{$t('2129')}}</div>
                     <div class="border-b mt-5  border-dashed" :class="darkMode?`border-gray-700`:`border-gray-400`"></div>
                     <div class="mt-5 font-semibold" :style="darkMode?``:{color:`#0b3465`}">{{result.correct}}/{{result.total_quiz}}</div>
-                    <button class="rounded-md mt-5 focus:outline-none py-2 px-5 shadow-lg" :class="darkMode?`bg-button text-gray-300`:`bg-primary text-white`">{{$t('2133')}}</button>
+                    <button class="rounded-md mt-5 focus:outline-none py-2 px-5 shadow-lg" :class="darkMode?`bg-button text-gray-300`:`bg-primary text-white`" @click="checkResult">{{$t('2133')}}</button>
                 </div>
 
                 <div class="w-72 flex flex-col justify-center items-center mt-8">
@@ -47,6 +47,9 @@ export default {
     methods:{
         exit(){
             this.$$emit("exit")
+        },
+        checkResult(){
+            this.$emit("checkResult")
         }
     }
 }

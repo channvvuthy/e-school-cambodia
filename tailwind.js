@@ -30,6 +30,7 @@ module.exports = {
             lightGray:"#afb0b4",
             lightBlue:"#eaf3ff",
             softGray:"#eaeaea",
+            pass:"#5aa20a",
             darkYellow:"#f5a623",
             button:"#383838",
             black: colors.black,
