@@ -175,5 +175,6 @@
   "pdf_des":"Do you have Document file yet? <br/>Download PDF file here",
   "send":"Send",
   "colon":":",
-  "minute": "Minutes"
+  "minute": "Minutes",
+  "book_detail":"Book Details"
 }

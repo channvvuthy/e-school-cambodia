@@ -13,15 +13,15 @@
                     </div>
                 </div>
             </div>
-            <vue-horizontal v-else>
-                <section v-for="(pk, index) in libraries.package" :key="index">
+            <vue-horizontal v-else :button="false">
+                <section v-for="(pk, index) in libraries.package" :key="index" class="mr-5">
                     <div class="flex items-start rounded-xl pr-5 h-36" :class="darkMode?`bg-secondary text-gray-300`:`bg-white `">
-                        <img :src="pk.thumbnail" class="max-h-36 rounded-l-xl mr-5">
+                        <img :src="pk.thumbnail" class="max-h-36 rounded-l-xl mr-5 cursor-pointer">
                         <div class="h-full py-4 flex flex-col justify-beteen items-between">
                             <div class="flex-1">{{pk.title}}</div>
                             <div class="flex justify-between items-center">
                                 <div class="mr-5">{{$t('1006')}}: {{pk.price.year}}$</div>
-                                <div><CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon></div>
+                                <div class="cursor-pointer"><CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon></div>
                             </div>
                         </div>
 
