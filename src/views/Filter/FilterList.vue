@@ -1,19 +1,18 @@
 <template>
-    <div class="m-5 z-50">
+    <div class="m-5 z-50" :class="darkMode?`text-gray-300`:``">
         <div class="flex justify-between w-3/5">
             <div class="flex-1 relative">
                 <input type="text" :placeholder="$t('1001')"
                        v-model="s"
                        v-on:keyup.enter="filterSearch"
-                       :class="localize==='en'?'text-md':'text-sm'"
-                       class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-gray-300 border-t-0 pl-8">
+                       :class="darkMode?`border-button`:`border-gray-300`"
+                       class="w-full h-12 leading-12 focus:outline-none bg-transparent border-b  pl-8 text-sm">
                 <div>
                     <div v-if="s" class="absolute left-0 top-2 cursor-pointer" style="margin-top:5px;"
                          :title="$t('clear')" @click="clear">
-                        <CloseIcon :width="20" :height="20"></CloseIcon>
+                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#D1D5DB`:`#000000`"></CloseIcon>
                     </div>
-                    <img src="/icon/icon/Search@2x.png" alt="" class="h-5 absolute left-0 top-2"
-                         style="margin-top:5px;" v-else>
+                    <div class="absolute left-0 top-3" v-else><SearchIcon :fill="darkMode?`#D1D5DB`:`#000000`"></SearchIcon></div>
                 </div>
                 <div class="flex absolute right-0 cursor-pointer justify-center items-center h-12 leading-12 top-0"
                      @click="showFilter">
@@ -21,7 +20,7 @@
                         <span v-if="selectedFilterName==='all'">{{$t('1002')}}</span>
                         <span v-else>{{selectedFilterName}}</span>
                     </p>
-                    <ChevronIcon/>
+                    <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"/>
                 </div>
             </div>
         </div>
@@ -30,6 +29,7 @@
 </template>
 <script>
     import ChevronIcon from "./../../components/ChevronIcon"
+    import SearchIcon from "./../../components/SearchIcon.vue"
     import List from "./components/List.vue"
     import {mapState, mapActions} from "vuex"
     import CloseIcon from "./../../components/CloseIcon.vue"
@@ -43,10 +43,11 @@
         components: {
             ChevronIcon,
             List,
-            CloseIcon
+            CloseIcon,
+            SearchIcon
         },
         computed: {
-            ...mapState('setting', ['localize']),
+            ...mapState('setting', ['localize','darkMode']),
             ...mapState('home', ['filter', 'selectedFilterName', 'filter_id'])
         },
         methods: {

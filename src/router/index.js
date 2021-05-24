@@ -126,7 +126,7 @@ const routes = [
     {
         path: '/library',
         name: 'library',
-        component: () => import('../views/Component/Pdfviewer'),
+        component: () => import('../views/Library/Library'),
     },
     {
         path: '/change-profile',

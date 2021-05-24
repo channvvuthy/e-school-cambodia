@@ -33,6 +33,7 @@ module.exports = {
             pass:"#5aa20a",
             darkYellow:"#f5a623",
             button:"#383838",
+            border:"cbcbcb",
             black: colors.black,
             white: colors.white,
             gray: colors.coolGray,

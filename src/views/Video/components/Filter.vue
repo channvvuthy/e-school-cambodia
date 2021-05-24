@@ -1,24 +1,22 @@
 <template>
-    <div class="relative">
-        <div class="p-5 mb-1" :class="darkMode?'bg-secondary border border-l-2':'bg-white shadow'">
+    <div class="relative text-sm">
+        <div class="p-5 mb-1" :class="darkMode?'bg-secondary border-t border-b border-button':'bg-white shadow'">
             <div class="flex justify-between w-3/5 ">
                 <div class="flex-1 relative">
-                    <input type="text"  v-on:keyup.enter="filterSearch" :placeholder="$t('1001')" v-model="s" :class="darkMode?'text-gray-300 border-gray-700':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8 text-sm">
+                    <input type="text"  v-on:keyup.enter="filterSearch" :placeholder="$t('1001')" v-model="s" :class="darkMode?'bg-secondary border-b border-button text-gray-300':'border-gray-300'" class="w-full h-12 leading-12 focus:outline-none bg-transparent border border-l-0 border-r-0 border-t-0 pl-8 text-sm">
                     <div>
                         <div v-if="s" class="absolute left-0 top-4 cursor-pointer"
                             :title="$t('clear')" @click="clear">
                             <CloseIcon :width="20" :height="20" :fill="darkMode?'#afb0b4':'#000000'"></CloseIcon>
                         </div>
-                        <div class="h-5 absolute left-0 top-4" v-else>
+                        <div class="h-5 absolute left-0 top-3" v-else>
                             <SearchIcon :fill="darkMode?'#afb0b4':'#000000'"></SearchIcon>
                         </div>
-                        <!-- <img src="/icon/icon/Search@2x.png" alt="" class="h-5 absolute left-0 top-2"
-                            style="margin-top:5px;" v-else> -->
                     </div>
                     <div class="flex absolute right-0 cursor-pointer justify-center items-center h-12 leading-12 top-0"
                     
                         @click="showFilter">
-                        <p class="mr-2" :class="localize==='en'?'text-md':'text-sm'">
+                        <p class="mr-2">
                             <span v-if="selectedFilterName==='all'" :class="darkMode?'text-gray-300':''">{{$t('1002')}}</span>
                             <span :class="darkMode?'text-gray-300':''" v-else>{{selectedFilterName}}</span>
                         </p>

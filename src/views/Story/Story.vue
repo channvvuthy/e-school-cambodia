@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkMode?'bg-youtube border border-l-2 border-gray-50 text-textSecondary':'bg-white shadow'">
+    <div :class="darkMode?'bg-secondary text-textSecondary border-t border-b border-button':'bg-white shadow'">
         <div class="px-5 py-5">
             <div class="flex text-primary  text-md gap-4">
                 <div>

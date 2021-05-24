@@ -41,7 +41,7 @@
             </div>
             <div class="flex-1">
                 <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium"
-                     :class="darkMode?`bg-youtube text-gray-300`:`bg-white`"
+                     :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white`"
                 >
                     <div @click="switchMenu('video')"
                          class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"

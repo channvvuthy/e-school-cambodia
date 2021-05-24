@@ -3,8 +3,8 @@
         <div class="text-sm">
             <div class="grid grid-cols-3 gap-x-10 gap-y-5 font-medium">
                 <div @click="selectFilter('all')"
-                        class="px-5 cursor-pointer flex items-center border border-t-0 border-l-0 border-r-0 border-gray-500 py-3">
-                    <div class="rounded-full flex justify-center items-center w-8 h-8" :class="darkMode?`bg-fb`:`bg-primary`">
+                        class="px-5 cursor-pointer flex items-center border-b py-3" :class="darkMode?`border-button`:`border-gray-500`">
+                    <div class="rounded-full flex justify-center items-center w-8 h-8" :class="darkMode?`bg-youtube`:`bg-primary`">
                         <WatchIcon fill="#fff" :size="18"></WatchIcon>
                     </div>
                     <div class="flex justify-start flex-1">
@@ -12,13 +12,13 @@
                     </div>
                     <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center">
                         <div class="w-2 h-2 rounded-full "
-                                v-if="filter_id==='all'" :class="darkMode?`bg-fb`:`bg-primary`"></div>
+                                v-if="filter_id==='all'" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
                     </div>
                 </div>
                 <div v-for="(list,index) in filter"
-                        class="px-5 cursor-pointer flex justify-between items-center border border-t-0 border-l-0 border-r-0 border-gray-500 py-3"
+                        class="px-5 cursor-pointer flex justify-between items-center border-b py-3" :class="darkMode?`border-button`:`border-gray-500`"
                         :key="index" @click="selectFilter(list)">
-                    <div class="rounded-full flex justify-center items-center w-8 h-8" :class="darkMode?`bg-fb`:`bg-primary`">
+                    <div class="rounded-full flex justify-center items-center w-8 h-8" :class="darkMode?`bg-youtube`:`bg-primary`">
                         <WatchIcon fill="#fff" :size="18"></WatchIcon>
                     </div>
                     <div class="flex justify-start flex-1">
@@ -26,7 +26,7 @@
                     </div>
                     <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center">
                         <div class="w-2 h-2  rounded-full"
-                                v-if="filter_id ===list._id " :class="darkMode?`bg-fb`:`bg-primary`"></div>
+                                v-if="filter_id ===list._id " :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
                     </div>
                 </div>
             </div>

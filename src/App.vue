@@ -1,5 +1,5 @@
 <template>
-    <div class="font-khmer_os">
+    <div class="font-khmer_os" :class="darkMode?`bg-youtube`:``">
         <div class="flex" v-if="!escapeRoute()">
             <div>
                 <!--Sidebar-->

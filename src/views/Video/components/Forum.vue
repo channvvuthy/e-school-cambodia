@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-5 py-3 h-screen font-khmer_os" :class="loadingForum?`overflow-y-scroll`:darkMode?`bg-youtube px-4 rgba`:`mt-1`">
+    <div class="ml-5 py-3 h-screen font-khmer_os" :class="loadingForum?`overflow-y-scroll`:darkMode?`bg-youtube rgba`:`mt-1`">
         <template v-if="loadingForum">
             <div class="flex mb-3 bg-white rounded-md p-3 shadow mx-4" v-for="i in 5" :key="i">
                 <div class="forum w-16 h-16 rounded-full"></div>
@@ -12,7 +12,7 @@
         </template>
         <template v-else>
             <div class="relative h-full">
-                <div class="absolute bottom-40  h-40 w-full my-shadow flex justify-between px-4 items-center" :class="darkMode?`bg-youtube`:`bg-white`">
+                <div class="absolute bottom-40  h-40 w-full my-shadow flex justify-between px-4 items-center" :class="darkMode?`bg-secondary`:`bg-white`">
                     <div class="opacity-50 cursor-pointer" @click="choosePhoto">
                         <ImageIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ImageIcon>
                     </div>
