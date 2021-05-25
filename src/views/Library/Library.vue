@@ -2,7 +2,7 @@
     <div>
         <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
-        <LibraryAudio></LibraryAudio>
+        <LibraryAudio v-if="showAudio"></LibraryAudio>
         <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
             <div class="px-5 pt-7 shadow-md" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
                 <FilterData></FilterData>
@@ -190,6 +190,8 @@ export default {
         },
         listenAudio(){
             // this.$router.push('library-audio')
+            this.showAudio = true
+            this.close()
         },
     },
     created(){
