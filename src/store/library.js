@@ -10,9 +10,13 @@ export default {
        showList: false,
        filter_id: '',
        loadingDetail: false,
-       details: []
+       details: [],
+       readingPdf: ''
     },
     mutations: {
+        readingPdf(state, payload){
+            state.readingPdf = payload
+        },
         gettingLibrary(state, payload){
             state.loading = payload
         },

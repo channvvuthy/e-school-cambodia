@@ -12,7 +12,7 @@
                 <Menu/>
             </div>
         </div>
-        <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}">
+        <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}" id="main">
             <router-view></router-view>
         </div>
 
@@ -35,7 +35,7 @@
         },
         methods: {
             hideMenu(){
-                if(this.$route.name === 'video-detail'){
+                if(this.$route.name === 'video-detail' || this.$route.name === 'library-audio'){
                     return true
                 }
                 return false

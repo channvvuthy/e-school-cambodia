@@ -1,6 +1,8 @@
 <template>
     <div>
-        <ViewBook v-if="preview" @close="close"></ViewBook>
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio"></ViewBook>
+        <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
+        <LibraryAudio></LibraryAudio>
         <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
             <div class="px-5 pt-7 shadow-md" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
                 <FilterData></FilterData>
@@ -88,6 +90,9 @@ import CartIcon from "./../../components/CartIcon.vue"
 import Loading from "./../../components/Loading.vue"
 import NewIcon from "./../../components/NewIcon.vue"
 import ViewBook from "./components/book/ViewBook.vue"
+import ReadingBook from "./components/book/ReadingBook.vue"
+import LibraryAudio from "./Audio.vue"
+
 export default {
     components:{
         FilterData,
@@ -96,7 +101,9 @@ export default {
         CartIcon,
         Loading,
         NewIcon,
-        ViewBook
+        ViewBook,
+        ReadingBook,
+        LibraryAudio
     },
     data(){
         return{
@@ -105,12 +112,14 @@ export default {
             minHeight: 0,
             page: 1,
             enableScroll: true,
-            preview: false
+            preview: false,
+            reading: false,
+            showAudio: false,
         }
     },
     computed:{
         ...mapState('setting', ['darkMode']),
-        ...mapState('library', ['loading', 'libraries','showList'])
+        ...mapState('library', ['loading', 'libraries','showList', 'details'])
     },
     methods:{
         ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail']),
@@ -171,7 +180,17 @@ export default {
         },
         close(){
             this.preview = false
-        }
+        },
+        readingBook(){
+            this.reading = true
+            this.close()
+        },
+        closeReading(){
+            this.reading = false
+        },
+        listenAudio(){
+            // this.$router.push('library-audio')
+        },
     },
     created(){
         this.page = 1

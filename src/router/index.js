@@ -129,6 +129,11 @@ const routes = [
         component: () => import('../views/Library/Library'),
     },
     {
+        path: '/library-audio',
+        name: 'library-audio',
+        component: () => import('../views/Library/Audio'),
+    },
+    {
         path: '/change-profile',
         name: 'change-profile',
         component: () => import('../views/Profile/Profile'),
