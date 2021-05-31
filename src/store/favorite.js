@@ -40,10 +40,40 @@ export default {
                 }
             }
 
+        },
+        addFavoriteBook(){
+
         }
     },
 
     actions: {
+        removeFavoriteBook({commit}, payload){
+            commit("addFavoriteBook")
+            return new Promise((resolve, reject) =>{
+                axios.delete(config.apiUrl + 'favorite/book',{
+                    headers: {
+                     
+                    },
+                    data: {
+                      id: payload
+                    }
+                  }).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        addFavoriteBook({commit}, payload){
+            commit("addFavoriteBook")
+            return new Promise((resolve, reject) =>{
+                axios.post(config.apiUrl + 'favorite/book',{id:payload}).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
         async add({
             commit
         }, payload) {

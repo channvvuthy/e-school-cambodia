@@ -129,9 +129,9 @@ const routes = [
         component: () => import('../views/Library/Library'),
     },
     {
-        path: '/library-audio',
-        name: 'library-audio',
-        component: () => import('../views/Library/Audio'),
+        path: '/library-video',
+        name: 'library-video',
+        component: () => import('../views/Library/Video'),
     },
     {
         path: '/change-profile',

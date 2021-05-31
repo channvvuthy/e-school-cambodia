@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen">                    
-                    <canvas id="convas" class="w-full"></canvas>
+                    <canvas id="convas"></canvas>
                 </div>
             </div>
             <!-- List -->
@@ -52,10 +52,10 @@
                 <!-- List -->
                 <div class="px-5 pt-5 overflow-y-scroll h-full" :class="darkMode?`bg-youtube text-gray-300`:``">
                     <div v-for="(detail,index) in details.list" :key="index">
-                        <div class="flex items-center py-3 rounded px-2  cursor-pointer hover:bg-button my-1" :class="order === index?`bg-button`:``" @click="changeChapter(detail,index)">
+                        <div class="flex items-center py-3 rounded px-2  cursor-pointer hover:bg-button my-1 hover:text-gray-300" :class="order === index?`bg-button text-gray-300`:``" @click="changeChapter(detail,index)">
                             <div v-if="canRead(detail)" class="mr-3"><CheckIcon :height="20" fill="#5aa20a"></CheckIcon></div>
                             <div v-else><XIcon fill="#ee3d3c" :width="20" :height="20" class="mr-3"></XIcon></div>
-                            <div>{{detail.title}}</div>
+                            <div :class="darkMode?``:``">{{detail.title}}</div>
                         </div>
                     </div>
                 </div>
@@ -122,7 +122,8 @@ export default {
                 var viewport = page.getViewport(this.scale);
                 this.canvas.height = viewport.height;
                 this.canvas.width = viewport.width;
-
+                // this.canvas.style.width = "100%";
+                this.canvas.style.height = "100%";
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: this.ctx,
@@ -219,12 +220,17 @@ export default {
     mounted(){
         this.initialPdf()
         window.addEventListener('keydown', (e) => {
+            
             if(e.key === `ArrowRight`){
                 this.onNextPage()
             }
 
             if(e.key === `ArrowLeft`){
                 this.onPrevPage()
+            }
+
+            if(e.key === `f`){
+                this.openFullscreen()
             }
         }, false)
     },

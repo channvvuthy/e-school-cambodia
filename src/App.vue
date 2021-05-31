@@ -35,7 +35,7 @@
         },
         methods: {
             hideMenu(){
-                if(this.$route.name === 'video-detail' || this.$route.name === 'library-audio'){
+                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video'){
                     return true
                 }
                 return false

@@ -33,8 +33,8 @@
                         <input type="range" min="0" max="100" id="seekSlider" value="0" step="1"
                                 ref="seekSlider"
                                 class="w-full seekSlider z-50"/>
-                        <div class="absolute w-full bg-white left-0 rounded-lg" id="range"
-                              :style="{width:rangeSliderWidth+'%',top:11.5+'px',zIndex:'-1',height:'4px'}"></div>
+                        <div class="absolute w-full bg-white left-0" id="range"
+                              :style="{width:rangeSliderWidth+'%',top:10+'px',zIndex:'-1',height:'4px'}"></div>
                     </div>
 
                     <div class="px-5 0 cursor-pointer relative">

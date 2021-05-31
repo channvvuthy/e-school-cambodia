@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed font-khmer_os" style="width: 350px;"
+    <div class="fixed font-khmer_os z-50" style="width: 350px;"
          :style="isHide?{marginLeft:'-350px'}:{marginLeft:'0px'}"
          :class="darkMode?'bg-secondary text-gray-300':'bg-white text-black'"
          

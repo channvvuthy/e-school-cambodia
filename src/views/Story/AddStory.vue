@@ -1,6 +1,6 @@
 <template>
     <div class="fixed w-full h-full bg-black top-0 left-0 z-50 flex justify-center items-center">
-        <div class="rounded-md shadow p-3 w-2/5 flex flex-col justify-center" style="max-height:90%" :class="darkMode?`bg-secondary`:`bg-white`">
+        <div class="rounded-md shadow p-3 w-96 flex flex-col justify-center" style="max-height:90%" :class="darkMode?`bg-secondary`:`bg-white`">
             <div class="flex justify-between items-center">
                 <div class="mb-3 font-semibold" :class="darkMode?`text-gray-300`:``">{{$t('preview')}}</div>
                 <div class="cursor-pointer relative -top-2" @click="closeAddStory">
@@ -11,8 +11,8 @@
                 <img :src="imgUrl" class="m-auto max-h-full rounded-md">
             </div>
             <div class="flex justify-end mt-4">
-                <button class="flex items-center justify-center rounded-md h-10 leading-10 cursor-pointer px-5 focus:outline-none shadow" 
-                :class="darkMode?`bg-youtube text-gray-300`:`bg-primary text-white`"
+                <button class="flex items-center justify-center rounded h-10 leading-10 cursor-pointer px-5 focus:outline-none shadow" 
+                :class="darkMode?`bg-button text-gray-300`:`bg-primary text-white`"
                 :disabled="addingStory"
                 @click="shareStory">
                     <span>{{$t('share_to_story')}} </span>

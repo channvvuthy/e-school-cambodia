@@ -29,7 +29,7 @@
                             <div class="mr-3"><HeadphoneIcon fill="#ffffff"></HeadphoneIcon></div>
                             <span>{{$t('2208')}}</span>
                         </button>
-                        <button class="h-12 rounded-lg bg-primary px-7 text-white focus:outline-none flex items-center mr-10 shadow-lg" v-if="details.book.type === `video`">
+                        <button class="h-12 rounded-lg bg-primary px-7 text-white focus:outline-none flex items-center mr-10 shadow-lg" v-if="details.book.type === `video`" @click="listVideo">
                             <div class="mr-3"><CameraVideoIcon fill="#ffffff"></CameraVideoIcon></div>
                             <span>{{$t('2209')}}</span>
                         </button>
@@ -70,6 +70,9 @@ export default {
         },
         listenAudio(){
             this.$emit('listenAudio')
+        },
+        listVideo(){
+            this.$emit("listVideo")
         }
     }
 }

@@ -176,5 +176,7 @@
   "send":"Send",
   "colon":":",
   "minute": "Minutes",
-  "book_detail":"Book Details"
+  "book_detail":"Book Details",
+  "more_video":"More Video",
+  "please_buy_this_class_first":"Please buy this class first"
 }

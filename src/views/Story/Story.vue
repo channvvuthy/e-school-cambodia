@@ -18,7 +18,7 @@
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                             <div class="h-full w-full bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                         </div>
-                        <div class="bg-primary w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-12 cursor-pointer">
+                        <div class="w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-12 cursor-pointer" :class="darkMode?`bg-fb`:`bg-primary`">
                             <AddIcon :size="16"/>
                         </div>
                         <p class="mt-3" :class="localize==='en'?'text-sm':'text-xs'">

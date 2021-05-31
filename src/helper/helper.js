@@ -4,6 +4,8 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 Vue.use(VueToast);
 import i18n from "./../i18n"
 import {machineIdSync} from 'node-machine-id'
+const os = require('os')
+
 
 // Validate only number
 const isNumber = (evt) => {
@@ -38,7 +40,19 @@ const deviceId = () => {
 }
 // Get os of platform
 const deviceOs = () => {
-    return "windows"
+    if(process.platform === `darwin`){
+        return 'mac'
+    }else if(process.platform === `win32`){
+        return 'window'
+    }else{
+        return 'linux'
+    }
+}
+
+// Get device name 
+
+const deviceName = () =>{
+    return os.hostname()
 }
 // Calculate price in duration
 const durationCalculate = (duration, pricePerMonth, pricePerYear) => {
@@ -96,5 +110,6 @@ export default{
     numDay,
     clearDevice,
     errorMessage,
-    q
+    q,
+    deviceName
 }

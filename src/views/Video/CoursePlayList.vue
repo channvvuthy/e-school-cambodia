@@ -1,6 +1,7 @@
 <template>
     <div>
         <VideoHeader :isExam="showExam" @exit="exit"></VideoHeader>
+        <BuyMsg @cancelModal="cancelModal" @yes="yes" v-if="showBuy"></BuyMsg>
         <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
         <div class="flex mt-5 ml-5 relative">
             <Exam v-if="showExam" @exit="exit"></Exam>
@@ -89,7 +90,7 @@
                         {{video.order}}. {{cutString(video.title,20)}}
                     </div>
                 </div>
-                <Playlist v-if="active === 'video'" @nextVideo="nextVideo($event)"></Playlist>
+                <Playlist v-if="active === 'video'" @nextVideo="nextVideo($event)" @buyNow="buyNow($event)"></Playlist>
                 <Document v-if="active === 'document'" :id="video._id" @openDoc="openDoc($event)"></Document>
                 <Forum v-if="active === 'forum' && showMenu" :id="video._id" @forumDetail="forumDetail($event)"
                        @openModal="openModal($event)" @postComment="postComment($event)" @noReply="noReply"></Forum>
@@ -100,7 +101,7 @@
         <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
              v-if="showDoc">
             <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
-                <div class="flex justify-between items-center bg-primary p-4">
+                <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
                     <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
                         <EnlargeIcon :size="16"></EnlargeIcon>
                     </div>
@@ -137,6 +138,7 @@
     import {mapState, mapActions} from "vuex"
     import helper from "./../../helper/helper"
     import Exam from "./components/Exam"
+    import BuyMsg from "./../Component/BuyMsg.vue"
     export default{
         data(){
             return {
@@ -154,7 +156,8 @@
                 imgUrl: "",
                 photo: null,
                 isReply: false,
-                showExam: false
+                showExam: false,
+                showBuy:false
             }
         },
         components: {
@@ -173,7 +176,8 @@
             ForumComment,
             ModalPhoto,
             Quiz,
-            Exam
+            Exam,
+            BuyMsg
 
         },
         computed: {
@@ -185,6 +189,15 @@
             ...mapActions('forum', ['getCommentForum','addComment', 'replyComment','showCommentPagination']),
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
+            cancelModal(){
+                this.showBuy = false
+            },
+            yes(){
+                this.showBuy = true
+            },
+            buyNow(){
+                this.showBuy = true
+            },
             startingExam(){
                 this.showExam = true
             },

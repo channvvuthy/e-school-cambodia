@@ -209,15 +209,15 @@ export default {
         },
         checkPhoneExist({
             commit
-        }, phone) {
+        }, payload) {
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'user/check-exist-phone?phone=' + phone).then(response => {
+                axios.get(config.apiUrl + `user/forget-password?${helper.q(payload)}`).then(response => {
                     commit("checkingPhone", false)
                     resolve(response.data)
                 }).catch(error => {
                     commit("checkingPhone", false)
-                    err.forgotPassword("សូមចាកចេញពី ឧបករណ៌ចាស់ជាមុនសិន")
+                    helper.errorMessage(error.response.data.msg)
                     reject(error)
                 })
             })

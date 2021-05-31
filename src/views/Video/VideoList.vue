@@ -3,7 +3,7 @@
         <div v-if="homeLoading">
             <Loading></Loading>
         </div>
-        <div class="grid gap-4" :class="isHide?'grid-cols-4':'grid-cols-3'" v-else>
+        <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-5'" v-else>
             <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'bg-youtube text-textSecondary':'bg-white shadow'">
                 <!--Vdo-->
                 <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"

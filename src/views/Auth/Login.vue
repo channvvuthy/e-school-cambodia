@@ -13,7 +13,7 @@
                             <PhoneIcon :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
                         </span>
                         <input type="text" :placeholder="$t('2009')" v-model="auth.phone" @keypress="isNumber($event)" ref="phone"
-                        :class="darkMode?`caret-white text-gray-300 rounded bg-black border border-gray-800`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
+                        :class="darkMode?`caret-white text-gray-300 rounded-md bg-black border border-button`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
                         class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
                     </div>
                     <div class="h-5"></div>
@@ -24,7 +24,7 @@
                         <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="auth.password"
                             v-on:keyup.enter="studentLogin"
                             ref="password"
-                            :class="darkMode?`caret-white text-gray-300 rounded bg-black border border-gray-800`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
+                            :class="darkMode?`caret-white text-gray-300 rounded-md bg-black border border-button`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
                             class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
                     </div>
                     <div class="h-3"></div>

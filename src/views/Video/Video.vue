@@ -6,7 +6,7 @@
                 <Loading></Loading>
             </div>
             <div v-else>
-                <div class="grid gap-4" :class="isHide?`grid-cols-4`:`grid-cols-3`">
+                <div class="grid gap-4" :class="isHide?`grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-5`">
                     <div v-for="(video, index) in videos.list" :key="index">
                         <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>

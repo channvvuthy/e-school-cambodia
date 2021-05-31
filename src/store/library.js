@@ -1,5 +1,4 @@
 import axios from "axios"
-import { stat } from "fs"
 import config from "./../config"
 import helper from "./../helper/helper"
 export default {
@@ -14,6 +13,13 @@ export default {
        readingPdf: ''
     },
     mutations: {
+        addFavorite(state){
+            state.details.is_favorite = 1
+        },
+        removeFavorite(state){
+            state.details.is_favorite = 0
+
+        },
         readingPdf(state, payload){
             state.readingPdf = payload
         },
@@ -45,13 +51,16 @@ export default {
                 ]
             }
         },
+        stopWatch(){
+
+        },
         getLibraryDetail(state, payload){
             state.details = payload
         },
         
         gettingLibraryDetail(state, payload){
             state.loadingDetail = payload
-        }
+        },
         
     },
     actions: {
@@ -82,13 +91,24 @@ export default {
         getLibraryDetail({commit}, payload){
             commit("gettingLibraryDetail", true);
             return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + `/library/detail?${helper.q(payload)}`).then(response =>{
+                axios.get(config.apiUrl + `library/detail?${helper.q(payload)}`).then(response =>{
                     resolve(response)
                     commit("gettingLibraryDetail", false);
                     commit("getLibraryDetail", response.data.data)
                 }).catch(err =>{
                     reject(err)
                     commit("gettingLibraryDetail", false);
+                })
+            })
+
+        },
+        stopWatch({commit}, payload){
+            commit("stopWatch");
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `library/stop?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
                 })
             })
 

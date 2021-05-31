@@ -112,8 +112,12 @@ export default {
             })
         },
         nextVideo(video){
+            
             if(this.canWatch(video.free_watch)){
                 this.$emit("nextVideo", video);
+                return
+            }else{
+                this.$emit("buyNow",video)
             }
             
         },

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio"></ViewBook>
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
         <LibraryAudio v-if="showAudio"></LibraryAudio>
         <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
@@ -50,7 +50,7 @@
                 <div class="flex items-center justify-center text-base mb-10" :class="darkMode?`text-gray-300`:`text-primary`" v-if="type == `video`">
                     {{$t('2205')}}
                 </div>
-                <div class="grid grid-cols-4 gap-6">
+                <div class="grid md:grid-cols-4 2xl:grid-cols-6 gap-6">
                     <div v-for="(book, index) in libraries.list" :key="index">
                         <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-b-xl shadow-md pb-3 view​ relative" :style="minHeight?{height:`${minHeight}px`}:{}">
                             <div class="absolute top-2 left-2" v-if="book.is_new">
@@ -139,6 +139,7 @@ export default {
         },
 
         changeType(type){
+            this.showAudio = false
             this.type = type
             let filter = {
                 type: this.type
@@ -183,16 +184,20 @@ export default {
         },
         readingBook(){
             this.reading = true
+            this.showAudio = false
             this.close()
         },
         closeReading(){
             this.reading = false
         },
         listenAudio(){
-            // this.$router.push('library-audio')
             this.showAudio = true
             this.close()
         },
+        listVideo(){
+            this.$router.push('library-video')
+            this.close()
+        }
     },
     created(){
         this.page = 1
