@@ -57,9 +57,9 @@ const deviceName = () =>{
 // Calculate price in duration
 const durationCalculate = (duration, pricePerMonth, pricePerYear) => {
     if (duration === 12) {
-        return "$" + pricePerYear + "/" + "1 ឆ្នាំ"
+        return "$" + pricePerYear + "/" + `1 ${i18n.t(`year`)}`
     }
-    return "$" + (pricePerMonth * duration) + "/" + duration + " ខែ"
+    return "$" + (pricePerMonth * duration) + "/" + duration + `${i18n.t(`month`)}`
 }
 const gender = () => {
     let stProfile = localStorage.getItem('stProfile')

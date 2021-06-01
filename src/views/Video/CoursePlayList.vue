@@ -3,6 +3,7 @@
         <VideoHeader :isExam="showExam" @exit="exit"></VideoHeader>
         <BuyMsg @cancelModal="cancelModal" @yes="yes" v-if="showBuy"></BuyMsg>
         <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
+        <Cart v-if="showCart" @closeCart="closeCart"></Cart>
         <div class="flex mt-5 ml-5 relative">
             <Exam v-if="showExam" @exit="exit"></Exam>
             <div class="w-3/5">
@@ -139,6 +140,7 @@
     import helper from "./../../helper/helper"
     import Exam from "./components/Exam"
     import BuyMsg from "./../Component/BuyMsg.vue"
+    import Cart from "./../Component/Cart.vue"
     export default{
         data(){
             return {
@@ -157,7 +159,8 @@
                 photo: null,
                 isReply: false,
                 showExam: false,
-                showBuy:false
+                showBuy:false,
+                showCart: false
             }
         },
         components: {
@@ -177,7 +180,8 @@
             ModalPhoto,
             Quiz,
             Exam,
-            BuyMsg
+            BuyMsg,
+            Cart
 
         },
         computed: {
@@ -189,11 +193,22 @@
             ...mapActions('forum', ['getCommentForum','addComment', 'replyComment','showCommentPagination']),
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
+            ...mapActions('cart', ['addCart', 'getCart']),
+
+            closeCart(){
+                this.showCart = false
+            },
             cancelModal(){
                 this.showBuy = false
             },
             yes(){
-                this.showBuy = true
+                this.showBuy = false
+                this.showCart = true
+                let payload = new FormData();
+                payload.append("id", this.playlist.course._id)
+                this.addCart(payload).then(() =>{
+                    this.getCart()
+                })
             },
             buyNow(){
                 this.showBuy = true

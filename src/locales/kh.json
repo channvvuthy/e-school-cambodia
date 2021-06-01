@@ -179,7 +179,11 @@
   "minute": "នាទី",
   "book_detail":"ពត៍មានលំអិតអំពីសៀវភៅ",
   "more_video":"វីដេអូជាច្រើនទៀត",
-  "please_buy_this_class_first":"សូមទិញថ្នាក់នេះជាមុនសិន"
-
+  "please_buy_this_class_first":"សូមទិញថ្នាក់នេះជាមុនសិន",
+  "year":"ឆ្នាំ",
+  "month":"ខែ",
+  "delete":"តើអ្នកពិតជាចង់លុបវាមែនទេ?",
+  "please_enter_coupon":"សូមបញ្ចូលលេខគូប៉ុង",
+  "delete_coupon":"លុបគូប៉ុង"
 
 }
