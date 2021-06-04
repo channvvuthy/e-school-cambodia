@@ -42,15 +42,15 @@
             </div>
             <div class="flex justify-end">
                 <div class="flex justify-between items-end flex-1">
-                    <div class="flex flex-col justify-center items-center cursor-pointer opacity-60 ">
+                    <div class="flex flex-col justify-center items-center cursor-pointer opacity-60 " @click="() =>{this.$emit('showItemIncart')}">
                         <div><CartIcon :fill="darkMode?`#909090`:`#0f3c7a`"></CartIcon></div>
 
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60">
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60" >
                         <div><ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ChatIcon></div>
 
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60">
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60" @click="() =>{this.$emit('notification')}">
                         <div><NotificationIcon :fill="darkMode?`#909090`:`#0f3c7a`"></NotificationIcon></div>
 
                     </div>
@@ -86,7 +86,7 @@ export default {
         SupporterIcon,
         NotificationIcon,
         ChatIcon,
-        CartIcon
+        CartIcon,
         
     },
     computed: {

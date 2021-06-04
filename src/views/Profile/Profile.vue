@@ -262,9 +262,7 @@
                     this.stProfile.photo = response.data.photo
                     this.getStudentProfile(this.stProfile)
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
-                }).catch(() => {
-                    console.log('err')
-                })
+                }).catch(() => {})
             }
         },
 

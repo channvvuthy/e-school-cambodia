@@ -183,5 +183,7 @@
   "month":"Month",
   "delete":"Are you sure to delete this item?",
   "please_enter_coupon":"Please enter coupon",
-  "delete_coupon":"Delete coupon"
+  "delete_coupon":"Delete coupon",
+  "no_audio": "No audio book to display",
+  "create_receipt":"Generate Receipt"
 }

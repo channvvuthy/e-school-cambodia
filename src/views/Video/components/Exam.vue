@@ -2,7 +2,7 @@
     <div>
         <div class="absolute left-0 top-0 w-full h-full z-50 pt-10" :class="darkMode?`bg-youtube text-gray-300`:`bg-white text-black`">
             <div class="text-center bg-transparent">
-                <div class="text-base max-w-md m-auto">
+                <div class="text-base max-w-xl m-auto">
                     <div class="mb-5">
                         {{$t('2121')}}
                     </div>
@@ -21,18 +21,22 @@
                     
                     <div class="text-sm mt-10">
                         <div v-for="(quizzes, index) in quiz.list" :key="index" :class="order != index?`hidden`:``">
-                            <div :class="darkMode?`bg-secondary`:`bg-gray-50`" class="shadow rounded-md py-5 px-10 rgba flex-col">
+                            <div :class="darkMode?`bg-secondary`:`bg-gray-50`" class="shadow rounded-md py-5 px-10 rgba flex-col overflow-y-scroll my-scroll">
                                 <math xmlns = "http://www.w3.org/1998/Math/MathML">
-                                    <div v-html="quizzes.title" class="mb-5"></div>
+                                <!-- {{}} -->
+                                    <katex-element :expression="toLatex(quizzes.title)" />
                                 </math>
                                 <div class="mt-8">
                                     <div v-for="(list,key) in quizzes.check_list" :key="key" class="my-5">
-                                        <label class="flex">
+                                        <label class="flex items-center">
                                             <div class="relative">
                                                 <input type="checkbox" class="mr-5 hidden" @change="selectAnswer($event,quizzes,list)">
-                                                <div class="h-5 w-5 rounded border mr-5 relative"></div>
+                                                <div class="h-5 w-5 rounded border mr-5 relative" :class="darkMode?`border-`:`border-gray-400`"></div>
                                             </div>
-                                            <div v-html="list.value" class="text-left"></div>
+                                            <div>
+                                            
+                                               <katex-element :expression="toLatex(list.value)"/>
+                                            </div>
                                         </label>
                                         
                                     </div>
@@ -84,6 +88,15 @@ import helper from "./../../../helper/helper"
 import FailExam from "./FailExam"
 import PassExam from "./PassExam"
 import ViewExam from "./ViewExam"
+import Vue from 'vue';
+import VueKatex from 'vue-katex';
+import 'katex/dist/katex.min.css';
+Vue.use(VueKatex, {
+  globalOptions: {
+    displayMode: true,
+    output: 'html'
+  }
+});
 
 export default {
     components:{
@@ -125,6 +138,11 @@ export default {
     },
     methods:{
         ...mapActions('quiz', ['submitQuiz']),
+        toLatex(str){
+            var str = str.toString()
+            return str.replace(/\[math]/g,"").replace(/\[\/math]/g,"").replace(/&nbsp;/g,"").replace("។","").replace(/lorx/,'lor x').replace(/intx/,'int x');
+
+        },
         setTimer(){
             let seconds = this.seconds
             seconds = seconds.toString()
@@ -236,4 +254,7 @@ export default {
         left:0;
         margin-left: 2.5px;
     }
+    // .katex-display>.katex {
+    //     white-space: normal !important;
+    // }
 </style>

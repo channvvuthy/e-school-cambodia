@@ -6,15 +6,15 @@
         <div class="h-screen overflow-y-scroll pb-72 mt-10">
             <div class="grid grid-cols-3 gap-10 text-sm">
                 <div v-for="(quizzes, index) in quiz.list" :key="index">
-                    <div :class="darkMode?`bg-secondary shadow-md`:`bg-gray-50`" class="rounded-xl shadow-md p-5 view" :style="minHeight?{minHeight:`${minHeight}px`}:``">
-                        <div class="flex mb-5">
+                    <div :class="darkMode?`bg-secondary shadow-md`:`bg-gray-50`" class="rounded-xl shadow-md p-5 my-scroll view overflow-x-scroll" :style="minHeight?{minHeight:`${minHeight}px`}:``">
+                        <div class="flex mb-5 items-center">
                             <span>{{index + 1}}.</span>
-                            <div v-html="quizzes.title" class="ml-1"></div>
+                            <katex-element :expression="toLatex(quizzes.title)"/>
                         </div>
                         <div v-for="(list,key) in quizzes.check_list" :key="key">
-                            <div class="inline-flex mb-5 relative" :class="correctAnswer(list._id)?`text-pass`:answer(list._id)?`delete`:``">
+                            <div class="inline-flex items-center mb-5 relative" :class="correctAnswer(list._id)?`text-pass`:answer(list._id)?`delete`:``">
                                 <div class="h-5 w-5 rounded border mr-5 relative" :class="correctAnswer(list._id)?`active-checkbox border-pass`:answer(list._id)?`incorrect`:``"></div>
-                                <div v-html="list.value"></div>
+                                <katex-element :expression="toLatex(list.value)"/>
                             </div>
                         </div>
                     </div>
@@ -30,6 +30,15 @@
 </template>
 <script>
 import {mapState} from "vuex"
+import Vue from 'vue';
+import VueKatex from 'vue-katex';
+import 'katex/dist/katex.min.css';
+Vue.use(VueKatex, {
+  globalOptions: {
+    displayMode: true,
+    output: 'html'
+  }
+});
 export default {
     computed:{
         ...mapState('setting', ['darkMode'])
@@ -64,7 +73,11 @@ export default {
                 }
             }
             return false
-            
+        },
+        toLatex(str){
+            var str = str.toString()
+            return str.replace(/\[math]/g,"").replace(/\[\/math]/g,"").replace(/&nbsp;/g,"").replace("។","").replace(/lorx/,'lor x').replace(/intx/,'int x');
+
         },
 
         answer(id){
@@ -110,8 +123,25 @@ export default {
     height: 1px;
     border-top:1px solid #c0272d;
     left:0;
-    top:10px;
     z-index: 100;
 
 }
+ /* .katex-display>.katex {
+    white-space: normal !important;
+} */
+.my-scroll::-webkit-scrollbar {
+    height: 0px;              /* width of the entire scrollbar */
+}
+
+/* .my-scroll::-webkit-scrollbar-track {
+  background: orange;      
+  height: 1px;
+}
+
+.my-scroll::-webkit-scrollbar-thumb {
+    height: 1px;
+  background-color: blue;    
+  border-radius: 20px;       
+  border: 3px solid orange;  
+} */
 </style>

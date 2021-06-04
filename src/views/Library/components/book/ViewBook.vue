@@ -25,7 +25,7 @@
                             <div class="mr-3"><ReadingBookIcon fill="#ffffff"></ReadingBookIcon></div>
                             <span>{{$t('1118')}}</span>
                         </button>
-                        <button class="h-12 rounded-lg bg-primary px-7 text-white focus:outline-none flex items-center mr-10 shadow-lg" v-if="details.book.type === `sound`" @click="listenAudio">
+                        <button class="h-12 rounded-lg bg-primary px-7 text-white focus:outline-none flex items-center mr-10 shadow-lg" v-if="details.book.type === `sound`" @click="listenAudio(details)">
                             <div class="mr-3"><HeadphoneIcon fill="#ffffff"></HeadphoneIcon></div>
                             <span>{{$t('2208')}}</span>
                         </button>
@@ -41,6 +41,7 @@
                 </div>
             </div>
         </div>
+        <BuyMsg v-if="showMsg" :msg="$t(`no_audio`)" @yes="yes" @cancelModal="cancelModal"></BuyMsg>
     </div>
 </template>
 <script>
@@ -49,13 +50,20 @@ import CloseIcon from "./../../../../components/CloseIcon"
 import ReadingBookIcon from "./../../../../components/ReadingBookIcon"
 import HeadphoneIcon from "./../../../../components/HeadphoneIcon"
 import CameraVideoIcon from "./../../../../components/CameraVideoIcon"
+import BuyMsg from "./../../../../views/Component/BuyMsg.vue"
 
 export default {
+    data(){
+        return{
+            showMsg: false
+        }
+    },
     components:{
         CloseIcon,
         ReadingBookIcon,
         HeadphoneIcon,
-        CameraVideoIcon
+        CameraVideoIcon,
+        BuyMsg
     },
     computed:{
         ...mapState('library', ['details', 'loadingDetail']),
@@ -68,8 +76,18 @@ export default {
         readingBook(){
             this.$emit("readingBook")
         },
-        listenAudio(){
-            this.$emit('listenAudio')
+        listenAudio(details){
+            if(details.list.length){
+                this.$emit('listenAudio', details)
+            }else{
+                this.showMsg = true
+            }
+        },
+        yes(){
+            this.showMsg = false
+        },
+        cancelModal(){
+            this.showMsg = false
         },
         listVideo(){
             this.$emit("listVideo")

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="fixed  h-48 bottom-0 right-0 z-50 justify-center items-center flex tt-shadow" :class="darkMode?`bg-secondary border-t border-button text-gray-300`:`bg-white`" :style="isHide?`width:100%`:`width:${mainWidth}px`">
+        <div class="fixed  h-48 bottom-0 right-0 z-50 justify-center items-center flex t-shadow" :class="darkMode?`bg-secondary border-t border-button text-gray-300`:`bg-white`" :style="isHide?`width:100%`:`width:${mainWidth}px`">
             <div class="flex items-center justify-between w-full px-10">
                 <div>
                     <img :src="defaultAudio.thumbnail" class="max-h-36 rounded-md shadow-md">
@@ -258,8 +258,6 @@ export default {
                 this.currentDuration.innerHTML = durmins + ":" + dursecs;
             }
 
-            // this.currentMinute = curmins
-
         },
         getVideo() {
             let interval = setInterval(() => {
@@ -319,23 +317,32 @@ export default {
                 this.defaultAudio = audio
                 this.showPlay = true
             }
+        },
+        initialVolume(){
+            if(this.defaultVolumeRange <= 0){
+                this.muted =true
+            }
+        },
+        initialAudio(){
+            this.defaultAudio = this.details.list[this.order]
+            this.audioUrl = this.defaultAudio.filename
+            // this.audio.src = this.defaultAudio.filename
+            this.mainTitle = this.details.book.title
         }
     },
     mounted(){
-        this.getVideo()
+        if(this.details.list.length){
+            this.getVideo()
+        }
     },
     created(){
-        if(this.defaultVolumeRange <= 0){
-            this.muted =true
-        }
+        this.initialVolume()
         this.initialWidth()
-        this.defaultAudio = this.details.list[this.order]
-        this.audioUrl = this.defaultAudio.filename
-        this.mainTitle = this.details.book.title
+        this.initialAudio()
+
         window.addEventListener('click',()=>{
             if(this.audio != null){
                 this.seekSlider.value
-                // console.log(this.seekSlider.value)
                 let color = `linear-gradient(90deg, rgb(15, 60, 122) ${
                         this.seekSlider.value
                     }%, rgb(151, 151, 151) ${this.seekSlider.value}%)`;
@@ -348,7 +355,7 @@ export default {
             }
         },false)
         
-    },
+    }
 }
 </script>
 <style>

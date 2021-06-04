@@ -15,35 +15,68 @@
             </div>
             <vue-horizontal v-else :button="false">
                 <section v-for="(pk, index) in libraries.package" :key="index" class="mr-5">
-                    <div class="flex items-start rounded-xl pr-5 h-36" :class="darkMode?`bg-secondary text-gray-300`:`bg-white `">
-                        <img :src="pk.thumbnail" class="max-h-36 rounded-l-xl mr-5 cursor-pointer">
-                        <div class="h-full py-4 flex flex-col justify-beteen items-between">
-                            <div class="flex-1">{{pk.title}}</div>
-                            <div class="flex justify-between items-center">
-                                <div class="mr-5">{{$t('1006')}}: {{pk.price.year}}$</div>
-                                <div class="cursor-pointer"><CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon></div>
+                    <div class="flex items-end rounded-xl h-44 w-80 bg-cover relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" :style="{backgroundImage:`url(${pk.thumbnail})`}">
+                        <div class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer" @click="showConfirm(pk)"></div>
+                        <div class="px-5 py-3 text-white relative z-50 w-full">
+                            <div class="text-base">{{pk.title}}</div>
+                            <div class="flex mt-1 items-center justify-between w-full">
+                                <div class="font-extralight">{{pk.total_book}} {{$t('2202')}}</div>
+                                <div class="h-3 w-0 border-l border-white mx-4"></div>
+                                <div class="font-extralight">{{$t('1006')}}: <span class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">{{pk.price.year}}$</span></div>
+                                <div class="flex-1 flex justify-end">
+                                    <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id" :class="(pk.is_in_cart || pk.is_buy)?`invisible`:``"><CartIcon fill="#FFFFFF"></CartIcon></span>
+                                </div>
                             </div>
                         </div>
-
                     </div>
                 </section>
                 
             </vue-horizontal>
         </div>
+        <BuyMsg v-if="showMsg" @cancelModal="() => {this.showMsg = false}" @yes="() => {this.showCart = true; this.showMsg = false}"></BuyMsg>
+        <Cart v-if="showCart" @closeCart="() => {this.showCart = false}"></Cart>
     </div>
 </template>
 <script>
 import VueHorizontal from 'vue-horizontal';
 import CartIcon from "./../../../components/CartIcon.vue"
-import {mapState} from "vuex"
+import {mapState,mapActions} from "vuex"
+import BuyMsg from "./../../../views/Component/BuyMsg.vue"
+import Cart from "./../../../views/Component/Cart.vue"
 export default {
-    components: {VueHorizontal,CartIcon},
+    components: {
+        VueHorizontal,
+        CartIcon,
+        BuyMsg,
+        Cart
+    },
     data() {
-        return {items: [1, 2, 3]}
+        return{
+            showMsg: false,
+            showCart: false
+        }
     },
     computed:{
         ...mapState('library', ['libraries', 'loading']),
-        ...mapState('setting', ['darkMode'])
+        ...mapState('setting', ['darkMode']),
+
+    },
+    methods:{
+        ...mapActions('cart', ['addCart']),
+        addToCart(pk){
+            let payload = {}
+
+            payload.id = pk._id
+            this.addCart(payload).then(() =>{
+                let el = document.getElementById(`${pk._id}`)
+                el.classList.add('invisible')
+            })
+        },
+        showConfirm(pk){
+           if(pk.is_buy == 0){
+            this.showMsg = true
+           }
+        }
     }
 }
 </script>

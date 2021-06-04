@@ -59,7 +59,7 @@ const durationCalculate = (duration, pricePerMonth, pricePerYear) => {
     if (duration === 12) {
         return "$" + pricePerYear + "/" + `1 ${i18n.t(`year`)}`
     }
-    return "$" + (pricePerMonth * duration) + "/" + duration + `${i18n.t(`month`)}`
+    return "$" + (pricePerMonth * duration) + "/" + duration + ` ${i18n.t(`month`)}`
 }
 const gender = () => {
     let stProfile = localStorage.getItem('stProfile')

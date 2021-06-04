@@ -77,9 +77,7 @@
             onScroll ({target: {scrollLeft, clientWidth, scrollWidth}}) {
                 if (scrollLeft + clientWidth >= scrollWidth) {
                     this.page ++
-                    this.getStory(this.page).then(response =>{
-                        console.log(response.data.data)
-                    });
+                    this.getStory(this.page).then(() =>{});
                 }
             },
             getStoryDetail(story,index = 0){

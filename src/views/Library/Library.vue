@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div> 
         <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
         <LibraryAudio v-if="showAudio"></LibraryAudio>
@@ -27,9 +27,6 @@
             </div>
             <!-- Membership -->
             <div class="mt-5" :class="darkMode?`bg-youtube`:`transparent`">
-                <div class="flex justify-center items-center"> 
-                    <div class="text-base" :class="darkMode?`text-gray-300`:`text-primary`">{{$t('2201')}}</div>
-                </div>
                 <div class="mt-10">
                     <Membership></Membership>
                 </div>
@@ -41,40 +38,54 @@
             </div>
             <!-- Book -->
             <div class="mx-5" v-else>
-                <div class="flex items-center justify-center text-base mb-10" :class="darkMode?`text-gray-300`:`text-primary`" v-if="type == `pdf`">
-                    {{$t('2202')}}
-                </div>
-                <div class="flex items-center justify-center text-base mb-10" :class="darkMode?`text-gray-300`:`text-primary`" v-if="type == `sound`">
-                    {{$t('2204')}}
-                </div>
-                <div class="flex items-center justify-center text-base mb-10" :class="darkMode?`text-gray-300`:`text-primary`" v-if="type == `video`">
-                    {{$t('2205')}}
-                </div>
-                <div class="grid md:grid-cols-4 2xl:grid-cols-6 gap-6">
+                <div class="grid gap-6" :class="type != `sound`?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-4 2xl:grid-cols-6`">
                     <div v-for="(book, index) in libraries.list" :key="index">
-                        <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-b-xl shadow-md pb-3 view​ relative" :style="minHeight?{height:`${minHeight}px`}:{}">
-                            <div class="absolute top-2 left-2" v-if="book.is_new">
-                                <NewIcon></NewIcon>
-                            </div>
-                            <div class="absolute top-2 left-2" v-if="book.is_buy">
-                                <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;</div>
-                            </div>
-                            <div class="cursor-pointer" @click="getDetail(book)">
-                                <img :src="book.thumbnail" class="rounded-t-xl">
-                            </div>
-                            <div class="mt-5 px-3">
-                                <div :class="darkMode?`text-white`:``">{{book.title}}</div>
-                                <div class="flex justify-between items-center mt-3 text-xs">
-                                    <template v-if="book.price.year">
-                                        <div>{{$t('1006')}}: <span class="font-bold" :class="darkMode?``:`text-heart`">{{book.price.year}}$</span></div>
-                                        <div><CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon></div>
-                                    </template>
-                                    <template v-else>
-                                        <div>{{$t('1007')}}</div>
-                                    </template>
+                        <!-- Book & Video -->
+                        <template v-if="type != 'sound'">
+                            <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                                <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer"/>
+
+                                <div class="px-3 py-5 flex flex-col justify-between">
+                                    <div class="font-black">{{book.title}}</div>
+                                    <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span><span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col justify-between flex-1 items-end">
+                                    <div>
+                                        <div v-if="book.is_favorite" class="cursor-pointer"><FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/></div>
+                                        <div v-else class="cursor-pointer"><FavoriteIcon :fill="darkMode?`#909090`:`#4A4A4A`"/></div>
+                                    </div>
+                                    <div v-if="book.price.year">
+                                        <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon>
+                                    </div>
+                                </div>
+                            </div> 
+                        </template>
+                        <template v-else>
+                            <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-b-xl shadow-md pb-3 view​ relative" :style="minHeight?{height:`${minHeight}px`}:{}">
+                                <div class="absolute top-2 left-2" v-if="book.is_new">
+                                    <NewIcon></NewIcon>
+                                </div>
+                                <div class="absolute top-2 left-2" v-if="book.is_buy">
+                                    <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;</div>
+                                </div>
+                                <div class="cursor-pointer" @click="getDetail(book)">
+                                    <img :src="book.thumbnail" class="rounded-t-xl m-auto">
+                                </div>
+                                <div class="mt-5 px-3">
+                                    <div :class="darkMode?`text-white`:``">{{book.title}}</div>
+                                    <div class="flex justify-between items-center mt-3 text-xs">
+                                        <template v-if="book.price.year">
+                                            <div>{{$t('1006')}}: <span class="font-bold" :class="darkMode?``:`text-heart`">{{book.price.year}}$</span></div>
+                                            <div><CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon></div>
+                                        </template>
+                                        <template v-else>
+                                            <div>{{$t('1007')}}</div>
+                                        </template>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -91,6 +102,8 @@ import Loading from "./../../components/Loading.vue"
 import NewIcon from "./../../components/NewIcon.vue"
 import ViewBook from "./components/book/ViewBook.vue"
 import ReadingBook from "./components/book/ReadingBook.vue"
+import FavoriteIcon from "./../../components/FavoriteIcon.vue"
+import FavoriteFill from "./../../components/FavoriteFill.vue"
 import LibraryAudio from "./Audio.vue"
 
 export default {
@@ -103,7 +116,9 @@ export default {
         NewIcon,
         ViewBook,
         ReadingBook,
-        LibraryAudio
+        LibraryAudio,
+        FavoriteIcon,
+        FavoriteFill
     },
     data(){
         return{
@@ -119,6 +134,7 @@ export default {
     },
     computed:{
         ...mapState('setting', ['darkMode']),
+        ...mapState('cart', ['carts']),
         ...mapState('library', ['loading', 'libraries','showList', 'details'])
     },
     methods:{
@@ -191,32 +207,47 @@ export default {
             this.reading = false
         },
         listenAudio(){
-            this.showAudio = true
+            this.showAudio = false
+            setTimeout(()=>{
+                this.showAudio = true
+            },100)
             this.close()
         },
         listVideo(){
             this.$router.push('library-video')
             this.close()
-        }
+        },
+        getLibraryBook(){
+            this.page = 1
+            this.getLibrary({
+                type: this.type
+            }).then(() =>{
+                this.matchHeight()
+            })
+        },
+        matchHeight(){
+            let arr = []
+            let interval = setInterval(() => {
+                let box = document.getElementsByClassName('view')
+                if (box) {
+                    for(let i = 0; i < box.length; i++){
+                        arr.push(box[i].clientHeight)
+                    }
+                    this.minHeight = Math.max(...arr)
+                    clearInterval(interval)
+                    
+                }
+            }, 1000)
+        },
     },
     created(){
-        this.page = 1
-        this.getLibrary({
-            type: this.type
-        })
-
-        let arr = []
-        let interval = setInterval(() => {
-            let box = document.getElementsByClassName('view')
-            if (box) {
-                for(let i = 0; i < box.length; i++){
-                    arr.push(box[i].clientHeight)
-                }
-                this.minHeight = Math.max(...arr)
-                clearInterval(interval)
-                
+        this.getLibraryBook()
+        document.addEventListener("click", (event) =>{
+            if(event.target.parentNode.id != null && event.target.parentNode.id.includes('closeCart')){
+                this.getLibraryBook()
             }
-        }, 1000)
+        })
     }
+    
 }
 </script>

@@ -8,7 +8,8 @@ export default {
     state: {
         carts: [],
         loading: false,
-        couponLoading: false
+        couponLoading: false,
+        identifier: 1
 
 
     },
@@ -30,6 +31,20 @@ export default {
             state.couponLoading = payload
         },
         deletingCoupon(){
+
+        },
+        updatingDuration(state, params){
+            state.carts.list.filter(items => {
+                if (items._id === params._id) {
+                    items.price['duration'] = params.duration
+                }
+                return items
+            })
+        },
+        deletedCart(state, payload){
+            state.identifier = payload
+        },
+        checkingOut(){
 
         }
 
@@ -76,6 +91,7 @@ export default {
                     }
                   }).then(response =>{
                     commit("deletingCart", false)
+                    commit("deletedCart", payload)
                     resolve(response)
                 }).catch(err =>{
                     commit("deletingCart", false)
@@ -109,6 +125,22 @@ export default {
                     }
                   }).then(response =>{
                     resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        // Update duration
+        async updateDuration({commit}, params){
+            await  commit("updatingDuration", params)
+        },
+        // Cart checkout
+        cartCheckout({commit}, payload){
+            commit("checkingOut")
+            return new Promise((resolve, reject) =>{
+                axios.post(config.apiUrl + 'cart/checkout', payload).then(response =>{
+                    resolve(response)
+                    
                 }).catch(err =>{
                     reject(err)
                 })

@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed w-full h-full left-0 top-0 z-50 bg-black bg-opacity-90 flex items-center justify-center">
+    <div class="fixed w-full h-full left-0 top-0 z-50 bg-black bg-opacity-90 flex items-center justify-center" style="z-index:56">
         <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl">
              <div class="px-5 mt-3 text-center">{{$t('2304')}}</div>
             <div class="px-5">
@@ -40,8 +40,8 @@ export default {
                         helper.errorMessage(response.data.msg)
                         this.setFocus()
                     }else{
-                        this.getCart()
                         this.cancel()
+                        this.$emit("addedCoupon")
                     }
                 })
             }

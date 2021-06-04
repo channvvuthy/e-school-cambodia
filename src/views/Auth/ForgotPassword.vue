@@ -80,12 +80,10 @@ import playVideo from '../../store/playVideo'
                 payload.device_os = helper.deviceOs()
                 payload.device_name = helper.deviceName()
                 payload.app_version = process.env.VUE_APP_VERSION
-                // console.log(payload)
                 this.checkPhoneExist(payload).then(response=>{
                     if(response.status === 1){
                         helper.errorMessage(response.msg)
                     }
-                    console.log(response)
                 })
             },
             isNumber(evt){
