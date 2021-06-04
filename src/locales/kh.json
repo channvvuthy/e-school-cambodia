@@ -186,7 +186,11 @@
   "please_enter_coupon":"សូមបញ្ចូលលេខគូប៉ុង",
   "delete_coupon":"លុបគូប៉ុង",
   "no_audio": "គ្មានអូឌីយ៉ូដើម្បីបង្ហាញ",
-  "create_receipt":"បង្កើតវិក័យបត្រ"
+  "create_receipt":"បង្កើតវិក័យបត្រ",
+  "invoice_detail":"ពត៍មានបង់ប្រាក់",
+  "invoce_no":"លេខវិក័យបត្រ",
+  "total":"សរុប",
+  "payment_method":"ទូទាត់តាមភ្នាក់ងា ឬកម្មវិធីហិរញ្ញវត្ថុ"
 
 
 }

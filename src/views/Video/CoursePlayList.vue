@@ -3,7 +3,9 @@
         <VideoHeader :isExam="showExam" @exit="exit"></VideoHeader>
         <BuyMsg @cancelModal="cancelModal" @yes="yes" v-if="showBuy"></BuyMsg>
         <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
-        <Cart v-if="showCart" @closeCart="closeCart"></Cart>
+        <Cart v-if="showCart" @closeCart="closeCart" @showInvoice="(data) =>{ this.showCart = false; this.showReceipt = true;this.receiptDetail = data}"></Cart>
+        <!-- Receipt info -->
+        <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
         <div class="flex mt-5 ml-5 relative">
             <Exam v-if="showExam" @exit="exit"></Exam>
             <div class="w-3/5">
@@ -141,6 +143,7 @@
     import Exam from "./components/Exam"
     import BuyMsg from "./../Component/BuyMsg.vue"
     import Cart from "./../Component/Cart.vue"
+    import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
     export default{
         data(){
             return {
@@ -160,7 +163,9 @@
                 isReply: false,
                 showExam: false,
                 showBuy:false,
-                showCart: false
+                showCart: false,
+                showReceipt:false,
+                receiptDetail: {}
             }
         },
         components: {
@@ -181,7 +186,8 @@
             Quiz,
             Exam,
             BuyMsg,
-            Cart
+            Cart,
+            ReceiptInfo
 
         },
         computed: {

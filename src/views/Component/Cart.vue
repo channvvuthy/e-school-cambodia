@@ -87,7 +87,7 @@
                 @choseDuration="choseDuration"
                 :duration="durationSelected">
         </ChooseDuration>
-        <Pay v-if="showPay" @closePay="closePay"></Pay>
+        <Pay v-if="showPay" @closePay="closePay" @showInvoice="showInvoice($event)"></Pay>
     </div>
 </template>
 <script>
@@ -220,6 +220,9 @@ export default {
                 }
             }
             this.totalCart = total
+        },
+        showInvoice(data){
+            this.$emit("showInvoice", data)
         }
     },
     mounted(){

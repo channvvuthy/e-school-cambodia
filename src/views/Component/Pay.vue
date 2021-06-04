@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="w-full h-0 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
-            <div class="flex items-center justify-between px-5 pb-7 pt-4 cursor-pointer">
+            <div class="flex items-center justify-between px-5 pb-7 pt-4 cursor-pointer" @click="checkout">
                 <img src="icon/Payment/Bill.png" class="mt-3 w-20"/>
                 <div class="flex-1 text-left pl-5">{{$t('create_receipt')}}</div>
             </div>
@@ -39,6 +39,8 @@ export default {
     },
     methods:{
         ...mapActions('cart', ['cartCheckout']),
+        ...mapActions('receipt', ['getReceiptDetail']),
+
         closePay(){
             this.$emit("closePay")
         },
@@ -56,12 +58,12 @@ export default {
             }
             let checkoutCourse = {courses}
             this.cartCheckout(checkoutCourse).then(response =>{
-               this.checkoutData = response.data.data
+                this.getReceiptDetail(response.data.data.e_code).then(response => {
+                    this.$emit("showInvoice", response.data.data)
+                }) 
             })
         },
-        created(){
-            this.checkout()
-        }
+       
     }
 }
 </script>

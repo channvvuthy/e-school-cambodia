@@ -37,7 +37,7 @@ export default {
         getReceiptDetail({commit}, id){
             commit("loadingReceipt", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'payment/receipt/detail?id=' + id).then(response => {
+                axios.get(config.apiUrl + 'invoice/detail/?id=' + id).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

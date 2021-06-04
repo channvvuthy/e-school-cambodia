@@ -90,6 +90,11 @@ const errorMessage = (message) => {
         position: "top-right",
     })
 }
+const success = (message) => {
+    Vue.$toast.success(i18n.t(message), {
+        position: "top-right",
+    })
+}
 
 const q = (payload) => {
     if (!payload) {
@@ -111,5 +116,6 @@ export default{
     clearDevice,
     errorMessage,
     q,
-    deviceName
+    deviceName,
+    success
 }

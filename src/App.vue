@@ -1,7 +1,9 @@
 <template>
     <div class="font-khmer_os" :class="darkMode?`bg-youtube`:``">
         <!-- Cart -->
-        <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}"></Cart>
+        <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
+        <!-- Receipt info -->
+        <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
         <!-- Notification -->
         <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}"></Notification>
         <div class="flex" v-if="!escapeRoute()">
@@ -27,19 +29,23 @@
     import Menu from "./views/Menu/Menu.vue"
     import Cart from "./views/Component/Cart.vue"
     import Notification from "./components/Notification.vue"
+    import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue"
     import {mapState} from "vuex"
     export default{
         data(){
             return {
                 showCart:false,
-                showNotification: false
+                showNotification: false,
+                showReceipt: false,
+                receiptDetail:{}
             }
         },
         components: {
             Sidebar,
             Menu,
             Cart,
-            Notification
+            Notification,
+            ReceiptInfo
         },
         computed: {
             ...mapState('setting', ['isHide', 'darkMode'])
@@ -62,6 +68,11 @@
                 }
                 return false;
             },
+            showInvoice(data){
+                this.receiptDetail = data
+                this.showReceipt = true
+                this.showCart = false
+            }
         }
     }
 </script>

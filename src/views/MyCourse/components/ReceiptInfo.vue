@@ -1,60 +1,76 @@
 <template>
-    <div class="fixed z-50 inset-0 overflow-y-auto font-khmer_os">
-        <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform transition-all  sm:align-middle"
-                 :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                <div class="bg-white py-5">
+    <div class="fixed inset-0 font-khmer_os w-full left-0 top-0 bg-black bg-opacity-90 flex justify-center items-center" style="z-index:70;">
+            <div class="rounded-xl shadow-lg w-96" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                <div class="py-5">
                     <div class="header text-center text-sm font-semibold pb-3">
-                        {{message}}
+                        {{$t('2306')}}
                     </div>
-                    <hr>
-                    <div class="body overflow-y-scroll text-13px" style="max-height: 550px;">
+                    <div class="w-full h-0 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                    <div class="text-13px overflow-y-scroll" style="max-height: 550px;">
                         <div class="p-5">
                             <div class="flex justify-between items-center">
-                                <div>លេខវិក្កយបត្រ</div>
-                                <div>{{receiptDetail.receipt}}</div>
+                                <input type="text" id="invoice_number"  class="absolute" :value="receiptDetail.receipt" style="z-index:-10">
+                                <div>{{$t('invoce_no')}}</div>
+                                <div class="text-heart flex-1 text-right">​{{receiptDetail.receipt}}</div>
+                                <div class="ml-2 cursor-pointer" @click="copyText()"><CopyIcon :size="20" :fill="darkMode?`#D1D5DB`:`#000000`"></CopyIcon></div>
                             </div>
                             <div class="flex justify-between items-center mt-3">
-                                <div>កាលបរិច្ឆេទបង់ប្រាក់</div>
+                                <div>{{$t('2308')}}</div>
                                 <div>{{formatDate(receiptDetail.date)}}</div>
+                            
                             </div>
 
                             <div class="course mt-3">
-                                <div class="text-red-500">វគ្កសិក្សា</div>
+                                <div class="font-black">{{$t('1102')}}</div>
                                 <ul>
                                     <li class="flex justify-between items-center my-2"
-                                        v-for="(receipt, key) in receiptDetail.payment_detail" :key="key">
-                                        <div>- {{receipt.course.title}}</div>
+                                        v-for="(receipt, key) in receiptDetail.detail" :key="key">
+                                        <div>- {{receipt.title}}</div>
                                         <div class="text-gray-500">
-                                            ${{parseFloat(receipt.amount)}}{{duration(receipt.duration)}}
+                                            <span class="font-mono">${{parseFloat(receipt.amount)}}</span> {{duration(receipt.duration)}}
                                         </div>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <hr>
-                        <div class="p-5">
+                        <div class="w-full h-0 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                        <div class="p-5 mt-1">
                             <div class="total flex justify-between items-center">
-                                <div>សរុប</div>
-                                <div class="text-red-500">${{parseFloat(receiptDetail.amount)}}</div>
+                                <div>{{$t('total')}}</div>
+                                <div class="text-heart font-mono font-bold">${{parseFloat(receiptDetail.amount)}}</div>
                             </div>
-                            <template v-if="!success">
-                                <div class="mt-3 text-center text-13px">ទូទាត់តាមភ្នាក់ងា ឬកម្មវិធីហិរញ្ញវត្ថុ</div>
-                                <div class="grid grid-cols-2 gap-4 mt-5 px-3">
-                                    <div class="p-5 rounded border border-gray-300">
-                                        <img src="/icon/Payment/ABA.png" class="max-w-full"/>
-                                        <div class="text-center text-sm mt-2">E-SCHOOL</div>
+                            <div v-if="!success">
+                                <div class="mt-3 text-center text-13px">{{$t('payment_method')}}</div>
+                                <div class="mt-6">
+                                    <div class="flex justify-between items-center">
+                                        <img src="/icon/Payment/ABA.png" class="w-20"/>
+                                        <div class="flex-1 ml-5 text-left flex justify-start flex-col items-start">
+                                            <div class="text-base font-semibold">ABA</div>
+                                            <div class="text-center text-sm mt-2">E-SCHOOL</div>
+                                        </div>
                                     </div>
-                                    <div class="p-5 rounded border border-gray-300 flex-col justify-center items-center">
-                                        <img src="/icon/Payment/Wing.png" class="max-w-full"/>
-                                        <div class="text-center text-sm mt-2">E-School(5224)</div>
+                                    <div class="h-5"></div>
+                                    <div class="w-full h-0 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                                    <div class="h-5"></div>
+                                    <div class="flex justify-between items-center">
+                                        <img src="/icon/Payment/Wing.png" class="w-20"/>
+                                        <div class="flex-1 ml-5 text-left flex justify-start flex-col items-start">
+                                            <div class="text-base font-semibold">Wing</div>
+                                            <div class="text-center text-sm mt-2">E-School(5224)</div>
+                                        </div>
+                                    </div>
+                                    <div class="h-5"></div>
+                                    <div class="w-full h-0 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                                    <div class="h-5"></div>
+                                    <div class="flex justify-between items-center">
+                                        <img src="/icon/Payment/Truemoney.png" class="w-20"/>
+                                        <div class="flex-1 ml-5 text-left flex justify-start flex-col items-start">
+                                            <div class="text-base font-semibold">True Money</div>
+                                            <div class="text-center text-sm mt-2">E-School(2121)</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </template>
+                            </div>
                             <template v-else>
                                 <div class="flex justify-center items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
@@ -84,42 +100,37 @@
                 </div>
                 <div class="sm:flex sm:flex-row text-sm font-khmer_os h-10 justify-center items-center mb-5 px-5">
                     <button type="button" @click="closeInfo($event)"
-                            class="w-full rounded bg-custom py-2 text-md text-white font-semibold px-10 focus:outline-none">
-                        Ok
+                            class="w-full rounded-md bg-primary py-2 text-md text-white shadow-lg  font-semibold px-10 focus:outline-none">
+                        {{$t('1010')}}
                     </button>
                 </div>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
     import moment from "moment"
+    import {mapState} from "vuex"
+    import CopyIcon from "./../../../components/CopyIcon.vue"
+    import helper from "./../../../helper/helper"
     export default{
         name: "ReceiptInfo",
+        components:{
+            CopyIcon
+        },
         props: {
             success: {
                 default: () => {
                     return false
                 }
             },
-            size: {
-                type: Number,
-                default: () => {
-                    return 96;
-                }
-            },
-            message: {
-                type: String,
-                default: function () {
-                    return " ពត៍មានបង់ប្រាក់"
-                }
-            },
             receiptDetail: {
                 type: Object
             }
         },
-
+        computed:{
+            ...mapState('setting', ['darkMode']),
+        },
         methods: {
             closeInfo($event){
                 this.$emit("closeInfo", $event);
@@ -132,14 +143,22 @@
             },
             duration(duration){
                 if (duration < 12) {
-                    return "/ខែ"
+                    return "/ ខែ"
                 }
-                return "/ឆ្នាំ"
+                return "/ ឆ្នាំ"
             },
 
             showCart($event){
                 this.$emit("showCart", $event);
+            },
+            copyText() {
+                var copyText = document.getElementById("invoice_number");
+                copyText.select();
+                copyText.setSelectionRange(0, 99999)
+                document.execCommand("copy");
+                helper.success("Copied the text: " + copyText.value)
             }
+            
         }
     }
 </script>
