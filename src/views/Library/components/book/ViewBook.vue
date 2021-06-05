@@ -33,7 +33,7 @@
                             <div class="mr-3"><CameraVideoIcon fill="#ffffff"></CameraVideoIcon></div>
                             <span>{{$t('2209')}}</span>
                         </button>
-                        <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg">
+                        <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg" @click="shopNow">
                             <span>{{$t('2206')}}</span>
                         </button>
                     </div>
@@ -91,6 +91,9 @@ export default {
         },
         listVideo(){
             this.$emit("listVideo")
+        },
+        shopNow(){
+            this.$emit("shopNow")
         }
     }
 }

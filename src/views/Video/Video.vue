@@ -8,7 +8,7 @@
             <div v-else>
                 <div class="grid gap-4" :class="isHide?`grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-5`">
                     <div v-for="(video, index) in videos.list" :key="index">
-                        <div class="relative rounded-2xl cursor-pointer" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`">
+                        <div class="relative rounded-2xl cursor-pointer view" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`" :style="minHeight?{minHeight:`${minHeight}px`}:{}">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
                             <div class="absolute top-3 left-3" v-if="video.is_buy">
                                 <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;</div>
@@ -107,7 +107,8 @@ export default {
     data(){
         return{
             page: 1,
-            enableScroll: true
+            enableScroll: true,
+            minHeight: 0,
         }
     },
     computed:{
@@ -126,6 +127,19 @@ export default {
         enableUserScroll(){
             this.enableScroll = true
             this.page = 1
+        },
+        matchHeight(){
+            let arr = []
+            let interval = setInterval(() => {
+                let box = document.getElementsByClassName('view')
+                if (box) {
+                    for(let i = 0; i < box.length; i++){
+                        arr.push(box[i].clientHeight)
+                    }
+                    this.minHeight = Math.max(...arr)
+                    clearInterval(interval)
+                }
+            }, 1000)
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight) {
@@ -153,7 +167,12 @@ export default {
             }
         },
     },
+    mounted(){
 
+        this.$nextTick(() => {
+            this.matchHeight()
+        })
+    },
     created(){
         this.getVideo({filter_id:""});
     }

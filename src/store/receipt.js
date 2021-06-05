@@ -56,7 +56,14 @@ export default {
         deleteReceipt({commit}, id){
             commit("removingReceipt", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'payment/receipt/delete', {id}).then(response => {
+                axios.delete(config.apiUrl + 'invoice',{
+                    headers:{
+
+                    },
+                    data:{
+                        id:id
+                    }
+                }).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -73,10 +80,10 @@ export default {
             })
         },
 
-        getReceipt({commit}, status = 0){
+        getReceipt({commit}, status = `unpaid`){
             commit("takingReceipt", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'payment/receipt?status=' + status).then(response => {
+                axios.get(config.apiUrl + 'invoice?status=' + status).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

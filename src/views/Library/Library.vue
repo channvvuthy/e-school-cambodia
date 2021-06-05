@@ -1,6 +1,6 @@
 <template>
     <div> 
-        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo"></ViewBook>
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo" @shopNow="shopNow"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
         <LibraryAudio v-if="showAudio"></LibraryAudio>
         <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
@@ -62,7 +62,7 @@
                             </div> 
                         </template>
                         <template v-else>
-                            <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-b-xl shadow-md pb-3 view​ relative" :style="minHeight?{height:`${minHeight}px`}:{}">
+                            <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl overflow-hidden shadow-md pb-3 relative">
                                 <div class="absolute top-2 left-2" v-if="book.is_new">
                                     <NewIcon></NewIcon>
                                 </div>
@@ -70,10 +70,10 @@
                                     <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;</div>
                                 </div>
                                 <div class="cursor-pointer" @click="getDetail(book)">
-                                    <img :src="book.thumbnail" class="rounded-t-xl m-auto">
+                                    <img :src="book.thumbnail" class="view  m-auto" :style="minHeight?{height:`${minHeight}px`}:{}">
                                 </div>
                                 <div class="mt-5 px-3">
-                                    <div :class="darkMode?`text-white`:``">{{book.title}}</div>
+                                    <div :class="darkMode?`text-white`:``">{{cutString(book.title,30)}}</div>
                                     <div class="flex justify-between items-center mt-3 text-xs">
                                         <template v-if="book.price.year">
                                             <div>{{$t('1006')}}: <span class="font-bold" :class="darkMode?``:`text-heart`">{{book.price.year}}$</span></div>
@@ -105,6 +105,7 @@ import ReadingBook from "./components/book/ReadingBook.vue"
 import FavoriteIcon from "./../../components/FavoriteIcon.vue"
 import FavoriteFill from "./../../components/FavoriteFill.vue"
 import LibraryAudio from "./Audio.vue"
+import helper from "./../../helper/helper"
 
 export default {
     components:{
@@ -139,6 +140,10 @@ export default {
     },
     methods:{
         ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail']),
+        ...mapActions('cart', ['addCart']),
+        cutString(text, limit){
+            return helper.cutString(text, limit)
+        },
         filterLibrary(library){
             this.filter_id = library._id
             let filter = {
@@ -221,9 +226,14 @@ export default {
             this.page = 1
             this.getLibrary({
                 type: this.type
-            }).then(() =>{
-                this.matchHeight()
             })
+        },
+        shopNow(){
+            this.preview = false
+            let payload = {}
+            payload.id = this.details._id
+
+            this.addCart(payload)
         },
         matchHeight(){
             let arr = []
@@ -233,7 +243,7 @@ export default {
                     for(let i = 0; i < box.length; i++){
                         arr.push(box[i].clientHeight)
                     }
-                    this.minHeight = Math.max(...arr)
+                    this.minHeight = Math.min(...arr)
                     clearInterval(interval)
                     
                 }
@@ -247,6 +257,16 @@ export default {
                 this.getLibraryBook()
             }
         })
+    },
+    watch:{
+        'type':function(type){
+            if(type ==='sound'){
+                this.$nextTick(() => {
+                    this.matchHeight()
+                })
+               
+            }
+        }
     }
     
 }

@@ -33,7 +33,7 @@
                 
             </vue-horizontal>
         </div>
-        <BuyMsg v-if="showMsg" @cancelModal="() => {this.showMsg = false}" @yes="() => {this.showCart = true; this.showMsg = false}"></BuyMsg>
+        <BuyMsg v-if="showMsg" @cancelModal="() => {this.showMsg = false}" @yes="yes()"></BuyMsg>
         <Cart v-if="showCart" @closeCart="() => {this.showCart = false}"></Cart>
     </div>
 </template>
@@ -53,7 +53,8 @@ export default {
     data() {
         return{
             showMsg: false,
-            showCart: false
+            showCart: false,
+            pk: {}
         }
     },
     computed:{
@@ -63,18 +64,25 @@ export default {
     },
     methods:{
         ...mapActions('cart', ['addCart']),
-        addToCart(pk){
+       async addToCart(pk){
             let payload = {}
 
             payload.id = pk._id
-            this.addCart(payload).then(() =>{
+            await this.addCart(payload).then(() =>{
                 let el = document.getElementById(`${pk._id}`)
                 el.classList.add('invisible')
+            })
+        },
+        yes(){
+            this.showMsg = false
+            this.addToCart(this.pk).then(() =>{
+                this.showCart = true; 
             })
         },
         showConfirm(pk){
            if(pk.is_buy == 0){
             this.showMsg = true
+            this.pk = pk
            }
         }
     }
