@@ -4,7 +4,7 @@ import helper from "./../helper/helper"
 export default {
     namespaced: true,
     state: {
-       libraries:[],
+       libraries:{},
        loading: false,
        showList: false,
        filter_id: '',
@@ -13,6 +13,24 @@ export default {
        readingPdf: ''
     },
     mutations: {
+        // Add && remove from in list
+        addToFavorite(state, payload){
+           state.libraries.list = state.libraries.list.filter(item => {
+                if(item._id === payload){
+                    item.is_favorite = 1
+                }
+                return item
+            })
+        },
+        removeFromFavorite(state, payload){
+            state.libraries.list = state.libraries.list.filter(item =>{
+                if(item._id === payload){
+                    item.is_favorite = 0
+                }
+                return item
+            })
+        },
+        // Add && remove favorite for detail
         addFavorite(state){
             state.details.is_favorite = 1
         },
@@ -61,6 +79,14 @@ export default {
         gettingLibraryDetail(state, payload){
             state.loadingDetail = payload
         },
+        addToCart(state, payload){
+            state.libraries.list.filter(item =>{
+                if(item._id === payload){
+                    item.is_in_cart = 1
+                }
+                return item
+            })
+        }
         
     },
     actions: {

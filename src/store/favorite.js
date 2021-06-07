@@ -1,6 +1,6 @@
 import axios from "axios"
 import config from "./../config"
-import err from "./../helper/err"
+import helper from "./../helper/helper"
 export default {
     namespaced: true,
 
@@ -9,6 +9,8 @@ export default {
         favorites: [],
         paginationLoading: false,
         temporaryFavorites: [],
+        favoritedVideo: [],
+        favoritedBook: [],
     },
 
     mutations: {
@@ -43,6 +45,19 @@ export default {
         },
         addFavoriteBook(){
 
+        },
+        getVideoFavorite(state, payload){
+            state.favoritedVideo = payload
+        },
+        getBookFavorite(state, payload){
+            state.favoritedBook = payload
+        },
+        paginateBookFavorite(state, payload){
+            // Push
+
+        },
+        getVideoFavorite(state, payload){
+            // Push
         }
     },
 
@@ -74,9 +89,7 @@ export default {
                 })
             })
         },
-        async add({
-            commit
-        }, payload) {
+        async add({commit}, payload) {
             commit("loading", true)
             await axios.post(config.apiUrl + 'favorite/video', {
                 id: payload
@@ -86,29 +99,44 @@ export default {
                 commit("loading", false);
             })
         },
-
-        getFavorite({
-            commit
-        }) {
+        getVideoFavorite({commit}, payload){
             commit("loading", true)
-            axios.get(config.apiUrl + 'favorite').then(response => {
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `favorite/video?${helper.q(payload)}`).then(response =>{
+                    commit("loading", false)
+                    if(payload.p < 1){
+                        commit("getVideoFavorite", response.data.data)
+                    }else{
+                        commit("paginateVideoFavorite", response.data.data)
+                    }
+                    resolve(response)
+                }).catch(err =>{
+                    commit("loading", false)
+                    reject(err)
+                })
+            })
 
-                if (response.data.status && response.data.status === 2) {
-                    err.err(response.data.msg)
-                }
+        },
+        getBookFavorite({commit}, payload){
+            commit("loading", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `favorite/book?${helper.q(payload)}`).then(response =>{
+                    commit("loading", false)
+                    if(payload.p < 1){
+                        commit("getBookFavorite", response.data.data)
+                    }else{
+                        commit("paginateBookFavorite", response.data.data)
+                    }
+                    resolve(response)
 
-
-                commit("loading", false)
-                commit("getAddedFavorite", response.data.data)
-            }).catch(() => {
-                commit("loading", false)
+                }).catch(err =>{
+                    commit("loading", false)
+                    reject(err)
+                })
             })
         },
 
-        favoritePagination({
-            commit,
-            dispatch
-        }, page = 1) {
+        favoritePagination({commit,dispatch}, page = 1) {
             commit("pagesLoading", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'favorite?p=' + page).then(response => {
@@ -128,16 +156,12 @@ export default {
             })
 
         },
-        loadMoreFavorite({
-            commit
-        }, favorite) {
+        loadMoreFavorite({commit}, favorite) {
             commit("loadMoreFavorite", favorite)
         },
 
 
-        async removeFavorite({
-            commit
-        }, payload) {
+        async removeFavorite({commit}, payload) {
             commit("loading", true)
             await axios.delete(config.apiUrl + 'favorite/video',
             {

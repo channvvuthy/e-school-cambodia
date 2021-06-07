@@ -63,7 +63,7 @@ export default {
 
     },
     methods:{
-        ...mapActions('cart', ['addCart']),
+        ...mapActions('cart', ['addCart', 'getCart']),
        async addToCart(pk){
             let payload = {}
 
@@ -71,6 +71,7 @@ export default {
             await this.addCart(payload).then(() =>{
                 let el = document.getElementById(`${pk._id}`)
                 el.classList.add('invisible')
+                this.getCart()
             })
         },
         yes(){

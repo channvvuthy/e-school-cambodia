@@ -5,9 +5,7 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
-// import {auth} from './../middlware/auth'
 import CourseDetail from "../views/MyCourse/CourseDetail"
-// import store from "../store"
 
 Vue.use(VueRouter);
 
@@ -153,30 +151,5 @@ const router = new VueRouter({
     base: process.env.BASE_URL,
     routes
 });
-// eslint-disable-next-line no-unused-vars
-// router.beforeEach((to, from, next) => {
-//     if (to.name === 'login') {
-//         if (auth()) {
-//             next({
-//                 name: 'home'
-//             })
-//         } else {
-//             next()
-//         }
-//     } else {
-//         if (auth()) {
-//
-//             store.commit("course/getFilterByGradeID","")
-//             store.commit("course/getQueryString","")
-//
-//             next()
-//         } else {
-//             next({
-//                 name: 'login'
-//             })
-//         }
-//     }
-//     next()
-// });
 
 export default router

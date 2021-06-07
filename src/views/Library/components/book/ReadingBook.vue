@@ -1,6 +1,6 @@
 <template>
     <div class="fixed top-0 left-0 bg-black bg-opacity-80 flex items-center justify-center h-full w-full z-50">
-        <div class="w-2/4 relative overflow-x-hidden">
+        <div class="w-2/4 relative">
             <!-- Header -->
             <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary">
                 <div class="cursor-pointer" @click="openFullscreen()">

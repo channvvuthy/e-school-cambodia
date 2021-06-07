@@ -52,7 +52,7 @@
         },
         methods: {
             hideMenu(){
-                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video'){
+                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' || this.$route.name === 'favorite'){
                     return true
                 }
                 return false

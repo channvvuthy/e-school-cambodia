@@ -55,8 +55,10 @@
                                <div class="flex w-full justify-between items-center relative top-5 mt-5 text-xs">
                                    <template v-if="video.price.year">
                                         <div  :class="darkMode?`text-gray-300`:``">{{$t('1006')}} : <del>{{video.price.highlight}} USD</del>&nbsp; <span :class="darkMode?`text-gray-300`:`text-red-700`">{{video.price.year}} USD</span></div>
-                                        <div>
-                                            <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
+                                        <div @click="addToCart(video)">
+                                            <div v-if="!video.is_in_cart">
+                                                <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
+                                            </div>
                                         </div>
                                    </template>
                                    <template v-else>
@@ -118,6 +120,7 @@ export default {
     },
     methods:{
         ...mapActions('video', ['getVideo','getVideoWithPagination']),
+        ...mapActions('cart', ['addCart', 'getCart']),
         cutString(text, limit){
             return helper.cutString(text, limit)
         },
@@ -140,6 +143,14 @@ export default {
                     clearInterval(interval)
                 }
             }, 1000)
+        },
+         addToCart(video){
+            let payload = {}
+            payload.id = video._id
+            this.addCart(payload).then(() =>{
+                this.getCart()
+            })
+            this.$store.commit("video/addToCart",video._id)
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight) {

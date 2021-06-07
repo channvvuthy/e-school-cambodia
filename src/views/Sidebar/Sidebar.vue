@@ -31,11 +31,6 @@
                         <p class="name">
                             {{token ? stProfile.first_name + " " + stProfile.last_name : $t('unname')}}
                         </p>
-                        <div class="relative flex-col justify-center items-center">
-                            <!--<span class="absolute text-xs z-50 absolute right-0"-->
-                            <!--style="bottom:5px;margin-right: 1px;">✓</span>-->
-                            <!--<img src="/icon/Menu/insurance.png" class="h-4 ml-5 relative -top-1"/>-->
-                        </div>
                     </div>
 
                 </div>
@@ -71,11 +66,6 @@
     import {mapState} from "vuex"
 
     export default{
-        data(){
-            return {
-                isHide: false
-            }
-        },
         components: {
             BackIcon,
             Privacy,
@@ -85,14 +75,20 @@
         },
         computed: {
             ...mapState('auth', ['token', 'stProfile']),
-            ...mapState('setting', ['localize','darkMode'])
+            ...mapState('setting', ['localize','darkMode','isHide'])
         },
 
         methods: {
             switchSidebar(){
-                this.isHide = !this.isHide
-                this.$store.commit('setting/toggleSidebar', this.isHide)
+                if(this.isHide){
+                    this.$store.commit('setting/toggleSidebar', false)
+                }else{
+                    this.$store.commit('setting/toggleSidebar', true)
+
+                }
             }
         },
+
+
     }
 </script>

@@ -78,5 +78,6 @@ new Vue({
         if (!localStorage.getItem('localize')) {
             localStorage.setItem('localize', 'en')
         }
+
     }
 }).$mount('#app');

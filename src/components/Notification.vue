@@ -1,13 +1,12 @@
 <template>
     <div class="fixed inset-0 overflow-y-auto w-full h-full bg-black bg-opacity-90 flex items-center justify-center" style="z-index: 60">
-        <div class="bg-white rounded-xl shadow-xl"
-                :class="`w-${size}`">
-            <div class="flex justify-between items-center p-4 border border-gray-200 border-t-0 border-l-0 border-r-0 text-sm font-khmer_os">
+        <div class="rounded-xl shadow-xl w-96" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+            <div class="flex justify-between items-center p-4 border-b text-sm font-khmer_os" :class="darkMode?`border-button`:`border-bordergray-200`">
                 <div class="text-left flex-1 text-center font-semibold text-sm">
-                    សារជូនដំណឹង
+                    {{$t('1012')}}
                 </div>
                 <div class="opacity-80 cursor-pointer" @click="closeNotification">
-                    <CloseIcon :width="20" :height="20"></CloseIcon>
+                    <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                 </div>
             </div>
             <div class="body mt-5 flex-cols justify-start items-center font-khmer_os text-13px mb-5 max-h-100 overflow-y-scroll" @scroll="onScroll">
@@ -21,7 +20,7 @@
                     <div v-if="notifications && notifications.length">
                         <ul>
                             <li v-for="(notification, key) in notifications" :key="key"
-                                class="flex justify-start items-center px-4 py-2 border-b cursor-pointer" :class="darkMode?`border-button`:`border-gray-200`"
+                                class="flex justify-start items-center px-4 py-2 cursor-pointer" :class="darkMode?`border-button ${key<(notifications.length - 1)?`border-b`:``}`:`border-gray-200 ${key<(notifications.length - 1)?`border-b`:``}`"
                                 @click="readNotification(notification)">
                                 <div class="h-12 w-12 rounded-full bg-primary flex justify-center items-center mr-3">
                                     <div v-if="notification.type === 1">

@@ -3,7 +3,7 @@ import config from "./../config";
 export default {
     namespaced: true,
     state: {
-        videos:[],
+        videos:{},
         loading:false,
         loadingMore:false,
         playlist: [],
@@ -12,6 +12,14 @@ export default {
     },
 
     mutations: {
+        addToCart(state, payload){
+            state.videos.list = state.videos.list.filter(item => {
+                if(item._id === payload){
+                    item.is_in_cart = 1
+                }
+                return item
+            })
+        },
         updatingProgressbar(state, payload){
             state.playlist.list.filter(item =>{
                 if(item._id === payload.id){

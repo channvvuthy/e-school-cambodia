@@ -44,44 +44,40 @@
                 </div>
             </div>
             <div class="flex-1">
-                <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center text-base font-medium"
+                <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center text-base font-medium"
                      :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white`"
                 >
                     <div @click="switchMenu('video')"
-                         class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
+                         class="flex flex-col flex-1 justify-center cursor-pointer h-full"
                          :class="active === 'video'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('2108') }}
-                        <!-- <div v-if="active === 'video'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto"
-                                 :class="active === 'video'?darkMode?`bg-white`:`bg-primary`:``"></div>
-                        </div> -->
+                        <div class="relative -bottom-4 px-4" v-if="active === 'video'">
+                            <BorderBottom :class="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </div>
                     </div>
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('document')"
                          :class="active === 'document'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('1112') }}
-                        <!-- <div v-if="active === 'document'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto"
-                                 :class="active === 'document'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div> -->
+                       <div class="relative -bottom-4 px-4" v-if="active === 'document'">
+                            <BorderBottom :class="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </div>
                     </div>
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('forum')"
                          :class="active === 'forum'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('2110') }}
-                        <!-- <div v-if="active === 'forum'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto"
-                                 :class="active === 'forum'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div> -->
+                        <div class="relative -bottom-4 px-4" v-if="active === 'forum'">
+                            <BorderBottom :class="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </div>
                     </div>
                     <div class="flex flex-col flex-1 justify-center cursor-pointer relative h-full"
                          @click="switchMenu('quiz')"
                          :class="active === 'quiz'?darkMode?`text-white`:`text-primary`:``">
                         {{ $t('2111') }}
-                        <!-- <div v-if="active === 'quiz'" class="m-auto w-full rounded absolute bottom-0 h-1">
-                            <div class="h-full h-1 w-10/12 m-auto"
-                                 :class="active === 'quiz'?darkMode?`bg-skyBlue`:`bg-primary`:``"></div>
-                        </div> -->
+                         <div class="relative -bottom-4 px-4" v-if="active === 'quiz'">
+                            <BorderBottom :class="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </div>
                     </div>
 
                 </div>
@@ -135,6 +131,7 @@
     import Forum from "./components/Forum.vue"
     import FavoriteIcon from "./../../components/FavoriteIcon.vue"
     import FavoriteFill from "./../../components/FavoriteFill.vue"
+    import BorderBottom from "./../../components/BorderBottom.vue"
     import Eye from "./../../components/Eye.vue"
     import VideoPlaylist from "./ads/VideoPlaylist.vue"
     import SinglePdf from "./../Component/SinglePdf.vue"
@@ -165,7 +162,10 @@
                 showBuy:false,
                 showCart: false,
                 showReceipt:false,
-                receiptDetail: {}
+                receiptDetail: {},
+                window:{
+                    wwidth: null
+                }
             }
         },
         components: {
@@ -187,7 +187,8 @@
             Exam,
             BuyMsg,
             Cart,
-            ReceiptInfo
+            ReceiptInfo,
+            BorderBottom
 
         },
         computed: {
@@ -373,9 +374,18 @@
             },
             exit(){
                 this.showExam = false
-            }
+            },
+            handleResize() {
+                this.window.width = window.innerWidth;
+            },
         },
         created(){
+            window.addEventListener('resize', this.handleResize);
+
+            this.handleResize();
+            if(this.window.width <= 1315){
+                this.$store.commit('setting/toggleSidebar', true)
+            }
             this.loading = true
 
             this.getPlaylist({id: this.$route.params.course._id}).then(response => {

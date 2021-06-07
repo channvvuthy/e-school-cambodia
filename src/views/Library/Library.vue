@@ -7,16 +7,25 @@
             <div class="px-5 pt-7 shadow-md" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
                 <FilterData></FilterData>
                 <!-- Tab -->
-                <div class="mt-7 pb-3" v-if="!showList">
+                <div class="mt-7" v-if="!showList">
                     <div class="flex justify-start">
-                        <div @click="changeType('pdf')" class="cursor-pointer" :class="type==`pdf`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
-                            <span class="">{{$t('2202')}}</span>
+                        <div @click="changeType('pdf')" class="cursor-pointer  w-12 text-center" :class="type==`pdf`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+                            <div class="pb-2">{{$t('2202')}}</div>
+                            <div v-if="type === `pdf`">
+                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                            </div>
                         </div>
-                        <div @click="changeType('sound')" class="cursor-pointer ml-20" :class="type==`sound`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
-                            <span>{{$t('2204')}}</span>
+                        <div @click="changeType('sound')" class="cursor-pointer ml-20 w-24 text-center" :class="type==`sound`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+                            <div class="pb-2">{{$t('2204')}}</div>
+                            <div v-if="type === `sound`">
+                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                            </div>
                         </div>
-                        <div @click="changeType('video')" class="cursor-pointer ml-20" :class="type==`video`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
-                            <span>{{$t('2205')}}</span>
+                        <div @click="changeType('video')" class="cursor-pointer ml-20 w-24 text-center" :class="type==`video`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+                            <div class="pb-2">{{$t('2205')}}</div>
+                            <div v-if="type === `video`">
+                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -43,7 +52,7 @@
                         <!-- Book & Video -->
                         <template v-if="type != 'sound'">
                             <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                                <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer"/>
+                                <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
 
                                 <div class="px-3 py-5 flex flex-col justify-between">
                                     <div class="font-black">{{book.title}}</div>
@@ -52,11 +61,15 @@
                                 </div>
                                 <div class="flex flex-col justify-between flex-1 items-end">
                                     <div>
-                                        <div v-if="book.is_favorite" class="cursor-pointer"><FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/></div>
-                                        <div v-else class="cursor-pointer"><FavoriteIcon :fill="darkMode?`#909090`:`#4A4A4A`"/></div>
+                                        <div v-if="book.is_favorite" class="cursor-pointer" @click="removeFromFavorite(book)">
+                                            <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
+                                        </div>
+                                        <div v-else class="cursor-pointer" @click="addToFavorite(book)">
+                                            <FavoriteIcon :fill="darkMode?`#909090`:`#4A4A4A`"/>
+                                        </div>
                                     </div>
-                                    <div v-if="book.price.year">
-                                        <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon>
+                                    <div v-if="book.price.year" @click="addToCart(book)" class="cursor-pointer">
+                                        <div v-if="!book.is_in_cart"><CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon></div>
                                     </div>
                                 </div>
                             </div> 
@@ -74,10 +87,14 @@
                                 </div>
                                 <div class="mt-5 px-3">
                                     <div :class="darkMode?`text-white`:``">{{cutString(book.title,30)}}</div>
-                                    <div class="flex justify-between items-center mt-3 text-xs">
+                                    <div class="flex justify-between items-center mt-3 text-xs h-8">
                                         <template v-if="book.price.year">
                                             <div>{{$t('1006')}}: <span class="font-bold" :class="darkMode?``:`text-heart`">{{book.price.year}}$</span></div>
-                                            <div><CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon></div>
+                                            <div @click="addToCart(book)" class="cursor-pointer" v-if="book.price.year">
+                                                <div v-if="book.is_in_cart === 0">
+                                                    <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
+                                                </div>
+                                            </div>
                                         </template>
                                         <template v-else>
                                             <div>{{$t('1007')}}</div>
@@ -104,6 +121,7 @@ import ViewBook from "./components/book/ViewBook.vue"
 import ReadingBook from "./components/book/ReadingBook.vue"
 import FavoriteIcon from "./../../components/FavoriteIcon.vue"
 import FavoriteFill from "./../../components/FavoriteFill.vue"
+import BorderBottom from "./../../components/BorderBottom.vue"
 import LibraryAudio from "./Audio.vue"
 import helper from "./../../helper/helper"
 
@@ -119,7 +137,8 @@ export default {
         ReadingBook,
         LibraryAudio,
         FavoriteIcon,
-        FavoriteFill
+        FavoriteFill,
+        BorderBottom
     },
     data(){
         return{
@@ -140,7 +159,8 @@ export default {
     },
     methods:{
         ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail']),
-        ...mapActions('cart', ['addCart']),
+        ...mapActions('cart', ['addCart', 'getCart']),
+        ...mapActions('favorite', ['addFavoriteBook','removeFavoriteBook']),
         cutString(text, limit){
             return helper.cutString(text, limit)
         },
@@ -233,7 +253,27 @@ export default {
             let payload = {}
             payload.id = this.details._id
 
-            this.addCart(payload)
+            this.addCart(payload).then(() =>{
+                this.getCart()
+            })
+        },
+        addToCart(book){
+            let payload = {}
+            payload.id = book._id
+            this.addCart(payload).then(() =>{
+                this.getCart()
+            })
+            this.$store.commit("library/addToCart",book._id)
+        },
+        addToFavorite(book){
+            this.addFavoriteBook(book._id).then(() =>{
+                this.$store.commit("library/addToFavorite", book._id)
+            })
+        },
+        removeFromFavorite(book){
+            this.removeFavoriteBook(book.filter_id).then(() =>{
+                this.$store.commit("library/removeFromFavorite", book._id)
+            })
         },
         matchHeight(){
             let arr = []
@@ -243,7 +283,7 @@ export default {
                     for(let i = 0; i < box.length; i++){
                         arr.push(box[i].clientHeight)
                     }
-                    this.minHeight = Math.min(...arr)
+                    this.minHeight = Math.max(...arr)
                     clearInterval(interval)
                     
                 }
@@ -253,8 +293,13 @@ export default {
     created(){
         this.getLibraryBook()
         document.addEventListener("click", (event) =>{
-            if(event.target.parentNode.id != null && event.target.parentNode.id.includes('closeCart')){
-                this.getLibraryBook()
+            try{
+                if(event.target.parentNode.id != null && event.target.parentNode.id === `closeCart`){
+                    console.log(event.target.parentNode.id)
+                    this.getLibraryBook()
+                }
+            }catch(err){
+                console.warn(err)
             }
         })
     },
