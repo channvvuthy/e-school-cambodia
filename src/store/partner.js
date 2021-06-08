@@ -41,10 +41,10 @@ export default {
                 })
             })
         },
-        openPartner({commit}, course_id){
+        openPartner({commit}, id){
             commit("openingPartnerLoading", true)
             return new Promise((resovle, reject) => {
-                axios.get(config.apiUrl + 'partner/open?course_id=' + course_id).then(response => {
+                axios.get(config.apiUrl + 'partner/open?id=' + id).then(response => {
                     resovle(response.data)
                     commit("openingPartnerLoading", false)
                     commit("receivingOpenPartner", response.data.data)

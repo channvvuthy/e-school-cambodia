@@ -4,7 +4,7 @@
             <Loading></Loading>
         </div>
         <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-5'" v-else>
-            <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
+            <div v-for="(view,index) in list" class="cursor-pointer rounded overflow-hidden" :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
                 <!--Vdo-->
                 <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"
                      @mouseleave="hideAndShowDuration('')">
