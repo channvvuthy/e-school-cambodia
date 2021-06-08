@@ -12,7 +12,7 @@
                                 <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
                             </div>
                         </div>
-                        <div @click="changeType('book')" class="cursor-pointer ml-20 w-24 text-center" :class="type==`book`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+                        <div @click="changeType('book')" class="cursor-pointer ml-20 w-24 text-center" :class="type==`book`?`text-primary ${darkMode?'text-white':''}`:``">
                             <div class="pb-2">{{$t('2202')}}</div>
                             <div v-if="type === `book`">
                                 <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
@@ -27,7 +27,7 @@
            <div v-if="loading">
                <Loading></Loading>
            </div>
-           <div v-else class="h-screen pb-72 overflow-y-scroll">
+           <div v-else class="h-screen pb-72 overflow-y-scroll" @scroll="onScroll">
                <!-- Video -->
                 <template v-if="type === `video`">
                     <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
@@ -39,6 +39,7 @@
                                             controlsList="nodownload" v-if="hideDuration===view._id" muted></video>
                                     </div>
                                     <img :src="view.thumbnail">
+                                    <div class="absolute bottom-0 left-0 bg-red-600 h-1" v-if="view.last_watch" :style="{width:Math.round(view.last_watch.percentage) + `%`}"></div>
                                     <div class="absolute right-3 bottom-2 rounded px-2 py-1 bg-black text-white bg-opacity-60 text-xs"
                                     v-if="millisToMinutesAndSeconds(view.duration)">
                                     {{millisToMinutesAndSeconds(view.duration)}}
@@ -69,11 +70,14 @@
                 <template v-else>
                     <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
                         <div v-for="(book, index) in favoritedBook" :key="index">
-                            <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                            <div class="flex rounded-xl shadow p-4 relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                                 <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
-
-                                <div class="px-3 py-5 flex flex-col justify-between">
-                                    <div class="font-thin text-sm">{{book.title}}</div>
+                                <div class="absolute left-5 top-5" v-if="book.is_new"><NewIcon :size="22"></NewIcon></div>
+                                <div class="px-3 flex flex-col justify-between">
+                                    <div class="font-thin text-sm cursor-pointer" @click="getDetail(book)">
+                                        <div>{{cutString(book.title,25)}}</div>
+                                        <div v-if="book.des" class="text-xs my-3">{{cutString(book.des,90)}}</div>
+                                    </div>
                                     <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span><span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
                                     </div>
                                 </div>
@@ -95,6 +99,9 @@
          <div v-if="showAds">
             <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)"></VideoADS>
         </div>
+        <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @shopNow="shopNow"></ViewBook>
+
     </div>
 </template>
 
@@ -102,12 +109,14 @@
 import eHeader from "./../Video/components/Header.vue"
 import BorderBottom from "./../../components/BorderBottom.vue"
 import Loading from "./../../components/Loading.vue"
+import CartIcon from "./../../components/CartIcon.vue"
 import FavoriteFill from "./../../components/FavoriteFill.vue";
 import helper from "./../../helper/helper"
 import BuyMsg from "./../Component/BuyMsg.vue"
 import VideoADS from "./../Video/ads/VideoADS.vue"
-
-
+import ReadingBook from "./../Library/components/book/ReadingBook.vue"
+import ViewBook from "./../Library/components/book/ViewBook.vue"
+import NewIcon from "./../../components/NewIcon.vue"
 
 import {mapState, mapActions} from "vuex"
 export default {
@@ -117,11 +126,16 @@ export default {
         Loading,
         FavoriteFill,
         BuyMsg,
-        VideoADS
+        VideoADS,
+        CartIcon,
+        ReadingBook,
+        ViewBook,
+        NewIcon
     },
     computed:{
         ...mapState('setting', ['darkMode','isHide']),
         ...mapState('favorite' ,['loading', 'favoritedVideo', 'favoritedBook']),
+        ...mapState('library', ['details']),
     },
     data(){
         return{
@@ -136,13 +150,17 @@ export default {
             hideDuration: "",
             showAds: false,
             videoUrl: "",
+            reading: false
         }
     },
     methods:{
         ...mapActions('favorite', ['getVideoFavorite', 'getBookFavorite','removeFavoriteVideo', 'removeFavoriteBook']),
         ...mapActions("playVideo", ["stopWatch", "playVideo"]),
+        ...mapActions('cart', ['addCart','getCart']),
+        ...mapActions('library', ['getLibraryDetail']),
 
         changeType(type){
+            this.enableScroll = true
             this.type = type
 
             if(type === 'video'){
@@ -166,6 +184,14 @@ export default {
             event.id = this.id;
             this.stopWatch(event);
         },
+        addToCart(book){
+            let payload = {}
+            payload.id = book._id
+            this.addCart(payload).then(() =>{
+                this.getCart()
+            })
+            this.$store.commit("favorite/addToCart",book._id)
+        },
         viewVideo(video) {
             this.id = video._id;
             this.playVideo(this.id);
@@ -177,6 +203,25 @@ export default {
 
             this.$store.commit("playVideo/getVideoUrl", video.video);
         },
+        close(){
+            this.preview = false
+        },
+        shopNow(){
+            this.preview = false
+            let payload = {}
+            payload.id = this.details._id
+
+            this.addCart(payload).then(() =>{
+                this.getCart()
+            })
+        },
+        closeReading(){
+            this.reading = false
+        },
+        readingBook(){
+            this.reading = true
+            this.close()
+        },
         closeAds() {
             this.showAds = false;
         },
@@ -186,7 +231,7 @@ export default {
         cutString(text, limit){
             return helper.cutString(text, limit)
         },
-         getDetail(library){
+        getDetail(library){
             this.getLibraryDetail({id:library._id}).then(() =>{
                 this.preview = true
             })
@@ -229,13 +274,22 @@ export default {
                 let payload = {}
 
                 payload.p = this.page
+                payload.paginate = 1
 
                 if(this.enableScroll){
-                    this.getVideoWithPagination(payload).then(res =>{
-                        if(res.data.data.list.length <= 0){
-                            this.enableScroll = false
-                        }
-                    })
+                    if(this.type === `video`){
+                        this.getVideoFavorite(payload).then(res =>{
+                            if(res.data.data.length <= 0){
+                                this.enableScroll = false
+                            }
+                        })
+                    }else{
+                        this.getBookFavorite(payload).then(res =>{
+                            if(res.data.data.length <= 0){
+                                this.enableScroll = false
+                            }
+                        })
+                    }
                 }
             }
         },

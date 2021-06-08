@@ -4,6 +4,14 @@
             <div class="flex justify-between items-center">
                 <div class="absolute right-5 top-5 cursor-pointer" @click="close"><CloseIcon :fill="darkMode?`#909090`:`#000000`"></CloseIcon></div>
                 <img :src="details.book.thumbnail" class="max-h-96 rounded-2xl shadow-md max-w-96">
+                <div class="absolute top-10 left-14 w-8 h-8 flex items-center justify-center rounded-md" :class="darkMode?`bg-secondary`:`bg-white`" v-if="is_favorite">
+                    <div v-if="details.is_favorite" class="cursor-pointer" @click="removeFromFavorite(details)">
+                        <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
+                    </div>
+                    <div v-else class="cursor-pointer" @click="addToFavorite(details)">
+                        <FavoriteIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"/>
+                    </div>
+                </div>
                 <div class="flex flex-col ml-14 justify-start">
                     <div class="text-base font-bold mb-5">{{details.book.title}}</div>
                     <template v-if="details.price.year">
@@ -33,7 +41,7 @@
                             <div class="mr-3"><CameraVideoIcon fill="#ffffff"></CameraVideoIcon></div>
                             <span>{{$t('2209')}}</span>
                         </button>
-                        <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg" @click="shopNow">
+                        <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg" @click="shopNow" v-if="details.price.year">
                             <span>{{$t('2206')}}</span>
                         </button>
                     </div>
@@ -45,14 +53,24 @@
     </div>
 </template>
 <script>
-import {mapState} from "vuex"
+import {mapState,mapActions} from "vuex"
 import CloseIcon from "./../../../../components/CloseIcon"
 import ReadingBookIcon from "./../../../../components/ReadingBookIcon"
 import HeadphoneIcon from "./../../../../components/HeadphoneIcon"
 import CameraVideoIcon from "./../../../../components/CameraVideoIcon"
 import BuyMsg from "./../../../../views/Component/BuyMsg.vue"
+import FavoriteIcon from "./../../../../components/FavoriteIcon.vue"
+import FavoriteFill from "./../../../../components/FavoriteFill.vue"
 
 export default {
+    name:"ViewBook",
+    props:{
+        is_favorite:{
+            default:()=>{
+                return false
+            }
+        }
+    },
     data(){
         return{
             showMsg: false
@@ -63,13 +81,16 @@ export default {
         ReadingBookIcon,
         HeadphoneIcon,
         CameraVideoIcon,
-        BuyMsg
+        BuyMsg,
+        FavoriteIcon,
+        FavoriteFill,
     },
     computed:{
         ...mapState('library', ['details', 'loadingDetail']),
         ...mapState('setting', ['darkMode'])
     },
     methods:{
+        ...mapActions('favorite', ['addFavoriteBook','removeFavoriteBook']),
         close(){
             this.$emit("close")
         },
@@ -94,7 +115,17 @@ export default {
         },
         shopNow(){
             this.$emit("shopNow")
-        }
+        },
+        addToFavorite(book){
+            this.addFavoriteBook(book._id).then(() =>{
+                this.$store.commit("library/addToFavorite", book._id)
+            })
+        },
+        removeFromFavorite(book){
+            this.removeFavoriteBook(book.filter_id).then(() =>{
+                this.$store.commit("library/removeFromFavorite", book._id)
+            })
+        },
     }
 }
 </script>

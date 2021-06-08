@@ -5,6 +5,10 @@
     src: url('./../../../public/font/battambang.ttf')
 }
 @font-face {
+    font-family: 'siemreap';
+    src: url('./../../../public/font/siemreap.ttf')
+}
+@font-face {
     font-family: 'Mukta.ttf';
     src: url('./../../../public/font/Mukta.ttf')
 }

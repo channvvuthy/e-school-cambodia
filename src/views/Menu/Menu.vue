@@ -58,7 +58,7 @@
             <div class="flex justify-end">
                 <div class="flex justify-between items-end flex-1">
                     <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}">
-                        <div class="absolute -top-4 left-2 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" v-if="carts.list && carts.list.length" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`">
+                        <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" v-if="carts.list && carts.list.length" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`">
                             <div style="margin-top:2px">
                                 {{carts.list.length}}
                             </div>

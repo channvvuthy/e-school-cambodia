@@ -14,6 +14,14 @@ export default {
     },
 
     mutations: {
+        addToCart(state, payload){
+            state.favoritedBook = state.favoritedBook.filter(item =>{
+                if(item._id === payload){
+                    item.is_in_cart = 1
+                }
+                return item
+            })
+        },
         removeFavoriteBook(state, payload){
             state.favoritedBook = state.favoritedBook.filter(item => item._id != payload)
         },
@@ -56,11 +64,15 @@ export default {
             state.favoritedBook = payload
         },
         paginateBookFavorite(state, payload){
-            // Push
+            for(let i = 0; i < payload.length; i ++){
+                state.favoritedBook.push(payload[i])
+            }
 
         },
-        paginateVideoFavorite(){
-
+        paginateVideoFavorite(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.favoritedVideo.push(payload[i])
+            }
         },
         removeFavoriteVideo(state, payload){
             state.favoritedVideo = state.favoritedVideo.filter(item => item._id != payload)
@@ -106,7 +118,9 @@ export default {
             })
         },
         getVideoFavorite({commit}, payload){
-            commit("loading", true)
+            if(!payload.paginate){
+                commit("loading", true)
+            }
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + `favorite/video?${helper.q(payload)}`).then(response =>{
                     commit("loading", false)
@@ -142,7 +156,9 @@ export default {
         },
         
         getBookFavorite({commit}, payload){
-            commit("loading", true)
+            if(!payload.paginate){
+                commit("loading", true)
+            }
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + `favorite/book?${helper.q(payload)}`).then(response =>{
                     commit("loading", false)

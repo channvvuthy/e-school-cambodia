@@ -1,6 +1,6 @@
 <template>
     <div> 
-        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo" @shopNow="shopNow"></ViewBook>
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo" @shopNow="shopNow" :is_favorite="true"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
         <LibraryAudio v-if="showAudio"></LibraryAudio>
         <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
@@ -54,25 +54,17 @@
                             <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                                 <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
 
-                                <div class="px-3 py-5 flex flex-col justify-between">
+                                <div class="px-3 flex flex-col justify-between">
                                     <div>
-                                        <div class="font-thin text-sm">
+                                        <div class="font-thin text-sm cursor-pointer" @click="getDetail(book)">
                                             {{cutString(book.title,30)}}
                                         </div>
-                                        <!-- <div v-if="book.des" class="text-xs my-2">{{cutString(book.des,50)}}</div> -->
+                                        <div v-if="book.des" class="text-xs my-2">{{cutString(book.des,50)}}</div>
                                     </div>
                                     <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span><span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
                                     </div>
                                 </div>
-                                <div class="flex flex-col justify-between flex-1 items-end">
-                                    <div>
-                                        <div v-if="book.is_favorite" class="cursor-pointer" @click="removeFromFavorite(book)">
-                                            <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
-                                        </div>
-                                        <div v-else class="cursor-pointer" @click="addToFavorite(book)">
-                                            <FavoriteIcon :fill="darkMode?`#909090`:`#4A4A4A`"/>
-                                        </div>
-                                    </div>
+                                <div class="flex flex-col justify-end flex-1 items-end">
                                     <div v-if="book.price.year" @click="addToCart(book)" class="cursor-pointer">
                                         <div v-if="!book.is_in_cart"><CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon></div>
                                     </div>
@@ -124,8 +116,6 @@ import Loading from "./../../components/Loading.vue"
 import NewIcon from "./../../components/NewIcon.vue"
 import ViewBook from "./components/book/ViewBook.vue"
 import ReadingBook from "./components/book/ReadingBook.vue"
-import FavoriteIcon from "./../../components/FavoriteIcon.vue"
-import FavoriteFill from "./../../components/FavoriteFill.vue"
 import BorderBottom from "./../../components/BorderBottom.vue"
 import LibraryAudio from "./Audio.vue"
 import helper from "./../../helper/helper"
@@ -141,8 +131,6 @@ export default {
         ViewBook,
         ReadingBook,
         LibraryAudio,
-        FavoriteIcon,
-        FavoriteFill,
         BorderBottom
     },
     data(){

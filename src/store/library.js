@@ -9,7 +9,7 @@ export default {
        showList: false,
        filter_id: '',
        loadingDetail: false,
-       details: [],
+       details: null,
        readingPdf: ''
     },
     mutations: {
@@ -21,6 +21,9 @@ export default {
                 }
                 return item
             })
+            if(state.details != null){
+                state.details.is_favorite = 1
+            }
         },
         removeFromFavorite(state, payload){
             state.libraries.list = state.libraries.list.filter(item =>{
@@ -29,6 +32,9 @@ export default {
                 }
                 return item
             })
+            if(state.details != null){
+                state.details.is_favorite = 0
+            }
         },
         // Add && remove favorite for detail
         addFavorite(state){

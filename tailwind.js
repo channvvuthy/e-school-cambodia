@@ -205,8 +205,9 @@ module.exports = {
                 '"Courier New"',
                 'monospace',
             ],
+            
             khmer_os: [
-                'khmer os',
+                'siemreap',
                 'ui-sans-serif',
                 'system-ui',
                 '-apple-system',
@@ -222,6 +223,7 @@ module.exports = {
                 '"Segoe UI Symbol"',
                 '"Noto Color Emoji"',
             ],
+            
 
         },
         fontSize: {
@@ -462,7 +464,6 @@ module.exports = {
             widest: '0.1em',
         },
         lineHeight: {
-            none: '1',
             tight: '1.25',
             snug: '1.375',
             normal: '1.5',

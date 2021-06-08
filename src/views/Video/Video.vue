@@ -8,12 +8,12 @@
             <div v-else>
                 <div class="grid gap-4" :class="isHide?`grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-5`">
                     <div v-for="(video, index) in videos.list" :key="index">
-                        <div class="relative rounded-2xl cursor-pointer view" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`" :style="minHeight?{minHeight:`${minHeight}px`}:{}">
+                        <div class="relative rounded-xl cursor-pointer view" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`" :style="minHeight?{minHeight:`${minHeight}px`}:{}">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
                             <div class="absolute top-3 left-3" v-if="video.is_buy">
                                 <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;</div>
                             </div>
-                            <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-2xl" onerror="this.onerror=null; this.src='/poster.png'"/>
+                            <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-xl" onerror="this.onerror=null; this.src='/poster.png'"/>
                             <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1" :style="{width:`${video.last_watch.percentage}%`}"></div>
                             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
                             <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">

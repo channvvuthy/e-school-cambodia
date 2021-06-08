@@ -14,7 +14,7 @@
                     <div class="overflow-y-scroll max-h-100">
                         <!-- Unpaid invoice -->
                         <div :class="darkMode?`bg-youtube`:`bg-softGray`">
-                            <div class="w-full text-center h-14 flex items-center justify-center">
+                            <div class="w-full text-center h-14 flex items-center justify-center" v-if="receipts.length">
                                 <div>{{$t('2301')}}</div>
                                 <div class="h-3"></div>
                             </div>
