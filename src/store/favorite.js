@@ -14,6 +14,9 @@ export default {
     },
 
     mutations: {
+        removeFavoriteBook(state, payload){
+            state.favoritedBook = state.favoritedBook.filter(item => item._id != payload)
+        },
         addTemporaryFavorite(state, payload) {
             state.temporaryFavorites.push(payload)
         },
@@ -56,8 +59,11 @@ export default {
             // Push
 
         },
-        getVideoFavorite(state, payload){
-            // Push
+        paginateVideoFavorite(){
+
+        },
+        removeFavoriteVideo(state, payload){
+            state.favoritedVideo = state.favoritedVideo.filter(item => item._id != payload)
         }
     },
 
@@ -104,7 +110,7 @@ export default {
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + `favorite/video?${helper.q(payload)}`).then(response =>{
                     commit("loading", false)
-                    if(payload.p < 1){
+                    if(payload.p <= 1){
                         commit("getVideoFavorite", response.data.data)
                     }else{
                         commit("paginateVideoFavorite", response.data.data)
@@ -117,12 +123,30 @@ export default {
             })
 
         },
+        removeFavoriteVideo({commit}, payload){
+            return new Promise((resolve, reject) =>{
+                axios.delete(config.apiUrl + 'favorite/video', {
+                    headers:{
+
+                    },
+                    data:{
+                        id: payload
+                    }
+                }).then(response =>{
+                    resolve(response)
+                    commit("removeFavoriteVideo", payload)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        
         getBookFavorite({commit}, payload){
             commit("loading", true)
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + `favorite/book?${helper.q(payload)}`).then(response =>{
                     commit("loading", false)
-                    if(payload.p < 1){
+                    if(payload.p <= 1){
                         commit("getBookFavorite", response.data.data)
                     }else{
                         commit("paginateBookFavorite", response.data.data)
@@ -136,6 +160,9 @@ export default {
             })
         },
 
+
+
+        // General favorite 
         favoritePagination({commit,dispatch}, page = 1) {
             commit("pagesLoading", true)
             return new Promise((resolve, reject) => {

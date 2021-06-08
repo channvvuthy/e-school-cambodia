@@ -55,7 +55,12 @@
                                 <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
 
                                 <div class="px-3 py-5 flex flex-col justify-between">
-                                    <div class="font-black">{{book.title}}</div>
+                                    <div>
+                                        <div class="font-thin text-sm">
+                                            {{cutString(book.title,30)}}
+                                        </div>
+                                        <!-- <div v-if="book.des" class="text-xs my-2">{{cutString(book.des,50)}}</div> -->
+                                    </div>
                                     <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span><span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
                                     </div>
                                 </div>

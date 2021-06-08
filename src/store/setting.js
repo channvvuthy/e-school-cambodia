@@ -14,8 +14,7 @@ export  default {
         darkMode: localStorage.getItem('darkMode') ? localStorage.getItem('darkMode') : false,
     },
     mutations: {
-        setDarkMode(state, payload){
-            // alert(payload)
+    setDarkMode(state, payload){
             state.darkMode = payload
             localStorage.setItem("darkMode", payload)
         },

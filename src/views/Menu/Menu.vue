@@ -57,20 +57,20 @@
             </div>
             <div class="flex justify-end">
                 <div class="flex justify-between items-end flex-1">
-                    <div class="flex flex-col justify-center items-center cursor-pointer opacity-60 relative " @click="() =>{this.$emit('showItemIncart')}">
-                        <div class="absolute -top-3 left-2 h-4 w-4 rounded-full flex justify-center items-center text-xs" v-if="carts.list && carts.list.length" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`">
-                            <div>
+                    <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}">
+                        <div class="absolute -top-4 left-2 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" v-if="carts.list && carts.list.length" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`">
+                            <div style="margin-top:2px">
                                 {{carts.list.length}}
                             </div>
                         </div>
                         <div><CartIcon :fill="darkMode?`#909090`:`#0f3c7a`"></CartIcon></div>
 
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60 relative" >
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10  relative" >
                         <div><ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ChatIcon></div>
 
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 opacity-60" @click="() =>{this.$emit('notification')}">
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 " @click="() =>{this.$emit('notification')}">
                         <div><NotificationIcon :fill="darkMode?`#909090`:`#0f3c7a`"></NotificationIcon></div>
 
                     </div>

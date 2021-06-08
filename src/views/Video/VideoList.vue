@@ -4,7 +4,7 @@
             <Loading></Loading>
         </div>
         <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-5'" v-else>
-            <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'bg-youtube text-textSecondary':'bg-white shadow'">
+            <div v-for="(view,index) in list" class="cursor-pointer" :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
                 <!--Vdo-->
                 <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"
                      @mouseleave="hideAndShowDuration('')">
@@ -22,7 +22,7 @@
                         <div class="absolute bottom-0 left-0 bg-red-600 h-1" v-if="view.vdo.last_watch" :style="{width:Math.round(view.vdo.last_watch.percentage) + `%`}"></div>
                     </div>
                    
-                    <div class="flex p-3 items-center justify-start cursor-text">
+                    <div class="flex items-center justify-start cursor-text" :class="darkMode?`py-3`:`p-3`">
                         <img :src="view.vdo.teacher.photo" class="h-10 rounded mr-3">
                         <div>
                             <div class="text-primary text-sm" :class="darkMode?'text-white':''">{{cutString(view.vdo.title,20)}}</div>
