@@ -10,10 +10,9 @@
                         <div>{{$t('2300')}}</div>
                 </div>
                 <div :class="darkMode?`border-button`:`border-gray-200`" class="border-b"></div>
-                <template v-if="carts.list && carts.list.length">
                     <div class="overflow-y-scroll max-h-100">
                         <!-- Unpaid invoice -->
-                        <div :class="darkMode?`bg-youtube`:`bg-softGray`">
+                        <div :class="darkMode?`bg-youtube`:`bg-softGray`" v-if="carts.list && receipts.length">
                             <div class="w-full text-center h-14 flex items-center justify-center" v-if="receipts.length">
                                 <div>{{$t('2301')}}</div>
                                 <div class="h-3"></div>
@@ -41,44 +40,47 @@
                         </div>
                         <!-- End unpaid invoice -->
                         <!-- Cart -->
-                        <div>
-                            <div class="flex justify-between px-5 py-3 border-t" :class="darkMode?`border-button`:``" v-for="(cart, index) in carts.list" :key="index">
-                                <div class="w-2/5 mr-3">
-                                    <img :src="cart.thumbnail">
-                                </div>
-                                <div class="flex flex-col flex-1 py-1">
-                                    <!-- Title -->
-                                    <div class="mb-3">
-                                        {{cart.title}}
+                        <template v-if="carts.list && carts.list.length">
+                            <div>
+                                <div class="flex justify-between px-5 py-3 border-t" :class="darkMode?`border-button`:``" v-for="(cart, index) in carts.list" :key="index">
+                                    <div class="w-2/5 mr-3">
+                                        <img :src="cart.thumbnail" class="rounded">
                                     </div>
-                                    <div class="text-xs" :class="darkMode?`text-gray-500`:``">
-                                        {{cart.teacher.name}}
+                                    <div class="flex flex-col flex-1 py-1">
+                                        <!-- Title -->
+                                        <div class="mb-3">
+                                            {{cart.title}}
+                                        </div>
+                                        <div class="text-xs" :class="darkMode?`text-gray-500`:``">
+                                            {{cart.teacher.name}}
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- Price -->
-                                <div class="flex flex-col items-end">
-                                    <div class="cursor-pointer flex-1" @click="confirmDeleteCart(cart._id, 1)">
-                                        <DeleteIcon :fill="darkMode?`#D1D5DB`:`#c0272d`"></DeleteIcon>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <div class="flex items-center justify-between">
-                                            <div :class="cart.price.month?'':`${darkMode?`text-white`:`text-heart`}`">
-                                                    {{durationCalculate((cart.price.duration ? cart.price.duration : 12), cart.price.month, cart.price.year)}}
-                                            </div>
-                                            <div class="flex flex-col ml-2" @click="cart.price.month?duration((cart.price.duration ? cart.price.duration : 12),cart._id):false">
-                                                <div class="transform -rotate-180 cursor-pointer">
-                                                    <ChevronIcon :size="18" :fill="darkMode?`${cart.price.month?`#D1D5DB`:`#4B5563`}`:`${cart.price.month?`#000000`:`#c0272d`}`"></ChevronIcon>
+                                    <!-- Price -->
+                                    <div class="flex flex-col items-end">
+                                        <div class="cursor-pointer flex-1" @click="confirmDeleteCart(cart._id, 1)">
+                                            <DeleteIcon :fill="darkMode?`#D1D5DB`:`#c0272d`"></DeleteIcon>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <div class="flex items-center justify-between">
+                                                <div :class="cart.price.month?'':`${darkMode?`text-white`:`text-heart`}`">
+                                                        {{durationCalculate((cart.price.duration ? cart.price.duration : 12), cart.price.month, cart.price.year)}}
                                                 </div>
-                                                <div class="transform cursor-pointer ">
-                                                    <ChevronIcon :size="18" :fill="darkMode?`${cart.price.month?`#D1D5DB`:`#4B5563`}`:`${cart.price.month?`#000000`:`#c0272d`}`"></ChevronIcon>
+                                                <div class="flex flex-col ml-2" @click="cart.price.month?duration((cart.price.duration ? cart.price.duration : 12),cart._id):false">
+                                                    <div class="transform -rotate-180 cursor-pointer">
+                                                        <ChevronIcon :size="18" :fill="darkMode?`${cart.price.month?`#D1D5DB`:`#4B5563`}`:`${cart.price.month?`#000000`:`#c0272d`}`"></ChevronIcon>
+                                                    </div>
+                                                    <div class="transform cursor-pointer ">
+                                                        <ChevronIcon :size="18" :fill="darkMode?`${cart.price.month?`#D1D5DB`:`#4B5563`}`:`${cart.price.month?`#000000`:`#c0272d`}`"></ChevronIcon>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </template>
                     </div>
+                <template v-if="carts.list && carts.list.length">
                     <!-- Button -->
                     <div class="border-t" :class="darkMode?`border-button`:``">
                         <div class="my-7 flex justify-center items-center flex-col ">

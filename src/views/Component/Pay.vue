@@ -49,13 +49,16 @@ export default {
             for(let i =0; i < this.carts.list.length; i++){
                 let course = {}
                 course.id = this.carts.list[i]._id
-                if(this.carts.list[i].duration){
-                    course.month = this.carts.list[i].duration
+                if(this.carts.list[i].price.duration){
+                    course.month = this.carts.list[i].price.duration
                 }else{
                     course.month = 12 
                 }
                 courses.push(course)
+                console.log(course)
+
             }
+
             let checkoutCourse = {courses}
             this.cartCheckout(checkoutCourse).then(response =>{
                 this.getReceiptDetail(response.data.data.e_code).then(response => {

@@ -130,9 +130,7 @@ export default {
     },
 
     actions: {
-        login({
-            commit
-        }, auth) {
+        login({commit}, auth) {
             commit("loging", true);
             return new Promise((resolve, reject) => {
 
@@ -152,9 +150,7 @@ export default {
                 })
             })
         },
-        getStory({
-            commit
-        }, page = 1) {
+        getStory({commit}, page = 1) {
             commit("loadingStory", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `story?p=${page}`).then(response => {
@@ -171,9 +167,7 @@ export default {
                 })
             })
         },
-        viewStory({
-            commit
-        }, payload) {
+        viewStory({commit}, payload) {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');
@@ -207,9 +201,8 @@ export default {
             });
 
         },
-        checkPhoneExist({
-            commit
-        }, payload) {
+        checkPhoneExist({commit}, payload) {
+            delete axios.defaults.headers.common['xtoken'];
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `user/forget-password?${helper.q(payload)}`).then(response => {
@@ -217,17 +210,14 @@ export default {
                     resolve(response.data)
                 }).catch(error => {
                     commit("checkingPhone", false)
-                    helper.errorMessage(error.response.data.msg)
                     reject(error)
                 })
             })
         },
-        changeForgotPassword({
-            commit
-        }, params) {
+        changeForgotPassword({commit}, params) {
             commit("changingForgotPassword", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/password/forget-reset', params).then(response => {
+                axios.post(config.apiUrl + 'user/forget-password', params).then(response => {
                     commit("changingForgotPassword", false)
                     resolve(response.data)
                 }).catch(err => {
@@ -237,15 +227,11 @@ export default {
             })
         },
 
-        getPhone({
-            commit
-        }, phone) {
+        getPhone({commit}, phone) {
             commit("getPhoneNumber", phone)
         },
 
-        getStudentProfile({
-            commit
-        }, stProfile) {
+        getStudentProfile({commit}, stProfile) {
             commit("studentProfile", stProfile)
         },
 
@@ -266,9 +252,7 @@ export default {
             })
         },
 
-        async logout({
-            commit
-        }) {
+        async logout({commit}) {
             delete axios.defaults.headers.common['xtoken'];
             await axios.get(config.apiUrl + 'me/logout').then(() => {
 
@@ -280,9 +264,7 @@ export default {
             })
         },
 
-        changeProfilePhotoPhoto({
-            commit
-        }, formData) {
+        changeProfilePhotoPhoto({commit }, formData) {
             commit('changingProfile', true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'user/change-photo',
@@ -306,9 +288,7 @@ export default {
             })
         },
 
-        changeProfile({
-            commit
-        }, params) {
+        changeProfile({commit}, params) {
             commit("userChangingProfile", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'user/change-profile', params).then(response => {
@@ -327,9 +307,7 @@ export default {
                 })
             })
         },
-        userChangePassword({
-            commit
-        }, params) {
+        userChangePassword({commit}, params) {
             commit("userChangePassword", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + "user/change-password", params).then(response => {
@@ -349,9 +327,7 @@ export default {
             })
         },
 
-        getNotification({
-            commit
-        }, page = 1) {
+        getNotification({commit}, page = 1) {
             if (page === 1) {
                 commit("loadingNotification", true)
                 return new Promise((resolve, reject) => {
@@ -389,20 +365,21 @@ export default {
             }
         },
 
-        async readingNotification({
-            commit
-        }, id) {
+        readingNotification({commit}, id) {
             commit('readingNotification', true)
-            await axios.get(config.apiUrl + '/notification/read?id=' + id).then(() => {
-                commit('readingNotification', false)
-            }).catch(() => {
-                commit('readingNotification', false)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + '/notification/read?id=' + id).then(response => {
+                    commit('readingNotification', false)
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    commit('readingNotification', false)
+                })
             })
+            
         },
 
-        getToken({
-            commit
-        }, token) {
+        getToken({commit}, token) {
             commit("receivingToken", token)
         }
     }

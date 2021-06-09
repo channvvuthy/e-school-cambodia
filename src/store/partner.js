@@ -21,8 +21,29 @@ export default {
         gettingPartner(state, partners){
             state.partners = partners
         },
-        addCartToPartner(state, payload){
-            state.partners[payload.index].packages[payload.key].is_in_cart = 1
+        deleteCart(state, payload){
+            if(state.packages){
+                state.packages = state.partners.filter(item =>{
+                    item.packages.filter(pk =>{
+                        if(pk._id === payload){
+                            pk.is_in_cart = 0
+                        }
+                        return pk
+                    })
+                    return item
+                })
+            }
+        },
+        addToCart(state, payload){
+            state.packages = state.partners.filter(item =>{
+                item.packages.filter(pk =>{
+                    if(pk._id === payload){
+                        pk.is_in_cart = 1
+                    }
+                    return pk
+                })
+                return item
+            })
         },
     },
     actions: {

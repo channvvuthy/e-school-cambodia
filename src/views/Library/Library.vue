@@ -248,6 +248,8 @@ export default {
 
             this.addCart(payload).then(() =>{
                 this.getCart()
+                let myCart = document.getElementById("myCart")
+                myCart.click()
             })
         },
         addToCart(book){
@@ -285,16 +287,6 @@ export default {
     },
     created(){
         this.getLibraryBook()
-        document.addEventListener("click", (event) =>{
-            try{
-                if(event.target.parentNode.id != null && event.target.parentNode.id === `closeCart`){
-                    console.log(event.target.parentNode.id)
-                    this.getLibraryBook()
-                }
-            }catch(err){
-                console.warn(err)
-            }
-        })
     },
     watch:{
         'type':function(type){

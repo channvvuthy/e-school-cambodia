@@ -97,8 +97,10 @@
                 }
             },
             readNotification(notification){
-                this.readingNotification(notification._id)
-                this.$emit('readNotification', notification)
+                this.readingNotification(notification._id).then(response =>{
+                    this.$emit('readNotification', response.data.data)
+                })
+                
             },
             formatDate(date){
                 moment.locale('en');

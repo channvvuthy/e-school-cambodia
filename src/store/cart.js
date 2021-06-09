@@ -1,7 +1,6 @@
 import axios from "axios"
 import config from "./../config"
-import helper from "./../helper/helper"
-
+import store from "./../store"
 export default {
     namespaced: true,
 
@@ -58,6 +57,8 @@ export default {
                 axios.post(config.apiUrl + 'cart', payload).then(response =>{
                     resolve(response)
                     commit("addingCart", false)
+                    store.commit('library/addToCart', payload.id)
+
                 }).catch(errr =>{
                     reject(errr)
                     commit("addingCart", false)
@@ -92,6 +93,9 @@ export default {
                   }).then(response =>{
                     commit("deletingCart", false)
                     commit("deletedCart", payload)
+                    store.commit("partner/deleteCart", payload)
+                    store.commit('library/deleteCart', payload)
+
                     resolve(response)
                 }).catch(err =>{
                     commit("deletingCart", false)

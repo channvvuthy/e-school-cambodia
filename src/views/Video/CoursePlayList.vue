@@ -18,10 +18,10 @@
                      v-else>
                     <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)"></VideoPlaylist>
                     <div class="mx-5 mt-6">
-                        <div class="font-semibold text-base" :class="darkMode?`text-white`:`text-primary`">
+                        <div class="font-semibold text-sm" :class="darkMode?`text-white`:`text-primary`">
                             {{ video.order }}. {{ video.title }}
                         </div>
-                        <div class="flex mt-5 text-base">
+                        <div class="flex mt-5 text-sm">
                             <div class="flex mb-3">
                                 <div class="cursor-pointer"
                                      @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="flex-1">
-                <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center text-base font-medium"
+                <div  v-if="showMenu" class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center text-sm font-medium"
                      :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white`"
                 >
                     <div @click="switchMenu('video')"

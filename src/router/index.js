@@ -137,9 +137,10 @@ const routes = [
         component: () => import('../views/Profile/Profile'),
     },
     {
-        path: '/course-detail/:videoId/:/order/:courseId',
-        name: 'course-detail',
-        component: CourseDetail
+        path: '/notification-detail/:detail/',
+        name: 'notification-detail',
+        component: () => import('../views/Notification/Notification'),
+
     },
 
 

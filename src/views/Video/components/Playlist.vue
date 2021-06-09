@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-5 pt-3  h-screen overflow-y-scroll pb-60 font-khmer_os bg-cover" @scroll="onScroll">
+    <div class="ml-5 mt-3  h-screen overflow-y-scroll pb-60 font-khmer_os bg-cover text-sm" @scroll="onScroll">
         <div v-for="(list,index) in playlist.list" :key="index">
             <div class="flex justify-between items-center p-4 mb-3 rounded-md shadow mr-4"
             :class="list.order === order?darkMode?`bg-white`:`bg-gray-200`:darkMode?`bg-button text-textSecondary`:`bg-white`"
@@ -12,7 +12,7 @@
                     <div class="absolute left-0 h-1 bg-red-600 -mt-1" v-if="list.last_watch" :style="{width:`${list.last_watch.percentage}%`}"></div>
                 </div>
                 <div class="flex-1 flex flex-col justify-between">
-                    <div class="font-semibold mb-3" 
+                    <div class="font-semibold mb-3 text-sm" 
                      @click="nextVideo(list)"
                      :title="list.title"
                     :class="canWatch(list.free_watch)?`cursor-pointer ${darkMode && list.order != order?'text-white':darkMode?'text-youtube':''}`:`cursor-default ${darkMode && list.order != order?'text-white':''}`">

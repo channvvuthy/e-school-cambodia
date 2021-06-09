@@ -24,7 +24,9 @@
                                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                                 <div class="font-extralight">{{$t('1006')}}: <span class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">{{pk.price.year}}$</span></div>
                                 <div class="flex-1 flex justify-end">
-                                    <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id" :class="(pk.is_in_cart || pk.is_buy)?`invisible`:``"><CartIcon fill="#FFFFFF"></CartIcon></span>
+                                    <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id" v-if="pk.is_buy === 0">
+                                        <CartIcon fill="#FFFFFF" v-if="!pk.is_in_cart"></CartIcon>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -69,8 +71,6 @@ export default {
 
             payload.id = pk._id
             await this.addCart(payload).then(() =>{
-                let el = document.getElementById(`${pk._id}`)
-                el.classList.add('invisible')
                 this.getCart()
             })
         },

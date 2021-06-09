@@ -7,7 +7,7 @@
              @click="back()">
                 <BackIcon :width="20" :height="20" :fill="darkMode?`#D1D5DB`:`#000000`"></BackIcon>
             </div>
-            <div class="text-base font-mediums">{{$t(title)}}</div>
+            <div class="text-sm font-mediums">{{$t(title)}}</div>
         </div>
     </div>
 </template>

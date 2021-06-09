@@ -31,7 +31,7 @@
                <!-- Video -->
                 <template v-if="type === `video`">
                     <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
-                            <div v-for="(view,index) in favoritedVideo" class="cursor-pointer" :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
+                            <div v-for="(view,index) in favoritedVideo" class="cursor-pointer rounded overflow-hidden" :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
                             <div class="relative" @mouseover="hideAndShowDuration(view._id)" @mouseleave="hideAndShowDuration('')" @click="viewVideo(view)">
                                     <div class="absolute z-30 w-full h-full flex justify-center items-center">
                                         <video :src="playWhenOver(view.video)" autoplay="autoplay"
@@ -100,8 +100,11 @@
             <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)"></VideoADS>
         </div>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
-        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @shopNow="shopNow"></ViewBook>
-
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @shopNow="shopNow" @listenAudio="listenAudio"></ViewBook>
+        <LibraryAudio v-if="showAudio" :is_favorite="false"></LibraryAudio>
+        <Cart v-if="showCart" @closeCart="()=>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
+        <!-- Receipt info -->
+        <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
     </div>
 </template>
 
@@ -113,10 +116,13 @@ import CartIcon from "./../../components/CartIcon.vue"
 import FavoriteFill from "./../../components/FavoriteFill.vue";
 import helper from "./../../helper/helper"
 import BuyMsg from "./../Component/BuyMsg.vue"
+import Cart from "./../Component/Cart.vue"
+import ReceiptInfo from "./..//MyCourse/components/ReceiptInfo.vue"
 import VideoADS from "./../Video/ads/VideoADS.vue"
 import ReadingBook from "./../Library/components/book/ReadingBook.vue"
 import ViewBook from "./../Library/components/book/ViewBook.vue"
 import NewIcon from "./../../components/NewIcon.vue"
+import LibraryAudio from "./../Library/Audio.vue"
 
 import {mapState, mapActions} from "vuex"
 export default {
@@ -130,7 +136,10 @@ export default {
         CartIcon,
         ReadingBook,
         ViewBook,
-        NewIcon
+        NewIcon,
+        LibraryAudio,
+        Cart,
+        ReceiptInfo
     },
     computed:{
         ...mapState('setting', ['darkMode','isHide']),
@@ -150,7 +159,11 @@ export default {
             hideDuration: "",
             showAds: false,
             videoUrl: "",
-            reading: false
+            reading: false,
+            showAudio: false,
+            showCart: false,
+            receiptDetail:{},
+            showReceipt: false
         }
     },
     methods:{
@@ -184,6 +197,11 @@ export default {
             event.id = this.id;
             this.stopWatch(event);
         },
+         showInvoice(data){
+            this.receiptDetail = data
+            this.showReceipt = true
+            this.showCart = false
+        },
         addToCart(book){
             let payload = {}
             payload.id = book._id
@@ -213,6 +231,8 @@ export default {
 
             this.addCart(payload).then(() =>{
                 this.getCart()
+                this.showCart = true
+                
             })
         },
         closeReading(){
@@ -220,6 +240,7 @@ export default {
         },
         readingBook(){
             this.reading = true
+            this.showAudio = false
             this.close()
         },
         closeAds() {
@@ -266,6 +287,13 @@ export default {
                 })
             }
             
+        },
+        listenAudio(){
+            this.showAudio = false
+            setTimeout(()=>{
+                this.showAudio = true
+            },100)
+            this.close()
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight) {

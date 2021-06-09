@@ -5,7 +5,7 @@
         <!-- Receipt info -->
         <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
         <!-- Notification -->
-        <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}"></Notification>
+        <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}" @readNotification="readNotification($event)"></Notification>
         <div class="flex" v-if="!escapeRoute()">
             <div>
                 <!--Sidebar-->
@@ -72,6 +72,10 @@
                 this.receiptDetail = data
                 this.showReceipt = true
                 this.showCart = false
+            },
+            readNotification(data){
+                this.showNotification = false
+                this.$router.push({ name: 'notification-detail', params: { detail: data }})
             }
         }
     }

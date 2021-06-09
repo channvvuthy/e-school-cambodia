@@ -19,7 +19,7 @@
                             type="text"
                             ref="first_name"
                             :placeholder="$t('2013')"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black border border-button`:`border-b border-solid  border-gray-500`"
+                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-solid  border-gray-500`"
                             class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
                             v-model="studentInfo.first_name"
                     />
@@ -32,7 +32,7 @@
                             type="text"
                             ref="last_name"
                             :placeholder="$t('2014')"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black border border-button`:`border-b border-solid  border-gray-500`"
+                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-solid  border-gray-500`"
 
                             class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
                             v-model="studentInfo.last_name"
@@ -69,7 +69,7 @@
                            ref="phone"
                            v-model="studentInfo.phone"
                            @keypress="isNumber($event)"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black border border-button`:`border-b border-solid  border-gray-500`"
+                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-solid  border-gray-500`"
 
                            class="h-12 placeholder-gray-500 p-2 w-full focus:outline-none mb-4 pl-8"/>
                 </div>
@@ -80,7 +80,7 @@
                     <input type="password" :placeholder="$t('2010')"
                            v-model="studentInfo.password"
                            ref="password"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black border border-button`:`border-b border-solid  border-gray-500`"
+                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-solid  border-gray-500`"
 
                            class="h-12 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4 pl-8"/>
 
@@ -92,7 +92,7 @@
                     <input type="password" :placeholder="$t('2017')"
                            ref="confirm_password"
                            v-model="studentInfo.confirm_password"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black border border-button`:`border-b border-solid  border-gray-500`"
+                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-solid  border-gray-500`"
                            class="h-12 placeholder-gray-500 p-2 px-0  w-full focus:outline-none mb-4 pl-8"/>
                 </div>
             </form>

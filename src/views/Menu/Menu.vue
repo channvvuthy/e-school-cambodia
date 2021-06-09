@@ -12,52 +12,52 @@
                         <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
                     </template>
                 </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
-                    <div v-if="$route.name === 'video'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
-                    <div v-else><WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon></div>
-                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video')">
-                        {{$t('2108')}}
-                    </p>
-                    <template v-if="$route.name === 'video'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
-                    </template>
-                </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
-                    <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></LibraryIcon></div>
-                    <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
-                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'library')">
-                        {{$t('2200')}}
-                    </p>
-                    <template v-if="$route.name === 'library'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
-                    </template>
-                </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
-                    <div v-if="$route.name === 'partner'"><PartnershipFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`" :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon></div>
-                    <div v-else><PartnershipIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PartnershipIcon></div>
-                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'partner')">
-                        {{$t('1104')}}
-                    </p>
-                    <template v-if="$route.name === 'partner'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
-                    </template>
-                    
-                </div>
-                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('support')">
-                    <div v-if="$route.name === 'support'"><SupporterIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SupporterIcon></div>
-                    <div v-else><SupporterIcon :fill="darkMode?`#909090`:`#0f3c7a`"></SupporterIcon></div>
-                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'support')">
-                        {{$t('1105')}}
-                    </p>
-                    <template v-if="$route.name === 'support'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
-                    </template>
-                
-                </div>
+                <template v-if="token">
+                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
+                        <div v-if="$route.name === 'video'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
+                        <div v-else><WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon></div>
+                        <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video')">
+                            {{$t('2108')}}
+                        </p>
+                        <template v-if="$route.name === 'video'">
+                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </template>
+                    </div>
+                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
+                        <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></LibraryIcon></div>
+                        <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
+                        <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'library')">
+                            {{$t('2200')}}
+                        </p>
+                        <template v-if="$route.name === 'library'">
+                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </template>
+                    </div>
+                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
+                        <div v-if="$route.name === 'partner'"><PartnershipFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`" :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon></div>
+                        <div v-else><PartnershipIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PartnershipIcon></div>
+                        <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'partner')">
+                            {{$t('1104')}}
+                        </p>
+                        <template v-if="$route.name === 'partner'">
+                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </template>
+                    </div>
+                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('support')">
+                        <div v-if="$route.name === 'support'"><SupporterIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SupporterIcon></div>
+                        <div v-else><SupporterIcon :fill="darkMode?`#909090`:`#0f3c7a`"></SupporterIcon></div>
+                        <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'support')">
+                            {{$t('1105')}}
+                        </p>
+                        <template v-if="$route.name === 'support'">
+                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        </template>
+                    </div>
+                </template>
             </div>
-            <div class="flex justify-end">
+            <div class="flex justify-end" v-if="token">
                 <div class="flex justify-between items-end flex-1">
-                    <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}">
+                    <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}" id="myCart">
                         <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" v-if="carts.list && carts.list.length" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`">
                             <div style="margin-top:2px">
                                 {{carts.list.length}}
@@ -113,7 +113,9 @@ export default {
     },
     computed: {
         ...mapState("setting", ["localize","darkMode"]),
-        ...mapState('cart', ['carts'])
+        ...mapState('cart', ['carts']),
+        ...mapState('auth', ['token'])
+
     },
     methods: {
         ...mapActions('cart', ['getCart']),

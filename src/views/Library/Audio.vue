@@ -48,7 +48,7 @@
                     </div>
                     
                 </div>
-                <div class="ml-8 cursor-pointer">
+                <div class="ml-8 cursor-pointer" v-if="is_favorite">
                     <div v-if="details.is_favorite" @click="removeFavorite(details.book._id)"><FavoriteFill :fill="darkMode?`#E5E7EB`:`#c0272d`"/></div>
                     <div @click="addFavorite(details.book._id)" v-else>
                         <FavoriteIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`" />
@@ -120,6 +120,13 @@ export default {
         HeadphoneIcon,
         MutedIcon
         
+    },
+    props:{
+        is_favorite:{
+            default: ()=>{
+                return true
+            }
+        }
     },
     data(){
         return{

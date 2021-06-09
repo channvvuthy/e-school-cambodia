@@ -37,7 +37,7 @@
                         >
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                         </div>
-                        <p class="mt-3 ">{{my_story.user.name}}</p>
+                        <p class="mt-3 whitespace-nowrap" :title="my_story.user.name">{{cutString(my_story.user.name,15)}}</p>
                     </div>
                 </div>
             </div>
@@ -53,6 +53,7 @@
     import StoryDetail from "./StoryDetail.vue"
     import AddStory from "./AddStory.vue"
     import {mapState, mapActions} from "vuex"
+    import helper from "./../../helper/helper"
     export default{
         components: {
             AddIcon,
@@ -79,6 +80,9 @@
                     this.page ++
                     this.getStory(this.page).then(() =>{});
                 }
+            },
+            cutString(text, limit){
+                return helper.cutString(text, limit)
             },
             getStoryDetail(story,index = 0){
                 let payload = {id:story._id}

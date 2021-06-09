@@ -85,13 +85,44 @@ export default {
         gettingLibraryDetail(state, payload){
             state.loadingDetail = payload
         },
+        deleteCart(state, payload){
+            
+            if(state.libraries.list.length){
+                state.libraries.list = state.libraries.list.filter(item =>{
+                    if(item._id === payload){
+                        item.is_in_cart = 0
+                    }
+                    return item
+                })
+            }
+
+            if(state.libraries.package.length){
+                state.libraries.package = state.libraries.package.filter(item =>{
+                    if(item._id === payload){
+                        item.is_in_cart = 0
+                    }
+                    return item
+                })
+            }
+        },
         addToCart(state, payload){
-            state.libraries.list.filter(item =>{
-                if(item._id === payload){
-                    item.is_in_cart = 1
-                }
-                return item
-            })
+            try{
+                state.libraries.list = state.libraries.list.filter(item =>{
+                    if(item._id === payload){
+                        item.is_in_cart = 1
+                    }
+                    return item
+                })
+                state.libraries.package = state.libraries.package.filter(item =>{
+                    if(item._id === payload){
+                        item.is_in_cart = 1
+                    }
+                    return item
+                })
+                console.log(state.libraries.package)
+            }catch(err){
+
+            }
         }
         
     },

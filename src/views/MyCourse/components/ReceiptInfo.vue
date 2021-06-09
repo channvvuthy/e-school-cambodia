@@ -143,7 +143,7 @@
             },
             duration(duration){
                 if (duration < 12) {
-                    return "/ ខែ"
+                    return `/ ${duration} ខែ`
                 }
                 return "/ ឆ្នាំ"
             },
