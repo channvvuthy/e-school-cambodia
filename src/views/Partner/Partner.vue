@@ -31,7 +31,7 @@
                         <template v-else>
                             <div v-for="(pk, key) in partner.packages" :key="key" class="px-3 pb-3">
                                 <div v-if="key === 0">
-                                    <img :src="pk.thumbnail" class="rounded cursor-pointer match-height" @click="openWebView(pk)" :style="minHeight?{height:`${minHeight}px`}:{}">
+                                    <img :src="pk.thumbnail" class="rounded cursor-pointer match-height m-auto" @click="openWebView(pk)" :style="minHeight?{height:`${minHeight}px`}:{}">
                                 </div>
                             </div>
                             <div class="flex px-3 items-center h-14 justify-between">

@@ -30,7 +30,7 @@ export default {
         getHelp({commit}){
             commit("loadingHelp", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + "introduction").then(response => {
+                axios.get(config.apiUrl + "company/help").then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

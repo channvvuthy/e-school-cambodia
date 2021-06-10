@@ -80,7 +80,7 @@ export  default {
         },
         companyInfo(){
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'company/info').then(response => {
+                axios.get(config.apiUrl + 'company/about').then(response => {
                     resolve(response.data.data)
                 }).catch(err => {
                     reject(err)

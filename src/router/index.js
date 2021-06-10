@@ -92,8 +92,8 @@ const routes = [
         component: () => import('../views/Help/Help'),
     },
     {
-        path: '/term',
-        name: 'term',
+        path: '/policy',
+        name: 'policy',
         component: () => import('../views/Term/Term'),
     },
     {

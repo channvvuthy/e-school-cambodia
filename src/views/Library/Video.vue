@@ -3,7 +3,7 @@
         <VideoHeader></VideoHeader>
         <div class="flex mt-3 px-5">
             <div class="w-3/5">
-                <div :class="darkMode?`bg-youtube text-gray-300`:`bg-white pb-5 shadow rounded-b-xl`">
+                <div :class="darkMode?`bg-youtube text-gray-300`:`bg-white pb-5 shadow rounded-b-lg text-sm`">
                     <div class="relative" @mouseover="() => {this.fullScreenBtn = true}" @mouseleave="() =>{this.fullScreenBtn = false}">
                         <div class="flex justify-center items-center bg-black bg-opacity-70 rounded absolute top-5 left-5 cursor-pointer z-50 h-8 w-8" v-if="fullScreenBtn" @click="toggleFullScreen">
                         <div class="border border-gray-300 opacity-60 m-1" style="padding:1px;">
@@ -78,41 +78,41 @@
                                             <div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(0.25)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===0.25">&#10003;</span>0.25
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===0.25">&#10003;</span>0.25
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(0.5)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===0.5">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===0.5">&#10003;</span>
                                                     0.5
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(0.75)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===0.75">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===0.75">&#10003;</span>
                                                     0.75
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(1)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===1">&#10003;</span>
                                                     {{$t('normal')}}
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(1.25)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1.25">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===1.25">&#10003;</span>
                                                     1.25
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(1.5)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1.5">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===1.5">&#10003;</span>
                                                     1.5
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(1.75)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===1.75">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===1.75">&#10003;</span>
                                                     1.75
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
                                                     @click="playbackRate(2)">
-                                                    <span class="text-base absolute left-5" v-if="defaultSpeed ===2">&#10003;</span>
+                                                    <span class="text-sm absolute left-5" v-if="defaultSpeed ===2">&#10003;</span>
                                                     2
                                                 </div>
                                             </div>
@@ -130,13 +130,13 @@
                                             <hr class="opacity-30">
                                             <div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(1)">
-                                                    <span class="text-base absolute left-5" v-if="defaultQuality ===1">&#10003;</span>{{$t('auto')}}
+                                                    <span class="text-sm absolute left-5" v-if="defaultQuality ===1">&#10003;</span>{{$t('auto')}}
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(360)">
-                                                    <span class="text-base absolute left-5" v-if="defaultQuality ===360">&#10003;</span>360p
+                                                    <span class="text-sm absolute left-5" v-if="defaultQuality ===360">&#10003;</span>360p
                                                 </div>
                                                 <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(720)">
-                                                    <span class="text-base absolute left-5" v-if="defaultQuality ===720">&#10003;</span>720p
+                                                    <span class="text-sm absolute left-5" v-if="defaultQuality ===720">&#10003;</span>720p
                                                 </div>
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="px-5 text-base mt-5">
+                    <div class="px-5 text-sm mt-5">
                             <div>{{order + 1}}. {{videos.title}}</div>
                             <div class="mt-3 flex">
                                 <div>
@@ -168,7 +168,7 @@
             </div>
             <div class="flex-1 ml-5" :class="darkMode?`text-gray-300`:`text-black`">
                 <div>
-                    <div :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white text-primary`" class="h-12 px-5 flex items-center font-bold text-base">
+                    <div :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white text-primary`" class="h-12 px-5 flex items-center font-bold text-sm">
                         <span>{{$t('more_video')}}</span>
                     </div>
                 </div>
@@ -176,7 +176,7 @@
                     <div v-for="(list, index) in details.list" :key="index" class="text-sm cursor-pointer" @click="nextVideo(list, index)">
                         <div class="flex rounded-md p-3" :class="darkMode?`${order === index?`bg-white text-black`:`bg-secondary`} mb-3`:`${order  === index?`bg-gray-300`:`bg-white`} shadow-md mb-3`">
                             <div class="relative w-2/5 mr-3 cursor-pointer relative">
-                                <img :src="list.thumbnail">
+                                <img :src="list.thumbnail" class="rounded-md">
                                 <div class="absolute h-1 bg-red-600 bottom-0 left-0" v-if="list.last_watch"  :style="{width:`${list.last_watch.percentage}%`}"></div>
                             </div>
                             <div class="flex flex-col justify-between py-2">

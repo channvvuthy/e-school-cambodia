@@ -6,6 +6,8 @@
         <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
         <!-- Notification -->
         <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}" @readNotification="readNotification($event)"></Notification>
+        <!-- NotificationDetail -->
+        <NotificationDetail v-if="showNotificationDetail" @closeNotificationDetail="closeNotificationDetail"></NotificationDetail>
         <div class="flex" v-if="!escapeRoute()">
             <div>
                 <!--Sidebar-->
@@ -29,6 +31,7 @@
     import Menu from "./views/Menu/Menu.vue"
     import Cart from "./views/Component/Cart.vue"
     import Notification from "./components/Notification.vue"
+    import NotificationDetail from "./components/NotificationDetail.vue"
     import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue"
     import {mapState} from "vuex"
     export default{
@@ -37,7 +40,8 @@
                 showCart:false,
                 showNotification: false,
                 showReceipt: false,
-                receiptDetail:{}
+                receiptDetail:{},
+                showNotificationDetail: false
             }
         },
         components: {
@@ -45,14 +49,17 @@
             Menu,
             Cart,
             Notification,
-            ReceiptInfo
+            ReceiptInfo,
+            NotificationDetail
         },
         computed: {
             ...mapState('setting', ['isHide', 'darkMode'])
         },
         methods: {
             hideMenu(){
-                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' || this.$route.name === 'favorite'){
+                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' 
+                || this.$route.name === 'policy'
+                || this.$route.name === 'favorite' || this.$route.name === 'about' || this.$route.name === 'help'){
                     return true
                 }
                 return false
@@ -73,9 +80,12 @@
                 this.showReceipt = true
                 this.showCart = false
             },
-            readNotification(data){
+            readNotification(){
                 this.showNotification = false
-                this.$router.push({ name: 'notification-detail', params: { detail: data }})
+                this.showNotificationDetail = true
+            },
+            closeNotificationDetail(){
+                this.showNotificationDetail = false
             }
         }
     }

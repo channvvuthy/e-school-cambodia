@@ -17,7 +17,7 @@ export default {
     props:{
         msg:{
             default:()=>{
-                return 'please_buy_this_class_first'
+                return '4008'
             }
         }
     },

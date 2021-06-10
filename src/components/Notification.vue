@@ -1,6 +1,6 @@
 <template>
     <div class="fixed inset-0 overflow-y-auto w-full h-full bg-black bg-opacity-90 flex items-center justify-center" style="z-index: 60">
-        <div class="rounded-xl shadow-xl w-96" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+        <div class="rounded-xl shadow-xl max-w-lg min-w-96" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
             <div class="flex justify-between items-center p-4 border-b text-sm font-khmer_os" :class="darkMode?`border-button`:`border-bordergray-200`">
                 <div class="text-left flex-1 text-center font-semibold text-sm">
                     {{$t('1012')}}
@@ -9,7 +9,7 @@
                     <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                 </div>
             </div>
-            <div class="body mt-5 flex-cols justify-start items-center font-khmer_os text-13px mb-5 max-h-100 overflow-y-scroll" @scroll="onScroll">
+            <div class="body mt-5 flex-cols justify-start items-center font-khmer_os text-13px overflow-y-scroll" @scroll="onScroll" style="min-height:24rem;max-height:85vh">
                 <div v-if="loadingNotification"
                         class="flex justify-center items-center h-screen">
                     <div class="relative" :class="window.width <= '1366'?' -top-20':' -top-56'">
@@ -20,7 +20,7 @@
                     <div v-if="notifications && notifications.length">
                         <ul>
                             <li v-for="(notification, key) in notifications" :key="key"
-                                class="flex justify-start items-center px-4 py-2 cursor-pointer" :class="darkMode?`border-button ${key<(notifications.length - 1)?`border-b`:``}`:`border-gray-200 ${key<(notifications.length - 1)?`border-b`:``}`"
+                                class="flex justify-start items-center px-4 h-20 cursor-pointer" :class="darkMode?`border-button ${key<(notifications.length - 1)?`border-b`:``}`:`border-gray-200 ${key<(notifications.length - 1)?`border-b`:``}`"
                                 @click="readNotification(notification)">
                                 <div class="h-12 w-12 rounded-full bg-primary flex justify-center items-center mr-3">
                                     <div v-if="notification.type === 1">
@@ -31,8 +31,8 @@
                                     <div class="font-semibold mb-1">{{cutString(notification.title, 25)}}</div>
                                     <div>{{cutString(notification.content.text, 40)}}</div>
                                 </div>
-                                <div class="text-right relative top-5 opacity-50 text-xs">
-                                    {{formatDate(notification.date)}}
+                                <div class="text-right opacity-50 text-xs flex flex-col items-end justify-end ml-10 h-full">
+                                   <span> {{formatDate(notification.date)}}</span>
                                 </div>
                             </li>
                         </ul>
@@ -104,7 +104,7 @@
             },
             formatDate(date){
                 moment.locale('en');
-                return moment(date).format('DD-MM-YYYY h:mm');
+                return moment(date).format('DD-MM-YYYY h:mm a');
             },
             closeNotification(){
                 this.$emit("closeNotification")

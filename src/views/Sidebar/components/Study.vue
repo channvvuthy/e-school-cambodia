@@ -5,17 +5,23 @@
         </div>
         <div class="px-3 my-3 mt-5">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><MyCourseIcon :fill="darkMode?`#909090`:`#0f3c7a`"></MyCourseIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('my-course')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `my-course`?`bg-byline`:`bg-button`}`:`${$route.name === `my-course`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <MyCourseIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `my-course`"></MyCourseIcon>
+                            <MyCourseIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></MyCourseIcon>
+                        </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1107')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('my-library')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `my-library`?`bg-byline`:`bg-button`}`:`${$route.name === `my-library`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <LibraryThinIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `my-library`"></LibraryThinIcon>
+                            <LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></LibraryThinIcon>
+                        </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1108')}}

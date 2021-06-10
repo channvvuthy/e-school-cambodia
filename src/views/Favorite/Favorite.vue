@@ -2,7 +2,7 @@
     <div>
        <eHeader :title="title"></eHeader>
        <div class="mt-3">
-           <div class="px-5 pt-7 shadow-md" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
+           <div class="px-5 pt-7 shadow-md text-sm" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
                 <!-- Tab -->
                 <div class="mt-7 px-3">
                     <div class="flex justify-start">
@@ -68,7 +68,7 @@
                 </template>
                 <!-- Book -->
                 <template v-else>
-                    <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
+                    <div class="grid gap-4" :class="isHide?'md:grid-cols-3 2xl:grid-cols-4':'md:grid-cols-2 2xl:grid-cols-3'">
                         <div v-for="(book, index) in favoritedBook" :key="index">
                             <div class="flex rounded-xl shadow p-4 relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                                 <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
@@ -100,7 +100,7 @@
             <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)"></VideoADS>
         </div>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
-        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @shopNow="shopNow" @listenAudio="listenAudio"></ViewBook>
+        <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @shopNow="shopNow" @listenAudio="listenAudio" @listVideo="listVideo"></ViewBook>
         <LibraryAudio v-if="showAudio" :is_favorite="false"></LibraryAudio>
         <Cart v-if="showCart" @closeCart="()=>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
         <!-- Receipt info -->
@@ -237,6 +237,10 @@ export default {
         },
         closeReading(){
             this.reading = false
+        },
+        listVideo(){
+            this.$router.push('library-video')
+            this.close()
         },
         readingBook(){
             this.reading = true

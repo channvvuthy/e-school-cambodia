@@ -7,7 +7,6 @@
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <!-- <img src="/icon/icon/chat.png" class="h-5 m-auto"> -->
                         <div><ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ChatIcon></div>
 
                     </div>
@@ -15,30 +14,37 @@
                         {{$t('1128')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <!-- <img src="/icon/icon/policy.png" class="h-5 m-auto"> -->
-                        <div><PolicyIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PolicyIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('policy')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `policy`?`bg-byline`:`bg-button`}`:`${$route.name === `policy`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <PolicyIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `policy`"></PolicyIcon>
+                            <PolicyIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></PolicyIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1129')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <!-- <img src="/icon/icon/help.png" class="h-5 m-auto"> -->
-                        <div><HelpIcon :fill="darkMode?`#909090`:`#0f3c7a`"></HelpIcon></div>
+                <div class="text-center flex flex-col justify-center items-center"  @click="goTo('help')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `help`?`bg-byline`:`bg-button`}`:`${$route.name === `help`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <HelpIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `help`"></HelpIcon>
+                            <HelpIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></HelpIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1130')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <!-- <img src="/icon/icon/about.png" class="h-5 m-auto"> -->
-                        <div><AboutIcon :fill="darkMode?`#909090`:`#0f3c7a`"></AboutIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('about')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `about`?`bg-byline`:`bg-button`}`:`${$route.name === `about`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <AboutIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `about`"></AboutIcon>
+                            <AboutIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></AboutIcon>
+
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -47,7 +53,6 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <!-- <img src="/icon/icon/share.png" class="h-5 m-auto"> -->
                         <div><ShareIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ShareIcon></div>
 
                     </div>
@@ -57,7 +62,6 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="setDarkMode(darkMode)">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <!-- <img src="/icon/icon/mode.png" class="h-5 m-auto"> -->
                         <div><ModeIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ModeIcon></div>
 
                     </div>
@@ -113,7 +117,10 @@
             setDarkMode(mode){
                 let darkMode = !mode
                 this.$store.commit('setting/setDarkMode',darkMode)
-            }
+            },
+            goTo(page) {
+                this.$router.push({ name: page });
+            },
         }
     }
 </script>

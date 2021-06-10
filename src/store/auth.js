@@ -22,6 +22,7 @@ export default {
         userChangingPassword: false,
         stProfile: studentProfileData,
         notifications: [],
+        notificationDetail: {},
         loadingNotification: false,
         loadingNotificationPagination: false,
         readingNotice: false,
@@ -36,6 +37,9 @@ export default {
     },
 
     mutations: {
+        getNotificationDetail(state, payload){
+            state.notificationDetail = payload
+        },
         addedStory(){
            
         },
@@ -370,6 +374,7 @@ export default {
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + '/notification/read?id=' + id).then(response => {
                     commit('readingNotification', false)
+                    commit("getNotificationDetail", response.data.data)
                     resolve(response)
                 }).catch(err => {
                     reject(err)
