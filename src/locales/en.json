@@ -36,7 +36,7 @@
   "1120": "Me & Privacy",
   "1121": "Profile",
   "1122": "Change Password",
-  "1123": "Guardian",
+  "1123": "Parents",
   "1124": "Insurance",
   "1125": "Receipt",
   "1126": "Logout",
@@ -190,5 +190,6 @@
   "invoce_no":"Invoice Number",
   "total":"Total",
   "payment_method":"Payment through agency or financial program",
-  "reset_password":"Please enter your new Password"
+  "reset_password":"Please enter your new Password",
+  "total_price":"Total price"
 }

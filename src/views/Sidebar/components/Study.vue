@@ -38,42 +38,57 @@
                         {{$t('1109')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><DownloadIcon :fill="darkMode?`#909090`:`#0f3c7a`"></DownloadIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('download')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `download`?`bg-byline`:`bg-button`}`:`${$route.name === `download`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <DownloadIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `download`"></DownloadIcon>
+                            <DownloadIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></DownloadIcon>
+                        </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1110')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><NetworkIcon :fill="darkMode?`#909090`:`#0f3c7a`"></NetworkIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('network')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `network`?`bg-byline`:`bg-button`}`:`${$route.name === `network`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <NetworkIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `network`"></NetworkIcon>
+                            <NetworkIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></NetworkIcon>
+                        </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('4120')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><DocumentIcon :fill="darkMode?`#909090`:`#0f3c7a`"></DocumentIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('document')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `document`?`bg-byline`:`bg-button`}`:`${$route.name === `document`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <DocumentIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `document`"></DocumentIcon>
+                            <DocumentIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></DocumentIcon>
+                        </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1112')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><GalleryIcon :fill="darkMode?`#909090`:`#0f3c7a`"></GalleryIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('gallery')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `gallery`?`bg-byline`:`bg-button`}`:`${$route.name === `gallery`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <GalleryIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `gallery`"></GalleryIcon>
+                            <GalleryIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></GalleryIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1113')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><CertificateIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24"></CertificateIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('certificate')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `certificate`?`bg-byline`:`bg-button`}`:`${$route.name === `certificate`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <CertificateIcon :fill="darkMode?`#212121`:`#FFFFFF`" :size="24" v-if="$route.name === `certificate`"></CertificateIcon>
+                            <CertificateIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24" v-else></CertificateIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">

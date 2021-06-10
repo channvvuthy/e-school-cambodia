@@ -1,6 +1,7 @@
 import config from "./../config"
 import axios from "axios"
 import err from "./../helper/err"
+import helper from "./../helper/helper"
 
 export default {
     namespaced: true,
@@ -30,6 +31,11 @@ export default {
         },
         removingReceipt(state, status){
             state.deleting = status
+        },
+        paginationReceipt(state, payload){
+            for(let i = 0; i < payload.length; i++){
+                state.receipts.push(payload[i])
+            }
         }
     },
 
@@ -80,18 +86,19 @@ export default {
             })
         },
 
-        getReceipt({commit}, status = `unpaid`){
+        getReceipt({commit}, payload){
             commit("takingReceipt", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'invoice?status=' + status).then(response => {
-
+                axios.get(config.apiUrl + `invoice?${helper.q(payload)}`).then(response => {
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
                     }
-
-
                     commit("takingReceipt", false)
-                    commit('gettingReceipt', response.data.data)
+                    if(payload.p > 1){
+                        commit('paginationReceipt', response.data.data)
+                    }else{
+                        commit('gettingReceipt', response.data.data)
+                    }
                     resolve(response)
                 }).catch(err => {
                     commit("takingReceipt", false)

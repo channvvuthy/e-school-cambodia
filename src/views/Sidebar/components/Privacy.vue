@@ -7,7 +7,6 @@
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <!-- <img src="/icon/icon/profile.png" class="h-5 m-auto"> -->
                         <div><ProfileIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ProfileIcon></div>
 
                     </div>
@@ -17,7 +16,6 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <!-- <img src="/icon/icon/change-password.png" class="h-5 m-auto"> -->
                         <div><LockIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LockIcon></div>
 
                     </div>
@@ -25,30 +23,36 @@
                         {{$t('1122')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <!-- <img src="/icon/icon/parent.png" class="h-5 m-auto"> -->
-                        <div><GuardianIcon :fill="darkMode?`#909090`:`#0f3c7a`"></GuardianIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('parent')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `parent`?`bg-byline`:`bg-button`}`:`${$route.name === `parent`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <GuardianIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `parent`"></GuardianIcon>
+                            <GuardianIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></GuardianIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1123')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <!-- <img src="/icon/icon/insurance.png" class="h-5 m-auto">InsuranceIcon -->
-                        <div><InsuranceIcon :fill="darkMode?`#909090`:`#0f3c7a`"></InsuranceIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('insurance')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `insurance`?`bg-byline`:`bg-button`}`:`${$route.name === `insurance`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <InsuranceIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `insurance`"></InsuranceIcon>
+                            <InsuranceIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></InsuranceIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
                         {{$t('1124')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <!-- <img src="/icon/icon/invoice.png" class="h-5 m-auto"> -->
-                        <div><InvoiceIcon :fill="darkMode?`#909090`:`#0f3c7a`"></InvoiceIcon></div>
+                <div class="text-center flex flex-col justify-center items-center"  @click="goTo('invoice')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `invoice`?`bg-byline`:`bg-button`}`:`${$route.name === `invoice`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <InvoiceIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `invoice`"></InvoiceIcon>
+                            <InvoiceIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></InvoiceIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -57,7 +61,6 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <!-- <img src="/icon/icon/logout.png" class="h-5 m-auto"> -->
                         <div><LogoutIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LogoutIcon></div>
 
                     </div>
@@ -75,7 +78,7 @@
     import LockIcon from "./../../../components/LockIcon"
     import GuardianIcon from "./../../../components/GuardianIcon"
     import InsuranceIcon from "./../../../components/InsuranceIcon"
-    import InvoiceIcon from "./../../../components/InvoiceIcon"
+    import InvoiceIcon from "./../../../components/BillInvoiceIcon.vue"
     import LogoutIcon from "./../../../components/LogoutIcon"
     
     export default{
@@ -97,7 +100,10 @@
                     this.$forceUpdate()
                     this.$router.push('/')
                 })
-            }
+            },
+            goTo(page) {
+                this.$router.push({ name: page });
+            },
         }
     }
 </script>

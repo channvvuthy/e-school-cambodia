@@ -1,7 +1,7 @@
 <template>
    <div>
        <eHeader></eHeader>
-        <div class="h-screen  p-5 font-siemreap" :class="darkMode?`bg-youtube text-gray-300`:`bg-transparent`">
+        <div class="h-screen overflow-y-scroll pb-40  p-5 font-siemreap" :class="darkMode?`bg-youtube text-gray-300`:`bg-transparent`">
             <div v-if="loadingHelp" class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
                     <loading></loading>

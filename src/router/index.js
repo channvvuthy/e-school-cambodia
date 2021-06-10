@@ -97,8 +97,8 @@ const routes = [
         component: () => import('../views/Term/Term'),
     },
     {
-        path: '/guardian',
-        name: 'guardian',
+        path: '/parent',
+        name: 'parent',
         component: () => import('../views/Guardian/Guardian'),
     },
     {

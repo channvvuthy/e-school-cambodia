@@ -1,53 +1,70 @@
 <template>
-    <div class="bg-white px-5 h-screen py-5">
-        <div v-if="receipts && receipts.length<=0" class="flex justify-center h-screen">
-            <img src="/icon/Empty/Empty.svg" class="w-64  mb-5 relative -top-14"/>
-        </div>
-        <div v-if="takingReceipt" class="flex justify-center items-center h-screen relative -top-5">
-            <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
-                <loading></loading>
-            </h1>
-        </div>
-        <div class="overflow-y-scroll h-screen" v-else>
-            <div class="grid gap-4  mb-40" style="max-height:100vh"
-                 :class="window.width <=1366?'grid-cols-3':window.width <=1440?'grid-cols-3':'grid-cols-4'"
-            >
-                <div v-for="(receipt,key) in receipts" :key="key">
-                    <div class="flex rounded border border-gray-300 p-3 items-center relative">
-                        <div class="flex flex-1 z-40  cursor-pointer" @click="viewReceipt(receipt)">
-                            <div class="mr-3">
-                                <InvoiceIcon size="40" :fill="receipt.status !==1?'#000000':'#34D399'"></InvoiceIcon>
-                            </div>
-                            <div class="cursor-pointer">
-                                <div>{{receipt.receipt}}</div>
-                                <div class="text-13px text-gray-500">{{formatDate(receipt.date)}}</div>
+    <div>
+        <eHeader></eHeader>
+        <div class="px-5 h-screen py-5 overflow-y-scroll pb-40" :class="darkMode?`bg-youtube text-gray-300`:``" @scroll="onScroll">
+            <div v-if="receipts && receipts.length<=0" class="flex justify-center h-screen">
+                <img src="/icon/Empty/Empty.svg" class="w-64  mb-5 relative -top-14"/>
+            </div>
+            <div v-if="takingReceipt" class="flex justify-center items-center h-screen relative -top-5">
+                <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
+                    <loading></loading>
+                </h1>
+            </div>
+            <div v-else>
+                <div class="grid gap-4" :class="isHide?`md:grid-cols-2 2xl:grid-cols-2`:`md:grid-cols-2 2xl:grid-cols-2`">
+                    <div v-for="(receipt,key) in receipts" :key="key" :class="darkMode?`bg-secondary rounded-xl py-5`:`bg-white rounded-xl py-5 shadow-md`">
+                        <div class="flex items-center px-7">
+                            <div class="flex flex-1 z-40  cursor-pointer" @click="viewReceipt(receipt)">
+                                <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center" :class="darkMode?`bg-primary`:`bg-softGray`">
+                                    <InvoiceIcon size="40" :fill="darkMode?`#FFFFFF`:`#0f3c7a`"></InvoiceIcon>
+                                </div>
+                                <div class="py-3">
+                                    <div class="flex justify-between items-center">
+                                        <div class="w-24">{{$t('invoce_no')}}</div>
+                                        <div class="w-5 text-center">:</div>
+                                        <div class="flex-1 text-leff font-semibold">{{receipt._id}}</div>
+                                    </div>
+                                    <div class="h-3"></div>
+                                    <div class="flex justify-between items-center">
+                                        <div class="w-24">{{$t('2308')}}</div>
+                                        <div class="w-5 text-center">:</div>
+                                        <div class="flex-1 text-left font-semibold">{{formatDate(receipt.date)}}</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="absolute right-5 flex z-50">
-                            <div class="font-semibold mr-2">${{receipt.amount}}</div>
-                            <div class="cursor-pointer" style="margin-top:3px;" @click="removeReceipt(receipt._id)"
-                                 v-if="receipt.status !==1">
-                                <DeleteIcon></DeleteIcon>
+                        <div class="px-5 my-4">
+                            <div class="border-b-2 border-dashed w-full h-1" :class="darkMode?`border-gray-500`:``"></div>
+                        </div>
+                        <div class="flex justify-between px-5">
+                            <div class="flex-1">
+                                <div class="cursor-pointer" style="margin-top:3px;" @click="removeReceipt(receipt._id)"
+                                    v-if="receipt.status !==1">
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div>{{$t('total_price')}} : <span class="text-heart font-semibold ml-5">${{receipt.amount}}</span></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <ReceiptInfo v-if="showInfo" :receiptDetail="receiptDetail" @closeInfo="closeInfo"
-                     :message="message" :success="success"></ReceiptInfo>
-        <ConfirmDelete v-if="showConfirm" @closeMessage="closeMessage"
-                       @ConfirmDeleteCart="ConfirmDelete"></ConfirmDelete>
+            <ReceiptInfo v-if="showInfo" :receiptDetail="receiptDetail" @closeInfo="closeInfo"
+                        :message="message" :success="success"></ReceiptInfo>
+            <ConfirmDelete v-if="showConfirm" @cancelModal="closeMessage" @yes="ConfirmDelete" :msg="msg"></ConfirmDelete>
+            </div>
     </div>
 </template>
 <script>
     import {mapActions, mapState} from "vuex"
-    import InvoiceIcon from "./../../components/InvoiceIcon"
+    import InvoiceIcon from "./../../components/BillInvoiceIcon.vue"
     import DeleteIcon from "./../MyCourse/components/DeleteIcon"
     import ReceiptInfo from "./../MyCourse/components/ReceiptInfo"
-    import ConfirmDelete from "./../MyCourse/components/ConfirmDelete"
+    import ConfirmDelete from "./../Component/BuyMsg.vue"
     import moment from "moment"
     import Loading from "./../../components/Loading"
+    import eHeader from "./../Video/components/Header.vue"
     export default{
         name: "Invoice",
         components: {
@@ -55,7 +72,8 @@
             DeleteIcon,
             ReceiptInfo,
             ConfirmDelete,
-            Loading
+            Loading,
+            eHeader
         },
         data(){
             return {
@@ -66,13 +84,16 @@
                 showConfirm: false,
                 receiptId: "",
                 showInfo: false,
-                message: "ពត៍មានបង់ប្រាក់",
                 active: 1,
                 success: false,
+                msg: "delete",
+                page: 1,
+                enableScroll: true
             }
         },
         computed: {
             ...mapState('receipt', ['receipts', 'takingReceipt', 'receiptDetail', 'loadingReceipt']),
+            ...mapState('setting', ['darkMode','isHide'])
         },
         destroyed() {
             window.removeEventListener('resize', this.handleResize);
@@ -116,13 +137,33 @@
                 if (!date) {
                     return
                 }
-                return moment(date).format("DD-MM-YYY h:mm")
-            }
+                return moment(date).format("DD-MM-YYYY")
+            },
+            onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+                if (scrollTop + clientHeight >= (scrollHeight - 2)) {
+                    this.page ++ 
+
+                    let payload = {}
+                    payload.p = this.page
+                    payload.type = 'all'
+
+                    if(this.enableScroll){
+                        this.getReceipt(payload).then(res =>{
+                            if(res.data.data.length <= 0){
+                                this.enableScroll = false
+                            }
+                        })
+                    }
+                }
+        },
         },
         created(){
             window.addEventListener('resize', this.handleResize);
             this.handleResize();
-            this.getReceipt(0)
+            this.getReceipt({
+                type: 'all',
+                p: this.page
+            })
         }
 
     }
