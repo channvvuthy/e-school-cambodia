@@ -42,7 +42,8 @@
                             <span>{{$t('2209')}}</span>
                         </button>
                         <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg whitespace-nowrap" @click="shopNow" v-if="details.price.year">
-                            <span>{{$t('2206')}}</span>
+                            <span v-if="details.is_buy === 1">{{$t('renewal')}}</span>
+                            <span v-else>{{$t('2206')}}</span>
                         </button>
                     </div>
                     

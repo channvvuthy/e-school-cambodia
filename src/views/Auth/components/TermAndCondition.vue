@@ -1,31 +1,34 @@
 <template>
-    <div class="fixed z-10 inset-0 overflow-y-auto">
-        <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 " :class="darkMode?`bg-youtube`:`bg-gray-500 opacity-75`"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="w-2/5 inline-block align-bottom bg-white rounded-xl overflow-hidden shadow-xl transform transition-all  sm:align-middle px-5 pb-5"
-                 role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                <div class="bg-white" @click="closeTermAndCondition">
-                    <div v-if="loadingTerm" class="p-5">
-                        <img src="ajax-loader.gif" class="m-auto"/>
+    <div class="fixed flex items-center justify-center z-50 w-full h-full top-0 left-0 bg-black bg-opacity-90">
+            <div class="w-2/5">
+                <div @click="closeTermAndCondition"  :class="darkMode?`bg-secondary text-gray-400`:`bg-gray-100 text-youtube border-t`" class="p-5 rounded-xl relative shadow-md">
+                    <div class="absolute top-3 right-3 cursor-pointer" @click="closeTermAndCondition"> <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`" :width="20"></CloseIcon></div>
+                    <div v-if="loadingTerm" class="p-5 flex items-center justify-center h-85">
+                        <div class="loader"></div>
                     </div>
                     <div v-else style="max-height: 80vh; overflow-y: scroll">
-                        <div v-html="termAndCondition" @click="closeTermAndCondition"></div>
+                        <div v-html="term"></div>
                     </div>
                 </div>
-                <hr>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import CloseIcon from "./../../../components/CloseIcon.vue"
     import {mapActions, mapState} from "vuex"
 
     export default{
         name: "TermAndCondition",
+        components:{
+            CloseIcon
+        },
+        data(){
+            return{
+                term: ""
+            }
+        },
         props: {
             size: {
                 type: Number,
@@ -41,37 +44,48 @@
         },
 
         created(){
-            this.getTerm()
+            this.getTerm().then(response =>{
+                let str = response.split('</section>')[0]
+                str = str.substring(str.indexOf('login-signup">'))
+                str = str.replace('login-signup">','')
+                this.term = str
+            })
         },
-
         methods: {
             ...mapActions('view', ['getTerm']),
 
-            closeTermAndCondition(e){
-                e.preventDefault()
-                if (e.target.tagName === "A") {
-                    this.$emit("closeTermAndCondition")
-                }
+            closeTermAndCondition(){
+                this.$emit("closeTermAndCondition")
             }
         }
     }
 </script>
 
-<style scoped>
-    body {
-        scrollbar-3dlight-color: #000000;
-        scrollbar-arrow-color: #ffffff;
-        scrollbar-darkshadow-color: #000000;
-        scrollbar-face-color: #000000;
-        scrollbar-highlight-color: #ffffff;
-        scrollbar-shadow-color: #ffffff;
-        scrollbar-track-color: #000000;
+<style lang="scss">
+    h3 {
+        font-size: 1.2em;
+        margin: 5px 0px 15px 0px;
+        font-weight: 800;
+        + {
+            p {
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+    ol {
+        list-style-type: decimal !important;
+        padding: 20px;
+        li {
+            font-weight: bold;
+            p {
+                text-indent: 20px;
+                margin:10px 0px;
+                font-size:12px;
+                font-weight: normal;
+            }
+        }
     }
 
-    ._status_bar > a {
-        position: initial !important;
-    }
-    .login-signup {
-        margin-top: 45px !important;
-    }
+
 </style>

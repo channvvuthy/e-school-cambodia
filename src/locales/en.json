@@ -195,5 +195,6 @@
   "choose_quality":"Please choose the quality of video",
   "download_video_success":"Video has been downloaded successfully",
   "download_problem":"Download problem, please try again",
-  "date_expired":"Date expired"
+  "date_expired":"Date expired",
+  "renewal":"Renewal"
 }

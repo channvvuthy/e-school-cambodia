@@ -40,7 +40,7 @@
                     <Membership @getDetail="getPackage($event)"></Membership>
                 </div>
             </div>
-            <div class="border-t border-dashed w-full my-10" :class="darkMode?`border-button`:`border-gray-300`"></div>
+            <div class="border-t border-dashed w-full my-10" :class="darkMode?`border-button`:`border-gray-300`" v-if="libraries.package && libraries.package.length"></div>
             <!-- Loading -->
             <div class="px-5" v-if="loading">
                 <Loading></Loading>
