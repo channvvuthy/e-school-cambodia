@@ -22,10 +22,10 @@
             <div class="text-center flex flex-col justify-center items-center bg-white text-white relative pt-5" @mouseover="()=>{this.showToolbar = true}" @mouseout="()=>{this.showToolbar = false}">
                 <div class="w-full flex flex-col justify-center items-center bottom-10 left-0 px-20 z-50 absolute z-50" :class="showToolbar?`visible`:`invisible`">
                     <div class="w-full py-4 bg-primary rounded-full flex items-center justify-between px-8 shadow">
-                        <div class="transform rotate-90" :class="pageNum <=1 ?`opacity-50`:`cursor-pointer`" @click="onPrevPage()">
+                        <div class="transform rotate-90 cursor-pointer" @click="onPrevPage()">
                             <ChevronIcon fill="#ffffff"></ChevronIcon>
                         </div>
-                        <div class="flex-1 flex justify-center items-center relative cursor-pointer" @click="showLesson">
+                        <div class="flex-1 flex justify-center items-center relative cursor-pointer" @click="showLesson(true)">
                             <div class="absolute w-7 h-7 rounded-full bg-primary -top-7">
                                 <div class="transform rotate-180" style="margin-right:3.5px;margin-top:3px;">
                                     <ChevronIcon fill="#ffffff" :size="20"></ChevronIcon>
@@ -33,20 +33,20 @@
                             </div>
                             <ReadingBookIcon fill="#ffffff"></ReadingBookIcon>
                         </div>
-                        <div class="transform -rotate-90"  :class="pageNum >= totalPage ?`opacity-50`:`cursor-pointer`" @click="onNextPage()">
+                        <div class="transform -rotate-90 cursor-pointer"  @click="onNextPage()">
                             <ChevronIcon fill="#ffffff"></ChevronIcon>
                         </div>
                     </div>
                 </div>
                 <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen">                    
-                    <canvas id="convas"></canvas>
+                    <div id="pdf-viewer"></div>
                 </div>
             </div>
             <!-- List -->
             <div class="absolute h-full bg-white top-0 left-0 z-50 shadow" :class="showList?`w-full`:`w-0 overflow-hidden`">
                 <!-- Header -->
                 <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary text-sm">
-                    <div class="transform rotate-90 cursor-pointer mr-5" @click="showLesson"><ChevronIcon fill="#ffffff"></ChevronIcon></div>
+                    <div class="transform rotate-90 cursor-pointer mr-5" @click="showLesson(false)"><ChevronIcon fill="#ffffff"></ChevronIcon></div>
                     <div class="flex-1 text-left">{{mainTitle}}</div>
                 </div>
                 <!-- List -->
@@ -94,7 +94,7 @@ export default {
             pageNum: 1,
             pageRendering: false,
             pageNumPending: null,
-            scale: 2,
+            scale: 1,
             canvas: null,
             ctx: null,
             order: 0,
@@ -113,33 +113,12 @@ export default {
            closeReading(){
             this.$emit("closeReading")
         },
-        renderPage(num) {
-            this.pageRendering = true;
-            // Using promise to fetch the page
-            this.pdfDoc.getPage(num).then(page=> {
-                this.canvas = document.getElementById('convas');
-                this.ctx = this.canvas.getContext('2d');
-                var viewport = page.getViewport(this.scale);
-                this.canvas.height = viewport.height;
-                this.canvas.width = viewport.width;
-                // this.canvas.style.width = "100%";
-                this.canvas.style.height = "100%";
-                // Render PDF page into canvas context
-                var renderContext = {
-                    canvasContext: this.ctx,
-                    viewport: viewport
-                };
-                var renderTask = page.render(renderContext);
-
-                // Wait for rendering to finish
-                renderTask.promise.then(()=> {
-                    this.pageRendering = false;
-                    if (this.pageNumPending !== null) {
-                        // New page rendering is pending
-                        this.renderPage(this.pageNumPending);
-                        this.pageNumPending = null;
-                    }
-                });
+        renderPage(pageNumber, canvas) {
+            this.pdfDoc.getPage(pageNumber).then(page=> {
+                let viewport = page.getViewport(this.scale);
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;          
+                page.render({canvasContext: canvas.getContext('2d'), viewport: viewport});
             });
         },
         queueRenderPage(num) {
@@ -150,18 +129,16 @@ export default {
             }
         },
         onPrevPage() {
-            if (this.pageNum <= 1) {
-                return;
+           if(this.order > 0){
+                this.order --
+                this.changeChapter(this.details.list[this.order],this.order)
             }
-            this.pageNum--;
-            this.queueRenderPage(this.pageNum);
         },
         onNextPage() {
-            if (this.pageNum >= this.pdfDoc.numPages) {
-                return;
+            if(this.order < this.details.list.length){
+                this.order ++
+                this.changeChapter(this.details.list[this.order],this.order)
             }
-            this.pageNum++;
-            this.queueRenderPage(this.pageNum);
         },
         openFullscreen() {
             var elem = document.getElementById("fullScreen");
@@ -176,8 +153,8 @@ export default {
         hideTollbar(){
             this.showToolbar = false
         },
-        showLesson(){
-            this.showList = !this.showList
+        showLesson(type = false){
+            this.showList = type
         },
         canRead(book){
             if(this.details.is_buy || book.free_watch){
@@ -189,7 +166,7 @@ export default {
             if(this.canRead(book)){
                 this.pdfUrl = book.filename
                 this.title = book.title
-                this.showLesson()
+                this.showLesson(false)
                 this.order = index
                 this.initialPdf()
             }
@@ -199,7 +176,6 @@ export default {
        
             if(this.readingPdf !==''){
                 this.order = this.readingPdf.order
-                // this.pageNum = this.readingPdf.pageNum
             }
 
             let defaultPdf = this.details.list[this.order]
@@ -208,11 +184,16 @@ export default {
         },
         initialPdf(){
             this.loadingPdf = true
-            pdfjsLib.getDocument(this.pdfUrl).promise.then(pdfDoc_=> {
-                this.pdfDoc = pdfDoc_;
-                // Initial/first page rendering
-                this.totalPage = pdfDoc_.numPages;
-                this.renderPage(this.pageNum);
+            pdfjsLib.getDocument(this.pdfUrl).promise.then(pdfDoc=> {
+                this.pdfDoc = pdfDoc
+                let viewer = document.getElementById('pdf-viewer');
+
+                for(let page = 1; page <= pdfDoc.numPages; page++) {
+                    let canvas = document.createElement("canvas");    
+                    canvas.className = 'pdf-page-canvas';         
+                    viewer.appendChild(canvas);            
+                    this.renderPage(page, canvas);
+                }
                 this.loadingPdf = false
             });
         }

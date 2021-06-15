@@ -1,12 +1,12 @@
 <template>
     <div> 
+        <eHeader></eHeader>
         <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo" @shopNow="shopNow" :is_favorite="true"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
         <LibraryAudio v-if="showAudio"></LibraryAudio>
         <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
             <div class="px-5 pt-7 shadow-md" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
                 <FilterData></FilterData>
-                <!-- Tab -->
                 <div class="mt-7" v-if="!showList">
                     <div class="flex justify-start">
                         <div @click="changeType('pdf')" class="cursor-pointer  w-12 text-center" :class="type==`pdf`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
@@ -30,27 +30,22 @@
                     </div>
                 </div>
             </div>
-            <!-- Filter list -->
             <div class="mx-5">
                 <FilterList v-if="showList" @filterLibrary="filterLibrary($event)"></FilterList>
             </div>
-            <!-- Membership -->
             <div class="mt-5" :class="darkMode?`bg-youtube`:`transparent`">
                 <div class="mt-10">
-                    <Membership @getDetail="getPackage($event)"></Membership>
+                     <Membership @getDetail="getPackage($event)"></Membership>
                 </div>
             </div>
-            <div class="border-t border-dashed w-full my-10" :class="darkMode?`border-button`:`border-gray-300`"></div>
-            <!-- Loading -->
+            <div class="border-t border-dashed w-full my-10" :class="darkMode?`border-button`:`border-gray-300`" v-if="libraries.package && libraries.package.length"></div>
             <div class="px-5" v-if="loading">
                 <Loading></Loading>
             </div>
-            <!-- Book -->
             <div class="mx-5" v-else>
-                <div class="grid gap-6" :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-4 2xl:grid-cols-6`">
+                <div class="grid gap-6" :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-3 2xl:grid-cols-6`">
                     <div v-for="(book, index) in libraries.list" :key="index">
-                        <!-- Book & Video -->
-                        <template v-if="type != 'sound'">
+                       <template v-if="type != 'sound'">
                             <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                                 <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
 
@@ -59,19 +54,20 @@
                                         <div class="text-sm cursor-pointer" @click="getDetail(book)">
                                             {{cutString(book.title,30)}}
                                         </div>
-                                        <div v-if="book.des" class="text-xs my-2">{{cutString(book.des,50)}}</div>
+                                        <div v-if="book.des" class="text-xs my-2">{{cutString(book.des,150)}}</div>
                                     </div>
-                                    <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span><span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
+                                    <div class="text-xs">
+                                         <div class="text-sm">{{$t('date_expired')}} : <span>{{formatDate(book.deadline)}}</span></div>
                                     </div>
                                 </div>
                                 <div class="flex flex-col justify-end flex-1 items-end">
-                                    <div v-if="book.price.year" @click="addToCart(book)" class="cursor-pointer">
+                                    <div @click="addToCart(book)" class="cursor-pointer">
                                         <div v-if="!book.is_in_cart"><CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon></div>
                                     </div>
                                 </div>
                             </div> 
                         </template>
-                        <template v-else>
+                         <template v-else>
                             <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl overflow-hidden shadow-md pb-3 relative">
                                 <div class="absolute top-2 left-2" v-if="book.is_new">
                                     <NewIcon></NewIcon>
@@ -85,17 +81,19 @@
                                 <div class="mt-5 px-3">
                                     <div :class="darkMode?`text-white`:``">{{cutString(book.title,30)}}</div>
                                     <div class="flex justify-between items-center mt-3 text-xs h-8">
-                                        <template v-if="book.price.year">
-                                            <div>{{$t('1006')}}: <span class="font-bold" :class="darkMode?``:`text-heart`">{{book.price.year}}$</span></div>
-                                            <div @click="addToCart(book)" class="cursor-pointer" v-if="book.price.year">
-                                                <div v-if="book.is_in_cart === 0">
+                                        <template>
+                                            <div>
+                                                 <div class="text-sm">{{$t('date_expired')}} : <span>{{formatDate(book.deadline)}}</span></div>
+                                            </div>
+                                            <div @click="addToCart(book)" class="cursor-pointer">
+                                                <div>
                                                     <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
                                                 </div>
                                             </div>
                                         </template>
-                                        <template v-else>
+                                        <!-- <template v-else>
                                             <div>{{$t('1007')}}</div>
-                                        </template>
+                                        </template> -->
                                     </div>
                                 </div>
                             </div>
@@ -104,14 +102,13 @@
                 </div>
             </div>
         </div>
-        <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
     </div>
 </template>
 <script>
 import {mapState, mapActions} from "vuex"
 import FilterData from "./components/Filter.vue"
 import FilterList from "./components/FilterList.vue"
-import Membership from "./components/Membership.vue"
+import Membership from "./components/MyPackage.vue"
 import CartIcon from "./../../components/CartIcon.vue"
 import Loading from "./../../components/Loading.vue"
 import NewIcon from "./../../components/NewIcon.vue"
@@ -120,7 +117,8 @@ import ReadingBook from "./components/book/ReadingBook.vue"
 import BorderBottom from "./../../components/BorderBottom.vue"
 import LibraryAudio from "./Audio.vue"
 import helper from "./../../helper/helper"
-import BuyMsg from "./../Component/BuyMsg.vue"
+import eHeader from "./../Video/components/Header.vue"
+import moment from "moment"
 
 export default {
     components:{
@@ -134,7 +132,7 @@ export default {
         ReadingBook,
         LibraryAudio,
         BorderBottom,
-        BuyMsg
+        eHeader
     },
     data(){
         return{
@@ -148,8 +146,6 @@ export default {
             showAudio: false,
             isPackage: false,
             packageId: null,
-            showMsg: false,
-            msg: "2006"
         }
     },
     computed:{
@@ -158,36 +154,32 @@ export default {
         ...mapState('library', ['loading', 'libraries','showList', 'details'])
     },
     methods:{
-        ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail', 'getMyPackage']),
+        ...mapActions('library', ['getLibraryPagination','getLibraryDetail','getMyLibrary', 'getMyPackage']),
         ...mapActions('cart', ['addCart', 'getCart']),
         ...mapActions('favorite', ['addFavoriteBook','removeFavoriteBook']),
         cutString(text, limit){
             return helper.cutString(text, limit)
         },
+        formatDate(date){
+            moment.locale('en');
+            return moment(date).format('ll');
+        },
         filterLibrary(library){
             this.filter_id = library._id
             let filter = {
-                
+                type: this.type
             }
 
             if(library){
                 filter.filter_id = library._id
             }
-            if(!this.isPackage){
-                filter.type = this.type
-                this.getLibrary(filter).then(() =>{
-                    this.$store.commit("library/showFilterList",this.showList)
-                })
-            }else{
-                filter.id = this.packageId
-                this.getMyPackage(filter).then(() =>{
-                    this.$store.commit("library/showFilterList",this.showList)
-                })
-            }
+
+            this.getLibraryDetail(filter).then(() =>{
+                this.$store.commit("library/showFilterList",this.showList)
+            })
         },
 
         changeType(type){
-            
             this.showAudio = false
             this.type = type
             let filter = {
@@ -198,12 +190,7 @@ export default {
                 filter.filter_id = this.filter_id
             }
 
-            if(this.isPackage){
-                delete filter.filter_id
-                this.isPackage = false
-            }
-
-            this.getLibrary(filter)
+            this.getMyLibrary(filter)
             
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
@@ -229,16 +216,9 @@ export default {
             }
         },
         getDetail(library){
-            if(localStorage.getItem('token') === null){
-                this.showMsg = true
-                return;
-            }
             this.getLibraryDetail({id:library._id}).then(() =>{
                 this.preview = true
             })
-        },
-        yes(){
-            this.$router.push('login');
         },
         close(){
             this.preview = false
@@ -264,15 +244,7 @@ export default {
         },
         getLibraryBook(){
             this.page = 1
-            this.getLibrary({
-                type: this.type
-            })
-        },
-        getPackage(pk){
-            this.isPackage = true
-            this.packageId = pk._id
-            this.getMyPackage({
-                id: pk._id,
+            this.getLibraryDetail({
                 type: this.type
             })
         },
@@ -288,10 +260,6 @@ export default {
             })
         },
         addToCart(book){
-            if(localStorage.getItem('token') === null){
-                this.showMsg = true
-                return;
-            }
             let payload = {}
             payload.id = book._id
             this.addCart(payload).then(() =>{
@@ -307,6 +275,14 @@ export default {
         removeFromFavorite(book){
             this.removeFavoriteBook(book.filter_id).then(() =>{
                 this.$store.commit("library/removeFromFavorite", book._id)
+            })
+        },
+        getPackage(pk){
+            this.isPackage = true
+            this.packageId = pk._id
+            this.getMyPackage({
+                id: pk._id,
+                type: this.type
             })
         },
         matchHeight(){
@@ -325,7 +301,9 @@ export default {
         },
     },
     created(){
-        this.getLibraryBook()
+        this.getMyLibrary({
+            type: 'pdf'
+        })
     },
     watch:{
         'type':function(type){

@@ -136,7 +136,7 @@
     import ErrMessage from "./components/ErrMessage"
     import Loader from "./../../components/Loader"
     import helper from "./../../helper/helper"
-    import TermAndCondition from "./components/TermAndCondition"
+    import TermAndCondition from "./components/TermAndCondition.vue"
     import ChevronIcon from "./../../components/ChevronIcon.vue"
     import PhoneIcon from "./../../components/PhoneIcon.vue"
     import UserIcon from "./../../components/ProfileIcon.vue"

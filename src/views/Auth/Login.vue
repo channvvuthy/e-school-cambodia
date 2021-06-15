@@ -2,7 +2,7 @@
     <div class="flex justify-center items-center min-h-screen" :class="darkMode?`bg-youtube`:`bg-white`">
         <div class="flex-col rounded-3xl w-96 p-6 shadow-2xl" :class="darkMode?`bg-secondary`:`bg-white`">
             <div class="flex flex-col justify-center items-center">
-                <div class="border border-primary w-20 h-20 leading-20 flex justify-center items-center rounded-full">
+                <div class="border border-primary w-20 h-20 leading-20 flex justify-center items-center rounded-full bg-white">
                     <img src="/e-school-logo.png" class="w-12"/>
                 </div>
             </div>

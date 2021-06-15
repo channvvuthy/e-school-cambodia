@@ -5,7 +5,6 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
-import CourseDetail from "../views/MyCourse/CourseDetail"
 
 Vue.use(VueRouter);
 
@@ -125,6 +124,11 @@ const routes = [
         path: '/library',
         name: 'library',
         component: () => import('../views/Library/Library'),
+    },
+    {
+        path: '/my-library',
+        name: 'my-library',
+        component: () => import('../views/Library/MyLibrary'),
     },
     {
         path: '/library-video',

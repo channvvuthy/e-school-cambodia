@@ -11,8 +11,8 @@
                 <img :src="imgUrl" class="m-auto max-h-full rounded-md">
             </div>
             <div class="flex justify-end mt-4">
-                <button class="flex items-center justify-center rounded h-10 leading-10 cursor-pointer px-5 focus:outline-none shadow" 
-                :class="darkMode?`bg-button text-gray-300`:`bg-primary text-white`"
+                <button class="flex items-center text-sm justify-center rounded h-10 leading-10 cursor-pointer px-5 focus:outline-none shadow" 
+                :class="darkMode?`bg-youtube border border-button text-gray-300`:`bg-primary text-white`"
                 :disabled="addingStory"
                 @click="shareStory">
                     <span>{{$t('share_to_story')}} </span>

@@ -212,7 +212,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("playVideo", ["videoUrl", "defaultVolumeRange", "lastWatched"])
+    ...mapState("playVideo", ["videoUrl", "defaultVolumeRange", "lastWatched", "isDownload", "downloadLocation"])
   },
   methods: {
     showQualityModal() {
@@ -232,10 +232,16 @@ export default {
       this.showSetting = true;
     },
     showSettingModal() {
-      this.showSetting = !this.showSetting;
-      this.showPlayback = false;
-      this.showSound = false;
-      this.showQuality = false;
+      if(this.url.search("e-downloads") >= 1){
+        return false
+      }else{
+        this.showSetting = !this.showSetting;
+        this.showPlayback = false;
+        this.showSound = false;
+        this.showQuality = false;
+      }
+
+     
     },
     closeAds() {
       this.$emit("closeAds");
@@ -421,6 +427,15 @@ export default {
     },
     singleVideo(video) {
       if (typeof video === "object") {
+        let videos = localStorage.getItem("videos")
+        if(videos != null && this.isDownload){
+            videos = JSON.parse(videos)
+            for(let i = 0; i < videos.length; i ++){
+              if(videos[i]._id === this.isDownload){
+                return `file:///${this.downloadLocation}/${this.isDownload}`
+              }
+            }
+        }
         let len = video.length - 1;
         return video[len]["url"];
       }

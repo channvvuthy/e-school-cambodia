@@ -1,11 +1,6 @@
 <template>
-    <div class="fixed z-50 inset-0 overflow-y-auto font-khmer_os">
-        <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-black bg-opacity-95"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-opacity-0 transform transition-all  sm:align-middle  w-7/12"
+    <div class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black bg-opacity-95">
+            <div class="min-w-96 max-w-xl"
                  role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="text-gray-50 flex justify-center items-center">
                     <div class="relative" @mouseover="()=>{this.showCloseIcon = true}" @mouseleave="()=>{this.showCloseIcon = false}">
@@ -37,10 +32,10 @@
                                 <ChevronIcon fill="#ffffff"></ChevronIcon>
                             </div>
                         </div>
-                        <img :src="storyDetail.photo.name" class="max-h-105 rounded"/>
+                        <img :src="storyDetail.photo.name" class="max-h-105"/>
                         <!-- Viewer -->
-                        <div class="cursor-pointer absolute bottom-0 left-0 w-full flex justify-start px-3 items-end text-sm"
-                         style="background-image: url('/footer.png'); background-repeat: repeat-x; height:165px;">
+                        <div class="cursor-pointer absolute bottom-0 left-0 w-full flex justify-start px-3 items-end text-sm  h-1/2 bg-gradient-to-t from-black"
+                         >
                             <div class="flex items-center mb-4" @click="showUserViewer(storyDetail._id)">
                                 <span><Eye fill="#ffffff"></Eye></span>
                                 <span class="px-1"> {{countView(storyDetail.viewer)}}</span>
@@ -50,7 +45,7 @@
                         </div>
                         <!-- End viewer -->
                         <!-- List viewer -->
-                        <div :class="darkMode?'bg-secondary text-textSecondary':'bg-white'" class="absolute top-14 z-50 left-0 w-full h-full overflow-y-scroll rounded-t-2xl shadow-md" @scroll="onScroll" v-if="showViewer">
+                        <div :class="darkMode?'bg-secondary text-textSecondary':'bg-white'" class="absolute top-5 z-50 left-0 w-full h-full overflow-y-scroll  rounded-t-xl shadow-md" @scroll="onScroll" v-if="showViewer">
                             <div class="top-0 sticky relative pt-14 pb-4" :class="darkMode?`bg-secondary`:`text-black bg-white`"> 
                                 <div class="absolute right-3 top-0 cursor-pointer opacity-70 z-50 top-4" @click="()=>{this.showViewer = false}">
                                     <close-icon :fill="darkMode?'#afb0b4':'#000000'" :width="20" :height="20"></close-icon>
@@ -74,7 +69,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </template>
 <script>
@@ -176,3 +170,27 @@ export default {
   }
 };
 </script>
+<style scoped>
+    .loader {
+        border: 2px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 2px solid #3498db;
+        width: 15px;
+        height: 15px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        }
+
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg);
+        }
+    }
+
+</style>

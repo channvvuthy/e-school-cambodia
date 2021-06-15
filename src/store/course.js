@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import config from "./../config"
 import err from "./../helper/err"
+import helper from "./../helper/helper"
+
 
 Vue.use(Vuex);
 
@@ -160,6 +162,11 @@ export default {
         },
         setLessonTitle(state, LessonTitle){
             state.LessonTitle = LessonTitle
+        },
+        pushtMyCourse(state, payload){
+            for(let i = 0; i < payload.list.length; i ++){
+                state.myCourses.list.push(payload.list[i])
+            }
         }
     },
 
@@ -204,19 +211,29 @@ export default {
             commit("loadMoreVideoLesson", lesson)
         },
 
-        myCourseList({commit, dispatch}, type){
+        myCourseList({commit, dispatch}, payload){
             commit('loadingMyCourse', true);
-            axios.get(config.apiUrl + 'user/my-course?type=' + type + "&s=" + this.state.course.s + "&grade_id=" + this.state.course.gradeID).then(response => {
-                commit('loadingMyCourse', false);
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `me/course?${helper.q(payload)}`).then(response => {
+                    commit('loadingMyCourse', false);
 
-                if (response.data.status && response.data.status === 2) {
-                    err.err(response.data.msg)
-                }
-
-                dispatch('getMyCourse', response.data.data)
-            }).catch(() => {
-                commit('loadingMyCourse', false)
+                    resolve(response)
+    
+                    if (response.data.status && response.data.status === 2) {
+                        err.err(response.data.msg)
+                    }
+                    if(payload.p > 1){
+                        commit('pushtMyCourse', response.data.data)
+                    }else{
+                        dispatch('getMyCourse', response.data.data)
+                    }
+                   
+                }).catch(err => {
+                    commit('loadingMyCourse', false)
+                    reject(err)
+                })
             })
+            
         },
 
         getVideo({commit}, videos){
@@ -427,7 +444,7 @@ export default {
         },
         removeActiveFavorite({commit}, lesson_id){
             commit("removeActiveFavorite", lesson_id)
-        }
+        },
     },
 
 }

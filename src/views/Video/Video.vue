@@ -11,14 +11,16 @@
                         <div class="relative rounded-xl cursor-pointer view" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`" :style="minHeight?{minHeight:`${minHeight}px`}:{}">
                             <div class="absolute left-3 top-3" v-if="video.is_new"><NewIcon></NewIcon></div>
                             <div class="absolute top-3 left-3" v-if="video.is_buy">
-                                <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;</div>
+                                <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base" :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
+                                    <span>&#10003;</span>
+                                </div>
                             </div>
                             <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-xl" onerror="this.onerror=null; this.src='/poster.png'"/>
                             <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1" :style="{width:`${video.last_watch.percentage}%`}"></div>
                             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
                             <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
                                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
-                                <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
+                                <div class="text-sm font-semibold mt-3">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
                                 <div class="flex items-end w-full justify-between mt-3 text-center text-sm">
                                     <div class="cursor-pointer">
                                         <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
@@ -74,8 +76,9 @@
                 <Loading></Loading>
             </div>
             <template v-if="videos.list && videos.list.length <= 0">
-            <Empty></Empty>
-        </template>
+                <Empty></Empty>
+             </template>
+            <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
         </div>
     </div>
 </template>
@@ -93,6 +96,10 @@ import NewIcon from "./../../components/NewIcon.vue"
 import {mapState, mapActions} from "vuex"
 import helper from "./../../helper/helper"
 import Empty from "./../Component/Empty.vue";
+import BuyMsg from "./../Component/BuyMsg.vue"
+
+const { ipcRenderer } = require('electron')
+
 export default {
     components:{
         BoxFilter,
@@ -104,13 +111,16 @@ export default {
         ChatIcon,
         CartIcon,
         NewIcon,
-        Empty
+        Empty,
+        BuyMsg
     },
     data(){
         return{
             page: 1,
             enableScroll: true,
             minHeight: 0,
+            showMsg: false,
+            msg: "2006"
         }
     },
     computed:{
@@ -125,6 +135,10 @@ export default {
             return helper.cutString(text, limit)
         },
         gotToPlayList(videoCourse){
+            if(localStorage.getItem('token') === null){
+                this.showMsg = true
+                return;
+            }
             this.$router.push({ name: 'video-detail', params: { course: videoCourse } })
         },
         enableUserScroll(){
@@ -145,12 +159,19 @@ export default {
             }, 1000)
         },
          addToCart(video){
+            if(localStorage.getItem('token') === null){
+                this.showMsg = true
+                return;
+            }
             let payload = {}
             payload.id = video._id
             this.addCart(payload).then(() =>{
                 this.getCart()
             })
             this.$store.commit("video/addToCart",video._id)
+        },
+        yes(){
+            this.$router.push('login');
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight) {
@@ -182,6 +203,10 @@ export default {
 
         this.$nextTick(() => {
             this.matchHeight()
+        })
+        ipcRenderer.send('downloadLocation', '')
+        ipcRenderer.on("getDownloadLocation", (event, arg) =>{
+            this.$store.commit("playVideo/downloadLocation", arg)
         })
     },
     created(){

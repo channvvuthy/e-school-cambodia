@@ -309,6 +309,7 @@
                 this.loading = true
                 this.video = event
                 this.$store.commit("playVideo/getVideoUrl", event.video);
+                this.$store.commit("playVideo/isDownload", event._id);
                 setTimeout(() => {
                     this.loading = false
                 }, 200)
@@ -408,6 +409,8 @@
                     let video = freeVideo.map(item => item)[0]
                     this.video = video
                     this.$store.commit("playVideo/getVideoUrl", video.video);
+                    this.$store.commit("playVideo/isDownload", video._id);
+
                     this.loading = false
                     this.playVideo(this.video._id)
 

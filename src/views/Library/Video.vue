@@ -339,13 +339,6 @@ export default {
             this.videoUrl = this.videos.video.filter(items => items.quality == `${this.defaultQuality}p`)[0]['url']
             this.order = index
             this.vid.src = this.videoUrl
-            console.log(this.videoUrl)
-
-            // if(videos.last_watch){
-            //     this.vid.currentTime = this.video.last_watch.mark
-            // }else{
-            //     this.lastWatch = 0
-            // }
         },
         playPause() {
             this.showSetting = false;

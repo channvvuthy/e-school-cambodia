@@ -78,6 +78,7 @@
         <div v-if="showAds">
             <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)"></VideoADS>
         </div>
+        <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
     </div>
 </template>
 <script>
@@ -90,6 +91,7 @@ import { mapState, mapActions } from "vuex";
 import VideoADS from "./../Video/ads/VideoADS.vue";
 import helper from "./../../helper/helper"
 const {ipcRenderer} = require('electron')
+import BuyMsg from "./../Component/BuyMsg.vue"
 export default {
   components: {
     // HeartIcon,
@@ -97,14 +99,17 @@ export default {
     Empty,
     VideoADS,
     FavoriteIcon,
-    FavoriteFill
+    FavoriteFill,
+    BuyMsg
   },
   data() {
     return {
       showAds: false,
       hideDuration: "",
       videoUrl: "",
-      id: ""
+      id: "",
+      showMsg: false,
+      msg: "2006"
     };
   },
   computed: {
@@ -140,9 +145,14 @@ export default {
     },
 
     addFavorite(id){
-        this.add(id).then(()=>{
+      if(localStorage.getItem('token') === null){
+        this.showMsg = true
+        return;
+      }
+
+      this.add(id).then(()=>{
             this.$store.commit('favorite/addTemporaryFavorite',id)
-        })
+      })
     },
 
     hideAndShowDuration(id = "") {
@@ -169,6 +179,9 @@ export default {
     },
     closeAds() {
       this.showAds = false;
+    },
+    yes(){
+      this.$router.push('login');
     },
     playWhenOver(video) {
       if (typeof video === "object") {

@@ -1,9 +1,9 @@
 <template>
     <div class="fixed w-full h-full bg-black left-0 bg-opacity-80 top-0 flex items-center justify-center" style="z-index:100">
-        <div class="max-w-screen-md m-auto px-10 py-5 shadow rounded-2xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-            <div class="flex justify-between items-center">
+        <div class="max-w-screen-lg m-auto px-10 py-5 shadow rounded-2xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+            <div class="flex items-center">
                 <div class="absolute right-5 top-5 cursor-pointer" @click="close"><CloseIcon :fill="darkMode?`#909090`:`#000000`"></CloseIcon></div>
-                <img :src="details.book.thumbnail" class="max-h-96 rounded-2xl shadow-md max-w-96">
+                <img :src="details.book.thumbnail" class="max-w-xs rounded-2xl shadow-md">
                 <div class="absolute top-10 left-14 w-8 h-8 flex items-center justify-center rounded-md" :class="darkMode?`bg-secondary`:`bg-white`" v-if="is_favorite">
                     <div v-if="details.is_favorite" class="cursor-pointer" @click="removeFromFavorite(details)">
                         <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
@@ -37,11 +37,11 @@
                             <div class="mr-3"><HeadphoneIcon fill="#ffffff"></HeadphoneIcon></div>
                             <span>{{$t('2208')}}</span>
                         </button>
-                        <button class="h-12 rounded-lg bg-primary px-7 text-white focus:outline-none flex items-center mr-10 shadow-lg" v-if="details.book.type === `video`" @click="listVideo">
+                        <button class="h-12 rounded-lg bg-primary px-7 text-white focus:outline-none flex items-center mr-10 shadow-lg whitespace-nowrap" v-if="details.book.type === `video`" @click="listVideo">
                             <div class="mr-3"><CameraVideoIcon fill="#ffffff"></CameraVideoIcon></div>
                             <span>{{$t('2209')}}</span>
                         </button>
-                        <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg" @click="shopNow" v-if="details.price.year">
+                        <button class="h-12 rounded-lg bg-primary px-8 text-white focus:outline-none flex items-center shadow-lg whitespace-nowrap" @click="shopNow" v-if="details.price.year">
                             <span>{{$t('2206')}}</span>
                         </button>
                     </div>

@@ -1,50 +1,90 @@
 <template>
-    <div :class="downloaded.length<=0?`flex flex-col p-5`:`p-5`">
-        <div class="flex items-center pb-5 font-khmer_os text-14px">
-            <div class="cursor-pointer rounded-full border border-gray-200 hover:bg-gray-200 px-3 py-1 flex justify-center items-center mr-5"
-                 :class="active ==1?'bg-gray-300':'bg-gray-100 '" @click="filtterDocument(1)">
-                <h2>វីដេអូ</h2>
+    <div>
+        <div :class="downloaded.length<=0?`flex flex-col p-5`:`p-5`">
+            <div class="h-screen flex justify-center items-center" v-if="downloaded.length <= 0 || active ===2">
+                <img src="/icon/Empty/Empty.svg" class="w-64  mb-5 relative -top-28"/>
             </div>
-            <div class="cursor-pointer rounded-full border border-gray-200 hover:bg-gray-200 px-3 py-1 flex justify-center items-center"
-                 :class="active ==2?'bg-gray-300':'bg-gray-100 '" @click="filtterDocument(2)">
-                <span>សៀវភៅ</span>
-            </div>
-        </div>
-
-        <div class="h-screen flex justify-center items-center" v-if="downloaded.length <= 0 || active ===2">
-            <img src="/icon/Empty/Empty.svg" class="w-64  mb-5 relative -top-28"/>
-        </div>
-        <div class="flex justify-start font-khmer_os" v-else>
-            <div class="grid grid-cols-4 gap-4" v-if="active == 1">
-                <div class="flex-col mb-5 relative cursor-pointer m-h-20" v-for="(video, key) in downloaded" :key="key">
-                    <div class="relative cursor-pointer" @click="downloadDetail(video)">
-                        <img :src="getPathFromUrl(video.thumbnail)" class="w-full"/>
-                        <div class="absolute flex justify-start items-center font-khmer_os -bottom-1 mb-12 left-0 bg-white w-full bg-opacity-60 h-8">
-                            <img :src="video.course.teacher.photo" alt="teacher"
-                                 class="rounded rounded-full h-10 shadow ml-3">
-                            <span class="text-14px ml-2">{{video.course.teacher.name}}</span>
+            <div class="flex justify-start font-siemreap h-screen overflow-y-scroll pb-40" v-else>
+                <div class="grid gap-4" :class="isHide?`md:grid-cols-4 2xl:grid-cols-5`:`md:grid-cols-3 2xl:grid-cols-4`">
+                    <div class="flex-col mb-5 relative cursor-pointer" v-for="(video, key) in downloaded" :key="key">
+                        <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl" @click="gotToPlayList(video)">
+                            <div class="relative">
+                                <img :src="video.thumbnail" class="rounded-t-xl">
+                                <div class="flex justify-center items-center absolute left-0 w-full -bottom-5">
+                                    <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center mt-8 px-5">
+                                <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
+                            </div>
+                            <div class="flex items-end w-full justify-between mt-4 text-center text-sm px-5">
+                                <div class="cursor-pointer">
+                                    <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
+                                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                                        {{ video.total_video?video.total_video: 0}}
+                                    </div>
+                                </div>
+                                <div class="cursor-pointer">
+                                    <PdfIcon :fill="darkMode?`#909090`:`#000000`"></PdfIcon>
+                                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                                        {{ video.total_pdf?video.total_pdf:0 }}
+                                </div>
+                                </div>
+                                <div class="cursor-pointer">
+                                    <ChatIcon :fill="darkMode?`#909090`:`#000000`"></ChatIcon>
+                                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                        {{ video.has_support?$t('1008'):$t('1009') }}
+                                    </div>   
+                                </div>
+                                <div class="cursor-pointer">
+                                    <TestIcon :fill="darkMode?`#909090`:`#000000`"></TestIcon>
+                                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                        {{ video.has_quiz?$t('1008'):$t('1009') }}
+                                    </div>
+                                </div>
+                                <div class="cursor-pointer">
+                                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon>
+                                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
+                                        {{ video.has_certificate?$t('1008'):$t('1009') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="h-6"></div>
                         </div>
-                        <div class="mt-3" v-html="cutString(video.title, window.width <= 1366?20:45)"></div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
     import helper from "./../../helper/helper"
+    import CertificateIcon from "./../../components/CertificateIcon.vue"
+    import TestIcon from "./../../components/TestIcon.vue"
+    import PdfIcon from "./../../components/PdfIcon.vue"
+    import ChatIcon from "./../../components/ChatIcon.vue"
+    import YoutubeIcon from "./../../components/YoutubeIcon.vue"
+    import {mapState} from "vuex"
     export default{
         name: "Download",
+        components:{
+            CertificateIcon,
+            TestIcon,
+            PdfIcon,
+            ChatIcon,
+            YoutubeIcon,
+        },
         data(){
             return {
                 downloaded: [],
                 active: 1,
                 window: {
                     width: 0,
-                    height: 0
                 },
             }
+        },
+        computed:{
+            ...mapState('setting', ['darkMode', 'isHide'])
         },
         methods: {
             getPathFromUrl(url) {
@@ -53,12 +93,16 @@
             cutString(text, limit){
                 return helper.cutString(text, limit)
             },
+           
             handleResize() {
                 this.window.width = window.innerWidth;
-                this.window.height = window.innerHeight;
+            },
+             gotToPlayList(videoCourse){
+                 console.log(videoCourse)
+                this.$router.push({ name: 'video-detail', params: { course: videoCourse } })
             },
             downloadDetail(video){
-                let downloadDetail = JSON.parse(localStorage.getItem('downloaded'))
+                let downloadDetail = JSON.parse(localStorage.getItem('videos'))
                 downloadDetail = downloadDetail.filter(item => item.course._id === video.course._id)
                 this.$store.commit('course/getDownloadDetail', downloadDetail)
                 this.$router.push('download-detail')
@@ -74,8 +118,8 @@
             window.addEventListener('resize', this.handleResize);
             this.handleResize();
 
-            if (localStorage.getItem("downloaded")!==null) {
-                let downloaded = JSON.parse(localStorage.getItem('downloaded'))
+            if (localStorage.getItem("videos")!==null) {
+                let downloaded = JSON.parse(localStorage.getItem('videos'))
                 downloaded = downloaded.filter((value, index, self) => self.findIndex((m) => m.course._id === value.course._id) === index)
                 this.downloaded = downloaded
             }

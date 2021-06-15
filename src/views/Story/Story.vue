@@ -12,15 +12,15 @@
                 </span></div>
             </div>
             <div class="list mt-5" :class="darkMode?`text-gray-300`:``">
-                <div class="w-full overflow-x-scroll flex overflow-y-hidden box-list-story" @scroll="onScroll">
+                <div class="w-full overflow-x-auto flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative" @click="addStory()">
-                        <div class="box-story relative h-36 bg-black w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative">
-                            <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
-                            <div class="h-full w-full bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                        <div class="box-story relative h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center relative">
+                            <div class="h-full w-full bg-cover bg-center rounded-lg" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                            <div class="w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 -bottom-1 cursor-pointer" :class="darkMode?`bg-fb`:`bg-primary`">
+                                <AddIcon :size="16"/>
+                            </div>
                         </div>
-                        <div class="w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 bottom-12 cursor-pointer" :class="darkMode?`bg-fb`:`bg-primary`">
-                            <AddIcon :size="16"/>
-                        </div>
+                        
                         <p class="mt-3" :class="localize==='en'?'text-sm':'text-xs'">
                             {{$t('2004')}}
                         </p>

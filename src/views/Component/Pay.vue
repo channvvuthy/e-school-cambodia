@@ -55,7 +55,6 @@ export default {
                     course.month = 12 
                 }
                 courses.push(course)
-                console.log(course)
 
             }
 

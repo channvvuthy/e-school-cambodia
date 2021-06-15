@@ -23,14 +23,11 @@
                                 <div class="font-extralight">{{pk.total_book}} {{$t('2202')}}</div>
                                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                                 <div class="font-extralight">
-                                    <template v-if="pk.is_buy === 0">
-                                        {{$t('1006')}}: <span class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">{{pk.price.year}}$</span>
-                                    </template>
-                                    <div class="text-xs" v-else>{{$t('date_expired')}} : <span>{{formatDate(pk.deadline)}}</span></div>
+                                     <div class="text-sm">{{$t('date_expired')}} : <span>{{formatDate(pk.deadline)}}</span></div>
                                 </div>
                                 <div class="flex-1 flex justify-end">
                                     <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id">
-                                        <CartIcon fill="#FFFFFF"></CartIcon>
+                                        <CartIcon fill="#FFFFFF" v-if="!pk.is_in_cart"></CartIcon>
                                     </span>
                                 </div>
                             </div>
@@ -40,10 +37,10 @@
                 
             </vue-horizontal>
         </div>
-        <BuyMsg v-if="showMsg" @cancelModal="() => {this.showMsg = false}" @yes="yes()" :msg="msg"> </BuyMsg>
+        <BuyMsg v-if="showMsg" @cancelModal="() => {this.showMsg = false}" @yes="yes()"></BuyMsg>
         <!-- Receipt info -->
         <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
-        <Cart v-if="showCart" @closeCart="() => {this.showCart = false}" @showInvoice="showInvoice($event)"></Cart>
+        <Cart v-if="showCart" @closeCart="() => {this.showCart = false}"></Cart>
     </div>
 </template>
 <script>
@@ -52,26 +49,23 @@ import CartIcon from "./../../../components/CartIcon.vue"
 import {mapState,mapActions} from "vuex"
 import BuyMsg from "./../../../views/Component/BuyMsg.vue"
 import Cart from "./../../../views/Component/Cart.vue"
-import moment from "moment"
 import ReceiptInfo from "./../../MyCourse/components/ReceiptInfo.vue"
+
+import moment from "moment"
 export default {
     components: {
         VueHorizontal,
         CartIcon,
         BuyMsg,
         Cart,
-        ReceiptInfo,
-        BuyMsg
+        ReceiptInfo
     },
     data() {
         return{
             showMsg: false,
             showCart: false,
             pk: {},
-            receiptDetail: {},
-            showReceipt: false,
-            showMsg: false,
-            msg: "4008"
+            showReceipt: false
         }
     },
     computed:{
@@ -82,12 +76,6 @@ export default {
     methods:{
         ...mapActions('cart', ['addCart', 'getCart']),
        async addToCart(pk){
-
-            if(localStorage.getItem('token') === null){
-                this.showMsg = true
-                this.msg = '2006'
-                return;
-            }
             let payload = {}
 
             payload.id = pk._id
@@ -96,10 +84,6 @@ export default {
             })
         },
         yes(){
-            if(localStorage.getItem('token') === null){
-                this.$router.push('/login')
-                return;
-            }
             this.showMsg = false
             this.addToCart(this.pk).then(() =>{
                 this.showCart = true; 
@@ -109,23 +93,21 @@ export default {
             moment.locale('en');
             return moment(date).format('ll');
         },
+        showConfirm(pk){
+        //    if(pk.is_buy == 0){
+        //     this.showMsg = true
+        //     this.pk = pk
+        //    }
+            this.getDetail(pk)
+        },
+        getDetail(pk){
+            this.$emit("getDetail", pk)
+        },
         showInvoice(data){
             this.receiptDetail = data
             this.showReceipt = true
             this.showCart = false
         },
-        showConfirm(pk){
-        //    if(pk.is_buy == 0){
-        //         this.showMsg = true
-        //         this.pk = pk
-        //    }else{
-        //        this.getDetail(pk)
-        //    }
-             this.getDetail(pk)
-        },
-        getDetail(pk){
-            this.$emit("getDetail", pk)
-        }
     }
 }
 </script>

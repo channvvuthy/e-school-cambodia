@@ -184,12 +184,16 @@
   "delete":"Are you sure to delete this item?",
   "please_enter_coupon":"Please enter coupon",
   "delete_coupon":"Delete coupon",
-  "no_audio": "No audio book to display",
+  "no_audio": "No audio book",
   "create_receipt":"Create invoice",
   "invoice_detail":"Invoice detail",
   "invoce_no":"Invoice Number",
   "total":"Total",
   "payment_method":"Payment through agency or financial program",
   "reset_password":"Please enter your new Password",
-  "total_price":"Total price"
+  "total_price":"Total price",
+  "choose_quality":"Please choose the quality of video",
+  "download_video_success":"Video has been downloaded successfully",
+  "download_problem":"Download problem, please try again",
+  "date_expired":"Date expired"
 }

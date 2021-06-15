@@ -66,7 +66,6 @@ export default {
             }
         },
         receivingMoreStoryDetail(state, payload){
-            console.log("payload", payload)
         },
         gettingStoryDetail(state, payload){
             state.loadingStory = payload

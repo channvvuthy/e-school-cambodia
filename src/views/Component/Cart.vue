@@ -264,7 +264,10 @@ export default {
             this.totalCartPrice()
         })
 
-        this.getReceipt()
+        this.getReceipt({
+            p: 1,
+            type:"all"
+        })
     }
 }
 </script>

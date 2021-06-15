@@ -185,12 +185,19 @@
   "delete":"តើអ្នកពិតជាចង់លុបវាមែនទេ?",
   "please_enter_coupon":"សូមបញ្ចូលលេខគូប៉ុង",
   "delete_coupon":"លុបគូប៉ុង",
-  "no_audio": "គ្មានអូឌីយ៉ូដើម្បីបង្ហាញ",
+  "no_audio": "មិនមានសំលេង",
   "create_receipt":"បង្កើតវិក័យបត្រ",
   "invoice_detail":"ពត៍មានបង់ប្រាក់",
   "invoce_no":"លេខវិក័យបត្រ",
   "total":"សរុប",
   "payment_method":"ទូទាត់តាមភ្នាក់ងា ឬកម្មវិធីហិរញ្ញវត្ថុ",
   "reset_password":"ប្តូរលេខសម្ងាត់ថ្មី",
-  "total_price":"តម្លៃសរុប"
+  "total_price":"តម្លៃសរុប",
+  "choose_quality":"សូមជ្រើកំរិតវីដេអូ",
+  "download_video_success":"វីដេអូត្រូវបានទាញទុក",
+  "download_problem":"ការទាញយកវីដេអូមានបញ្ហា",
+  "date_expired":"ថ្ងៃផុតកំណត់"
+
+
+
 }

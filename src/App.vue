@@ -57,8 +57,8 @@
         },
         methods: {
             hideMenu(){
-                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' 
-                || this.$route.name === 'policy' || this.$route.name === 'invoice'
+                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' || this.$route.name === 'my-library' 
+                || this.$route.name === 'policy' || this.$route.name === 'invoice' || this.$route.name === 'my-course'
                 || this.$route.name === 'favorite' || this.$route.name === 'about' || this.$route.name === 'help'){
                     return true
                 }

@@ -35,9 +35,22 @@
                                         <FavoriteIcon :size="20" v-else :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></FavoriteIcon>
                                     </template>
                                 </div>
-                                <div>
-                                    <DownloadIcon :size="18" v-if="list.order != order" :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></DownloadIcon>
-                                    <DownloadIcon :size="18" v-else :fill="darkMode?`#181818`:`#4A4A4A`"></DownloadIcon>
+                                <div class="cursor-pointer">
+                                    <template v-if="isDownloading(list._id)">
+                                       <Loading></Loading>
+                                    </template>
+                                    <template v-else-if="isDownloaded(list._id)">
+                                        <div @click="confirmRemoveDownload(list._id)">
+                                            <CloseIcon :size="18" v-if="list.order != order" :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></CloseIcon>
+                                            <CloseIcon :size="18" v-else :fill="darkMode?`#181818`:`#4A4A4A`"></CloseIcon>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div @click="showOptionDownload(list)">
+                                            <DownloadIcon :size="18" v-if="list.order != order" :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></DownloadIcon>
+                                            <DownloadIcon :size="18" v-else :fill="darkMode?`#181818`:`#4A4A4A`"></DownloadIcon>
+                                        </div>
+                                    </template>
                                 </div>
                             </template>
                             <div v-else>
@@ -48,28 +61,59 @@
                 </div>
             </div>
         </div>
+        <!-- Download option -->
+        <div class="fixed flex items-center justify-center w-full h-full left-0 top-0 bg-black bg-opacity-90 z-50" v-if="showOpt">
+            <div class="w-80 rounded-xl shadow" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                <!-- Header -->
+                <div class="py-3 text-center flex items-center justify-center"><span>{{$t('choose_quality')}}</span></div>
+                <div class="w-full h-1 border-b" :class="darkMode?`border-button`:`border-gray-3000`"></div>
+                <ul>
+                    <li class="w-full text-center h-12 leading-11 flex items-center justify-center border-b cursor-pointer" :class="darkMode?`border-button`:`border-gray-300`" @click="download(360)"><span>360p</span></li>
+                    <li class="w-full text-center h-12 leading-11 flex items-center justify-center border-b cursor-pointer" :class="darkMode?`border-button`:`border-gray-300`" @click="download(720)"><span>720p</span></li>
+                </ul>
+                <div class="flex items-center justify-center py-3 cursor-pointer" :class="darkMode?`text-pass`:`text-heart`" @click="()=>{this.showOpt = false}">
+                    <span>{{$t('1011')}}</span>
+                </div>
+                
+            </div>
+        </div>
+        <BuyMsg v-if="showConfirm" :msg="msg" @cancelModal="() =>{this.showConfirm = false}" @yes="removeDownload"></BuyMsg>
     </div>
 </template>
 
 <script>
 import Eye from "./../../../components/Eye.vue"
+import Loading from "./../../../components/LoadingWhite.vue"
 import DownloadIcon from "./../../../components/DownloadIcon.vue"
 import LockIcon from "./../../../components/LockIcon.vue"
+import CloseIcon from "./../../../components/CloseIcon.vue"
 import FavoriteIcon from "./../../../components/FavoriteIcon.vue"
 import FavoriteFill from "./../../../components/FavoriteFill.vue"
 import helper from "./../../../helper/helper"
+import BuyMsg from "./../../Component/BuyMsg.vue"
 import {mapActions,mapState} from "vuex"
+
+const { ipcRenderer } = require('electron')
 export default {
     components:{
         Eye,
         DownloadIcon,
         FavoriteIcon,
         FavoriteFill,
-        LockIcon
+        LockIcon,
+        Loading,
+        CloseIcon,
+        BuyMsg
     },
     data(){
         return{
             page: 1,
+            showOpt: false,
+            list: null,
+            downloading: [],
+            showConfirm: false,
+            id: null,
+            msg: "delete"
         }
     },
     computed:{
@@ -127,11 +171,95 @@ export default {
             }
             return false
         },
+        showOptionDownload(list){
+            this.showOpt = true
+            list.teacher = this.$route.params.course.teacher
+            list.has_certificate = this.$route.params.course.has_certificate
+            list.has_support = this.$route.params.course.has_support
+            list.is_buy = this.$route.params.course.is_buy
+            list.is_in_cart = this.$route.params.course.is_in_cart
+            list.is_new =  this.$route.params.course.is_new
+            list.total_pdf = this.$route.params.course.total_pdf
+            this.list = list
+            
+        },
+        isDownloading(_id){
+           if(this.downloading.length){
+               for(let i = 0; i < this.downloading.length; i ++){
+                   if(this.downloading[i] === _id){
+                       return true
+                   }
+               }
+           }
+           return false
+        },
+        isDownloaded(_id){
+            let videos = localStorage.getItem("videos")
+            if(videos != null){
+                videos = JSON.parse(videos)
+                for(let i = 0; i < videos.length; i ++){
+                    if(videos[i]._id === _id){
+                        return true
+                    }
+                }
+            }
+
+            return false
+        },
+        confirmRemoveDownload(_id){
+            this.id = _id
+            this.showConfirm = true
+        },
+        removeDownload(){
+            let videos = localStorage.getItem("videos")
+            if(videos != null){
+                videos = JSON.parse(videos)
+                videos = videos.filter(item => item._id != this.id)
+                localStorage.setItem("videos", JSON.stringify(videos))
+                this.showConfirm = false
+                ipcRenderer.send("removeDownload", this.id)
+            }
+        },
+        download(qty){
+            let videos = localStorage.getItem("videos")
+
+            if(videos === null){
+                videos = []
+                videos.push(this.list)
+                localStorage.setItem("videos",JSON.stringify(videos))
+            }else{
+                videos = JSON.parse(videos)
+                videos.push(this.list)
+                localStorage.setItem("videos",JSON.stringify(videos))
+            }
+            this.downloading.push(this.list._id)
+
+            let videoUrl = this.list.video.filter(item => item.quality === `${qty}p`)[0]['url']
+            
+            let arg = {
+                videoUrl: videoUrl,
+                quality: qty,
+                _id: this.list._id
+            }
+
+            ipcRenderer.send('download', arg)
+
+            this.showOpt = false
+        }
         
     },
+    created(){
+        ipcRenderer.on('downloaded', (event, arg) => {
+            helper.success('download_video_success')
+            this.downloading = this.downloading.filter(item => item != arg._id)
+        })
+
+        ipcRenderer.on('fail', (event, arg) => {
+            helper.errorMessage("download_problem")
+            this.downloading = this.downloading.filter(item => item != arg._id)
+        })
+
+
+    }
 }
 </script>
-
-<style>
-
-</style>

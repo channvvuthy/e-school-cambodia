@@ -12,27 +12,27 @@
                         <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
                     </template>
                 </div>
-                <template v-if="token">
-                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
-                        <div v-if="$route.name === 'video'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
-                        <div v-else><WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon></div>
-                        <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video')">
-                            {{$t('2108')}}
-                        </p>
-                        <template v-if="$route.name === 'video'">
-                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
-                        </template>
-                    </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
-                        <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></LibraryIcon></div>
-                        <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
-                        <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'library')">
-                            {{$t('2200')}}
-                        </p>
-                        <template v-if="$route.name === 'library'">
-                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
-                        </template>
-                    </div>
+                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
+                    <div v-if="$route.name === 'video'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
+                    <div v-else><WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon></div>
+                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video')">
+                        {{$t('2108')}}
+                    </p>
+                    <template v-if="$route.name === 'video'">
+                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                    </template>
+                </div>
+                <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
+                    <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></LibraryIcon></div>
+                    <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
+                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'library')">
+                        {{$t('2200')}}
+                    </p>
+                    <template v-if="$route.name === 'library'">
+                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                    </template>
+                </div>
+                 <template v-if="token">
                     <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
                         <div v-if="$route.name === 'partner'"><PartnershipFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`" :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon></div>
                         <div v-else><PartnershipIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PartnershipIcon></div>

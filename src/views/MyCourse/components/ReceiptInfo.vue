@@ -11,7 +11,7 @@
                             <div class="flex justify-between items-center">
                                 <input type="text" id="invoice_number"  class="absolute" :value="receiptDetail.receipt" style="z-index:-10">
                                 <div>{{$t('invoce_no')}}</div>
-                                <div class="text-heart flex-1 text-right">​{{receiptDetail.receipt}}</div>
+                                <div class="flex-1 text-right" :class="darkMode?`text-gray-300`:`text-heart`">​{{receiptDetail.receipt}}</div>
                                 <div class="ml-2 cursor-pointer" @click="copyText()"><CopyIcon :size="20" :fill="darkMode?`#D1D5DB`:`#000000`"></CopyIcon></div>
                             </div>
                             <div class="flex justify-between items-center mt-3">

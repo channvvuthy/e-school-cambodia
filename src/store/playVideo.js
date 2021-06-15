@@ -8,11 +8,19 @@ export default {
         stopWatch: false,
         videoPlay: "",
         lastWatched: 0,
-        pdf: ""
+        pdf: "",
+        isDownload: "",
+        downloadLocation: ""
 
     },
 
     mutations: {
+        downloadLocation(state, payload){
+            state.downloadLocation = payload
+        },
+        isDownload(state, payload){
+            state.isDownload = payload
+        },
         getPdf(state, payload){
             state.pdf = payload
         },

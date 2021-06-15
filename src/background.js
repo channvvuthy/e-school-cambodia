@@ -1,7 +1,6 @@
 'use strict';
 import path from 'path'
 const fs = require("fs");
-let request = require('request');
 const ytdl = require('ytdl-core');
 let {CookieMap} = require('cookiefile/http-cookiefile')
 let cookieFile = new CookieMap(path.join(__static, 'cookies.txt'));
@@ -32,9 +31,9 @@ const downloadFile = async (fileUrl, info) => {
     // Get the file name
     const fileName = info._id
     // The path of the downloaded file on our machine
-    const myInstalledDir = path.join(app.getAppPath(), "..", "..", "ESCHOOL", fileName);
+    const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", fileName);
     //write something to root installation folder
-    let dir = path.join(app.getAppPath(), "..", "..", "ESCHOOL");
+    let dir = path.join(app.getAppPath(), "..", "..", "electronjs");
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
     }
@@ -45,10 +44,11 @@ const downloadFile = async (fileUrl, info) => {
             responseType: "stream",
         });
         await response.data.pipe(fs.createWriteStream(myInstalledDir).on('finish', () => {
-            info.url = path.join(app.getAppPath(), "..", "..", "ESCHOOL", info._id);
-            win.webContents.send("downloadComplete", info)
+            info.url = path.join(app.getAppPath(), "..", "..", "electronjs");
+            win.webContents.send("downloaded", info)
         }));
     } catch (err) {
+        win.webContents.send("fail", info)
         throw new Error(err);
     }
 };
@@ -77,31 +77,23 @@ protocol.registerSchemesAsPrivileged([{
 ipcMain.on("updateVersion", (event, arg) => {
     autoUpdater.checkForUpdates()
 })
+ipcMain.on("downloadLocation", (event, arg) => {
+    event.reply("getDownloadLocation", path.join(app.getAppPath(), "..", "..", "electronjs"))
+})
 
 ipcMain.on("download", (event, arg) => {
-    ytdl.getBasicInfo("https://www.youtube.com/watch?v=" + arg.video_youtube, opt).then(res => {
-        try {
-            let fileUrl = res.player_response.streamingData.formats.filter(item => item.itag === arg.quality)[0].url
-            downloadFile(fileUrl, arg).then(() => {
-                // arg.url = path.join(app.getAppPath(), "..", "..", "ESCHOOL", arg._id);
-                // event.reply("downloadComplete", arg)
-            }).catch(err => {
-                event.reply("downloadFailed", arg)
-                throw new Error(err);
-            })
-        } catch (err) {
-            event.reply("downloadFailed", arg)
-            throw new Error(err);
-        }
-
-    });
+    
+    downloadFile(arg.videoUrl, arg).catch(err => {
+        event.reply("downloadFailed", arg)
+        throw new Error(err);
+    })
 });
 ipcMain.on("nextDownload", (event, arg) => {
     event.reply('nextDownload', arg)
 })
 
 ipcMain.on("removeDownload", (event, arg) => {
-    let dir = path.join(app.getAppPath(), "..", "..", "ESCHOOL", arg)
+    let dir = path.join(app.getAppPath(), "..", "..", "electronjs", arg)
     fs.unlink(dir, (err) => {
         if (err) {
             console.error(err)
@@ -115,20 +107,9 @@ ipcMain.on("openLink", async (event, arg) => {
     shell.openExternal(arg)
 })
 
-ipcMain.on("youtubeVideo", async (event, arg) => {
-    ytdl.getBasicInfo("https://www.youtube.com/watch?v=" + arg, opt).then(res => {
-        event.reply('youtubeVideo', res.player_response.streamingData.formats)
-    });
-})
-
-ipcMain.on("nextVideo", async (event, arg) => {
-    ytdl.getBasicInfo("https://www.youtube.com/watch?v=" + arg, opt).then(res => {
-        event.reply('nextVideo', res.player_response.streamingData.formats)
-    });
-})
 
 let win
-let appIcon = null
+// let appIcon = null
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
 })

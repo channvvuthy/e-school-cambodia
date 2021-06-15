@@ -13,6 +13,10 @@ export default {
        readingPdf: ''
     },
     mutations: {
+        getPackageDetail(state, payload){
+            state.libraries.list = payload.list
+            state.libraries.filter = payload.filter
+        },
         // Add && remove from in list
         addToFavorite(state, payload){
            state.libraries.list = state.libraries.list.filter(item => {
@@ -87,7 +91,7 @@ export default {
         },
         deleteCart(state, payload){
             
-            if(state.libraries.list.length){
+            if(state.libraries && state.libraries.list && libraries.list.length){
                 state.libraries.list = state.libraries.list.filter(item =>{
                     if(item._id === payload){
                         item.is_in_cart = 0
@@ -96,7 +100,7 @@ export default {
                 })
             }
 
-            if(state.libraries.package.length){
+            if(state.libraries && state.libraries.package && state.libraries.package.length){
                 state.libraries.package = state.libraries.package.filter(item =>{
                     if(item._id === payload){
                         item.is_in_cart = 0
@@ -119,10 +123,12 @@ export default {
                     }
                     return item
                 })
-                console.log(state.libraries.package)
             }catch(err){
 
             }
+        },
+        gettingPackage(){
+
         }
         
     },
@@ -131,6 +137,19 @@ export default {
             commit("gettingLibrary", true);
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + `library?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                    commit("receivingLibrary", response.data.data)
+                    commit("gettingLibrary", false)
+                }).catch(err =>{
+                    reject(err)
+                    commit("gettingLibrary", false)
+                })
+            })
+        },
+        getMyLibrary({commit},payload){
+            commit("gettingLibrary", true);
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `me/library?${helper.q(payload)}`).then(response =>{
                     resolve(response)
                     commit("receivingLibrary", response.data.data)
                     commit("gettingLibrary", false)
@@ -164,6 +183,19 @@ export default {
                 })
             })
 
+        },
+        getMyPackage({commit}, payload){
+            commit("gettingPackage", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `library/package?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                    commit("gettingPackage", false)
+                    commit("getPackageDetail", response.data.data)
+                }).catch(err =>{
+                    reject(err)
+                    commit("gettingPackage", false)
+                })
+            })
         },
         stopWatch({commit}, payload){
             commit("stopWatch");
