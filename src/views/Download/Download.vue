@@ -49,7 +49,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="h-6"></div>
+                            <div class="h-3"></div>
+                            <div class="w-full h-1 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                            <div class="h-4"></div>
+                            <div class="flex justify-between items-center px-5">
+                                <div class="text-xs">
+                                    {{$t('date_expired')}} : 11-05-2022
+                                </div>
+                                <div class="cursor-pointer">
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#000000`"></DeleteIcon>
+                                </div>
+                            </div>
+                            <div class="h-4"></div>
                         </div>
                     </div>
                 </div>
@@ -60,6 +71,7 @@
 <script>
     import helper from "./../../helper/helper"
     import CertificateIcon from "./../../components/CertificateIcon.vue"
+    import DeleteIcon from "./../MyCourse/components/DeleteIcon.vue"
     import TestIcon from "./../../components/TestIcon.vue"
     import PdfIcon from "./../../components/PdfIcon.vue"
     import ChatIcon from "./../../components/ChatIcon.vue"
@@ -73,6 +85,7 @@
             PdfIcon,
             ChatIcon,
             YoutubeIcon,
+            DeleteIcon
         },
         data(){
             return {
@@ -98,8 +111,7 @@
                 this.window.width = window.innerWidth;
             },
              gotToPlayList(videoCourse){
-                 console.log(videoCourse)
-                this.$router.push({ name: 'video-detail', params: { course: videoCourse } })
+                 this.$router.push('download')
             },
             downloadDetail(video){
                 let downloadDetail = JSON.parse(localStorage.getItem('videos'))

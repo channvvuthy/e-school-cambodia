@@ -29,7 +29,7 @@ export default {
         getGuardian({commit}){
             commit("loadingGuardian", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'user/guardian').then(response => {
+                axios.get(config.apiUrl + 'me/guardian').then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -49,7 +49,7 @@ export default {
         addingGuardian({commit}, params){
             commit("loadAddingGuardian", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/guardian/add', params).then(response => {
+                axios.post(config.apiUrl + 'me/guardian', params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -67,7 +67,14 @@ export default {
         removeGuardian({commit}, _id){
             commit("deletingGuardian", _id)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/guardian/remove', {_id}).then(response => {
+                axios.delete(config.apiUrl + 'me/guardian',{
+                    headers:{
+
+                    },
+                    data:{
+                        _id:_id
+                    }
+                }).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

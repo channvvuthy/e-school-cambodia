@@ -196,5 +196,17 @@
   "download_video_success":"Video has been downloaded successfully",
   "download_problem":"Download problem, please try again",
   "date_expired":"Date expired",
-  "renewal":"Renewal"
+  "renewal":"Renewal",
+  "fill_info": "Please fill in some information below",
+  "as" :"Relationship",
+  "name": "Name",
+  "insurance_note":"Please purchase 4 courses or more to get insurance service worth 10,000,000 Riel (ten million Riel)",
+  "new_password": "New Password",
+  "old_password": "Old Password",
+  "set_password": "Set Password",
+  "please_enter_old_password": "Please enter old password",
+  "4122":"Your old password is incorrect",
+  "password_updated": "Password has been updated successfully",
+  "4123":"Invalid Guardian Phone Number",
+  "4124":"Please confirm the relationship with the guardian"
 }

@@ -14,7 +14,7 @@
                         {{$t('1121')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
+                <div class="text-center flex flex-col justify-center items-center"  @click="goTo('change-password')">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
                         <div><LockIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LockIcon></div>
 

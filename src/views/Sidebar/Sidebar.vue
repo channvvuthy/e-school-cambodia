@@ -23,8 +23,13 @@
             </div>
             <div class="profile bg-primary px-10 py-8 flex items-end text-white justify-between">
                 <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
-                    <div class="w-20 h-20 rounded-full bg-cover m-auto bg-white cursor-pointer"
-                         :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}">
+                    <div class="w-20 h-20 rounded-full bg-cover m-auto bg-white cursor-pointer relative"
+                         :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}" @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}" @click="() => {token?this.$refs.photo.click():``}">
+                         <div class="absolute flex items-end pb-2 justify-center w-full h-full bg-gradient-to-t from-black rounded-full" v-if="isEdit"><CameraIcon fill="#fff"></CameraIcon></div>
+                         <div class="absolute w-full h-full rounded-full flex items-start justify-center bg-gradient-to-t from-black" v-if="loading">
+                             <div class="loader mt-3"></div>
+                         </div>
+                         <input type="file" ref="photo" class="hidden" @change="onSelectedPhoto">
                     </div>
                     <div class="flex justify-between items-end mt-3  cursor-pointer"
                          :class="localize==='en'?'text-xs':'text-xs'">
@@ -62,8 +67,9 @@
     import Study from "./components/Study.vue"
     import Report from "./components/Report.vue"
     import Privacy from "./components/Privacy.vue"
+    import CameraIcon from "./../../components/CameraIcon.vue"
     import eSchool from "./components/eSchool.vue"
-    import {mapState} from "vuex"
+    import {mapActions, mapState} from "vuex"
 
     export default{
         components: {
@@ -71,7 +77,14 @@
             Privacy,
             Report,
             Study,
-            eSchool
+            eSchool,
+            CameraIcon
+        },
+        data(){
+            return{
+                isEdit: false,
+                loading: false
+            }
         },
         computed: {
             ...mapState('auth', ['token', 'stProfile']),
@@ -79,6 +92,7 @@
         },
 
         methods: {
+            ...mapActions('auth', ['changeProfilePhotoPhoto']),
             switchSidebar(){
                 if(this.isHide){
                     this.$store.commit('setting/toggleSidebar', false)
@@ -86,7 +100,24 @@
                     this.$store.commit('setting/toggleSidebar', true)
 
                 }
-            }
+            },
+            onSelectedPhoto(event){
+                if (event.target.value) {
+                    this.loading = true
+                    const file = event.target.files[0];
+                    let formData = new FormData();
+                    formData.append("image",file)
+                    this.changeProfilePhotoPhoto(formData).then(response =>{
+                        let stProfile = localStorage.getItem("stProfile")
+                        stProfile = JSON.parse(stProfile)
+                        stProfile.photo = response.data.photo
+                        this.$store.commit("auth/studentProfile", stProfile)
+                        localStorage.setItem("stProfile", JSON.stringify(stProfile))
+                        this.loading = false
+                    })
+                    
+                }
+            },
         },
 
 

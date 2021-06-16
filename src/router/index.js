@@ -141,6 +141,11 @@ const routes = [
         component: () => import('../views/Profile/Profile'),
     },
     {
+        path: '/change-password',
+        name: 'change-password',
+        component: () => import('../views/Auth/ChangePassword'),
+    },
+    {
         path: '/notification-detail/:detail/',
         name: 'notification-detail',
         component: () => import('../views/Notification/Notification'),

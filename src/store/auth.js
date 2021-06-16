@@ -270,7 +270,7 @@ export default {
         changeProfilePhotoPhoto({commit }, formData) {
             commit('changingProfile', true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/change-photo',
+                axios.post(config.apiUrl + 'me/update-photo',
                     formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
@@ -313,7 +313,7 @@ export default {
         userChangePassword({commit}, params) {
             commit("userChangePassword", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + "user/change-password", params).then(response => {
+                axios.post(config.apiUrl + "me/update-password", params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -388,3 +388,4 @@ export default {
         }
     }
 }
+
