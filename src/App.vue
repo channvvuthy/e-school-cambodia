@@ -1,5 +1,5 @@
 <template>
-    <div class="font-khmer_os" :class="darkMode?`bg-youtube`:``">
+    <div class="font-khmer_siemreab" :class="darkMode?`bg-youtube`:``">
         <!-- Cart -->
         <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
         <!-- Receipt info -->

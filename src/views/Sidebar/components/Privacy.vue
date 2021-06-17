@@ -5,9 +5,12 @@
         </div>
         <div class="px-3 mt-8">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
-                <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><ProfileIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ProfileIcon></div>
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('profile')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `profile`?`bg-byline`:`bg-button`}`:`${$route.name === `profile`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <ProfileIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `profile`"></ProfileIcon>
+                            <ProfileIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></ProfileIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
