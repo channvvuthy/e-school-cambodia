@@ -215,5 +215,7 @@
   "parent_info":"Parent information",
   "insurance_term": "Before clicking OK, make sure that the information you provide to us is correct, such as your birth certificate or identity card.",
   "submit": "Submit",
-  "please_enter_date_of_birth": "Please enter date of birth"
+  "please_enter_date_of_birth": "Please enter date of birth",
+  "save_change": "Save Change",
+  "account_updated":"Your account has been updated successfully"
 }

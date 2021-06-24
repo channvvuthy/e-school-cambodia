@@ -294,7 +294,7 @@ export default {
         changeProfile({commit}, params) {
             commit("userChangingProfile", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/change-profile', params).then(response => {
+                axios.post(config.apiUrl + 'me/update-profile', params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

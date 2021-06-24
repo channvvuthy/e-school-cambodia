@@ -136,14 +136,19 @@ const routes = [
         component: () => import('../views/Library/Video'),
     },
     {
-        path: '/change-profile',
-        name: 'change-profile',
+        path: '/profile',
+        name: 'profile',
         component: () => import('../views/Profile/Profile'),
     },
     {
         path: '/change-password',
         name: 'change-password',
         component: () => import('../views/Auth/ChangePassword'),
+    },
+    {
+        path: '/document',
+        name: 'document',
+        component: () => import('../views/Document/Document'),
     },
     {
         path: '/notification-detail/:detail/',

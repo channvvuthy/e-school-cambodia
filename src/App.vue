@@ -59,7 +59,8 @@
             hideMenu(){
                 if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' || this.$route.name === 'my-library' 
                 || this.$route.name === 'policy' || this.$route.name === 'invoice' || this.$route.name === 'my-course'
-                || this.$route.name === 'parent' || this.$route.name === 'insurance'
+                || this.$route.name === 'parent' || this.$route.name === 'insurance' || this.$route.name === 'profile'
+                || this.$route.name === 'document'
                 || this.$route.name === 'favorite' || this.$route.name === 'about' || this.$route.name === 'help'){
                     return true
                 }
