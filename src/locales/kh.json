@@ -218,8 +218,14 @@
   "submit": "បញ្ជូន",
   "please_enter_date_of_birth": "សូមថ្ងៃខែឆ្នាំកំណើត",
   "save_change": "កែប្រែទិន្ន័យ",
-  "account_updated":"គណនីរបស់លោកអ្នកត្រូវបានកែប្រជោគជ័យ"
-
-
+  "account_updated":"គណនីរបស់លោកអ្នកត្រូវបានកែប្រជោគជ័យ",
+  "add_image":"បន្ថែមរូបភាព",
+  "attach_file":"ភ្ជាប់ឯកសារ",
+  "create_folder":"បង្កើតថតឯកសារ",
+  "directory_name": "ដាក់ឈ្មោះថតឯកសារ",
+  "please_enter_folder_name":"សូមបញ្ចូលឈ្មោះថតឯកសារ",
+  "file_has_been_uploaded":"ឯកសារត្រូវបានរក្សាទុគ",
+  "folder_created":"ថតឯកសារត្រូវបានបង្កើត",
+  "choose_parent_directory":"ជ្រើសរើសថតឯកសារ"
 
 }

@@ -5,7 +5,7 @@
         <div class="loader" :class="darkMode?`text-gray-300`:`text-youtube`"></div>
     </div>
     <div v-else>
-        <pdf :src="pdfFile" :key="i" v-for="i in numPages" :page="i"></pdf>
+        <pdf :src="pdfFile" :key="i" v-for="i in numPages" :page="i" style="width: 100%"></pdf>
     </div>
   </div>
 </template>
@@ -41,7 +41,7 @@
     
         methods:{
             progress(){
-                // console.log("djkf dkfn")
+                console.log("processing...")
             }
         },
         created(){

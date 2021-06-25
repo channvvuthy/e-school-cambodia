@@ -217,5 +217,14 @@
   "submit": "Submit",
   "please_enter_date_of_birth": "Please enter date of birth",
   "save_change": "Save Change",
-  "account_updated":"Your account has been updated successfully"
+  "account_updated":"Your account has been updated successfully",
+  "add_image":"Add Image",
+  "attach_file":"Attach File",
+  "create_folder":"Create Folder",
+  "directory_name": "Enter directory name",
+  "please_enter_folder_name":"Please enter name of folder",
+  "file_has_been_uploaded":"File has been uploaded successfully",
+  "folder_created":"Folder has been created successfully",
+  "choose_parent_directory":"Choose parent directory"
+
 }
