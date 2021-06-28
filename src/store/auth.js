@@ -66,6 +66,10 @@ export default {
             }
         },
         receivingMoreStoryDetail(state, payload){
+            for(let i = 0; i < payload.viewer.length; i ++){
+                state.storyDetail.viewer.push(payload.viewer[i])
+            }
+
         },
         gettingStoryDetail(state, payload){
             state.loadingStory = payload

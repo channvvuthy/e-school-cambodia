@@ -76,7 +76,9 @@
                 <Loading></Loading>
             </div>
             <template v-if="videos.list && videos.list.length <= 0">
-                <Empty></Empty>
+                <div class="h-65 flex items-center justify-center">
+                    <Empty></Empty>
+                </div>
              </template>
             <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
         </div>

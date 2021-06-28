@@ -226,6 +226,8 @@
   "please_enter_folder_name":"សូមបញ្ចូលឈ្មោះថតឯកសារ",
   "file_has_been_uploaded":"ឯកសារត្រូវបានរក្សាទុគ",
   "folder_created":"ថតឯកសារត្រូវបានបង្កើត",
-  "choose_parent_directory":"ជ្រើសរើសថតឯកសារ"
+  "choose_parent_directory":"ជ្រើសរើសថតឯកសារ",
+  "there_are_no_documents_in_this_view":"សូមទោសមិនមានឯកសារទេ",
+  "no_viewers_yet":"មិនទាន់មានអ្នកមើល"
 
 }

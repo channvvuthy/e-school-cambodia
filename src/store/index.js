@@ -20,6 +20,7 @@ import partner from "./partner"
 import chat from "./chat"
 import library from "./library"
 import document from "./document"
+import gallery from "./gallery"
 import help from "./help"
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -48,6 +49,7 @@ export default  new Vuex.Store({
         partner,
         quiz,
         library,
-        document
+        document,
+        gallery
     }
 });

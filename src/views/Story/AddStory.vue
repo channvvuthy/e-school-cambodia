@@ -11,12 +11,15 @@
                 <img :src="imgUrl" class="m-auto max-h-full rounded-md">
             </div>
             <div class="flex justify-end mt-4">
-                <button class="flex items-center text-sm justify-center rounded h-10 leading-10 cursor-pointer px-5 focus:outline-none shadow" 
-                :class="darkMode?`bg-youtube border border-button text-gray-300`:`bg-primary text-white`"
+                <button class="flex items-center text-sm justify-center rounded h-10 leading-10 cursor-pointer px-5 focus:outline-none shadow relative w-36" 
+                :class="darkMode?`bg-primary text-gray-300`:`bg-primary text-white`"
                 :disabled="addingStory"
                 @click="shareStory">
-                    <span>{{$t('share_to_story')}} </span>
-                    <div class="loader ml-2" v-if="addingStory"></div>
+                    
+                   <div class="absolute w-full flex items-center justify-center -top-2 left-0" v-if="addingStory">
+                        <div class="loader" ></div>
+                   </div>
+                   <span v-else>{{$t('share_to_story')}} </span>
                 </button>
                 
             </div>
@@ -46,27 +49,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-    .loader {
-        border: 2px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 2px solid #3498db;
-        width: 15px;
-        height: 15px;
-        -webkit-animation: spin 2s linear infinite; /* Safari */
-        animation: spin 2s linear infinite;
-        }
-
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg);
-        }
-    }
-
-</style>

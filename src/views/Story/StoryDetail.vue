@@ -30,6 +30,7 @@
                 <div class="flex-1 flex items-center justify-center overflow-hidden" style="max-height:80%;">
                      <img :src="storyDetail.photo.name" style="max-height:100%;"/>
                 </div>
+                <div class="h-4"></div>
                 <!-- Viewer -->
                 <div class="cursor-pointer w-full flex justify-start px-3  items-end text-sm mb-2 relative z-50"
                     >

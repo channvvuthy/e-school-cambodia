@@ -151,6 +151,16 @@ const routes = [
         component: () => import('../views/Document/Document'),
     },
     {
+        path: '/gallery',
+        name: 'gallery',
+        component: () => import('../views/Gallery/Gallery'),
+    },
+    {
+        path: '/document-detail/:folder',
+        name: 'document-detail',
+        component: () => import('../views/Document/Detail'),
+    },
+    {
         path: '/notification-detail/:detail/',
         name: 'notification-detail',
         component: () => import('../views/Notification/Notification'),

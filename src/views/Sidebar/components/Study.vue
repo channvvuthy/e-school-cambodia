@@ -51,9 +51,9 @@
                 </div>
                
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('document')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `document`?`bg-byline`:`bg-button`}`:`${$route.name === `document`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `document` || $route.name === `document-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `document`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
-                            <DocumentIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `document`"></DocumentIcon>
+                            <DocumentIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `document` || $route.name === `document-detail`"></DocumentIcon>
                             <DocumentIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></DocumentIcon>
                         </div>
                     </div>

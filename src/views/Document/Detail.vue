@@ -10,7 +10,10 @@
                     </div>
                 </div>
             </div>
-            <div class="h-10"></div>
+            <div class="h-5"></div>
+            <div v-if="documents.length <= 0" class="flex items-center justify-center h-65">
+                <Empty :des="$t(`there_are_no_documents_in_this_view`)"></Empty>
+            </div>
             <template v-if="loadingDoc">
                 <Loading></Loading>
             </template>
@@ -74,8 +77,8 @@
         </div>
         <Directroy v-if="showDirectory" @closeDirectory="closeDirectory"></Directroy>
         <!-- Preview Image -->
-        <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90 p-5 overflow-y-scroll" v-if="showPreview">
-            <div class="w-96 rounded-xl flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`" style="max-height:100%;">
+        <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="showPreview">
+            <div class="w-96 rounded-xl flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
                 <div class="py-4 px-5 relative">
                     {{$t('preview')}}
                     <div class="absolute right-2 top-3 cursor-pointer" @click="() => {this.showPreview = false}">
@@ -93,12 +96,12 @@
                     </div>
                 </div>
                 <div class="h-5"></div>
-                <div class="px-5 overflow-y-scroll" style="max-height:80%;">
-                    <img :src="preview">
+                <div class="px-5">
+                    <img :src="preview" style="max-height:80%;">
                 </div>
                 <div class="h-5"></div>
                 <div class="flex justify-end px-5">
-                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="createImage">
+                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="createImage" :disabled="loading">
                         <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="loading">
                             <div class="loader"></div>
                         </div>
@@ -131,7 +134,7 @@
                 </div>
                 <div class="h-5"></div>
                 <div class="flex justify-end px-5">
-                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="createImage">
+                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="createImage" :disabled="loading">
                         <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="loading">
                             <div class="loader"></div>
                         </div>
@@ -188,7 +191,9 @@
     import moment from "moment"
     import BuyMsg from "./../Component/BuyMsg.vue"
     import SinglePdf from "./../Component/SinglePdf.vue"
+    import Empty from "./../Component/Empty.vue"
     import Loading from "./../../components/Loading.vue"
+
     export default {
         data(){
             return{
@@ -228,6 +233,7 @@
             BuyMsg,
             SinglePdf,
             EnlargeIcon,
+            Empty,
             Loading
         },
         computed:{
@@ -266,13 +272,14 @@
                 let formData = new FormData()
                 formData.append("file", this.file)
                 formData.append("name", this.fileName)
-                formData.append("id", this.directroy)
+                formData.append("id", this.$route.params.folder)
 
                 this.createDocument(formData).then(() =>{
                     this.showPreview = false
                     this.showPdf = false
                     this.getDocument({
-                        user_id: this.user_id
+                        user_id: this.user_id,
+                        folder: this.$route.params.folder
                     })
                     helper.success("file_has_been_uploaded")
                 })
@@ -285,6 +292,7 @@
                     payload.p = this.page
                     payload.user_id = this.user_id
                     payload.s = this.s
+                    payload.folder = this.$route.params.folder
 
                     if(this.enableScroll){
                         this.getMoreDocument(payload).then(res =>{
@@ -296,10 +304,11 @@
                 }
             },
             search(){
+                this.loadingDoc = true
                 let payload = {}
                 payload.s = this.s
                 payload.user_id = this.user_id
-                this.loadingDoc = true
+                payload.folder = this.$route.params.folder
                 this.getDocument(payload).then(response =>{
                     this.loadingDoc = false
                     if(response.data.data && response.data.data.length){
@@ -339,6 +348,7 @@
             },
 
             previewFile(file){
+                console.log(file)
                 if(file.type === 2){
                     this.pdfUrl = file.url
                     this.fileName = file.name
@@ -351,7 +361,7 @@
                 }
                 if(file.type === 1){
                     this.$router.push({name:'document-detail', params:{folder: file._id}})
-
+                   
                 }
             },
             openFullscreen() {
@@ -375,9 +385,10 @@
             }
         },
         mounted(){
-            this.loadingDoc = true;
+            this.loadingDoc = true
             this.getDocument({
-                user_id: this.user_id
+                user_id: this.user_id,
+                folder: this.$route.params.folder
             }).then(response =>{
                 this.loadingDoc = false
                 if(response.data.data && response.data.data.length){
