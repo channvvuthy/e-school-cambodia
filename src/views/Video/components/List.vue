@@ -2,8 +2,7 @@
     <div class="mx-5 mb-5 pb-4" :class="darkMode?'bg-secondary text-gray-300':'bg-white'">          
         <div class="text-sm">
             <div class="grid grid-cols-3 gap-x-10 gap-y-5 font-medium">
-                <div
-                        class="px-5 cursor-pointer flex items-center border-b  py-3" :class="darkMode?`border-button`:`border-gray-500`">
+                <div class="px-5 cursor-pointer flex items-center border-b  py-3" :class="darkMode?`border-button`:`border-gray-500`" @click="selectFilter('all')">
                     <div class="rounded-full flex justify-center items-center w-8 h-8" :class="darkMode?`bg-youtube`:`bg-primary`">
                         <WatchIcon fill="#fff" :size="18"></WatchIcon>
                     </div>

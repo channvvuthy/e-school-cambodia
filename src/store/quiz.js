@@ -5,7 +5,9 @@ import helper from "./../helper/helper"
 export default {
     namespaced: true,
     state: {
-        quiz: []
+        quiz: [],
+        certificatesQuiz: [],
+        loading: false
     },
     mutations:{
         getQuiz(state, payload){
@@ -13,6 +15,12 @@ export default {
         },
         submittingQuiz(){
 
+        },
+        gettingQuizCertificate(state, payload){
+            state.loading = payload
+        },
+        receivingCertificate(state, payload){
+            state.certificatesQuiz = payload
         }
     },
     actions:{
@@ -37,7 +45,19 @@ export default {
                     reject(err)
                 })
             })
+        },
+        getQuizCertificate({commit}, payload){
+            commit("gettingQuizCertificate", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `quiz/certificate?${helper.q(payload)}`).then(response =>{
+                    commit("receivingCertificate", response.data.data)
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
         }
+
     }
     
 }

@@ -21,23 +21,32 @@
                         <div class="font-semibold text-sm" :class="darkMode?`text-white`:`text-primary`">
                             {{ video.order }}. {{ video.title }}
                         </div>
-                        <div class="flex mt-5 text-sm">
-                            <div class="flex mb-3">
-                                <div class="cursor-pointer"
-                                     @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
-                                    <FavoriteFill v-if="video.is_favorite" :size="24" :fill="darkMode?`#E5E7EB`:`#c0272d`"></FavoriteFill>
-                                    <FavoriteIcon v-else :size="24" :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></FavoriteIcon>
+                        <div class="h-5"></div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex text-sm">
+                                <div class="flex items-center">
+                                    <div class="cursor-pointer"
+                                        @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
+                                        <FavoriteFill v-if="video.is_favorite" :size="24" :fill="darkMode?`#E5E7EB`:`#c0272d`"></FavoriteFill>
+                                        <FavoriteIcon v-else :size="24" :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></FavoriteIcon>
+                                    </div>
+                                    <div class="mx-3">
+                                        {{$t('1109')}}
+                                    </div>
                                 </div>
-                                <div class="mx-3">
-                                    {{$t('1109')}}
+                                <div class="flex mx-20 items-center">
+                                    <div>
+                                        <Eye :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></Eye>
+                                    </div>
+                                    <div class="mx-2">{{kFormatter(video.view)}}</div>
+                                    <div>{{$t('1003')}}</div>
                                 </div>
                             </div>
-                            <div class="flex mx-20">
-                                <div>
-                                    <Eye :fill="darkMode?`#E5E7EB`:`#4A4A4A`"></Eye>
+                            <div class="flex items-center cursor-pointer" v-if="($route.params.course.has_certificate && $route.params.course.is_buy)" @click="courseQuiz($route.params.course._id)">
+                                <div class="mr-3">
+                                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon> 
                                 </div>
-                                <div class="mx-2">{{video.view}}</div>
-                                <div>{{$t('1003')}}</div>
+                                <div>{{$t('2117')}}</div>
                             </div>
                         </div>
                     </div>
@@ -141,6 +150,8 @@
     import BuyMsg from "./../Component/BuyMsg.vue"
     import Cart from "./../Component/Cart.vue"
     import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
+    import CertificateIcon from "./../../components/CertificateIcon.vue"
+
     export default{
         data(){
             return {
@@ -188,12 +199,14 @@
             BuyMsg,
             Cart,
             ReceiptInfo,
-            BorderBottom
+            BorderBottom,
+            CertificateIcon
 
         },
         computed: {
             ...mapState('video', ['playlist']),
             ...mapState('setting', ['darkMode']),
+            ...mapState('quiz', ['certificatesQuiz'])
         },
         methods: {
             ...mapActions('video', ['getPlaylist']),
@@ -201,6 +214,7 @@
             ...mapActions('playVideo', ['playVideo', 'stopWatch']),
             ...mapActions('favorite', ['add', 'removeFavorite']),
             ...mapActions('cart', ['addCart', 'getCart']),
+            ...mapActions('quiz', ['getQuizCertificate']),
 
             closeCart(){
                 this.showCart = false
@@ -217,6 +231,11 @@
                     this.getCart()
                 })
             },
+            courseQuiz(id){
+                this.getQuizCertificate({id}).then(() =>{
+                    this.$router.push({name:'course-quiz',params:{course: this.$route.params.course}})
+                })
+            },
             buyNow(){
                 this.showBuy = true
             },
@@ -230,6 +249,9 @@
             },
             cutString(text, limit){
               return helper.cutString(text, limit)
+            },
+            kFormatter(num){
+                return helper.kFormatter(num)
             },
             openFullscreen() {
                 var elem = document.getElementById("fullScreen");

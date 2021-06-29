@@ -151,6 +151,11 @@ const routes = [
         component: () => import('../views/Document/Document'),
     },
     {
+        path: '/course-quiz/:course',
+        name: 'course-quiz',
+        component: () => import('../views/MyCourse/Quiz'),
+    },
+    {
         path: '/gallery',
         name: 'gallery',
         component: () => import('../views/Gallery/Gallery'),
