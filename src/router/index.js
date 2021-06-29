@@ -156,6 +156,11 @@ const routes = [
         component: () => import('../views/Gallery/Gallery'),
     },
     {
+        path: '/certificate',
+        name: 'certificate',
+        component: () => import('../views/Certificate/Certificate'),
+    },
+    {
         path: '/document-detail/:folder',
         name: 'document-detail',
         component: () => import('../views/Document/Detail'),

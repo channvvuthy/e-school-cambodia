@@ -2,6 +2,8 @@
     <div>
         
         <eHeader :title="'1113'"></eHeader>
+       
+        <!-- Popup -->
         <div class="fixed w-full h-full top-0 left-0 z-50 bg-black bg-opacity-95 p-5 overflow-y-scroll flex items-center justify-center" v-if="previewStory">
             <div class="md:w-96 2xl:w-100 text-gray-300 bg-secondary rounded-lg flex flex-col justify-between relative" style="height:90%;">
                 <div class="flex justify-between p-5">
@@ -21,17 +23,27 @@
                 <div class="h-5"></div>
                 <div class="overflow-y-scroll  flex-1 flex items-center justify-center">
                     <img :src="imgUrl" class="max-h-full">
+                    <div class="absolute flex justify-between items-center w-full bg-transparent">
+                        <!-- Left -->
+                        <div class="transform rotate-90 relative -left-20 cursor-pointer bg-secondary w-8 h-8 rounded-full flex items-center justify-center" :class="previous?'visible':'invisible'"  @click="previousStory">
+                            <ChevronIcon fill="#909090"></ChevronIcon>
+                        </div>
+                        <!-- Right -->
+                        <div class="transform -rotate-90 relative -right-20 cursor-pointer bg-secondary w-8 h-8 rounded-full flex items-center justify-center" :class="next?'visible':'invisible'" @click="nextStory">
+                            <ChevronIcon fill="#ffffff"></ChevronIcon>
+                        </div>
+                    </div>
                 </div>
                 <div class="h-5"></div>
                 <div class="cursor-pointer w-full flex justify-start px-3  items-end text-sm mb-2 relative z-50"
                     >
-                    <div class="flex items-center mb-4" @click="showUserViewer(gallery)">
-                        <template v-if="!countView(storyDetail.viewer)">
+                    <div class="flex items-center mb-4" @click="showUserViewer(storyDetail)">
+                        <template v-if="!storyDetail.view">
                             <span>{{$t('no_viewers_yet')}}</span>
                         </template>
                         <template v-else>
                             <span><Eye fill="#ffffff"></Eye></span>
-                            <span class="px-1"> {{countView(storyDetail.viewer)}}</span>
+                            <span class="px-1"> {{storyDetail.view}}</span>
                             <span class="pr-1">{{$t('1004')}}</span>
                             <span><ChevronIcon fill="#ffffff" :size="18"></ChevronIcon></span>
                         </template>
@@ -43,7 +55,7 @@
                     <div class="md:w-96 2xl:w-100 top-0 sticky relative flex justify-between px-3 py-9" :class="darkMode?`bg-secondary`:`text-black bg-white`"> 
                         <div class="flex ml-5 text-xs font-semibold items-center">
                             <span><Eye :fill="darkMode?'#ffffff':'#000000'"></Eye></span>
-                            <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{countView(storyDetail.viewer)}}</span>
+                            <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{storyDetail.view}}</span>
                             <span class="pr-1" :class="darkMode?`text-white`:`text-black`">{{$t('1004')}}</span>
                         </div>
                         <div class="cursor-pointer opacity-70 z-50 relative -top-4" @click="()=>{this.showViewer = false}">
@@ -79,7 +91,7 @@
         <div v-else class="m-5">
             <div class="h-screen pb-40 overflow-y-scroll"  @scroll="getMoreGallery($event)">
                 <div :class="window.width <= 1315?`container-4`:`container-5`">
-                    <div v-for="(gallery, index) in galleries" :key="index" class="cursor-pointer" @click="viewImg(gallery)">
+                    <div v-for="(gallery, index) in galleries" :key="index" class="cursor-pointer" @click="viewImg(gallery,index)">
                         <img :src="gallery.photo.name">
                     </div>
                 </div>
@@ -109,7 +121,10 @@ export default {
             page: 1,
             window:{
                 width: null
-            }
+            },
+            next:true,
+            previous:true,
+            order: 0,
         }
     },
     components:{
@@ -130,7 +145,7 @@ export default {
         ...mapActions('gallery', ['getGallery']),
         ...mapActions('auth', ['viewStory']),
          showUserViewer(gallery){
-             if(this.countView(this.storyDetail.viewer)){
+             if(this.storyDetail.view){
                 this.showViewer = true
                 this.id = gallery._id;
              }
@@ -157,6 +172,24 @@ export default {
                 this.viewStory(payload)
             }
         },
+        previousStory(){
+            this.order -- 
+            if(this.order <= 0){
+                this.previous = false
+            }
+            this.next = true
+
+            this.viewImg(this.galleries[this.order], this.order)
+        },
+        nextStory(){
+            this.previous = true
+            if(this.order < (this.galleries.length - 1)){
+                this.order ++
+                this.viewImg(this.galleries[this.order], this.order)
+            }else{
+                this.next = false
+            }
+        },
         countView(viewer) {
             if (typeof viewer === "object") {
                 if (viewer.length) {
@@ -165,7 +198,8 @@ export default {
             }
             return false;
         },
-        viewImg(gallery){
+        viewImg(gallery,index){
+            this.order = index
             this.id = gallery._id
             this.imgUrl = gallery.photo.name
             this.previewStory = true

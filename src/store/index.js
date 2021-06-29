@@ -21,6 +21,7 @@ import chat from "./chat"
 import library from "./library"
 import document from "./document"
 import gallery from "./gallery"
+import certificate from "./certificate"
 import help from "./help"
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -50,6 +51,7 @@ export default  new Vuex.Store({
         quiz,
         library,
         document,
-        gallery
+        gallery,
+        certificate
     }
 });

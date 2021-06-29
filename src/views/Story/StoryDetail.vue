@@ -36,7 +36,7 @@
                     >
                     <div class="flex items-center mb-4" @click="showUserViewer(storyDetail._id)">
                         <span><Eye fill="#ffffff"></Eye></span>
-                        <span class="px-1"> {{countView(storyDetail.viewer)}}</span>
+                        <span class="px-1"> {{storyDetail.view}}</span>
                         <span class="pr-1">{{$t('1004')}}</span>
                         <span><ChevronIcon fill="#ffffff" :size="18"></ChevronIcon></span>
                     </div>
@@ -50,7 +50,7 @@
                         </div>
                         <div class="flex ml-5 text-xs font-semibold items-center">
                             <span><Eye :fill="darkMode?'#ffffff':'#000000'"></Eye></span>
-                            <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{countView(storyDetail.viewer)}}</span>
+                            <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{storyDetail.view}}</span>
                             <span class="pr-1" :class="darkMode?`text-white`:`text-black`">{{$t('1004')}}</span>
                         </div>
                     </div>
@@ -118,14 +118,6 @@ export default {
         }
     },
 
-    countView(viewer) {
-      if (typeof viewer === "object") {
-        if (viewer.length) {
-          return viewer.length;
-        }
-      }
-      return "";
-    },
     previousStory(){
         this.showViewer = false;
         let storyIndex = this.storyIndex - 1
