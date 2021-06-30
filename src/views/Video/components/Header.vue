@@ -37,7 +37,12 @@
         },
         methods:{
             back(){
+                
                 if(!this.isExam){
+                    if(this.$route.name === 'video-detail'){
+                        this.$router.push({name:'video'})
+                        return;
+                    }
                     this.$router.go(-1)
                 }else{
                     this.$emit("exit")

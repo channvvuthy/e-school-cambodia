@@ -78,6 +78,7 @@ export default {
             var str = str.toString()
             return str.replace(/\[math]/g,"").replace(/\[\/math]/g,"").replace(/&nbsp;/g,"").replace("។","")
             .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f').replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
+            .replace(/\\pitk/g,"\\pi\\text{tk}")
 
         },
 

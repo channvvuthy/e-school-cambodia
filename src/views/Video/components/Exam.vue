@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="absolute left-0 top-0 w-full h-full z-50 pt-10" :class="darkMode?`bg-youtube text-gray-300`:`bg-white text-black`">
-            <div class="text-center bg-transparent">
+        <div class="absolute left-0 top-0 w-full h-full z-50 pt-10 " :class="darkMode?`bg-youtube text-gray-300`:`bg-white text-black`">
+            <div class="text-center bg-transparent overflow-y-scroll h-85 pb-40">
                 <div class="text-base max-w-xl m-auto">
                     <div class="mb-5">
                         {{$t('2121')}}
@@ -19,7 +19,7 @@
                     </div>
                     <!-- Quiz -->
                     
-                    <div class="text-sm mt-10">
+                    <div class="text-sm mt-10 ">
                         <div v-for="(quizzes, index) in quiz.list" :key="index" :class="order != index?`hidden`:``">
                             <div :class="darkMode?`bg-secondary`:`bg-gray-50`" class="shadow rounded-md py-5 px-10 rgba flex-col overflow-y-scroll my-scroll">
                                 <math xmlns = "http://www.w3.org/1998/Math/MathML">
@@ -27,7 +27,7 @@
                                     <katex-element :expression="toLatex(quizzes.title)" />
                                 </math>
                                 <div class="mt-8">
-                                    <div v-for="(list,key) in quizzes.check_list" :key="key" class="my-5">
+                                    <div v-for="(list,key) in quizzes.check_list" :key="key">
                                         <label class="flex items-center relative">
                                             <div class="relative">
                                                 <input type="checkbox" class="mr-5 hidden" @change="selectAnswer($event,quizzes,list)">
@@ -85,9 +85,9 @@ import LoadingTimeIcon from "./../../../components/LoadingTimeIcon.vue"
 import ChevronIcon from "./../../../components/ChevronIcon.vue"
 import toHHMMSS from "./../../../helper/toHHMMSS"
 import helper from "./../../../helper/helper"
-import FailExam from "./FailExam"
-import PassExam from "./PassExam"
-import ViewExam from "./ViewExam"
+import FailExam from "./FailExam.vue"
+import PassExam from "./PassExam.vue"
+import ViewExam from "./ViewExam.vue"
 import Vue from 'vue';
 import VueKatex from 'vue-katex';
 import 'katex/dist/katex.min.css';

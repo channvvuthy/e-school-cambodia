@@ -56,6 +56,18 @@ export default {
                     reject(err)
                 })
             })
+        },
+        submitQuizCertificate({commit}, payload){
+            commit("gettingQuizCertificate", true)
+            return new Promise((resolve, reject ) =>{
+                axios.post(config.apiUrl + `quiz/certificate`, payload).then(response =>{
+                    resolve(response)
+                    commit("gettingQuizCertificate", false)
+                }).catch(err =>{
+                    reject(err)
+                    commit("gettingQuizCertificate", false)
+                })
+            })
         }
 
     }
