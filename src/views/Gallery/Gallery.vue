@@ -108,7 +108,6 @@ import CloseIcon from "./../../components/CloseIcon.vue"
 import ChevronIcon from "./../../components/ChevronIcon.vue"
 import Eye from "./../../components/Eye.vue"
 import VueMomentsAgo from "vue-moments-ago";
-import Template from '../Story/<template>.vue'
 
 export default {
     data(){
@@ -134,7 +133,6 @@ export default {
         VueMomentsAgo,
         ChevronIcon,
         Eye,
-        Template
     },
     computed:{
         ...mapState('gallery', ['loading', 'galleries']),

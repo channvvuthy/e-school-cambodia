@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black bg-opacity-95">
+    <div class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black">
             <div class="md:w-96 2xl:w-100 h-85 rounded-xl bg-secondary flex flex-col justify-between text-gray-300 relative">
                 <!-- Profile -->
                 <div class="flex items-center left-3 justify-start p-4" v-if="storyDetail.user">

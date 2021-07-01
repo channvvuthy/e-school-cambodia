@@ -176,6 +176,12 @@ const routes = [
         component: () => import('../views/Notification/Notification'),
 
     },
+    {
+        path: '/story-list',
+        name: 'story-list',
+        component: () => import('../views/Story/List'),
+
+    },
 
 
 ];

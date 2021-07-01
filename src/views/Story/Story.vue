@@ -11,7 +11,12 @@
                     {{token ? stProfile.first_name + " " + stProfile.last_name : $t('1127')}}
                 </span></div>
             </div>
-            <div class="list mt-5" :class="darkMode?`text-gray-300`:``">
+            <div class="list mt-5 relative" :class="darkMode?`text-gray-300`:``">
+                <div class="absolute -right-3  h-full flex items-center justify-center z-50 text-white">
+                    <div class="bg-secondary w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-button" :title="$t('see_all_story')" v-if="seeMore" @click="listOfStory">
+                        <ArrowRight :size="16" fill="#F3F4F6"></ArrowRight>
+                    </div>
+                </div>
                 <div class="w-full overflow-x-auto flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative" @click="addStory()">
                         <div class="box-story relative h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center relative">
@@ -27,7 +32,7 @@
                         <input type="file" ref="file" class="hidden" accept="image/x-png,image/gif,image/jpeg" @change="chooseFilt">
                     </div>
                     <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index" @click="getStoryDetail(my_story,index)">
-                        <div class="w-10 h-10 border-3 rounded-full bg-cover absolute z-50 left-2 top-2 bg-white flex justify-center items-center"
+                        <div class="w-10 h-10 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 bg-white flex justify-center items-center"
                         :class="darkMode?``:`border-fb`"
                              :style="{backgroundImage:`url(${my_story.user.photo})`}"
                         >
@@ -50,6 +55,7 @@
 <script>
     import AddIcon from "./../../components/AddIcon.vue"
     import SmileIcon from "./../../components/SmileIcon.vue"
+    import ArrowRight from "./../../components/ArrowRight.vue"
     import StoryDetail from "./StoryDetail.vue"
     import AddStory from "./AddStory.vue"
     import {mapState, mapActions} from "vuex"
@@ -59,14 +65,16 @@
             AddIcon,
             StoryDetail,
             AddStory,
-            SmileIcon
+            SmileIcon,
+            ArrowRight
         },
         data(){
             return{
                 page: 1,
                 showStory:false,
                 showAddStory:false,
-                file: ""
+                file: "",
+                seeMore: false,
             }
         },
         computed: {
@@ -75,8 +83,14 @@
         },
         methods: {
             ...mapActions('auth', ['getStory','viewStory','addMyStory']),
+            listOfStory(){
+                this.$router.push({name: 'story-list'})
+            },
             onScroll ({target: {scrollLeft, clientWidth, scrollWidth}}) {
-                if (scrollLeft + clientWidth >= scrollWidth) {
+                this.seeMore = true
+                
+                if (scrollLeft + clientWidth >= (scrollWidth - 1)) {
+
                     this.page ++
                     this.getStory(this.page).then(() =>{});
                 }
