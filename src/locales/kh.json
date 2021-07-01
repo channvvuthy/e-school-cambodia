@@ -230,6 +230,10 @@
   "there_are_no_documents_in_this_view":"សូមទោសមិនមានឯកសារទេ",
   "no_viewers_yet":"មិនទាន់មានអ្នកមើល",
   "certificate_of_education":"វិញាបនបត្របញ្ជាក់ការសិក្សា",
-  "see_all_story":"មើលរឿងទាំងអស់"
+  "see_all_story":"មើលរឿងទាំងអស់",
+  "friend": "មិត្ត",
+  "friend_request": "សំណូមពរមិត្ត",
+  "add_friend": "បន្ថែម​មិត្ត",
+  "your_request":"សំណើ​របស់​អ្នក"
 
 }

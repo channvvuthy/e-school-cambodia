@@ -22,6 +22,7 @@ import library from "./library"
 import document from "./document"
 import gallery from "./gallery"
 import certificate from "./certificate"
+import network  from "./network"
 import help from "./help"
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -52,6 +53,7 @@ export default  new Vuex.Store({
         library,
         document,
         gallery,
-        certificate
+        certificate,
+        network
     }
 });

@@ -182,6 +182,12 @@ const routes = [
         component: () => import('../views/Story/List'),
 
     },
+    {
+        path: '/network',
+        name: 'network',
+        component: () => import('../views/Network/Network'),
+
+    },
 
 
 ];

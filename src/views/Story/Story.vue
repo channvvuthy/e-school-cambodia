@@ -33,7 +33,7 @@
                     </div>
                     <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index" @click="getStoryDetail(my_story,index)">
                         <div class="w-10 h-10 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 bg-white flex justify-center items-center"
-                        :class="darkMode?``:`border-fb`"
+                        :class="darkMode?`border-fb`:`border-fb`"
                              :style="{backgroundImage:`url(${my_story.user.photo})`}"
                         >
                         </div>

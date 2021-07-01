@@ -62,6 +62,7 @@
                 || this.$route.name === 'parent' || this.$route.name === 'insurance' || this.$route.name === 'profile'
                 || this.$route.name === 'certificate' || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
                 || this.$route.name === 'document' || this.$route.name === 'document-detail' || this.$route.name === 'gallery'
+                || this.$route.name === 'network'
                 || this.$route.name === 'favorite' || this.$route.name === 'about' || this.$route.name === 'help'){
                     return true
                 }
