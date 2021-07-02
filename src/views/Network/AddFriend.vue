@@ -12,12 +12,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center justify-center rounded-full" :class="darkMode?`bg-fb`:`bg-primary cursor-pointer`">
-                        <div @click="addFriend(friend)" v-if="!isRequested(friend)" class="px-3 py-1">
-                            <AddIcon fill="#FFFFFF" :size="14"></AddIcon>
+                    <div class="flex items-center justify-center cursor-pointer rounded-2xl" :class="darkMode?`bg-button`:`bg-primary`">
+                        <div @click="addUser(friend)" v-if="!isRequested(friend)" class="flex items-center justify-center w-10 h-6 rounded-2xl">
+                            <AddIcon :fill="darkMode?`#909090`:`#FFFFFF`" :size="16"></AddIcon>
                         </div>
-                        <div v-else @click="cancelFriendRequest(friend)" class="px-3 py-1">
-                            <ArrowRight fill="#FFFFFF" :size="14"></ArrowRight>
+                        <div v-else @click="cancelFriendRequest(friend)" class="flex items-center justify-center w-10 h-6 rounded-2xl">
+                            <ArrowRight fill="#FFFFFF" :size="16"></ArrowRight>
                         </div>
                     </div>
                 </div>
@@ -26,12 +26,15 @@
                 </div>
             </div>
         </div>
+         <div v-else>
+            {{$t('there_is_no_friend_to_add')}}
+        </div>
     </div>
 </template>
 <script>
 import AddIcon from "./../../components/AddIcon.vue"
 import ArrowRight from "./../../components/ArrowRight.vue"
-import {mapState} from "vuex"
+import {mapState, mapActions} from "vuex"
 export default {
     props:{
         friendNotInContact:{
@@ -53,8 +56,12 @@ export default {
         ArrowRight
     },
     methods:{
-        addFriend(friend){
-            this.addedFriend.push(friend._id)
+        ...mapActions('network', ['addFriend', 'cancelRequest']),
+        addUser(friend){
+            let payload = {id: friend._id}
+            this.addFriend(payload).then(() =>{
+                 this.addedFriend.push(friend._id)
+            })
         },
         isRequested(friend){
             for(let i = 0; i < this.addedFriend.length; i ++){
@@ -65,7 +72,9 @@ export default {
             return false
         },
         cancelFriendRequest(friend){
-            this.addedFriend = this.addedFriend.filter(item => item != friend._id)
+            this.cancelRequest(friend._id).then(() =>{
+                this.addedFriend = this.addedFriend.filter(item => item != friend._id)
+            })
         }
     }
 }

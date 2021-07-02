@@ -233,6 +233,10 @@
   "friend": "Friend",
   "friend_request": "Friend Request",
   "add_friend": "Add Friend",
-  "your_request":"Your Request"
+  "your_request":"Your Request",
+  "there_is_no_friend_request": "There is no friend request",
+  "there_is_no_friend_to_add":"There is no friend to add",
+  "no_request_to":"You don't have any request to the friend",
+  "you_do_not_have_any_friend":"You don't have any friend"
 
 }
