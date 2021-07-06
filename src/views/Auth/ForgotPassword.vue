@@ -11,7 +11,7 @@
                 {{$t('2011')}}
             </div>
             <div class="h-5"></div>
-            <div class="text-center text-gray-600 px-11 text-sm">
+            <div class="text-center text-gray-400 px-11 text-sm">
                <span v-if="!showReset">{{$t('reset_password_des')}}</span>
                <span v-else> {{$t('reset_password')}}</span>
             </div>
@@ -122,9 +122,11 @@
                     if(response.status === 1 || response.status === 2){
                         helper.errorMessage(response.msg)
                     }else{
+                        this.payload.xtoken = response.data.token
                         this.showReset = true                    
                         axios.interceptors.request.use(
                             (config) => {
+                              
                                 config.headers['xtoken'] = response.data.token
                                 return config;
                             },
@@ -168,12 +170,15 @@
                 this.resetingPassword = true
 
                 this.changeForgotPassword(this.payload).then(result =>{
-                    let data = result.data
-                    let stProfile = data
+                    if(result.status === 1 || result.status === 2){
+                        helper.errorMessage(result.msg)
+                    }else{
+                        let data = result.data
+                        let stProfile = data
 
-                    localStorage.setItem('stProfile', JSON.stringify(stProfile));
+                        localStorage.setItem('stProfile', JSON.stringify(stProfile));
                     this.storeUserData(data)
-
+                    }
                 })
             }
         }

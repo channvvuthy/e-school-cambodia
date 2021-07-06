@@ -111,7 +111,7 @@
                 this.window.width = window.innerWidth;
             },
              gotToPlayList(videoCourse){
-                 this.$router.push('download')
+                 this.$router.push({name: 'download-detail',params:{course: videoCourse}})
             },
             downloadDetail(video){
                 let downloadDetail = JSON.parse(localStorage.getItem('videos'))

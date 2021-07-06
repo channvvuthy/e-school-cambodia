@@ -1,6 +1,6 @@
 import axios from "axios"
 import config from "./../config"
-// import err from "./../helper/err"
+import helper from "./../helper/helper"
 
 export default {
     namespaced: true,
@@ -69,6 +69,7 @@ export default {
                     resolve(response)
                 }).catch(err => {
                     commit("homeLoading", false)
+                    helper.errorMessage(err.response.data.msg)
                     reject(err)
                 })
             })
@@ -87,6 +88,7 @@ export default {
                     resolve(response)
                 }).catch(err => {
                     commit("paginationLoading", false)
+                    helper.errorMessage(err.response.data.msg)
                     reject(err)
                 })
             })

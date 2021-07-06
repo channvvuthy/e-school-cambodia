@@ -39,9 +39,9 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('download')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `download`?`bg-byline`:`bg-button`}`:`${$route.name === `download`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `download` || $route.name === `download-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `download` || $route.name === `download-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
-                            <DownloadIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `download`"></DownloadIcon>
+                            <DownloadIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `download` || $route.name === `download-detail`"></DownloadIcon>
                             <DownloadIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></DownloadIcon>
                         </div>
                     </div>

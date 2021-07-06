@@ -138,15 +138,15 @@ export default {
 
     actions: {
         login({commit}, auth) {
+            var instance = axios.create();
+            delete instance.defaults.headers.common['xtoken'];
             commit("loging", true);
             return new Promise((resolve, reject) => {
-
-                axios.post(config.apiUrl + 'user/login', auth).then(response => {
+                instance.post(config.apiUrl + 'user/login', auth).then(response => {
                     if (response.data.status === 0) {
                         axios.defaults.headers.common['xtoken'] = response.data.data.token;
                     } else {
                         delete axios.defaults.headers.common['xtoken']
-                        // helper.errorMessage(response.data.data.status)
                     }
                     commit("loging", false);
                     resolve(response)
@@ -209,10 +209,11 @@ export default {
 
         },
         checkPhoneExist({commit}, payload) {
-            delete axios.defaults.headers.common['xtoken'];
+            var instance = axios.create();
+            delete instance.defaults.headers.common['xtoken'];
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `user/forget-password?${helper.q(payload)}`).then(response => {
+                instance.get(config.apiUrl + `user/forget-password?${helper.q(payload)}`).then(response => {
                     commit("checkingPhone", false)
                     resolve(response.data)
                 }).catch(error => {
@@ -222,9 +223,12 @@ export default {
             })
         },
         changeForgotPassword({commit}, params) {
+            var instance = axios.create();
+            delete instance.defaults.headers.common['xtoken'];
+            instance.defaults.headers.common['xtoken'] = params.xtoken;
             commit("changingForgotPassword", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/forget-password', params).then(response => {
+                instance.post(config.apiUrl + 'user/forget-password', params).then(response => {
                     commit("changingForgotPassword", false)
                     resolve(response.data)
                 }).catch(err => {

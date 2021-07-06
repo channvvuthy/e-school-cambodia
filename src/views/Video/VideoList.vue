@@ -115,15 +115,18 @@ export default {
   computed: {
     ...mapState("setting", ["isHide","darkMode"]),
     ...mapState("home", ["list", "homeLoading"]),
-    ...mapState('favorite', ['temporaryFavorites'])
+    ...mapState('favorite', ['temporaryFavorites']),
+    ...mapState('auth', ['token'])
   },
   methods: {
     ...mapActions("playVideo", ["stopWatch", "playVideo"]),
     ...mapActions('favorite', ['add','removeFavorite']),
 
     lastWatchVideo(event) {
-      event.id = this.id;
-      this.stopWatch(event);
+      if(this.token != null){
+        event.id = this.id;
+        this.stopWatch(event);        
+      }
     },
     cutString(text, limit){
       return helper.cutString(text, limit)

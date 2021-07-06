@@ -9,7 +9,7 @@
             </div>
             <div class="text-sm font-mediums">{{$t(title)}}</div>
         </div>
-        <div class="flex-1 w-full flex justify-end px-5 items-center cursor-pointer">
+        <div class="flex-1 w-full flex justify-end px-5 items-center cursor-pointer" @click="() => {this.$router.push({name:'network'})}">
                 <AddUserIcon :fill="darkMode?`#909090`:`#0f3c7a`"></AddUserIcon>
         </div>
     </div>
