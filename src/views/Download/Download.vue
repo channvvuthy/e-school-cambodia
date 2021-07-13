@@ -6,18 +6,18 @@
             </div>
             <div class="flex justify-start font-siemreap h-screen overflow-y-scroll pb-40" v-else>
                 <div class="grid gap-4" :class="isHide?`md:grid-cols-4 2xl:grid-cols-5`:`md:grid-cols-3 2xl:grid-cols-4`">
-                    <div class="flex-col mb-5 relative cursor-pointer" v-for="(video, key) in downloaded" :key="key">
-                        <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl" @click="gotToPlayList(video)">
+                    <div class="flex-col mb-5 relative" v-for="(video, key) in downloaded" :key="key">
+                        <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl">
                             <div class="relative">
-                                <img :src="video.thumbnail" class="rounded-t-xl">
-                                <div class="flex justify-center items-center absolute left-0 w-full -bottom-5">
+                                <img :src="video.thumbnail" class="rounded-t-xl cursor-pointer" @click="gotToPlayList(video)">
+                                <div class="flex justify-center items-center absolute left-0 w-full -bottom-5 cursor-pointer">
                                     <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-center mt-8 px-5">
+                            <div class="flex items-center justify-center mt-8 px-5" @click="gotToPlayList(video)">
                                 <div class="text-sm font-semibold mt-2">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
                             </div>
-                            <div class="flex items-end w-full justify-between mt-4 text-center text-sm px-5">
+                            <div class="flex items-end w-full justify-between mt-4 text-center text-sm px-5" @click="gotToPlayList(video)">
                                 <div class="cursor-pointer">
                                     <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
                                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
@@ -54,10 +54,10 @@
                             <div class="h-4"></div>
                             <div class="flex justify-between items-center px-5">
                                 <div class="text-xs">
-                                    {{$t('date_expired')}} : 11-05-2022
+                                    {{$t('date_expired')}} : .. .. ..
                                 </div>
-                                <div class="cursor-pointer">
-                                    <DeleteIcon :fill="darkMode?`#909090`:`#000000`"></DeleteIcon>
+                                <div class="cursor-pointer" @click="confrimDelete(video)">
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
                                 </div>
                             </div>
                             <div class="h-4"></div>
@@ -66,6 +66,7 @@
                 </div>
             </div>
         </div>
+        <BuyMsg v-if="isConfrim" :msg="`delete`" @cancelModal="() => {this.isConfrim = false}" @yes="yes"></BuyMsg>
     </div>
 </template>
 <script>
@@ -77,15 +78,16 @@
     import ChatIcon from "./../../components/ChatIcon.vue"
     import YoutubeIcon from "./../../components/YoutubeIcon.vue"
     import {mapState} from "vuex"
+    import BuyMsg from "./../Component/BuyMsg.vue"
     export default{
-        name: "Download",
         components:{
             CertificateIcon,
             TestIcon,
             PdfIcon,
             ChatIcon,
             YoutubeIcon,
-            DeleteIcon
+            DeleteIcon,
+            BuyMsg
         },
         data(){
             return {
@@ -94,12 +96,25 @@
                 window: {
                     width: 0,
                 },
+                isConfrim: false,
+                video:{},
             }
         },
         computed:{
             ...mapState('setting', ['darkMode', 'isHide'])
         },
         methods: {
+            yes(){
+                this.isConfrim = false
+                let videos = JSON.parse(localStorage.getItem('videos'));
+                videos = videos.filter(item => item.course._id != this.video.course._id);
+                this.downloaded = videos.filter((value, index, self) => self.findIndex((m) => m.course._id === value.course._id) === index);
+                localStorage.setItem("videos", JSON.stringify(videos))
+            },
+            confrimDelete(video){
+                this.video = video
+                this.isConfrim = true
+            },
             getPathFromUrl(url) {
                 return url.split("?")[0];
             },

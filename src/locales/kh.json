@@ -238,6 +238,10 @@
   "there_is_no_friend_request": "មិនមានសំណូមពរពីមិត្តភក្តិទេ",
   "there_is_no_friend_to_add":"មិនមានមិត្តភក្តិត្រូវបន្ថែមទេ",
   "no_request_to":"អ្នកមិនមានសំណើណាមួយទៅកាន់មិត្តភក្តិទេ",
-  "you_do_not_have_any_friend":"អ្នកមិនមានមិត្តភក្តិទេ"
+  "you_do_not_have_any_friend":"អ្នកមិនមានមិត្តភក្តិទេ",
+  "personal_info":"ពត៌មានផ្ទាល់ខ្លួន",
+  "full_name":"ឈ្មោះពេញ",
+  "national":"សញ្ជាតិ",
+  "country":"ប្រទេស"
 
 }

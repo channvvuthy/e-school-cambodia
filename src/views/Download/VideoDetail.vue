@@ -172,19 +172,55 @@
                          <span class="pb-3" :class="darkMode?``:`text-primary`">{{$t('1112')}}</span>
                          <BorderBottom :class="darkMode?`bg-white`:`bg-primary`" v-if="active === `document`"></BorderBottom>
                     </div>
-                    <div class="cursor-pointer text-center w-full h-full justify-end flex flex-col" :class="active === `forum`?`font-semibold`:``" @click="switchTap(`forum`)">
+                    <!-- <div class="cursor-pointer text-center w-full h-full justify-end flex flex-col" :class="active === `forum`?`font-semibold`:``" @click="switchTap(`forum`)">
                          <span class="pb-3" :class="darkMode?``:`text-primary`">{{$t('2110')}}</span>
                          <BorderBottom :class="darkMode?`bg-white`:`bg-primary`" v-if="active === `forum`"></BorderBottom>
-                    </div>
+                    </div> -->
                  </div>
-                 <div class="mt-3 h-full overflow-y-scroll pr-3" v-if="active === `video`">
+                 <!-- Video -->
+                 <div class="mt-3 h-full overflow-y-scroll pr-3 pb-60" v-if="active === `video`">
                      <div v-for="(video, index) in videos" :key="index" class="mb-3 p-4 rounded" :class="darkMode?`${order === index?`bg-white`:`bg-button text-gray-300`}`:`${order === index?`bg-gray-300`:`bg-white`} shadow`">
                          <div class="flex items-center cursor-pointer">
                              <img :src="video.thumbnail" class="w-2/5 mr-5" @click="nextVideo(index,video)">
                              <div @click="nextVideo(index,video)">{{video.title}}</div>
+                             <div class="flex-1 flex justify-end items-center cursor-pointer">
+                                 <CloseIcon></CloseIcon>
+                             </div>
                          </div>
                      </div>
                  </div>
+                 <!-- Document -->
+                 <div>
+                    <div class="h-screen overflow-y-scroll pb-60 font-khmer_os flex flex-col justify-center items-center mt-3 rounded-t"
+                    :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" v-if="active === `document`">
+                        <div class="text-base text-center" v-html="$t('pdf_des')"></div> 
+                        <button @click="openDoc" class="rounded-lg mt-5 focus:outline-none h-13 text-base text-white px-10" :class="darkMode?`bg-active`:`bg-primary`" :style="darkMode?``:`box-shadow: rgba(155, 155, 155, 0.7) 3px 4px 3px;`">{{$t('1110')}}</button>
+                    </div>
+                </div>
+                <!-- Pdf -->
+                <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
+                    v-if="showDoc">
+                    <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
+                        <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
+                            <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
+                                <EnlargeIcon :size="16"></EnlargeIcon>
+                            </div>
+                            <div class="text-white text-sm">{{video.title}}</div>
+                            <div class="cursor-pointer" @click="closeDock">
+                                <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                            </div>
+                        </div>
+                        <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
+                            <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"></SinglePdf>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Forum -->
+                <Forum :id="video._id" v-if="active === `forum`" @forumDetail="forumDetail($event)"
+                       @openModal="openModal($event)" @postComment="postComment($event)" @noReply="noReply"></Forum>
+                <ForumComment v-if="showMenu" :comments="comments" :loading="loadingComment" @openModal="openModal($event)" @reply="reply" @replyTextComment="replyTextComment($event)" @loadMoreComment="loadMoreComment($event)"></ForumComment>
+
             </div>
         </div>
     </div>
@@ -193,6 +229,7 @@
 import eHeader from "./../Video/components/Header.vue"
 import EnlargeIcon from "./../../components/EnlargeIcon.vue";
 import ChevronIcon from "./../../components/ChevronIcon.vue";
+import CloseIcon from "./../../components/CloseIcon.vue";
 import LoadingWhite from "./../../components/LoadingWhite.vue"
 import PlayIcon from "./../MyCourse/components/media/PlayIcon.vue";
 import PauseIcon from "./../MyCourse/components/media/PauseIcon.vue";
@@ -200,8 +237,12 @@ import SettingIcon from "./../MyCourse/components/media/SettingIcon.vue";
 import SoundIcon from "./../MyCourse/components/media/SoundIcon.vue";
 import MutedIcon from "./../MyCourse/components/media/MutedIcon.vue";
 import BorderBottom from "./../../components/BorderBottom.vue"
+import SinglePdf from "./../Component/SinglePdf.vue"
+import Forum from "./../Video/components/Forum.vue"
+import ForumComment from "./../Video/components/ForumComment.vue"
 
-import { mapState } from "vuex";
+
+import { mapState, mapActions } from "vuex";
 const {ipcRenderer} = require('electron')
 
 export default {
@@ -215,7 +256,11 @@ export default {
         SoundIcon,
         ChevronIcon,
         MutedIcon,
-        BorderBottom
+        BorderBottom,
+        SinglePdf,
+        CloseIcon,
+        Forum,
+        ForumComment
     },
     data(){
         return{
@@ -250,7 +295,16 @@ export default {
             video:{},
             videos:[],
             active: "video",
-            order: 0
+            order: 0,
+            showDoc: false,
+            pdfUrl: "",
+            comments:[],
+            isReply: false,
+            showMenu: false,
+            loadingComment: false,
+
+            
+
         }
     },
     computed: {
@@ -263,6 +317,69 @@ export default {
         })
     },
     methods:{
+        ...mapActions('playVideo', ['getPdf']),
+        ...mapActions('forum', ['getCommentForum','addComment', 'replyComment','showCommentPagination']),
+
+        openDoc(){
+            this.showDoc = true
+        },
+        replyTextComment(event){
+            this.replyComment(event).then(response =>{
+                this.comments.comment.push(response.data.data)
+            })
+        },
+        loadMoreComment(payload){
+            this.showCommentPagination(payload).then(res =>{
+                for(let i =0 ; i < res.comment.length; i++){
+                    this.comments.comment.push(res.comment[i]);
+                }
+            })
+        },
+        forumDetail($event){
+            this.showMenu = true
+            this.loadingComment = true
+            this.getCommentForum({id:$event._id}).then(response =>{
+                this.comments = response
+                this.loadingComment = false
+            })
+        },
+        openModal(event){
+            this.showModalPhoto = true
+            this.photo = event.target.files[0]
+            let reader = new FileReader();
+            reader.onload = (e) => {
+                this.imgUrl = e.target.result
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        },
+        noReply(){
+            this.isReply = false
+        },
+        reply(){
+            
+            this.isReply = true
+        },
+        postComment(event){
+            let formData = new FormData();
+            formData.append("id", this.video._id)
+            if(event){
+                formData.append("text", event);
+            }
+            this.addComment(formData)
+        },
+        closeDock(){
+            this.showDoc = false
+        },
+        openFullscreen() {
+            var elem = document.getElementById("fullScreen");
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        },
         handleResize() {
             this.window.width = window.innerWidth;
         },
@@ -277,7 +394,10 @@ export default {
             this.video = video
             this.vid.src = this.protocol + this.baseUrl + '/' + video._id
             this.showPlay = false
-            
+
+            this.getPdf({id: this.video._id}).then(response =>{
+                this.pdfUrl = response.data.data.url
+            })
         },
         endedVideo(){
             this.$emit("endedVideo")
@@ -431,6 +551,9 @@ export default {
         videos = videos.filter(item => item.course._id == this.$route.params.course.course._id)
         this.video = videos[0]
         this.videos = videos
+        this.getPdf({id: this.video._id}).then(response =>{
+            this.pdfUrl = response.data.data.url
+        })
     }
 }
 </script>
