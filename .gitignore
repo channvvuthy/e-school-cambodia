@@ -52,3 +52,6 @@ Thumbs.db
 # Env
 .env.local
 .env
+
+#Electron-builder output
+/dist_electron

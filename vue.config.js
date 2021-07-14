@@ -35,7 +35,8 @@ module.exports = {
                 "mac":{
                     "target": [
                         "dmg",
-                        "zip"
+                        "zip",
+                        "pkg"
                     ],
                     "category":"education",
                     "icon":"build/icons/icon.icns"

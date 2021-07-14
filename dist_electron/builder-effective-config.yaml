@@ -28,6 +28,7 @@ mac:
   target:
     - dmg
     - zip
+    - pkg
   category: education
   icon: build/icons/icon.icns
 dmg:
