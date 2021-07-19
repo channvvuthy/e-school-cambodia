@@ -46,6 +46,11 @@ const routes = [
         component: () => import('../views/Support/Support'),
     },
     {
+        path: '/activity',
+        name: 'activity',
+        component: () => import('../views/Activity/Activity'),
+    },
+    {
         path: '/download-detail',
         name: 'download-detail',
         component: () => import('../views/Download/VideoDetail'),

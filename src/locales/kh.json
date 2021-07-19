@@ -242,6 +242,13 @@
   "personal_info":"ពត៌មានផ្ទាល់ខ្លួន",
   "full_name":"ឈ្មោះពេញ",
   "national":"សញ្ជាតិ",
-  "country":"ប្រទេស"
+  "country":"ប្រទេស",
+  "summary":"សង្ខេប",
+  "this_month":"ខែនេះ",
+  "last_month":"ខែមុន",
+  "last_3_month":"3 ខែមុន",
+  "last_6_month":"6 ខែមុន",
+  "this_year":"ឆ្នាំនេះ",
+  "study_graph":"ក្រាបសកម្មភាពសិក្សា"
 
 }

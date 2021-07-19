@@ -24,6 +24,8 @@ import gallery from "./gallery"
 import certificate from "./certificate"
 import network  from "./network"
 import help from "./help"
+import attendant from "./attendant"
+import summary from "./summary"
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
@@ -54,6 +56,8 @@ export default  new Vuex.Store({
         document,
         gallery,
         certificate,
-        network
+        network,
+        attendant,
+        summary
     }
 });
