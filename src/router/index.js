@@ -51,6 +51,26 @@ const routes = [
         component: () => import('../views/Activity/Activity'),
     },
     {
+        path: '/activity-detail/:type',
+        name: 'activity-detail',
+        component: () => import('../views/Activity/ActivityDetail'),
+    },
+    {
+        path: '/watch-video',
+        name: 'watch-video',
+        component: () => import('../views/WatchVideo/WatchVideo'),
+    },
+    {
+        path: '/read-book',
+        name: 'read-book',
+        component: () => import('../views/ReadBook/ReadBook'),
+    },
+    {
+        path: '/quizzes',
+        name: 'quizzes',
+        component: () => import('../views/DoQuiz/DoQuiz'),
+    },
+    {
         path: '/download-detail',
         name: 'download-detail',
         component: () => import('../views/Download/VideoDetail'),

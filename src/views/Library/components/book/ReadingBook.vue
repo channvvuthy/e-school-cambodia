@@ -1,5 +1,6 @@
 <template>
     <div class="fixed top-0 left-0 bg-black bg-opacity-80 flex items-center justify-center h-full w-full z-50">
+        
         <div class="w-2/4 relative">
             <!-- Header -->
             <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary">
@@ -38,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen">                    
+                <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen" >                    
                     <div id="pdf-viewer"></div>
                 </div>
             </div>
@@ -64,7 +65,7 @@
     </div>
 </template>
 <script>
-import {mapState} from "vuex"
+import {mapActions, mapState} from "vuex"
 import CloseIcon from "./../../../../components/CloseIcon"
 import ChevronIcon from "./../../../../components/ChevronIcon"
 import EnlargeIcon from "./../../../../components/EnlargeIcon"
@@ -110,8 +111,10 @@ export default {
         ...mapState('library', ['details','loadingDetail','readingPdf']),
     },
     methods: {
-           closeReading(){
+        ...mapActions('library', ['stopWatch']),
+        closeReading(){
             this.$emit("closeReading")
+            this.stopReading()
         },
         renderPage(pageNumber, canvas) {
             this.pdfDoc.getPage(pageNumber).then(page=> {
@@ -133,6 +136,14 @@ export default {
                 this.order --
                 this.changeChapter(this.details.list[this.order],this.order)
             }
+        },
+        stopReading(){
+            let payload = {
+                id: this.details._id,
+                mark: 2,
+                duration: this.totalPage
+            }
+            this.stopWatch(payload)
         },
         onNextPage() {
             if(this.order < this.details.list.length){
@@ -187,7 +198,7 @@ export default {
             pdfjsLib.getDocument(this.pdfUrl).promise.then(pdfDoc=> {
                 this.pdfDoc = pdfDoc
                 let viewer = document.getElementById('pdf-viewer');
-
+                this.totalPage  = pdfDoc.numPages 
                 for(let page = 1; page <= pdfDoc.numPages; page++) {
                     let canvas = document.createElement("canvas");    
                     canvas.className = 'pdf-page-canvas';         

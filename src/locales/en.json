@@ -248,6 +248,9 @@
   "last_3_month":"Last 3 Months",
   "last_6_month":"Last 6 Months",
   "this_year":"This Year",
-  "study_graph":"Study Summary"
+  "study_graph":"Study Summary",
+  "watch_video":"Watched Video ",
+  "read_book":"Read Book",
+  "time":"Time"
 
 }

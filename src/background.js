@@ -129,6 +129,7 @@ async function createWindow() {
     // win.setContentProtection(true)
     win.setTitle("E-SCHOOL")
     win.setMenu(null);
+    Menu.setApplicationMenu(null)
     win.maximize();
     win.on("close", (event) => {
         win.hide()

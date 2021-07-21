@@ -16,6 +16,7 @@ module.exports = {
             transparent: 'transparent',
             current: 'currentColor',
             primary: '#0f3c7a',
+            dadada:"#dadada",
             secondary:"#212121",
             youtube:"#181818",
             textSecondary:"#909090",

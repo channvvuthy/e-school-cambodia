@@ -207,6 +207,16 @@ export default {
                 })
             })
 
+        },
+        readingLibrary({commit}, payload){
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `library/read?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+
         }
     }
 

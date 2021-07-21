@@ -8,6 +8,7 @@ export default {
         summaries: {
             watch_video: 0,
         },
+        summariesDetail:[],
         loading: false
     },
     mutations: {
@@ -17,6 +18,14 @@ export default {
         receivedSummary(state, payload){
             state.summaries = payload
         },
+        getSummaryDetail(state, payload){
+            state.summariesDetail = payload
+        },
+        getSummaryDetailPagination(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.summariesDetail.push(payload[i])
+            }
+        }
     },
 
     actions: {
@@ -34,6 +43,31 @@ export default {
                 })
             })
         },
+        getSummaryDetail({commit}, payload){
+            commit("loadingSummary", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `report/activity/detail?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                    commit("getSummaryDetail", response.data.data)
+                    commit("loadingSummary", false)
+                }).catch(err =>{
+                    reject(err)
+                    commit("loadingSummary", false)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        getSummaryDetailPagination({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `report/activity/detail?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                    commit("getSummaryDetailPagination", response.data.data)
+                }).catch(err =>{
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        }
     },
 
 }

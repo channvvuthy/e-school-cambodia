@@ -1,7 +1,10 @@
 <template>
-    <div class="h-screen">
-         <eHeader></eHeader>
-         <div class="flex items-center my-5 px-5 h-32 text-sm" :class="darkMode?`bg-secondary text-white`:`bg-white`">
+    <div>
+         <div>
+             <eHeader></eHeader>
+         </div>
+        <div class="h-screen pb-40 overflow-y-scroll">
+            <div class="flex items-center my-5 px-5 h-32 text-sm" :class="darkMode?`bg-secondary text-white`:`bg-white`">
             <button class="flex flex-col items-center justify-center h-12  mr-5  focus:outline-none text-center " @click="filterSummary('this_month')">
                 <div class="mb-5 flex items-center justify-center w-14 h-14 rounded-full" :class="activeClass('this_month')">
                     <CalendarIcon :size="30" :fill="colorIcon('this_month', '#0f3c7a')"></CalendarIcon>
@@ -48,52 +51,61 @@
                 </div>
                 <BorderBottom :class="darkMode?`bg-fb relative top-3`:`bg-primary relative top-3`" v-if="active === `this_year`"></BorderBottom>
             </button>
-         </div>
-        <div class="m-5 rounded-xl shadow-lg w-3/4 py-10 overflowy-y-scroll max-h-full" :class="darkMode?`bg-secondary`:`bg-white`">
-            <div v-if="loading" class="px-5">
-                <Loading></Loading>
             </div>
-             <div class="text-center" v-else>
-                 <div class="font-bold text-3xl" :class="darkMode?`text-white`:`text-primary`">
-                     {{$t('study_graph')}}
-                 </div>
-                 <div class="flex w-2/3 m-auto mt-10">
-                    <div class="grid grid-cols-3 gap-10 w-full text-lg text-white">
-                        <div style="background-color:#f7b616" class="rounded-xl py-7 shadow">
-                            <div class="text-5xl font-black mb-5">
-                                {{summaries.watch_video}}
-                            </div>
-                            <div>
-                                {{$t('1117')}}
-                            </div>
-                        </div>
-                        <div style="background-color:#bfca33" class="rounded-xl py-7 shadow">
-                            <div class="text-5xl font-black mb-5">
-                                {{summaries.read_book}}
-                            </div>
-                            <div>
-                                {{$t('1118')}}
-                            </div>
-                        </div>
-                        <div style="background-color:#189faf" class="rounded-xl py-7 shadow">
-                            <div class="text-5xl font-black mb-5">
-                                {{summaries.do_quiz}}
-                            </div>
-                            <div>
-                                {{$t('1119')}}
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-                
-                <div class="mt-7 flex items-center justify-center" v-if="(summaries.watch_video || summaries.read_book || summaries.do_quiz)">
-                    <div id="chart">
-                        <apexchart type="donut" :options="chartOptions" :series="series" width="380"></apexchart>
-                    </div>
+            <div class="m-5 rounded-xl shadow-lg w-3/4 py-10" :class="darkMode?`bg-secondary`:`bg-white`">
+                <div v-if="loading" class="px-5">
+                    <Loading></Loading>
                 </div>
-    
-             </div>
-         </div>
+                <div class="text-center" v-else>
+                    <div class="font-bold text-3xl" :class="darkMode?`text-white`:`text-primary`">
+                        {{$t('study_graph')}}
+                    </div>
+                    <div class="flex w-2/3 m-auto mt-10">
+                        <div class="grid grid-cols-3 gap-10 w-full text-lg text-white">
+                            <div style="background-color:#f7b616" class="rounded-xl py-7 shadow cursor-pointer" @click="() => {this.$router.push({name:'activity-detail',params:{type:`1`,filter: active}})}">
+                                <div class="text-5xl font-black mb-5">
+                                    {{summaries.watch_video}}
+                                </div>
+                                <div>
+                                    {{$t('1117')}}
+                                </div>
+                            </div>
+                            <div style="background-color:#bfca33" class="rounded-xl py-7 shadow cursor-pointer" @click="() => {this.$router.push({name:'activity-detail',params:{type:`2`,filter: active}})}">
+                                <div class="text-5xl font-black mb-5">
+                                    {{summaries.read_book}}
+                                </div>
+                                <div>
+                                    {{$t('1118')}}
+                                </div>
+                            </div>
+                            <div style="background-color:#189faf" class="rounded-xl py-7 shadow cursor-pointer" @click="() => {this.$router.push({name:'activity-detail',params:{type:`3`,filter: active}})}">
+                                <div class="text-5xl font-black mb-5">
+                                    {{summaries.do_quiz}}
+                                </div>
+                                <div>
+                                    {{$t('1119')}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-7 flex items-center justify-center" v-if="(summaries.watch_video || summaries.read_book || summaries.do_quiz)" :class="darkMode?`text-white`:``">
+                        <div>
+                            <fusioncharts
+                                :type="type"
+                                :width="width"
+                                :height="height"
+                                :dataFormat="dataFormat"
+                                :dataSource="dataSource" 
+                                ref="fc"
+                            >
+                            </fusioncharts>
+                        </div>
+                    </div>
+        
+                </div>
+            </div>     
+        </div>
     </div>
 </template>
 <script>
@@ -101,12 +113,19 @@ import eHeader from "./components/eHeader.vue"
 import {mapState,mapActions} from "vuex"
 import CalendarIcon from "./../../components/CalendarIcon.vue"
 import BorderBottom from "./../../components/BorderBottom.vue"
-import Vue from "vue"
-import VueApexCharts from 'vue-apexcharts'
-Vue.use(VueApexCharts)
+// import Vue from "vue"
+// import VueApexCharts from 'vue-apexcharts'
+// Vue.use(VueApexCharts)
 import Loading from "./../../components/Loading.vue"
+// Include Dependencies
+import Vue from 'vue';
+import VueFusionCharts from 'vue-fusioncharts';
+import FusionCharts from 'fusioncharts';
+import Column2D from 'fusioncharts/fusioncharts.charts';
+import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 
-Vue.component('apexchart', VueApexCharts)
+Vue.use(VueFusionCharts, FusionCharts, Column2D, FusionTheme);
+
 export default {
     components:{
         eHeader,
@@ -122,26 +141,39 @@ export default {
     data(){
         return{
             active: "this_month",
-            series: [44, 55, 41],
             loading:false,
-            chartOptions: {
+            type: "doughnut3d",
+            width: "40%",
+            height: "40%",
+            dataFormat: "json",
+            dataSource:{
                 chart: {
-                    type: 'donut',
+                    lineThickness : "2",
+                    showpercentvalues: "1",
+                    aligncaptionwithcanvas: "0",
+                    captionpadding: "0",
+                    decimals: "1",
+                    theme: "fusion",
+                    
                 },
-                colors:['#f7b616', '#bfca33', '#189faf'],
-                labels: [`${this.$i18n.t(`1117`)}`, `${this.$i18n.t(`1118`)}`, `${this.$i18n.t(`1119`)}`],
-                responsive: [{
-                breakpoint: 0,
-                options: {
-                    chart: {
-                        width: 0
-                    },
-                    legend: {
-                    position: 'bottom'
-                    }
-                }
-                }]
-            },
+                data: [
+                        {
+                            label: `${this.$i18n.t('1117')}`,
+                            value: "1000",
+                            color:"#f7b616"
+                        },
+                        {
+                            label: `${this.$i18n.t('1118')}`,
+                            value: "5300",
+                            color:"#bfca33"
+                        },
+                        {
+                            label: `${this.$i18n.t('1119')}`,
+                            value: "10500",
+                            color:"#189faf"
+                        },
+                ],
+            }
         }
     },
     methods:{
@@ -150,14 +182,12 @@ export default {
             this.active = filter
             let payload = {}
             payload.id = this.stProfile._id
-            let myFilter = filter.replace(/_/g, " ")
-            myFilter = myFilter.charAt(0).toUpperCase() + myFilter.slice(1);
-            payload.filter = myFilter
+            payload.filter = filter
             this.loading = true
             this.getSummary(payload).then(response => {
-                this.series[0] = response.data.data.watch_video
-                this.series[1] = response.data.data.read_book
-                this.series[2] = response.data.data.do_quiz
+                this.dataSource.data[0].value = response.data.data.watch_video
+                this.dataSource.data[1].value = response.data.data.read_book
+                this.dataSource.data[2].value = response.data.data.do_quiz
                 this.loading = false
             })
         },
@@ -195,15 +225,24 @@ export default {
     created(){
         this.loading = true
         this.getSummary({
-            filter:"This month",
+            filter:"this_month",
             id: this.stProfile._id
         }).then(response => {
            
-            this.series[0] = response.data.data.watch_video
-            this.series[1] = response.data.data.read_book
-            this.series[2] = response.data.data.do_quiz
+            this.dataSource.data[0].value = response.data.data.watch_video
+            this.dataSource.data[1].value = response.data.data.read_book
+            this.dataSource.data[2].value = response.data.data.do_quiz
             this.loading = false
         })
+        
     }
 }
 </script>
+<style>
+    div[id^='fc-'] > span > svg > defs + g + g > g{
+            display:none !important;
+    }
+    div[id^='fc-'] > span > svg > defs + g > g:nth-child(26) {
+        display:none !important;
+    }
+</style>
