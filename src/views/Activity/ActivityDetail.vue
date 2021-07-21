@@ -31,7 +31,7 @@
                                 </template>
                                 <template v-if="$route.params.type == 2">
                                     <div class="rounded-full h-14 w-14 flex items-center justify-center" style="background-color:#bfca33">
-                                       <BookIcon></BookIcon>
+                                       <!-- <BookIcon></BookIcon> -->
                                     </div>
                                     <div class="ml-5 text-lg">
                                         {{$t('read_book')}} {{summary.count}} {{$t('time')}}

@@ -9,9 +9,18 @@ export default {
             watch_video: 0,
         },
         summariesDetail:[],
-        loading: false
+        loading: false,
+        course: []
     },
     mutations: {
+        getCourse(state, payload){
+            state.course = payload
+        },
+        getCoursePagination(state, payload){
+            for(let i = 0; i < payload.list.length; i ++){
+                state.course.list.push(payload.list[i])
+            }
+        },
         loadingSummary(state, payload){
             state.loading = payload
         },
@@ -67,7 +76,34 @@ export default {
                     helper.errorMessage(err.response.data.msg)
                 })
             })
+        },
+        getCourse({commit}, payload){
+            commit("loadingSummary", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `report/course?${helper.q(payload)}`).then(response => {
+                    resolve(response)
+                    commit("loadingSummary", false)
+                    commit("getCourse", response.data.data)
+                }).catch(err =>{
+                    reject(err)
+                    commit("loadingSummary", false)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        getCoursePagination({commit}, payload){
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `report/course?${helper.q(payload)}`).then(response => {
+                    resolve(response)
+                    commit("getCoursePagination", response.data.data)
+                }).catch(err =>{
+                    reject(err)
+                   
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
         }
+        
     },
 
 }
