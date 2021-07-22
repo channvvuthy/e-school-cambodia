@@ -23,9 +23,10 @@
                </div>
                <div v-for="(day, key) in days" :key="key + Math.random()">
                    <div class="text-base" :class="attendantActive(day)?`${darkMode?`text-pass`:`text-primary`} font-black`:`${darkMode?`text-gray-600`:`text-gray-400`}`">
-                      <div class="text-center rounded py-3" :class="getCurrentDay() == day?`${darkMode?`bg-pass`:`bg-primary`} text-white font-black`:``">
+                      <div class="text-center rounded py-3" :class="getCurrentDay(day,currentMonth)?`${darkMode?`bg-pass`:`bg-primary`} text-white font-black`:``">
                            {{day}}
                       </div>
+                     
                    </div>
                </div>
            </div>
@@ -78,10 +79,9 @@ export default {
                 this.days.push(i)
             }
         },
-        getCurrentDay() {
-            var d = new Date();
-            return d.getDate()
-            
+        getCurrentDay(day, month) {
+           var d = new Date();
+           return this.getMonth() === parseInt(month) &&  day === d.getDate()
         },
 
         filterMonth(month){
