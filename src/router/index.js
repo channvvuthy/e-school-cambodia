@@ -61,14 +61,24 @@ const routes = [
         component: () => import('../views/WatchVideo/WatchVideo'),
     },
     {
+        path: '/watch-detail/:course_id/:id/:percentage',
+        name: 'watch-detail',
+        component: () => import('../views/WatchVideo/WatchDetail'),
+    },
+    {
         path: '/read-book',
         name: 'read-book',
         component: () => import('../views/ReadBook/ReadBook'),
     },
     {
-        path: '/quizzes',
-        name: 'quizzes',
-        component: () => import('../views/DoQuiz/DoQuiz'),
+        path: '/read-book-detail',
+        name: 'read-book-detail',
+        component: () => import('../views/ReadBook/ReadBookDetail'),
+    },
+    {
+        path: '/attendant',
+        name: 'attendant',
+        component: () => import('../views/Attendant/Attendant'),
     },
     {
         path: '/download-detail',
@@ -216,6 +226,12 @@ const routes = [
         path: '/network',
         name: 'network',
         component: () => import('../views/Network/Network'),
+
+    },
+    {
+        path: '/relative',
+        name: 'relative',
+        component: () => import('../views/Relative/Relative'),
 
     },
 

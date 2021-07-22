@@ -1,26 +1,37 @@
 <template>
     <div>
-        <eHeader></eHeader>
-        <div class="mt-5">
-            <BoxFilter @enableUserScroll="enableUserScroll($event)"></BoxFilter>
+        <div class="mb-5">
+            <eHeader></eHeader>
         </div>
-        <div class="px-5 overflow-y-scroll pb-40 h-screen mt-5">
-            <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5">
-                <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl p-5 flex items-center justify-center flex-col cursor-pointer" v-for="i in 13" :key="i">
-                <div class="progressBook">
-                        <div class="progressBook">
-                            <div class="relative z-50 relative flex justify-between" style="top:120px;">
-                                <div class="text-xs -ml-1" :class="darkMode?`text-gray-400`:`text-gray-500`">0%</div>
-                                <div class="text-xs -mr-3" :class="darkMode?`text-gray-400`:`text-gray-500`">100%</div>
+        <div class="overflow-y-scroll pb-40 h-screen"  @scroll="onScroll">
+            <div>
+                <BoxFilter @enableUserScroll="enableUserScroll($event)" @closeFilter="closeFilter($event)" :filter_id="filter_id" @filterSearch="filterSearch($event)"></BoxFilter>
+            </div>
+            <div class="px-5 mt-5">
+                <div v-if="loading">
+                    <Loading></Loading>
+                </div>
+                <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5" v-else>
+                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl p-5 flex items-center justify-center flex-col cursor-pointer" v-for="(list, index) in course.list" :key="index">
+                    <div class="progressBook" @click="watchDetail(list.course_id,list.percentage)">
+                            <div>
+                                <div class="relative z-50 relative flex justify-between" style="top:120px;">
+                                    <div class="text-xs -ml-1" :class="darkMode?`text-gray-400`:`text-gray-500`">0%</div>
+                                    <div class="text-xs -mr-3" :class="darkMode?`text-gray-400`:`text-gray-500`">100%</div>
+                                </div>
+                                <div class="barOverflowBook">
+                                    <div class="barBook" :style="{transform:`rotate(${45+(Math.round(list.percentage)*1.8)}deg)`}"></div>
+                                </div>
+                                <span class="text-3xl font-black relative -top-5">
+                                    {{Math.round(list.percentage)}}%
+                                </span>
                             </div>
-                            <div class="barOverflowBook">
-                                <div class="barBook"></div>
-                            </div>
-                            <span class="text-3xl font-black relative -top-5">100%</span>
+                        </div>
+                        <div class="w-full h-1 border-t border-gray-400 mt-5 border-dashed"> </div>
+                        <div class="font-semibold flex justify-start mt-4 w-full text-left text-base" :class="darkMode?`text-gray-400`:`text-primary`">
+                            {{list.title}}
                         </div>
                     </div>
-                    <div class="w-full h-1 border-t border-gray-400 mt-5 border-dashed"> </div>
-                    <div class="font-semibold flex justify-start mt-4 w-full text-left text-base" :class="darkMode?`text-gray-400`:`text-primary`">គណិតវិទ្យា</div>
                 </div>
             </div>
         </div>
@@ -29,7 +40,7 @@
 <script>
 import eHeader from "./../Activity/components/eHeader.vue"
 import Loading from "./../../components/Loading.vue"
-import BoxFilter from "./../Video/components/Filter.vue"
+import BoxFilter from "../Component/BoxFilter.vue"
 import {mapActions, mapState} from "vuex"
 export default {
     components:{
@@ -39,21 +50,84 @@ export default {
     },
     computed:{
         ...mapState('setting', ['darkMode']),
-        ...mapState('auth', ['stProfile'])
+        ...mapState('auth', ['stProfile']),
+        ...mapState('summary', ['loading', 'course'])
     },
     data(){
         return{
-            loading: false,
+            page: 1 ,
+            enableScroll: true,
+            filter_id: "",
+            s: ""
         }
     },
     methods:{
-        ...mapActions('summary', ['getSummaryDetail']),
+        ...mapActions('summary', ['getSummaryDetail', 'getCourse', 'getCoursePagination']),
         enableUserScroll(){
 
+        },
+        filterSearch(s){
+            this.s = s
+            this.getCourses(s)
+        },
+        watchDetail(course_id,percentage){
+            this.$router.push({
+                name: 'read-book-detail',
+                params: {
+                    course_id,
+                    id: this.stProfile._id,
+                    percentage
+                }
+            })
+        },
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if (scrollTop + clientHeight >= (scrollHeight - 1)) {
+                this.page ++ 
+                let payload = {}
+                payload.p = this.page
+                payload.id = this.stProfile._id
+                payload.type = 2
+                if(this.s){
+                    payload.s = this.s
+                }
+
+                if(this.enableScroll){
+                    this.getCoursePagination(payload).then(res =>{
+                        if(res.data.data.list.length <= 0){
+                            this.enableScroll = false
+                        }
+                    })
+                }
+            }
+        },
+        getCourses(s=''){
+            let payload = {}
+            payload.id = this.stProfile._id
+            payload.type = 2
+
+            if(s){
+                payload.s = s
+            }
+
+            if(this.filter_id){
+                payload.filter_id = this.filter_id
+            }
+
+            this.getCourse(payload).then(response =>{
+                this.$store.commit("home/receiveList", response.data.data)
+            })
+        },
+        closeFilter(event){
+            if(event=== 'all'){
+                this.filter_id = ``
+            }else{
+                this.filter_id = event._id
+            }
+            this.getCourses()
         }
     },
     created(){
-
+        this.getCourses()
     }
 }
 </script>

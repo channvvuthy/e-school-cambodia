@@ -251,6 +251,27 @@
   "study_graph":"Study Summary",
   "watch_video":"Watched Video ",
   "read_book":"Read Book",
-  "time":"Time"
+  "time":"Time",
+  "attendant":"Attendant",
+  "1":"January",
+  "2":"February",
+  "3":"March",
+  "4":"April",
+  "5":"May",
+  "6":"June",
+  "7":"July",
+  "8":"August",
+  "9":"September",
+  "10":"October",
+  "11":"November",
+  "12":"December",
+  "sunday":"Sun",
+  "monday":"Mon",
+  "tuesday":"Tue",
+  "wednesday":"Wed",
+  "thursday":"Thu",
+  "friday":"Fr",
+  "saturday":"Sat",
+  "relative":"Relative"
 
 }

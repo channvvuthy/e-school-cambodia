@@ -69,15 +69,7 @@
                 this.filterSearch()
             },
             filterSearch(){
-                this.$store.commit("home/receiveS", this.s);
-                let payload = {}
-                payload.s = this.s 
-
-                if(this.filter_id !== "all"){
-                    payload.filter_id = this.filter_id
-                }
-
-                this.getVideo(payload);
+                this.$emit("filterSearch", this.s)
                 this.$emit("enableUserScroll", true)
             }
         },

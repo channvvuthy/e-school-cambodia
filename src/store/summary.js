@@ -10,7 +10,9 @@ export default {
         },
         summariesDetail:[],
         loading: false,
-        course: []
+        course: [],
+        courseDetail: [],
+        attendant:[]
     },
     mutations: {
         getCourse(state, payload){
@@ -34,6 +36,12 @@ export default {
             for(let i = 0; i < payload.length; i ++){
                 state.summariesDetail.push(payload[i])
             }
+        },
+        getCourseDetail(state, payload){
+            state.courseDetail = payload
+        },
+        getAttendant(state, payload){
+            state.attendant = payload
         }
     },
 
@@ -99,6 +107,36 @@ export default {
                 }).catch(err =>{
                     reject(err)
                    
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+
+        getCourseDetail({commit}, payload){
+            commit("loadingSummary", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `report/course/detail?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                    commit("loadingSummary", false)
+                    commit("getCourseDetail", response.data.data)
+                }).catch(err =>{
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                    commit("loadingSummary", false)
+                })
+            })
+        },
+
+        getAttendant({commit}, payload){
+            commit("loadingSummary", true)
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `report/attendant?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                    commit("loadingSummary", false)
+                    commit("getAttendant", response.data.data)
+                }).catch(err =>{
+                    reject(err)
+                    commit("loadingSummary", false)
                     helper.errorMessage(err.response.data.msg)
                 })
             })

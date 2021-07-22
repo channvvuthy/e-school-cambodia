@@ -19,9 +19,9 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center z-50" @click="goTo('watch-video')" >
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`${$route.name === `watch-video`?`bg-byline`:`bg-button`}`:`${$route.name === `watch-video`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
-                            <WatchVideoIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `watch-video`"></WatchVideoIcon>
+                            <WatchVideoIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
                             <WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></WatchVideoIcon>
                         </div>
 
@@ -42,16 +42,29 @@
                         {{$t('1118')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center" @click="doQuizzess()">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `quizzes`?`bg-byline`:`bg-button`}`:`${$route.name === `quizzes`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('attendant')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `attendant`?`bg-byline`:`bg-button`}`:`${$route.name === `attendant`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
-                            <QuizIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `quizzes`"></QuizIcon>
+                            <QuizIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `attendant`"></QuizIcon>
                             <QuizIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></QuizIcon>
                         </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
-                        {{$t('1119')}}
+                        {{$t('attendant')}}
+                    </div>
+                </div>
+
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('relative')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `relative`?`bg-byline`:`bg-button`}`:`${$route.name === `relative`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <RelativeIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `relative`"></RelativeIcon>
+                            <RelativeIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></RelativeIcon>
+                        </div>
+
+                    </div>
+                    <div class="text-xs whitespace-nowrap mt-3">
+                        {{$t('relative')}}
                     </div>
                 </div>
             </div>
@@ -60,28 +73,27 @@
 </template>
 <script>
     import {mapState} from "vuex"
-    import ActivityIcon from "./../../../components/ActivityIcon"
-    import WatchVideoIcon from "./../../../components/WatchVideoIcon"
-    import BookIcon from "./../../../components/BookIcon"
-    import QuizIcon from "./../../../components/QuizIcon"
+    import ActivityIcon from "./../../../components/ActivityIcon.vue"
+    import WatchVideoIcon from "./../../../components/WatchVideoIcon.vue"
+    import RelativeIcon from "./../../../components/RelativeIcon.vue"
+    import BookIcon from "./../../../components/BookIcon.vue"
+    import QuizIcon from "./../../../components/QuizIcon.vue"
 
     export default{
         components:{
             ActivityIcon,
             WatchVideoIcon,
             BookIcon,
-            QuizIcon
+            QuizIcon,
+            RelativeIcon
         },
         computed: {
             ...mapState('setting', ['darkMode'])
         },
         methods:{
-             goTo(page) {
+            goTo(page) {
                 this.$router.push({ name: page });
             },
-            doQuizzess(){
-               this.$router.push({ name: 'quizzes' });
-            }
         }
     }
 </script>

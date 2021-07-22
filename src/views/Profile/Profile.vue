@@ -1,7 +1,11 @@
 <template>
     <div>
         <eHeader></eHeader>
-        <div class="h-screen overflow-y-scroll m-5 pb-40" :class="darkMode?`text-gray-300`:``">
+        <!-- View -->
+        <div></div>
+        <!-- End View -->
+        <!-- Edit -->
+        <div v-if="showEdit" class="h-screen overflow-y-scroll m-5 pb-40" :class="darkMode?`text-gray-300`:``">
            <div class="flex items-center ">
                <div class="w-20 h-20 rounded-full bg-primary bg-cover" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                <div class="font-semibold ml-10">
@@ -103,6 +107,7 @@
                 </div>
            </div>
         </div>
+        <!-- End edit -->
     </div>
 </template>
 
@@ -147,7 +152,8 @@
                 loading: false,
                 showProvince: false,
                 showSchool: false,
-                province:{}
+                province:{},
+                showEdit: false
             }
         },
         computed: {

@@ -5,7 +5,7 @@
         </div>
         <div class="overflow-y-scroll pb-40 h-screen"  @scroll="onScroll">
             <div>
-                <BoxFilter @enableUserScroll="enableUserScroll($event)" @closeFilter="closeFilter($event)" :filter_id="filter_id"></BoxFilter>
+                <BoxFilter @enableUserScroll="enableUserScroll($event)" @closeFilter="closeFilter($event)" :filter_id="filter_id" @filterSearch="filterSearch($event)"></BoxFilter>
             </div>
             <div class="px-5 mt-5">
                 <div v-if="loading">
@@ -13,8 +13,8 @@
                 </div>
                 <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5" v-else>
                     <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl p-5 flex items-center justify-center flex-col cursor-pointer" v-for="(list, index) in course.list" :key="index">
-                    <div class="progressVideo">
-                            <div class="progressVideo">
+                    <div class="progressVideo" @click="watchDetail(list.course_id,list.percentage)">
+                            <div>
                                 <div class="relative z-50 relative flex justify-between" style="top:120px;">
                                     <div class="text-xs -ml-1" :class="darkMode?`text-gray-400`:`text-gray-500`">0%</div>
                                     <div class="text-xs -mr-3" :class="darkMode?`text-gray-400`:`text-gray-500`">100%</div>
@@ -57,13 +57,28 @@ export default {
         return{
             page: 1 ,
             enableScroll: true,
-            filter_id: ""
+            filter_id: "",
+            s: ""
         }
     },
     methods:{
         ...mapActions('summary', ['getSummaryDetail', 'getCourse', 'getCoursePagination']),
         enableUserScroll(){
 
+        },
+        watchDetail(course_id,percentage){
+            this.$router.push({
+                name: 'watch-detail',
+                params: {
+                    course_id,
+                    id: this.stProfile._id,
+                    percentage
+                }
+            })
+        },
+        filterSearch(s){
+            this.s = s
+            this.getCourses(s)
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= (scrollHeight - 1)) {
@@ -72,6 +87,9 @@ export default {
                 payload.p = this.page
                 payload.id = this.stProfile._id
                 payload.type = 1
+                if(this.s){
+                    payload.s = this.s
+                }
 
                 if(this.enableScroll){
                     this.getCoursePagination(payload).then(res =>{
@@ -82,10 +100,14 @@ export default {
                 }
             }
         },
-        getCourses(){
+        getCourses(s=''){
             let payload = {}
             payload.id = this.stProfile._id
             payload.type = 1
+
+            if(s){
+                payload.s = s
+            }
 
             if(this.filter_id){
                 payload.filter_id = this.filter_id

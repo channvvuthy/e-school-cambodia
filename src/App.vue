@@ -63,8 +63,9 @@
                 || this.$route.name === 'certificate' || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
                 || this.$route.name === 'document' || this.$route.name === 'document-detail' || this.$route.name === 'gallery'
                 || this.$route.name === 'network' || this.$route.name === 'download-detail' || this.$route.name === 'activity'
-                || this.$route.name === 'watch-video' || this.$route.name === 'activity-detail' || this.$route.name === 'quizzes'
-                || this.$route.name === 'read-book'
+                || this.$route.name === 'watch-video' || this.$route.name === 'activity-detail' || this.$route.name === 'attendant'
+                || this.$route.name === 'relative'
+                || this.$route.name === 'read-book' || this.$route.name === 'watch-detail' || this.$route.name === 'read-book-detail'
                 || this.$route.name === 'favorite' || this.$route.name === 'about' || this.$route.name === 'help'){
                     return true
                 }
