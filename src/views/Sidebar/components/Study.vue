@@ -126,7 +126,7 @@
         },
         methods:{
             goTo(page) {
-                this.$router.push({ name: page });
+                this.$router.push({ name: page }).catch((err)=>{err});
             },
         }
     }

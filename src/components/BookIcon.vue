@@ -1,7 +1,7 @@
 <template>
 
 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     height="24"
+     :height="size"
 	 viewBox="0 0 412.72 412.72" style="enable-background:new 0 0 412.72 412.72;" xml:space="preserve">
         <g :fill="fill">
             <g>
@@ -35,7 +35,7 @@
                     return 24
                 }
             },
-            height: {
+            size: {
                 type: Number,
                 default: function(){
                     return 24;

@@ -23,7 +23,9 @@
     export default {
         name: 'Home',
         data(){
-            return {}
+            return {
+                enableScroll: true
+            }
         },
         components: {
             Story,
@@ -41,12 +43,19 @@
 
             onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
                 if (scrollTop + clientHeight >= scrollHeight) {
-                    this.$store.commit('setting/setPagination', this.page + 1)
-                    this.getListPagination({
-                        filter_id: this.filter_id,
-                        s: this.s,
-                        p: this.page
-                    })
+                    if(this.enableScroll){
+                        this.$store.commit('setting/setPagination', this.page + 1)
+                        this.getListPagination({
+                            filter_id: this.filter_id,
+                            s: this.s,
+                            p: this.page
+                        }).then(response =>{
+                            if(response.data.data.list !== undefined && response.data.data.list.length <= 0){
+                                this.enableScroll = false
+                                this.$store.commit('setting/setPagination', 1)
+                            }
+                        })
+                    }
                 }
             },
         },

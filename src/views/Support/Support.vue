@@ -6,10 +6,10 @@
             </div>
             <div class="h-5"></div>
             <div>{{$t('full_name')}}*</div>
-            <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-button border-transparent pl-3 rounded`:`border-gray-300`">
+            <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-transparent border-b border-button`:`border-gray-300`">
             <div class="h-5"></div>
             <div>{{$t('date_of_birth')}}</div>
-            <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-button border-transparent pl-3 rounded`:`border-gray-300`">
+            <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-transparent border-b border-button`:`border-gray-300`">
             <div class="h-5"></div>
             <div class="flex items-center">
                 <div class="mr-10">{{$t('gender')}}</div>
@@ -32,21 +32,21 @@
             <div class="grid grid-cols-2 gap-5">
                 <div>
                     <div>{{$t('national')}}</div>
-                    <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-button border-transparent pl-3 rounded`:`border-gray-300`">
+                    <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-transparent border-b border-button pl-3`:`border-gray-300`">
                 </div>
                 <div>
                     <div>{{$t('country')}}</div>
-                    <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-button border-transparent pl-3 rounded`:`border-gray-300`">
+                    <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-transparent border-b border-button pl-3`:`border-gray-300`">
                 </div>
             </div>
             <div class="h-5"></div>
             <div>{{$t('2123')}}</div>
-            <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-button border-transparent pl-3 rounded`:`border-gray-300`">
+            <input type="text" class="w-full focus:outline-none h-10 border-b" :class="darkMode?`bg-transparent border-b border-button pl-3`:`border-gray-300`">
             <div class="h-5"></div> 
-            <div :class="darkMode?`bg-button`:`bg-softGray text-primary`" class="rounded p-2">
+            <div :class="darkMode?`bg-button`:`bg-softGray text-primary`" class="rounded p-3">
                 <div>{{$t('attach_file')}}</div>
             </div>
-            <div class="h-5 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div> 
+            <div class="h-5" :class="darkMode?`border-button`:`border-gray-300`"></div> 
             <div class="flex items-center">
                 <div  class="flex items-center cursor-pointer">
                     <div>

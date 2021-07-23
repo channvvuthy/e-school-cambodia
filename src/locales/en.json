@@ -272,6 +272,7 @@
   "thursday":"Thu",
   "friday":"Fr",
   "saturday":"Sat",
-  "relative":"Relative"
+  "relative":"Relative",
+  "location":"Location"
 
 }

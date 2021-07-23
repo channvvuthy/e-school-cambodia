@@ -58,11 +58,14 @@
             <div class="flex justify-end" v-if="token">
                 <div class="flex justify-between items-end flex-1">
                     <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}" id="myCart">
-                        <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" v-if="carts.list != undefined && carts.list.length" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`">
-                            <div style="margin-top:2px">
-                                {{carts.list.length}}
+                        
+                        <template>
+                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="itemInCart">
+                                <div style="margin-top:2px">
+                                    {{itemInCart}}
+                                </div>
                             </div>
-                        </div>
+                        </template>
                         <div><CartIcon :fill="darkMode?`#909090`:`#0f3c7a`"></CartIcon></div>
 
                     </div>
@@ -111,6 +114,11 @@ export default {
         BorderBottom
         
     },
+    data(){
+        return{
+            itemInCart: 0
+        }
+    },
     computed: {
         ...mapState("setting", ["localize","darkMode"]),
         ...mapState('cart', ['carts']),
@@ -120,7 +128,7 @@ export default {
     methods: {
         ...mapActions('cart', ['getCart']),
         goTo(page) {
-            this.$router.push({ name: page });
+            this.$router.push({ name: page }).catch((err)=>{err});
         },
         darkActive(darkMode, active){
             if(darkMode && active){
@@ -132,8 +140,12 @@ export default {
             
         },
     },
-    mounted(){
-        this.getCart()
+    created(){
+        this.getCart().then(response =>{
+            if(response.data.data.list.length !== `undefinded`){
+                this.itemInCart = response.data.data.list.length
+            }
+        })
     }
 };
 </script>

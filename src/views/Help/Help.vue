@@ -10,7 +10,7 @@
             <div v-else>
                 <div class="grid md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 text-sm">
                     <div class="cursor-pointer" v-for="(h,key) in help" :key="key" @click="getHelpDetail(h)">
-                       <div :class="darkMode?`bg-secondary`:`bg-white shadow-lg`" class="rounded overflow-hidden">
+                       <div :class="darkMode?`bg-secondary`:`bg-white shadow-lg`" class="rounded-lg overflow-hidden">
                             <img :src="h.thumbnail">
                             <div class="p-4">{{h.title}}</div>
                        </div>

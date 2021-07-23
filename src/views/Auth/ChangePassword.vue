@@ -1,6 +1,6 @@
 <template>
     <div class="fixed w-full h-full left-0 top-0 flex justify-center items-center" :class="darkMode?`bg-youtube`:`bg-white`">
-        <div class="flex-col rounded-3xl w-96 p-6 shadow-2xl" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+        <div class="flex-col rounded-3xl w-100 p-6 shadow-2xl" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
             <div class="flex justify-between items-center">
                 <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
                     <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"></ChevronIcon>

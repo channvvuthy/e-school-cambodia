@@ -198,7 +198,7 @@
                     </div>
                 </div>
                 <!-- Pdf -->
-                <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
+                <div class="fixed w-full h-full left-0 top-0 bg-black  flex justify-center items-center z-50 bg-opacity-90"
                     v-if="showDoc">
                     <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
                         <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">

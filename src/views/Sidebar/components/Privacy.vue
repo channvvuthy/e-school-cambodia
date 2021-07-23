@@ -101,11 +101,11 @@
             logoutUser(){
                 this.logout().then(() => {
                     this.$forceUpdate()
-                    this.$router.push('/')
+                    this.$router.push('/').catch((err)=>{err})
                 })
             },
             goTo(page) {
-                this.$router.push({ name: page });
+                this.$router.push({ name: page }).catch((err)=>{err});
             },
         }
     }

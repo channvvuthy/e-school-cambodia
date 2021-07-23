@@ -1,5 +1,5 @@
 <template>
-    <svg width="30" height="32" viewBox="0 0 25 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg :width="width" :height="height" viewBox="0 0 25 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <!-- Generator: Sketch 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
         <title>Video</title>
         <desc>Created with Sketch.</desc>
@@ -18,9 +18,14 @@
 <script>
 export default {
    props:{
-       size:{
+        height:{
            default:()=>{
                return 35
+           }
+        },
+        width:{
+           default:()=>{
+               return 30
            }
        },
        fill:{

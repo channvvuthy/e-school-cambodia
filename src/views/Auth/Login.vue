@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center items-center min-h-screen" :class="darkMode?`bg-youtube`:`bg-white`">
-        <div class="flex-col rounded-3xl w-96 p-6 shadow-2xl" :class="darkMode?`bg-secondary`:`bg-white`">
+        <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:`bg-white`">
             <div class="flex flex-col justify-center items-center">
                 <div class="border border-primary w-20 h-20 leading-20 flex justify-center items-center rounded-full bg-white">
                     <img src="/e-school-logo.png" class="w-12"/>
@@ -13,8 +13,8 @@
                             <PhoneIcon :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
                         </span>
                         <input type="text" :placeholder="$t('2009')" v-model="auth.phone" @keypress="isNumber($event)" ref="phone"
-                        :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
-                        class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
+                        :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-borderGray`" 
+                        class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
                     </div>
                     <div class="h-5"></div>
                     <div class="relative">
@@ -24,8 +24,8 @@
                         <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="auth.password"
                             v-on:keyup.enter="studentLogin"
                             ref="password"
-                            :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
-                            class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
+                            :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border-borderGray`" 
+                            class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
                     </div>
                     <div class="h-3"></div>
                     <div class="text-right cursor-pointer mb-4" @click="goTo('forgot-password')" :class="darkMode?`text-white`:`text-gray-500 `">

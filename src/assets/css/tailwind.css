@@ -9,8 +9,7 @@
     src: url('./../../../public/font/siemreap.ttf')
 }
 @font-face {
-    font-family: 'Mukta.ttf';
+    font-family: 'Mukta';
     src: url('./../../../public/font/Mukta.ttf')
 }
-
 @tailwind utilities;
