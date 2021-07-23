@@ -89,7 +89,6 @@ export default {
         }
     },
     computed:{
-        ...mapState('auth', ['stProfile']),
         ...mapState('summary', ['summariesDetail','loading']),
         ...mapState('setting', ['darkMode'])
     },
@@ -97,7 +96,7 @@ export default {
         ...mapActions('summary', ['getSummaryDetail', 'getSummaryDetailPagination']),
         getReportDetail(){
             let payload = {}
-            payload.id = this.stProfile._id
+            payload.id = this.$route.params.user_id
             payload.filter = this.$route.params.filter
             payload.type = this.$route.params.type
             this.getSummaryDetail(payload)
@@ -115,7 +114,7 @@ export default {
                 this.page ++ 
 
                 let payload = {}
-                payload.id = this.stProfile._id
+                payload.id = this.$route.params.user_id
                 payload.filter = this.$route.params.filter
                 payload.type = this.$route.params.type
                 payload.p = this.page

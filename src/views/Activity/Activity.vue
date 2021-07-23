@@ -62,7 +62,7 @@
                     </div>
                     <div class="flex w-2/3 m-auto mt-10">
                         <div class="grid grid-cols-3 gap-10 w-full text-lg text-white">
-                            <div style="background-color:#f7b616" class="rounded-xl py-7 shadow cursor-pointer" @click="() => {this.$router.push({name:'activity-detail',params:{type:`1`,filter: active}})}">
+                            <div style="background-color:#f7b616" class="rounded-xl py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',1,active)">
                                 <div class="text-5xl font-black mb-5">
                                     {{summaries.watch_video}}
                                 </div>
@@ -70,7 +70,7 @@
                                     {{$t('1117')}}
                                 </div>
                             </div>
-                            <div style="background-color:#bfca33" class="rounded-xl py-7 shadow cursor-pointer" @click="() => {this.$router.push({name:'activity-detail',params:{type:`2`,filter: active}})}">
+                            <div style="background-color:#bfca33" class="rounded-xl py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',2,active)">
                                 <div class="text-5xl font-black mb-5">
                                     {{summaries.read_book}}
                                 </div>
@@ -78,7 +78,7 @@
                                     {{$t('1118')}}
                                 </div>
                             </div>
-                            <div style="background-color:#189faf" class="rounded-xl py-7 shadow cursor-pointer" @click="() => {this.$router.push({name:'activity-detail',params:{type:`3`,filter: active}})}">
+                            <div style="background-color:#189faf" class="rounded-xl py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',3,active)">
                                 <div class="text-5xl font-black mb-5">
                                     {{summaries.do_quiz}}
                                 </div>
@@ -220,7 +220,11 @@ export default {
                     return "bg-gray-300 text-gray-300"
                 }
             }
-        }
+        },
+        summaryDetail(name,type,filter){
+            let user_id = this.$route.params.user_id
+            this.$router.push({name,params:{user_id, type, filter}})
+        },
     },
     created(){
         this.loading = true

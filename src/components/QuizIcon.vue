@@ -1,5 +1,5 @@
 <template>
-    <svg id="Capa_1" enable-background="new 0 0 512 512" :height="size" viewBox="0 0 512 512" width="512" xmlns="http://www.w3.org/2000/svg">
+    <svg id="Capa_1"  :height="size" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <g>
             <g :fill="fill"><path d="m372.971 178.12h-191.128c-4.142 0-7.5 3.358-7.5 7.5s3.358 7.5 7.5 7.5h191.128c4.142 0 7.5-3.358 7.5-7.5s-3.358-7.5-7.5-7.5z"/>
                 <path d="m372.971 210.319h-191.128c-4.142 0-7.5 3.358-7.5 7.5s3.358 7.5 7.5 7.5h191.128c4.142 0 7.5-3.358 7.5-7.5s-3.358-7.5-7.5-7.5z"/>
