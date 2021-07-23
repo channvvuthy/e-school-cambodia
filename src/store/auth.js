@@ -393,6 +393,16 @@ export default {
 
         getToken({commit}, token) {
             commit("receivingToken", token)
+        },
+        getRelative(){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `me/relative`).then(response => {
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
         }
     }
 }
