@@ -142,7 +142,7 @@ export default {
     },
     created(){
         this.getCart().then(response =>{
-            if(response.data.data.list.length !== `undefinded`){
+            if(response.data.data.list !== `undefinded` &&  response.data.data.list.length !== `undefinded`){
                 this.itemInCart = response.data.data.list.length
             }
         })

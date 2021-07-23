@@ -88,11 +88,12 @@
             RelativeIcon
         },
         computed: {
-            ...mapState('setting', ['darkMode'])
+            ...mapState('setting', ['darkMode']),
+            ...mapState('auth', ['stProfile'])
         },
         methods:{
             goTo(page) {
-                this.$router.push({ name: page }).catch((err)=>{err});
+                this.$router.push({ name: page, params:{user_id:this.stProfile._id} }).catch((err)=>{err});
             },
         }
     }

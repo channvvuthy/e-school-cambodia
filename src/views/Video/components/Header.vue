@@ -24,9 +24,9 @@
             ...mapState('setting', ['isHide','darkMode'])
         },
         props:{
-            isExam:{
+            isRoute:{
                 default:()=>{
-                    return false
+                    return true
                 }
             },
             title:{
@@ -38,11 +38,7 @@
         methods:{
             back(){
                 
-                if(!this.isExam){
-                    if(this.$route.name === 'video-detail'){
-                        this.$router.push({name:'video'})
-                        return;
-                    }
+                if(this.isRoute){
                     this.$router.go(-1)
                 }else{
                     this.$emit("exit")

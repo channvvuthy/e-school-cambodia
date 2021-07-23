@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mb-5">
-            <eHeader></eHeader>
+            <eHeader :user="course.user"></eHeader>
         </div>
         <div class="overflow-y-scroll pb-40 h-screen"  @scroll="onScroll">
             <div>
@@ -75,7 +75,7 @@ export default {
                 name: 'read-book-detail',
                 params: {
                     course_id,
-                    id: this.stProfile._id,
+                    id: this.$route.params.user_id,
                     percentage
                 }
             })
@@ -85,7 +85,7 @@ export default {
                 this.page ++ 
                 let payload = {}
                 payload.p = this.page
-                payload.id = this.stProfile._id
+                payload.id = this.$route.params.user_id
                 payload.type = 2
                 if(this.s){
                     payload.s = this.s
@@ -102,7 +102,7 @@ export default {
         },
         getCourses(s=''){
             let payload = {}
-            payload.id = this.stProfile._id
+            payload.id = this.$route.params.user_id
             payload.type = 2
 
             if(s){

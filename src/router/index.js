@@ -46,7 +46,7 @@ const routes = [
         component: () => import('../views/Support/Support'),
     },
     {
-        path: '/activity',
+        path: '/activity/:user_id',
         name: 'activity',
         component: () => import('../views/Activity/Activity'),
     },
@@ -56,7 +56,7 @@ const routes = [
         component: () => import('../views/Activity/ActivityDetail'),
     },
     {
-        path: '/watch-video',
+        path: '/watch-video/:user_id',
         name: 'watch-video',
         component: () => import('../views/WatchVideo/WatchVideo'),
     },
@@ -66,22 +66,22 @@ const routes = [
         component: () => import('../views/WatchVideo/WatchDetail'),
     },
     {
-        path: '/read-book',
+        path: '/read-book/user_id',
         name: 'read-book',
         component: () => import('../views/ReadBook/ReadBook'),
     },
     {
-        path: '/read-book-detail',
+        path: '/read-book-detail/:user_id',
         name: 'read-book-detail',
         component: () => import('../views/ReadBook/ReadBookDetail'),
     },
     {
-        path: '/attendant',
+        path: '/attendant/:user_id',
         name: 'attendant',
         component: () => import('../views/Attendant/Attendant'),
     },
     {
-        path: '/download-detail',
+        path: '/download-detail/:user_id',
         name: 'download-detail',
         component: () => import('../views/Download/VideoDetail'),
     },

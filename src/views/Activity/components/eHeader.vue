@@ -7,9 +7,9 @@
              @click="back()">
                 <BackIcon :width="20" :height="20" :fill="darkMode?`#D1D5DB`:`#000000`"></BackIcon>
             </div>
-            <div class="w-9 h-9 rounded-full mr-5 bg-cover" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+            <div class="w-9 h-9 rounded-full mr-5 bg-cover" :style="{backgroundImage:`url(${user.photo})`}"></div>
             <div class="text-sm font-mediums">
-                {{stProfile.first_name + " " + stProfile.last_name}}
+                {{user.name}}
             </div>
         </div>
     </div>
@@ -25,9 +25,17 @@
         },
         computed:{
             ...mapState('setting', ['isHide','darkMode']),
-            ...mapState('auth', ['stProfile'])
         },
         props:{
+            user:{
+                type: Object,
+                default: () => {
+                    return{
+                        name:"",
+                        photo: ""
+                    }
+                }
+            },
             isExam:{
                 default:()=>{
                     return false

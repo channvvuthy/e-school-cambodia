@@ -1,6 +1,6 @@
 <template>
     <div class="h-screen">
-        <eHeader></eHeader>    
+        <eHeader :user="attendant.user"></eHeader>    
         <div class="flex items-center mt-5 mx-5 overflow-y-scroll months pb-5">
             <div v-for="(month, index) in months" :key="index + Math.random()">
                 <button :class="darkMode?`${currentMonth == month?`bg-pass text-white`:` bg-button text-gray-300`}`:`${currentMonth == month?`bg-primary text-white`:`bg-white`}`"
@@ -99,7 +99,10 @@ export default {
         attendantActive(day){
             if(this.attendant.days != undefined && this.attendant.days.length){
                 for(let i = 0; i < this.attendant.days.length; i ++){
-                    if(day === this.attendant.days[i]){
+                    let d = new Date(this.attendant.days[i])
+                    d = parseInt(d.getDate())
+                    
+                    if(day === d){
                         return true;
                     }
                 }
@@ -112,7 +115,7 @@ export default {
     created(){
         this.currentMonth = this.getMonth()
         this.daysInThisMonth(this.getMonth())
-        this.payload.id = this.stProfile._id
+        this.payload.id = this.$route.params.user_id
         this.payload.filter = this.year()+`-`+this.currentMonth 
         this.getAttendant(this.payload)
 

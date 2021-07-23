@@ -81,9 +81,7 @@ export default {
         let payload = {}
         payload.id = this.$route.params.id
         payload.course_id = this.$route.params.course_id
-        this.getCourseDetail(payload).then(response => {
-            console.log(response)
-        })
+        this.getCourseDetail(payload)
     }
 }
 </script>

@@ -181,7 +181,7 @@ export default {
         filterSummary(filter){
             this.active = filter
             let payload = {}
-            payload.id = this.stProfile._id
+            payload.id = this.$route.params.user_id
             payload.filter = filter
             this.loading = true
             this.getSummary(payload).then(response => {
@@ -226,7 +226,7 @@ export default {
         this.loading = true
         this.getSummary({
             filter:"this_month",
-            id: this.stProfile._id
+            id: this.$route.params.user_id
         }).then(response => {
            
             this.dataSource.data[0].value = response.data.data.watch_video
