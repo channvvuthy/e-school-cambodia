@@ -44,7 +44,7 @@
             </button>
             <button class="flex flex-col items-center justify-center h-12  mr-5  focus:outline-none text-center " @click="filterSummary('this_year')">
                 <div class="mb-5 flex items-center justify-center w-14 h-14 rounded-full" :class="activeClass('this_year')">
-                    <CalendarIcon :size="30" :fill="colorIcon('this_year', '#bfca33')"></CalendarIcon>
+                    <CalendarIcon :size="30" :fill="colorIcon('this_year', '#759F4B')"></CalendarIcon>
                 </div>
                 <div :class="darkMode?`${active === `this_year`?`text-fb`:``}`:`${active === `this_year`?`text-primary`:``}`">
                     {{$t('this_year')}}

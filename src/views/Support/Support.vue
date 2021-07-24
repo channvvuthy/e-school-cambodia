@@ -65,7 +65,7 @@
             </div>
             <div class="h-10"></div>
            <div class="flex justify-center items-center">
-                <button class="h-9 rounded-md px-40 bg-primary text-white">{{$t('submit')}}</button>
+                <button class="h-11 rounded-lg px-40 bg-primary text-white">{{$t('submit')}}</button>
            </div>
         </div>
     </div>
