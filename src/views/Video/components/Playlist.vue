@@ -61,6 +61,18 @@
                 </div>
             </div>
         </div>
+        <div class="text-xs text-center" :class="darkMode?`text-gray-300`:``">{{$t('scrolling_problem')}}</div>
+        <div class="flex items-center justify-center mt-2">
+            <button class="focus:outline-none text-xs rounded-full px-2 py-1" :class="darkMode?`bg-pass text-white`:`bg-primary text-white`" @click="loadMore">
+                <div class="flex items-center justify-center">
+                    <div class="px-14 py-1" v-if="loading">
+                        <div class="loader relative -top-6"></div>
+                    </div>
+                    <span v-else>{{$t('load_more')}} </span>
+                    
+                </div>
+            </button>
+        </div>
         <!-- Download option -->
         <div class="fixed flex items-center justify-center w-full h-full left-0 top-0 bg-black bg-opacity-90 z-50" v-if="showOpt">
             <div class="w-80 rounded-xl shadow" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
@@ -113,7 +125,8 @@ export default {
             downloading: [],
             showConfirm: false,
             id: null,
-            msg: "delete"
+            msg: "delete",
+            loading: false
         }
     },
     computed:{
@@ -135,6 +148,24 @@ export default {
         },
         kFormatter(num){
             return helper.kFormatter(num)
+        },
+        loadMore(){
+            this.loading = true
+            let map = this.playlist.list.map(item =>item.order)
+            let lastOrder = Math.max(...map)
+            this.page ++
+            if(this.playlist.list !== undefined){                    
+                this.getPlaylistWithPagination({
+                    p: this.page,
+                    id: this.$route.params.course._id,
+                    order: lastOrder
+                }).then(response => {
+                    this.loading = false
+                    if(response.data.data.list !=`undefined` && response.data.data.list.length <= 0){
+                        helper.success('no_more_result')
+                    }
+                })
+            }
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             let map = this.playlist.list.map(item =>item.order)

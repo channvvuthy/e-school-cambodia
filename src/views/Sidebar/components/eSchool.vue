@@ -5,10 +5,10 @@
         </div>
         <div class="px-3 my-3 mt-7">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
-                <div class="text-center flex flex-col justify-center items-center" @click="goTo('chat')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `chat`?`bg-byline`:`bg-button`}`:`${$route.name === `chat`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('hot-chat')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `hot-chat`?`bg-byline`:`bg-button`}`:`${$route.name === `hot-chat`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
-                            <ChatIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `chat`"></ChatIcon>
+                            <ChatIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `hot-chat`"></ChatIcon>
                             <ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></ChatIcon>
                         </div>
 

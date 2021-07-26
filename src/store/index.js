@@ -26,6 +26,7 @@ import network  from "./network"
 import help from "./help"
 import attendant from "./attendant"
 import summary from "./summary"
+import etalk from "./etalk"
 import Vue from 'vue'
 import Vuex from 'vuex'
 Vue.use(Vuex);
@@ -58,6 +59,7 @@ export default  new Vuex.Store({
         certificate,
         network,
         attendant,
-        summary
+        summary,
+        etalk
     }
 });

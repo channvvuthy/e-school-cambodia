@@ -273,6 +273,11 @@
   "friday":"Fr",
   "saturday":"Sat",
   "relative":"Relative",
-  "location":"Location"
+  "location":"Location",
+  "scrolling_problem":"Click load more button if you have a problem with scrolling",
+  "load_more":"Load More",
+  "no_more_result":"No more result to display",
+  "eschool":"E-School Cambodia",
+  "official_page":"Official Page"
 
 }

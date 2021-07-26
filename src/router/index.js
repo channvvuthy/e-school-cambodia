@@ -232,7 +232,16 @@ const routes = [
         path: '/relative',
         name: 'relative',
         component: () => import('../views/Relative/Relative'),
-
+    },
+    {
+        path: '/hot-chat',
+        name: 'hot-chat',
+        component: () => import('../views/HotChat/HotChat'),
+    },
+    {
+        path: '/chat',
+        name: 'chat',
+        component: () => import('../views/Chat/Chat'),
     },
 
 

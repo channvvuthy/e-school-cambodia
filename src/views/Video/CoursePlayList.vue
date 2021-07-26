@@ -22,7 +22,7 @@
                             {{ video.order }}. {{ video.title }}
                         </div>
                         <div class="h-5"></div>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-between items-center mb-3">
                             <div class="flex text-sm">
                                 <div class="flex items-center">
                                     <div class="cursor-pointer"
@@ -106,7 +106,7 @@
                 <Quiz v-if="active === 'quiz'" @startingExam="startingExam($event)"></Quiz>
             </div>
         </div>
-        <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-70 flex justify-center items-center"
+        <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-90 z-50 flex justify-center items-center"
              v-if="showDoc">
             <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
                 <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">

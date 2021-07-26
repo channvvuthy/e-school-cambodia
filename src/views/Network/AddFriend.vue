@@ -4,7 +4,7 @@
             <div v-for="(friend, index) in friendNotInContact.list" :key="index" class="mb-3">
                 <div class="flex justify-between items-center">
                     <div class="flex justify-start items-center">
-                        <div class="h-12 w-12 rounded-full bg-ceover bg-white" :style="{backgroundImage:`url(${friend.photo})`}"></div>
+                        <div class="h-12 w-12 rounded-full bg-cover bg-white" :style="{backgroundImage:`url(${friend.photo})`}"></div>
                         <div class="ml-4 text-sm">
                             <div>
                                 

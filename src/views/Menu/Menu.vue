@@ -66,15 +66,18 @@
                                 </div>
                             </div>
                         </template>
-                        <div><CartIcon :fill="darkMode?`#909090`:`#0f3c7a`"></CartIcon></div>
+                        <div><CartIcon :fill="darkMode?`#909090`:`#181818`"></CartIcon></div>
 
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10  relative" >
-                        <div><ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ChatIcon></div>
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10  relative" @click="goTo('chat')" >
+                        <div>
+                            <ChatIcon :fill="darkMode?`#aaa`:`#0f3c7a`" v-if="$route.name === `chat`"></ChatIcon>
+                            <ChatIcon :fill="darkMode?`#909090`:`#181818`" v-else></ChatIcon>
+                        </div>
 
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10 " @click="() =>{this.$emit('notification')}">
-                        <div><NotificationIcon :fill="darkMode?`#909090`:`#0f3c7a`"></NotificationIcon></div>
+                        <div><NotificationIcon :fill="darkMode?`#909090`:`#181818`"></NotificationIcon></div>
 
                     </div>
                 </div>
