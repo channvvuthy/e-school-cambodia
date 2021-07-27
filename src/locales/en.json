@@ -278,6 +278,21 @@
   "load_more":"Load More",
   "no_more_result":"No more result to display",
   "eschool":"E-School Cambodia",
-  "official_page":"Official Page"
+  "official_page":"Official Page",
+  "connect_friend":"Connect Friend",
+  "create_group":"Create Group",
+  "mute_all": "Mute All",
+  "need_support":"Need Support",
+  "disconnect":"Disconnect",
+  "mute_group":"Mute Group",
+  "select_member":"Select Member",
+  "search_member":"Search Member",
+  "done":"Done",
+  "name_your_group":"Name Your Group",
+  "group_name":"Group Name",
+  "please_enter_group_name":"Please enter group name",
+  "please_select_member":"Please select member",
+  "please_upload_photo":"Please upload photo"
+
 
 }

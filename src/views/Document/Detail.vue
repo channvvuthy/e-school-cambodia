@@ -348,7 +348,6 @@
             },
 
             previewFile(file){
-                console.log(file)
                 if(file.type === 2){
                     this.pdfUrl = file.url
                     this.fileName = file.name

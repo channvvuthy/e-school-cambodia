@@ -131,6 +131,7 @@ export default {
     methods: {
         ...mapActions('cart', ['getCart']),
         goTo(page) {
+            this.$store.commit("etalk/setActive", 0)
             this.$router.push({ name: page }).catch((err)=>{err});
         },
         darkActive(darkMode, active){

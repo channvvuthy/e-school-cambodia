@@ -41,7 +41,6 @@
     
         methods:{
             progress(){
-                console.log("processing...")
             }
         },
         created(){

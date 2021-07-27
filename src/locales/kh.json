@@ -279,6 +279,20 @@
   "load_more":"ទាញទិន្ន័យបន្ថែម",
   "no_more_result":"ទិន្ន័យត្រូវបានទាញមកអស់ហើយ",
   "eschool":"អ៊ីស្គូល ខេមបូឌា",
-  "official_page":"ទំព័រផ្លូវការ"
+  "official_page":"ទំព័រផ្លូវការ",
+  "connect_friend":"ភ្ជាប់ទំនាក់ទំនងមិត្ត",
+  "create_group":"បង្កើតក្រុម",
+  "mute_all": "ស្ងាត់ទាំងអស់",
+  "need_support":"ត្រូវការជំនួយ",
+  "disconnect":"ផ្ដាច់",
+  "mute_group":"ក្រុមស្ងាត់",
+  "select_member":"ជ្រើសរើសសមាជិក",
+  "search_member":"ស្វែងរកសមាជិក",
+  "done":"បញ្ចប់",
+  "name_your_group":"ឈ្មោះក្រុមរបស់អ្នក",
+  "group_name":"ដាក់ឈ្មោះ",
+  "please_enter_group_name":"សូមបញ្ចូលឈ្មោះក្រុម",
+  "please_select_member":"សូមជ្រើសរើសសមាជិកក្រុម",
+  "please_upload_photo":"សូមជ្រើសរើសរូបភាព"
 
 }

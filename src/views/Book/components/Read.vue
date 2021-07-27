@@ -206,7 +206,6 @@
                 })
             },
             log(){
-                console.log(this.title)
             }
         },
         beforeDestroy() {

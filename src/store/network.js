@@ -82,7 +82,6 @@ export default {
                 axios.get(config.apiUrl + `friend?${helper.q(payload)}`).then(response =>{
                     resolve(response)
                     if(payload.p !== undefined && payload.p > 1){
-                        console.log(response)
                         commit("gettingMoreFriend", response.data.data)
                     }else{
                         commit("gettingFriend", response.data.data)

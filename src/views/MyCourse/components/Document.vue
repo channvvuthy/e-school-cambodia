@@ -122,8 +122,8 @@
                 this.window.height = window.innerHeight;
             },
 
-            log(err){
-                console.log(err)
+            log(){
+
             },
             showListData(){
                 this.showList = !this.showList

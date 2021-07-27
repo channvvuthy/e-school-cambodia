@@ -1,6 +1,5 @@
 import axios from "axios"
 import config from "./../config"
-import store from "./../store"
 import helper from "./../helper/helper"
 export default {
     namespaced: true,
@@ -8,7 +7,8 @@ export default {
     state: {
         loading: false,
         contacts: [],
-        messages: []
+        messages: [],
+        active: 0
     },
 
     mutations:{
@@ -17,6 +17,9 @@ export default {
         },
         getContact(state, payload){
             state.contacts = payload
+        },
+        setActive(state, payload){
+            state.active = payload 
         }
 
     },
@@ -32,6 +35,28 @@ export default {
                 }).catch(err => {
                     reject(err)
                 })
+            })
+        },
+        createGroup({commit}, form){
+            return new Promise((resolve, reject) => {
+                var settings = {
+                    "url": config.apiUrl + "etalk/group",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        
+                    },
+                    "processData": false,
+                    "mimeType": "multipart/form-data",
+                    "contentType": false,
+                    "data": form
+                };
+    
+                axios(settings).then(function (response) {
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                });
             })
         }
     }
