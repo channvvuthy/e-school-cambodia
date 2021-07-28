@@ -8,7 +8,8 @@ export default {
         loading: false,
         contacts: [],
         messages: [],
-        active: 0
+        active: 0,
+        members: []
     },
 
     mutations:{
@@ -20,6 +21,14 @@ export default {
         },
         setActive(state, payload){
             state.active = payload 
+        },
+        getMember(state, payload){
+            state.members = payload
+        },
+        getPagesMember(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.members.push(payload[i])
+            }
         }
 
     },
@@ -56,8 +65,68 @@ export default {
                     resolve(response)
                 }).catch(err => {
                     reject(err)
+                    helper.errorMessage(err.response.data)
                 });
             })
-        }
+        },
+        renameGroup({}, payload){
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/contact/rename`, payload).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        setPhoto({}, payload){
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/contact/photo`, payload).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        muteContact({}, payload){
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/contact/mute`, payload).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        deleteMute({}, payload){
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `etalk/contact/mute`, {
+                    headers:{},
+                    data:{
+                        id: payload._id
+                    }
+                }).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        getMember({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `etalk/group/member?${helper.q(payload)}`).then(response =>{
+                    if(payload.p !== 'undefined' && payload.p > 1){
+                        commit("getPagesMember", response.data.data)
+                    }else{
+                        commit("getMember", response.data.data)
+                    }
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
     }
 }

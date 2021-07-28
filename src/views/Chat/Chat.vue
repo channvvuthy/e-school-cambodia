@@ -50,7 +50,16 @@
                             <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-3" :style="{backgroundImage:`url(${contact.photo})`}"></div>
                         </div>
                         <div>
-                            <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">{{contact.name}}</div>
+                            <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">
+                                <div class="flex">
+                                    <div>
+                                        {{contact.name}}
+                                    </div>
+                                    <div v-if="contact.type===0" class="h-4 w-4 rounded-full ml-3 flex items-center justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
+                                       <span style="font-size:10px;">&#10003;</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{cutString(contact.last.message, 30)}}</div>
                         </div>
                         <div class="flex flex-1 justify-end items-end h-full">
@@ -71,13 +80,16 @@
         </div>
         <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?`bg-youtube`:`bg-img-primary`">
             <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
-                <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3" :style="{backgroundImage:`url(${contact.photo})`}"></div>
+                <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="contact.type === 0?``:`cursor-pointer`">
+                    <div class="loading" v-if="settingImage"></div>
+                </div>
+                <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
                 <div>
                     <div class="font-semibold">
                         {{contact.name}}
                     </div>
-                    <div class="text-xs">
-                        Online
+                    <div class="text-xs text-gray-500">
+                        {{$t('online')}}
                     </div>
                 </div>
                 <div class="flex-1 flex flex-col items-end cursor-pointer" @click="() => {this.chatOption = true;}">
@@ -91,8 +103,20 @@
                         {{$t('disconnect')}}
                     </div>
                     <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
-                        {{$t('mute_group')}}
+                        <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute_group')}}</span>
+                        <span v-else @click="mute">{{$t('mute_group')}}</span>
                     </div>
+                    <template v-if="contact.type === 2">
+                        <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.isRename = true; this.chatOption = false;}">
+                            {{$t('rename_group')}}
+                        </div>
+                        <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.$router.push({name: 'add-member', params:{contact}})}">
+                            {{$t('add_member')}}
+                        </div>
+                        <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                            {{$t('member')}}
+                        </div>
+                    </template>
                     
                    
                 </div>
@@ -126,6 +150,7 @@
             </div>
             
         </div>
+        <Rename v-if="isRename" @cancelRename="() => {this.isRename = false}" :group="contact"></Rename>
     </div>
 </template>
 <script>
@@ -135,19 +160,24 @@ import ImageIcon from "./components/LinkIcon.vue"
 import ChevronIcon from "./../HotChat/components/ChevronIcon.vue"
 import helper from "./../../helper/helper"
 import moment from "moment"
+import Rename from "./components/Rename.vue"
 export default {
     components:{
         SearchIcon,
         ImageIcon,
-        ChevronIcon
+        ChevronIcon,
+        Rename
     },
     data(){
         return{
-            active: 0,
+            active: 1,
             contact: {},
             searchQuery: "",
             eTalkOption: false,
-            chatOption: false
+            chatOption: false,
+            isRename: false,
+            photo: "",
+            settingImage: false
         }
     },
     computed:{
@@ -174,7 +204,7 @@ export default {
 
     },
     methods:{
-        ...mapActions('etalk', ['getContact']),
+        ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute']),
         formatTime(date){
             moment.locale('en');
             return moment(date).format('h:mm A');
@@ -189,6 +219,40 @@ export default {
         goTo(page){
             this.$router.push({
                 name: page,
+            })
+        },
+        mute(){
+            let form = new FormData()
+            form.append("id", this.contact._id)
+
+
+            this.muteContact(form).then(() =>{
+                this.contact.is_mute = 1
+            })
+        },
+        deleteMuteContact(){
+            this.deleteMute({id: this.contact._id}).then(() =>{
+                this.contact.is_mute = 0
+            })
+        },
+        contactPhoto(){
+             if(this.contact.type === 0){
+                return;
+            }
+            this.$refs.contactPhoto.click()
+        },
+        changeContactPhoto(event){
+           
+            const file = event.target.files[0];
+            this.photo = file
+            let form = new FormData();
+            form.append("id", this.contact._id)
+            form.append("photo", this.photo)
+
+            this.settingImage = true
+            this.setPhoto(form).then(() =>{
+                this.contact.photo = URL.createObjectURL(file);
+                this.settingImage = false
             })
         }
         
@@ -215,3 +279,25 @@ export default {
     }
 }
 </script>
+<style>
+    .loading {
+        border: 2px solid #eee;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        animation: spin 1s linear infinite;
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+        border-right: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
+</style>

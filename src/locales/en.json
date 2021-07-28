@@ -285,6 +285,7 @@
   "need_support":"Need Support",
   "disconnect":"Disconnect",
   "mute_group":"Mute Group",
+  "unmute_group":"Unmute Group",
   "select_member":"Select Member",
   "search_member":"Search Member",
   "done":"Done",
@@ -292,7 +293,13 @@
   "group_name":"Group Name",
   "please_enter_group_name":"Please enter group name",
   "please_select_member":"Please select member",
-  "please_upload_photo":"Please upload photo"
-
+  "please_upload_photo":"Please upload photo",
+  "member": "Member",
+  "add_member":"Add Member",
+  "rename_group": "Rename Group",
+  "online": "Online",
+  "change_group_name": "Change Group Name",
+  "group_member":"Group Member",
+  "search_friend":"Search Friend"
 
 }

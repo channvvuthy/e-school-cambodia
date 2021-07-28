@@ -285,7 +285,8 @@
   "mute_all": "ស្ងាត់ទាំងអស់",
   "need_support":"ត្រូវការជំនួយ",
   "disconnect":"ផ្ដាច់",
-  "mute_group":"ក្រុមស្ងាត់",
+  "mute_group":"បិតសំលេង",
+  "unmute_group":"បើកសំឡេង",
   "select_member":"ជ្រើសរើសសមាជិក",
   "search_member":"ស្វែងរកសមាជិក",
   "done":"បញ្ចប់",
@@ -293,6 +294,14 @@
   "group_name":"ដាក់ឈ្មោះ",
   "please_enter_group_name":"សូមបញ្ចូលឈ្មោះក្រុម",
   "please_select_member":"សូមជ្រើសរើសសមាជិកក្រុម",
-  "please_upload_photo":"សូមជ្រើសរើសរូបភាព"
+  "please_upload_photo":"សូមជ្រើសរើសរូបភាព",
+  "member": "សមាជិក",
+  "add_member":"បន្ថែមសមាជិក",
+  "rename_group": "ប្តូរឈ្មោះក្រុម",
+  "online": "អនឡាញ",
+  "change_group_name": "ផ្លាស់ប្តូរឈ្មោះក្រុម",
+  "group_member":"ស​​មាជិកក្រុម",
+  "search_friend":"ស្វែងរកមិត្ត"
+
 
 }

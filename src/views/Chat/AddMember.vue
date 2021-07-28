@@ -78,41 +78,26 @@
                         </div>
                     </div>
                     <div class="ml-3">
-                        {{$t('1013')}}
+                        {{$route.params.contact.name}}
                     </div>
                 </div>
                 <div class="flex-1 w-full text-center text-base">
-                    {{$t('select_member')}}
+                    {{$t('add_member')}}
                 </div>
                 <div class="flex flex-col items-end cursor-pointer" @click="nextPage">
-                    <span :class="darkMode?``:`text-primary`" v-if="isNext">
+                    <span :class="darkMode?``:`text-primary`">
                         <div v-if="creatingGroup" class="bg-red-300 flex items-center justify-center relative h-full">
                             <div class="loader absolute -top-7 right-5"></div>
                         </div>
-                        <span v-else>{{$t('done')}}</span>
+                        <span>{{$t('done')}}</span>
                     </span>
-                    <span :class="darkMode?``:`text-primary`" v-else>{{$t('2125')}}</span>
                 </div>
             </div>
-            <div :class="isNext?`my-2`:`m-5`">
-                <template v-if="isNext">
-                    <div class="flex shadow px-5 py-4 items-center" :class="darkMode?`bg-secondary`:`bg-white`">
-                        <div class="cursor-pointer h-16 w-16 bg-cover bg-gray-300 rounded-full mr-3 bg-no-repeat"
-                        @click="() => {this.$refs.groupLogo.click()}"
-                         :style="{backgroundImage:`url(${defaultBackground})`,backgroundPosition:`center center`}"></div>
-                        <input type="file" ref="groupLogo" class="hidden" @change="onSelectedPhoto">
-                        <div>
-                            <div class="text-xs" :class="darkMode?`text-gray-300`:`text-gray-400`">{{$t('name_your_group')}}</div>
-                            <div>
-                                <input type="text" class="bg-transparent focus:outline-none text-smm py-2 font-semibold" :placeholder="$t('group_name')" v-model="groupName" ref="groupName">
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template v-else>
+            <div class="m-5">
+                <template>
                     <div class="w-11/12 relative">
                         <input type="text" class="focus:outline-none h-11 w-full rounded-md pl-4"
-                        :placeholder="$t('search_member')"
+                        :placeholder="$t('search_friend')"
                         :class="darkMode?`bg-button text-gray-300`:`bg-softGray`" v-model="search" @keyup.enter="searchMember">
                         <div class="absolute right-4 top-2">
                             <SearchIcon :fill="darkMode?`#909090`:`#000000`"></SearchIcon>
@@ -125,23 +110,32 @@
                         </div>
                     </div>
                 </template>
-                <div v-if="loadingFriend" class="flex items-center justify-center" :class="darkMode?`text-gray-300`:`text-black`">
+                <div v-if="loadingMember" class="flex items-center justify-center" :class="darkMode?`text-gray-300`:`text-black`">
                     <div class="loader"></div>
                 </div>
                 <!-- Group Member -->
-                <template v-if="isNext">
-                    <div class="mt-2 pb-5 h-screen" :class="darkMode?`bg-secondary`:`bg-white`">
-                        <div class="pt-5 text-base px-5">
-                            Group Member
+                <template v-else>
+                    <div class="mt-2 pb-5 h-screen">
+                        <div class="pt-5">
+                            <span class="text-sm" v-if="locale() === 'en'">{{members.length}} {{$t('member')}}{{members.length > 1?`s`:``}}</span>
+                            <span class="text-sm" v-else>{{$t('member')}} {{members.length}} នាក់</span>
                         </div>
                         ​<div>
-                            <div v-for="(member, index) in selectedMember" :key="index" class="py-3  border-b px-5" :class="darkMode?`border-youtube`:`border-gray-200`">
+                            <div v-for="(member, index) in friends.list" :key="index" class="py-3  border-b flex items-center justify-between" :class="darkMode?`border-button`:`border-gray-200`">
                                 <div class="flex items-center">
                                     <div class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300" :style="{backgroundImage:`url(${member.photo})`}"></div>
                                     <div>
                                         <div>{{member.name}}</div>
-                                        <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">Online</div>
+                                        <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{$t('online')}}</div>
                                     </div>
+                                </div>
+                                <div class="h-5 w-5 rounded-full flex items-center justify-center relative" :class="darkMode?`bg-pass`:`bg-primary`" >
+                                    <label class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
+                                        <input type="checkbox"  class="hidden">
+                                        <div>
+                                            <CheckIcon :fill="darkMode?`#212121`:`#FFFFFF`"></CheckIcon>
+                                        </div>
+                                    </label>
                                 </div>
                                
                             </div>
@@ -149,7 +143,7 @@
                     </div>
                 </template>
                 <!-- List friend -->
-                <template v-else>
+                <!-- <template>
                     <div class="h-screen pb-96 overflow-y-scroll flex flex-col mt-2" @scroll="onScroll">
                         <div v-for="(friend, index) in friends.list" :key="index">
                             <div class="flex items-center justify-between border-b py-3" :class="darkMode?`border-button`:``">
@@ -173,7 +167,7 @@
                             </div>
                         </div>
                     </div>
-                </template>
+                </template> -->
             </div>
             
         </div>
@@ -210,12 +204,13 @@ export default {
             groupName:"",
             photo: "",
             creatingGroup: false,
+            loadingMember: false
         }
     },
     computed:{
         ...mapState('setting', ['darkMode']),
         ...mapState('auth', ['stProfile']),
-        ...mapState('etalk', ['loading', 'contacts']),
+        ...mapState('etalk', ['loading', 'contacts', 'members']),
         ...mapState('network', ['friends']),
         // search
         resultQuery(){
@@ -230,7 +225,7 @@ export default {
 
     },
     methods:{
-        ...mapActions('etalk', ['getContact','createGroup']),
+        ...mapActions('etalk', ['getContact','getMember']),
         ...mapActions('network', ['getFriend']),
         formatTime(date){
             moment.locale('en');
@@ -243,7 +238,7 @@ export default {
             this.active = index
             this.contact = contact
             this.$store.commit("etalk/setActive", contact._id)
-            this.$router.push("chat").catch((err)=>{err})
+            this.$router.push({name: "chat"})
         },
         goTo(page){
             this.$router.push({
@@ -304,64 +299,26 @@ export default {
             this.defaultBackground = URL.createObjectURL(file);
         },
         backTo(){
-            if(this.isNext){
-                this.isNext = false
-            }else{
-                this.$router.push("chat")
-            }
+            this.$router.push({name:"chat"})
         },
         nextPage(){
-            if(!this.isNext){
-                if(!this.selectedMember.length){
-                    helper.errorMessage('please_select_member')
-                    return;
-                }
-                this.isNext = true
-            }else{
-                if(!this.groupName.trim()){
-                    this.$refs.groupName.focus()
-                    helper.errorMessage('please_enter_group_name')
-                    return;
-                }
-                if(!this.photo){
-                    helper.errorMessage('please_upload_photo')
-                    return;
-                }
 
-                this.creatingGroup = true
-            
-                var form = new FormData();
-
-                form.append("name", this.groupName);
-                form.append("photo", this.photo);
-
-                // form.append("member", this.stProfile._id);
-                let member = []
-
-                for(let i = 0; i < this.selectedMember.length; i ++){
-                    // form.append("member", this.selectedMember[i].id);
-                    member.push(this.selectedMember[i].id)
-                }
-                form.append("member", JSON.stringify(member));
-                this.createGroup(form).then(response => {
-                    this.creatingGroup = false
-                    this.$store.commit("etalk/setActive", response.data.data._id)
-                    this.$router.push("chat").catch((err)=>{err})
-
-                }).catch(() =>{
-                    this.creatingGroup = false
-                }) 
-
-            }
-        }
-        
+        },
+        locale(){
+            return this.$i18n.locale
+        }      
 
     },
     created(){
-        this.loadingFriend = true
+       
         this.getContact().then(() =>{
             if(this.contacts.contact.length !== 'undefined' ){
-                this.contact = this.contacts.contact[0]
+                for(let i = 0; i < this.contacts.contact.length; i ++){
+                    if(this.$route.params.contact._id === this.contacts.contact[i]._id){
+                        this.active = i
+                    }
+                }
+                this.contact = this.contacts.contact[this.active]
             }else{
                 this.contact =  {
                     name: "",
@@ -369,12 +326,19 @@ export default {
                 }
             }
         })
-
+        this.loadingMember = true
+        this.getMember({
+            id: this.$route.params.contact._id
+        }).then(() => {
+            this.loadingMember = false
+        })
+         this.loadingFriend = true
         this.getFriend({
             id: this.stProfile._id
         }).then(() => {
             this.loadingFriend = false
         })
+
     }
 }
 </script>

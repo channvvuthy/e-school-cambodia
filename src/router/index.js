@@ -248,6 +248,11 @@ const routes = [
         name: 'create-group',
         component: () => import('../views/Chat/Group'),
     },
+    {
+        path: '/add-member/:contact',
+        name: 'add-member',
+        component: () => import('../views/Chat/AddMember'),
+    },
 
 
 ];
