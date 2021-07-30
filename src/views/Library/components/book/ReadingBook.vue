@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen" >                    
+                <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen" @scroll="onScroll">                    
                     <div id="pdf-viewer"></div>
                 </div>
             </div>
@@ -103,6 +103,7 @@ export default {
             showToolbar: false,
             loadingPdf: true,
             totalPage: null,
+            page: 1,
             pdfUrl:"http://staging-admin.e-schoolcambodia.com/files/pdf/202105ze18adbf3f9764c2dfeec0c616757271d.pdf"
         }
     },
@@ -111,7 +112,7 @@ export default {
         ...mapState('library', ['details','loadingDetail','readingPdf']),
     },
     methods: {
-        ...mapActions('library', ['stopWatch']),
+        ...mapActions('library', ['stopWatch', 'readingLibrary']),
         closeReading(){
             this.$emit("closeReading")
             this.stopReading()
@@ -139,16 +140,21 @@ export default {
         },
         stopReading(){
             let payload = {
-                id: this.details._id,
-                mark: 2,
+                id: this.details.list[this.order]._id,
+                mark: this.page,
                 duration: this.totalPage
             }
             this.stopWatch(payload)
+            this.page = 1
         },
         onNextPage() {
             if(this.order < this.details.list.length){
                 this.order ++
                 this.changeChapter(this.details.list[this.order],this.order)
+                this.readingLibrary({
+                    id: this.details.list[this.order]._id
+                })
+                
             }
         },
         openFullscreen() {
@@ -174,6 +180,9 @@ export default {
             return false
         },
         changeChapter(book,index){
+
+            this.stopReading()
+            
             if(this.canRead(book)){
                 this.pdfUrl = book.filename
                 this.title = book.title
@@ -184,33 +193,47 @@ export default {
         },
         loadPdf(){
             this.mainTitle = this.details.book.title
-       
-            if(this.readingPdf !==''){
-                this.order = this.readingPdf.order
+            if(this.details.book.last_watch !== undefined){
+                this.order = this.details.book.last_watch.order
             }
 
             let defaultPdf = this.details.list[this.order]
+            if(defaultPdf.last_watch !== undefined){
+                this.page = defaultPdf.last_watch.mark
+            }
+
+            this.readingLibrary({
+                id: this.details.list[this.order]._id
+            })
             this.pdfUrl = defaultPdf.filename
             this.title = defaultPdf.title
         },
-        initialPdf(){
+        initialPdf(page = 1){
             this.loadingPdf = true
             pdfjsLib.getDocument(this.pdfUrl).promise.then(pdfDoc=> {
                 this.pdfDoc = pdfDoc
                 let viewer = document.getElementById('pdf-viewer');
                 this.totalPage  = pdfDoc.numPages 
-                for(let page = 1; page <= pdfDoc.numPages; page++) {
-                    let canvas = document.createElement("canvas");    
-                    canvas.className = 'pdf-page-canvas';         
-                    viewer.appendChild(canvas);            
-                    this.renderPage(page, canvas);
-                }
+                // for(let page = 1; page <= pdfDoc.numPages; page++) {
+                let canvas = document.createElement("canvas");    
+                canvas.className = 'pdf-page-canvas';         
+                viewer.appendChild(canvas);            
+                this.renderPage(page, canvas);
+                // }
                 this.loadingPdf = false
             });
-        }
+        },
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if (scrollTop + clientHeight >= (scrollHeight - 1)) {
+                if(this.page < this.totalPage){
+                    this.page ++
+                    this.initialPdf(this.page)
+                }
+            }
+        },
     },
     mounted(){
-        this.initialPdf()
+        this.initialPdf(this.page)
         window.addEventListener('keydown', (e) => {
             
             if(e.key === `ArrowRight`){

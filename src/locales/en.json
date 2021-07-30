@@ -300,6 +300,9 @@
   "online": "Online",
   "change_group_name": "Change Group Name",
   "group_member":"Group Member",
-  "search_friend":"Search Friend"
+  "search_friend":"Search Friend",
+  "user_has_been_added_to_the_group": "User has been added to the group",
+  "user_has_been_remove_from_group":"User has been removed from the group",
+  "you_are_not_admin_in_this_group":"You are not admin this group"
 
 }

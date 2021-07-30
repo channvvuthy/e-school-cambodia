@@ -31,7 +31,7 @@
             </div>
             <!-- Search -->
             <div class="relative mb-4 px-3">
-                <input type="text" v-on:keyup.enter="searchFilter" v-model="searchQuery" class="w-full rounded-md h-10 focus:outline-none pl-3" :class="darkMode?`bg-youtube text-gray-300`:`bg-softGray`" :placeholder="$t('1001')">
+                <input type="text"  v-model="searchQuery" class="w-full rounded-md h-10 focus:outline-none pl-3" :class="darkMode?`bg-youtube text-gray-300`:`bg-softGray`" :placeholder="$t('1001')">
                 <div class="absolute right-6 top-2">
                     <SearchIcon :fill="darkMode?`#909090`:`#000`"></SearchIcon>
                 </div>
@@ -97,11 +97,45 @@
                 <template>
                     <div class="w-11/12 relative">
                         <input type="text" class="focus:outline-none h-11 w-full rounded-md pl-4"
-                        :placeholder="$t('search_friend')"
-                        :class="darkMode?`bg-button text-gray-300`:`bg-softGray`" v-model="search" @keyup.enter="searchMember">
-                        <div class="absolute right-4 top-2">
+                        :placeholder="$t('add_member')"
+                        :class="darkMode?`bg-button text-gray-300`:`bg-softGray`" v-model="search" @keyup.enter="searchMember" @keyup="isEmpty">
+                        <div class="absolute right-4 top-2 cursor-pointer" style="margin-top:1px;" v-if="search" @click="clearSearch">
+                            <CloseIcon :width="22" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        </div>
+                        <div class="absolute right-4 top-2" style="margin-top:1px;" v-else>
                             <SearchIcon :fill="darkMode?`#909090`:`#000000`"></SearchIcon>
                         </div>
+                        
+                        <div class="absolute -top-2 flex items-center right-20" v-if="loadingFriend">
+                            <div class="loader"></div>
+                        </div>
+                        <template v-else>
+                            <div class="absolute w-full left-0 top-14 rounded h-96 overflow-y-scroll py-5" :class="darkMode?`bg-button`:`bg-softGray`" v-if="showFriend">
+                                <div v-if="friends.list && friends.list.length">
+                                    <div v-for="(friend, index) in friends.list" :key="index">
+                                        <div class="py-3 px-5  border-b flex items-center justify-between" :class="darkMode?`border-secondary`:`border-gray-300`">
+                                            <div class="flex items-center">
+                                                <div class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300" :style="{backgroundImage:`url(${friend.photo})`}"></div>
+                                                <div>
+                                                    <div>{{friend.name}}</div>
+                                                    <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{$t('online')}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="h-4 w-4 rounded-full flex items-center justify-center relative" :class="darkMode?`bg-pass`:`bg-primary`" @click="addUser(friend)">
+                                                <div class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
+                                                    <input type="checkbox"  class="hidden">
+                                                    <div>
+                                                        <CheckIcon :fill="darkMode?`#383838`:`#FFFFFF`" v-if="isMember(friend._id)"></CheckIcon>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div v-else class="px-5">{{$t('there_is_no_friend_to_add')}}</div>
+                            </div>
+                        </template>
                     </div>
 
                     <div v-if="selectedMember.length" class="mt-5">
@@ -120,8 +154,9 @@
                             <span class="text-sm" v-if="locale() === 'en'">{{members.length}} {{$t('member')}}{{members.length > 1?`s`:``}}</span>
                             <span class="text-sm" v-else>{{$t('member')}} {{members.length}} នាក់</span>
                         </div>
-                        ​<div>
-                            <div v-for="(member, index) in friends.list" :key="index" class="py-3  border-b flex items-center justify-between" :class="darkMode?`border-button`:`border-gray-200`">
+                        ​<div class="h-full overflow-y-scroll pb-96" @scroll="onScroll">
+                            <!-- {{users}} -->
+                            <div v-for="(member, index) in members" :key="index" class="py-3  border-b flex items-center justify-between" :class="darkMode?`border-button`:`border-gray-200`">
                                 <div class="flex items-center">
                                     <div class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300" :style="{backgroundImage:`url(${member.photo})`}"></div>
                                     <div>
@@ -129,48 +164,22 @@
                                         <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{$t('online')}}</div>
                                     </div>
                                 </div>
-                                <div class="h-5 w-5 rounded-full flex items-center justify-center relative" :class="darkMode?`bg-pass`:`bg-primary`" >
-                                    <label class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
+                                <div class="h-5 w-5 rounded-full flex items-center justify-center relative" :class="darkMode?`bg-pass`:`bg-primary`" @click="addUser(member)">
+                                    <div class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
                                         <input type="checkbox"  class="hidden">
                                         <div>
-                                            <CheckIcon :fill="darkMode?`#212121`:`#FFFFFF`"></CheckIcon>
+                                            <CheckIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="isMember(member._id)"></CheckIcon>
                                         </div>
-                                    </label>
+                                    </div>
                                 </div>
                                
                             </div>
                         </div> 
                     </div>
                 </template>
-                <!-- List friend -->
-                <!-- <template>
-                    <div class="h-screen pb-96 overflow-y-scroll flex flex-col mt-2" @scroll="onScroll">
-                        <div v-for="(friend, index) in friends.list" :key="index">
-                            <div class="flex items-center justify-between border-b py-3" :class="darkMode?`border-button`:``">
-                                <div class="flex items-center">
-                                    <div class="h-14 w-14 rounded-full bg-cover bg-gray-300" :style="{backgroundImage:`url(${friend.photo})`}"></div>
-                                    <div class="ml-3">
-                                        <div>{{friend.name}}</div>
-                                        <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">Online</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="h-5 w-5 rounded-full flex items-center justify-center relative" :class="darkMode?`bg-pass`:`bg-primary`" >
-                                        <label class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
-                                            <input type="checkbox" :value="friend._id" @click="selectMember($event, friend)" class="hidden">
-                                            <div v-if="isSelected(friend._id)">
-                                                <CheckIcon :fill="darkMode?`#212121`:`#FFFFFF`"></CheckIcon>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </template> -->
             </div>
-            
         </div>
+        <Add v-if="showAdd" @cancelRename="() => {this.showAdd = false}"></Add>
     </div>
 </template>
 <script>
@@ -180,11 +189,15 @@ import helper from "./../../helper/helper"
 import moment from "moment"
 import CheckIcon from "./../../components/CheckIcon.vue"
 import ChevronIcon from "./../../components/ChevronIcon.vue"
+import Add from "./components/Add.vue"
+import CloseIcon from "./../../components/CloseIcon.vue"
 export default {
     components:{
         SearchIcon,
         ChevronIcon,
-        CheckIcon
+        CheckIcon,
+        Add,
+        CloseIcon
     },
     data(){
         return{
@@ -196,7 +209,7 @@ export default {
             page: 1,
             enableScroll: true,
             selectedMember: [],
-        
+            showAdd: false,
             search: "",
             loadingFriend: false,
             isNext: false,
@@ -204,7 +217,8 @@ export default {
             groupName:"",
             photo: "",
             creatingGroup: false,
-            loadingMember: false
+            loadingMember: false,
+            showFriend: false
         }
     },
     computed:{
@@ -222,10 +236,9 @@ export default {
                 return this.contacts.contact;
             }
         },
-
     },
     methods:{
-        ...mapActions('etalk', ['getContact','getMember']),
+        ...mapActions('etalk', ['getContact','getMember','addMember', 'deleteMember']),
         ...mapActions('network', ['getFriend']),
         formatTime(date){
             moment.locale('en');
@@ -233,6 +246,44 @@ export default {
         },
         cutString(text, limit){
             return helper.cutString(text, limit)
+        },
+        isEmpty(){
+            if(!this.search){
+                this.showFriend = false
+            }
+        },
+        isMember(contact_id){
+            if(!this.members.length){
+                return false
+            }
+            for(let i = 0; i < this.members.length; i ++){
+                if(contact_id === this.members[i]._id){
+                    return true
+                }
+            }
+            return false
+        },
+        addUser(member){
+            let payload = {
+                user_id: member._id,
+                id: this.contact._id
+            }
+            if(this.isMember(member._id)){
+                if(!this.contact.is_admin){
+                    helper.errorMessage("you_are_not_admin_in_this_group")
+                    return;
+                }
+
+                this.deleteMember(payload).then((response) =>{
+                    if(response.data.msg !== undefined){
+                        helper.errorMessage(response.data.msg)
+                    }
+                })
+            }else{
+                this.addMember(payload).then(() =>{
+                    helper.success("user_has_been_added_to_the_group")
+                })
+            }
         },
         selectedContact(contact, index){
             this.active = index
@@ -267,31 +318,23 @@ export default {
             return false
         },
         searchMember(){
+            if(!this.search){
+                this.$store.commit("network/gettingFriend", [])
+                return
+            }
+            this.loadingFriend = true
             this.getFriend({
                 id: this.stProfile._id,
                 s: this.search
+            }).then(() =>{
+                this.loadingFriend = false
+                this.showFriend = true
             })
         },
-
-        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
-            if (scrollTop + clientHeight >= (scrollHeight - 1) ) {
-                let payload = {}
-                this.page ++ 
-
-                payload.p = this.page
-
-                if(this.search){
-                    payload.s = this.search
-                }
-
-                if(this.enableScroll){
-                    this.getFriend(payload).then(res =>{
-                        if(res.data.data.list.length <= 0){
-                            this.enableScroll = false
-                        }
-                    })
-                }
-            }
+        clearSearch(){
+            this.search = ""
+            this.showFriend = false
+            this.$store.commit("network/gettingFriend", [])
         },
         onSelectedPhoto(event){
             const file = event.target.files[0];
@@ -302,16 +345,33 @@ export default {
             this.$router.push({name:"chat"})
         },
         nextPage(){
-
+            this.$store.commit("etalk/setActive", this.contact._id)
+            this.$router.push({name:"chat"})
         },
         locale(){
             return this.$i18n.locale
-        }      
+        } ,
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if (scrollTop + clientHeight >= (scrollHeight - 1)) {
+                this.page ++ 
+                let payload = {}
+                payload.p = this.page
+                payload.id = this.contact._id
+
+                if(this.enableScroll){
+                    this.getMember(payload).then(res =>{
+                        if(res.data.data.length <= 0){
+                            this.enableScroll = false
+                        }
+                    })
+                }
+            }
+        },     
 
     },
     created(){
-       
-        this.getContact().then(() =>{
+       this.contact = this.$route.params.contact
+        this.getContact({}).then(() =>{
             if(this.contacts.contact.length !== 'undefined' ){
                 for(let i = 0; i < this.contacts.contact.length; i ++){
                     if(this.$route.params.contact._id === this.contacts.contact[i]._id){
@@ -332,13 +392,7 @@ export default {
         }).then(() => {
             this.loadingMember = false
         })
-         this.loadingFriend = true
-        this.getFriend({
-            id: this.stProfile._id
-        }).then(() => {
-            this.loadingFriend = false
-        })
-
+        this.$store.commit("network/gettingFriend", [])
     }
 }
 </script>

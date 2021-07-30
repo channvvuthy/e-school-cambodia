@@ -9,15 +9,36 @@ export default {
         contacts: [],
         messages: [],
         active: 0,
-        members: []
+        members: [],
+        adminMessage: []
     },
 
     mutations:{
+        getAdminMessage(state, payload){
+          state.adminMessage = payload  
+        },
+        getAdminMessages(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.adminMessage.push(payload[i])
+            }
+        },
         loading(state, payload){
             state.loading = payload
         },
         getContact(state, payload){
             state.contacts = payload
+        },
+        getContacts(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.contacts.contact.push(payload[i])
+            }
+        },
+        addMember(state, payload){
+            state.members.push(payload)
+        },
+        removeMember(state, payload){
+            const result = state.members.filter(item => item._id != payload.user_id);
+            state.members = result
         },
         setActive(state, payload){
             state.active = payload 
@@ -34,12 +55,27 @@ export default {
     },
 
     actions:{
-        getContact({commit}){
+        getContact({commit}, payload){
             commit("loading", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `etalk/contact`).then(response => {
+                axios.get(config.apiUrl + `etalk/contact?${helper.q(payload)}`).then(response => {
                     resolve(response)
-                    commit("getContact", response.data.data)
+                    if(payload.p === undefined || payload.p === 1){
+                        commit("getContact", response.data.data)
+                    }else{
+                        commit("getContacts", response.data.data.contact)
+                    }
+                    commit("loading", false)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        getContacts({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `etalk/contact?${helper.q(payload)}`).then(response => {
+                    resolve(response)
+                    commit("getContacts", response.data.data.contact)
                     commit("loading", false)
                 }).catch(err => {
                     reject(err)
@@ -98,6 +134,17 @@ export default {
                 })
             })
         },
+        addMember({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/group/member`, payload).then(response =>{
+                    resolve(response)
+                    commit("addMember", response.data.data)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
         deleteMute({}, payload){
             return new Promise((resolve, reject) => {
                 axios.delete(config.apiUrl + `etalk/contact/mute`, {
@@ -107,6 +154,22 @@ export default {
                     }
                 }).then(response =>{
                     resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        deleteMember({commit}, data){
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `etalk/group/member`, {
+                    headers:{},
+                    data
+                }).then(response =>{
+                    resolve(response)
+                    if(response.data.msg ===undefined){
+                        commit("removeMember", data)
+                    }
                 }).catch(err => {
                     reject(err)
                     helper.errorMessage(err.response.data.msg)
@@ -128,5 +191,21 @@ export default {
                 })
             })
         },
+        getAdminMessage({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `etalk/admin/contact?${helper.q(payload)}` ).then(response => {
+                    if(payload.p === 1){
+                        commit("getAdminMessage", response.data.data)
+                    }else{
+                        commit("getAdminMessages", response.data.data)
+                    }
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response)
+                })
+            })
+        }
+
     }
 }

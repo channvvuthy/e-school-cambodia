@@ -9,7 +9,7 @@
            </div>
            <div v-else>
                 <div v-for="(summary, index) in summariesDetail" :key="index" class="mb-5 max-w-screen-lg rounded-xl shadow-md" :class="darkMode?`bg-secondary`:`bg-white`">
-                    <div class="rounded-t-xl h-12 flex items-center justify-start pl-5" :class="darkMode?`bg-primary text-white`:`bg-dadada`">
+                    <div class="rounded-t-xl h-14 flex items-center justify-start pl-5 text-base" :class="darkMode?`bg-primary text-white`:`bg-dadada`">
                         {{formatDate(summary.date)}}
                     </div>
                     <!-- List -->
@@ -47,14 +47,14 @@
                                 </template>
                             </div>
                             <div v-for="(list, key) in summary.list" :key="key" class="flex justify-start items-center py-5">
-                                <div class="mr-20" :class="darkMode?``:`text-primary`">
+                                <div class="w-40" :class="darkMode?``:`text-primary`">
                                     <div class="flex items-center">
                                         <div class="mr-2"><ClockIcon :size="20" :fill="darkMode?`#909090`:`#0f3c7a`"></ClockIcon></div>
                                         <div>{{formatTime(list.time)}}</div>
                                     </div>
                                 </div>
                                 <div>
-                                    :{{list.title}}
+                                    : {{list.title}}
                                 </div>
                             </div>
                         </div>
@@ -102,11 +102,11 @@ export default {
             this.getSummaryDetail(payload)
         },
         formatDate(date){
-            moment.locale('en');
-            return moment(date).format('DD MM YYYY');
+            moment.locale(this.$i18n.locale === 'en'?`en`:`km`);
+            return moment(date).format('LL');
         },
         formatTime(date){
-            moment.locale('en');
+            moment.locale(this.$i18n.locale === 'en'?`en`:`km`);
             return moment(date).format('h:mm A');
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {

@@ -158,7 +158,7 @@ export default {
         ...mapState('library', ['loading', 'libraries','showList', 'details'])
     },
     methods:{
-        ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail', 'getMyPackage', 'readingLibrary']),
+        ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail', 'getMyPackage']),
         ...mapActions('cart', ['addCart', 'getCart']),
         ...mapActions('favorite', ['addFavoriteBook','removeFavoriteBook']),
         cutString(text, limit){
@@ -244,9 +244,6 @@ export default {
             this.preview = false
         },
         readingBook(){
-            this.readingLibrary({
-                id: this.details.book._id
-            })
             this.reading = true
             this.showAudio = false
             this.close()

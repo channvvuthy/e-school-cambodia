@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-7 flex items-center justify-center" v-if="(summaries.watch_video || summaries.read_book || summaries.do_quiz)" :class="darkMode?`text-white`:``">
+                    <div class="mt-7 flex items-center justify-center overflow-x-hidden" v-if="(summaries.watch_video || summaries.read_book || summaries.do_quiz)" :class="darkMode?`text-white`:``">
                         <div>
                             <fusioncharts
                                 :type="type"
@@ -142,9 +142,9 @@ export default {
         return{
             active: "this_month",
             loading:false,
-            type: "doughnut3d",
-            width: "40%",
-            height: "40%",
+            type: "doughnut2d",
+            width: "50%",
+            height: "50%",
             dataFormat: "json",
             dataSource:{
                 chart: {
@@ -153,8 +153,7 @@ export default {
                     aligncaptionwithcanvas: "0",
                     captionpadding: "0",
                     decimals: "1",
-                    theme: "fusion",
-                    
+                    theme: "fusion",  
                 },
                 data: [
                         {
@@ -249,4 +248,5 @@ export default {
     div[id^='fc-'] > span > svg > defs + g > g:nth-child(26) {
         display:none !important;
     }
+
 </style>

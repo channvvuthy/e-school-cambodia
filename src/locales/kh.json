@@ -301,7 +301,8 @@
   "online": "អនឡាញ",
   "change_group_name": "ផ្លាស់ប្តូរឈ្មោះក្រុម",
   "group_member":"ស​​មាជិកក្រុម",
-  "search_friend":"ស្វែងរកមិត្ត"
-
-
+  "search_friend":"ស្វែងរកមិត្ត",
+  "user_has_been_added_to_the_group": "អ្នកប្រើប្រាស់ត្រូវបានបញ្ចូលជាសមាជិកក្រុម",
+  "user_has_been_remove_from_group":"អ្នកប្រើប្រាស់ត្រូវបានលុបចេញពីក្រុម",
+  "you_are_not_admin_in_this_group":"អ្នកមិនមែនជាអ្នកគ្រប់គ្រងក្រុមនេះទេ"
 }

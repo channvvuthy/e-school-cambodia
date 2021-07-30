@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-screen m-5 text-sm">
-        <div class="w-80 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+        <div class="w-80 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" @scroll="onScroll">
             <div class="flex px-4 py-2 items-center justify-between relative" :class="darkMode?`text-gray-300`:`bg-white`">
                 <div class="py-3 font-bold" :class="darkMode?``:`text-primary`">E-TALK</div>
                 <div class="cursor-pointer" @click="() => {this.eTalkOption = true;}">
@@ -31,7 +31,7 @@
             </div>
             <!-- Search -->
             <div class="relative mb-4 px-3">
-                <input type="text" v-on:keyup.enter="searchFilter" v-model="searchQuery" class="w-full rounded-md h-10 focus:outline-none pl-3" :class="darkMode?`bg-youtube text-gray-300`:`bg-softGray`" :placeholder="$t('1001')">
+                <input type="text" v-on:keyup.enter="searchContact" v-model="searchQuery" class="w-full rounded-md h-10 focus:outline-none pl-3" :class="darkMode?`bg-youtube text-gray-300`:`bg-softGray`" :placeholder="$t('1001')">
                 <div class="absolute right-6 top-2">
                     <SearchIcon :fill="darkMode?`#909090`:`#000`"></SearchIcon>
                 </div>
@@ -43,7 +43,7 @@
                 </div>
                 <div v-else>
                     <!-- Contact List -->
-                    <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in resultQuery" :key="index" 
+                    <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in contacts.contact" :key="index" 
                     @click="selectedContact(contact, index)"
                     :class="darkMode?`border-b border-black ${active === index ?`bg-button`:``}`:`border-b ${active === index?`bg-blue-100`:``}`">
                         <div>
@@ -217,20 +217,11 @@ export default {
         ...mapState('auth', ['stProfile']),
         ...mapState('etalk', ['loading', 'contacts']),
         ...mapState('network', ['friends']),
-        // search
-        resultQuery(){
-            if(this.searchQuery){
-                return this.contacts.contact.filter((item)=>{
-                    return this.searchQuery.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
-                })
-            }else{
-                return this.contacts.contact;
-            }
-        },
+        
 
     },
     methods:{
-        ...mapActions('etalk', ['getContact','createGroup']),
+        ...mapActions('etalk', ['getContact','createGroup', 'getContacts']),
         ...mapActions('network', ['getFriend']),
         formatTime(date){
             moment.locale('en');
@@ -277,27 +268,31 @@ export default {
                 s: this.search
             })
         },
+        searchContact(){ 
+            let payload = {
+                s: this.searchQuery
+            }
+            this.getContact(payload)
+        },
 
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
-            if (scrollTop + clientHeight >= (scrollHeight - 1) ) {
-                let payload = {}
+            if (scrollTop + clientHeight >= (scrollHeight - 1)) {
                 this.page ++ 
-
-                payload.p = this.page
-
-                if(this.search){
-                    payload.s = this.search
+                let payload = {}
+                if(this.searchQuery){
+                    payload.s = this.searchQuery
                 }
-
+                payload.p = this.page
+              
                 if(this.enableScroll){
-                    this.getFriend(payload).then(res =>{
-                        if(res.data.data.list.length <= 0){
+                    this.getContacts(payload).then(res =>{
+                        if(res.data.data.contact.length <= 0){
                             this.enableScroll = false
                         }
                     })
                 }
             }
-        },
+        }, 
         onSelectedPhoto(event){
             const file = event.target.files[0];
             this.photo = file
@@ -359,7 +354,7 @@ export default {
     },
     created(){
         this.loadingFriend = true
-        this.getContact().then(() =>{
+        this.getContact({}).then(() =>{
             if(this.contacts.contact.length !== 'undefined' ){
                 this.contact = this.contacts.contact[0]
             }else{

@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-screen m-5 text-sm">
-        <div class="w-80 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`">
+        <div class="w-80 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`" @scroll="onScroll">
             <div class="flex px-4 py-2 items-center justify-between relative" :class="darkMode?`text-gray-300`:`bg-white`">
                 <div class="py-3 font-bold" :class="darkMode?``:`text-primary`">E-TALK</div>
                 <div class="cursor-pointer" @click="() => {this.eTalkOption = true;}">
@@ -31,7 +31,9 @@
             </div>
             <!-- Search -->
             <div class="relative mb-4 px-3">
-                <input type="text" v-on:keyup.enter="searchFilter" v-model="searchQuery" class="w-full rounded-md h-10 focus:outline-none pl-3" :class="darkMode?`bg-youtube text-gray-300`:`bg-softGray`" :placeholder="$t('1001')">
+                <input type="text" v-model="searchQuery" class="w-full rounded-md h-10 focus:outline-none pl-3"
+                @keyup.enter="searchContact"
+                :class="darkMode?`bg-youtube text-gray-300`:`bg-softGray`" :placeholder="$t('1001')">
                 <div class="absolute right-6 top-2">
                     <SearchIcon :fill="darkMode?`#909090`:`#000`"></SearchIcon>
                 </div>
@@ -43,7 +45,7 @@
                 </div>
                 <div v-else>
                     <!-- Contact List -->
-                    <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in resultQuery.contact" :key="index" 
+                    <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in contacts.contact" :key="index" 
                     @click="selectedContact(contact, index)"
                     :class="darkMode?`border-b border-black ${active === index ?`bg-button`:``}`:`border-b ${active === index?`bg-blue-100`:``}`">
                         <div>
@@ -126,7 +128,7 @@
                 <div class="flex-1 overflow-y-scroll h-full">
                     <!-- User -->
                     <div class="inline-block ml-14 max-w-sm">
-                        <div class="relative rounded-3xl py-5 e-shadow flex items-center px-5 text-black mb-5" :class="darkMode?`bg-button text-gray-300`:`bg-white`" v-for="i in 10" :key="i">
+                        <div class="relative rounded-3xl py-5 e-shadow flex items-center px-5 text-black mb-5" :class="darkMode?`bg-button text-gray-300`:`bg-white`" v-for="i in 1" :key="i">
                             <div class="chevron absolute bottom-4 w-10 h-10 overflow-hidden" style="left:-2.44rem;">
                                 <img :src="darkMode?`chevron-dark.png`:`chevron.png`" class="absolute left-2">
                             </div>
@@ -177,7 +179,9 @@ export default {
             chatOption: false,
             isRename: false,
             photo: "",
-            settingImage: false
+            settingImage: false,
+            enableScroll: true,
+            page: 1,
         }
     },
     computed:{
@@ -191,20 +195,9 @@ export default {
                 return value
             }
         },
-        // search
-        resultQuery(){
-            if(this.searchQuery){
-                return this.contacts.filter((item)=>{
-                    return this.searchQuery.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
-                })
-            }else{
-                return this.contacts;
-            }
-        },
-
     },
     methods:{
-        ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute']),
+        ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage', 'getContacts']),
         formatTime(date){
             moment.locale('en');
             return moment(date).format('h:mm A');
@@ -215,6 +208,12 @@ export default {
         selectedContact(contact, index){
             this.active = index
             this.contact = contact
+
+            if(contact.type === 0){
+                this.getAdminMessage({
+                    p: 1
+                })
+            }
         },
         goTo(page){
             this.$router.push({
@@ -241,6 +240,9 @@ export default {
             }
             this.$refs.contactPhoto.click()
         },
+        receiveAdminMessage(){
+            this.getAdminMessage()
+        },
         changeContactPhoto(event){
            
             const file = event.target.files[0];
@@ -254,12 +256,36 @@ export default {
                 this.contact.photo = URL.createObjectURL(file);
                 this.settingImage = false
             })
-        }
+        },
+        searchContact(){ 
+            let payload = {
+                s: this.searchQuery
+            }
+            this.getContact(payload)
+        },
+        onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if (scrollTop + clientHeight >= (scrollHeight - 1)) {
+                this.page ++ 
+                let payload = {}
+                if(this.searchQuery){
+                    payload.s = this.searchQuery
+                }
+                payload.p = this.page
+              
+                if(this.enableScroll){
+                    this.getContacts(payload).then(res =>{
+                        if(res.data.data.contact.length <= 0){
+                            this.enableScroll = false
+                        }
+                    })
+                }
+            }
+        },     
         
 
     },
     created(){
-        this.getContact().then(() =>{
+        this.getContact({}).then(() =>{
             if(this.contacts.contact.length !== 'undefined'){
                 if(this.contactActive){
                     for(let i = 0; i < this.contacts.contact.length; i ++){
