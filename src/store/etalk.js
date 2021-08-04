@@ -8,12 +8,28 @@ export default {
         loading: false,
         contacts: [],
         messages: [],
+        message: {},
         active: 0,
         members: [],
-        adminMessage: []
+        adminMessage: [],
+        sending: false
     },
 
     mutations:{
+        addMessage(state, payload){
+            state.messages.push(payload)
+        },
+        sendingMessage(state, payload){
+            state.sending = payload
+        },
+        getMessage(state, payload){
+            state.messages = payload.reverse()
+        },
+        getMessages(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.messages.push(payload[i])
+            }
+        },
         getAdminMessage(state, payload){
           state.adminMessage = payload  
         },
@@ -30,7 +46,7 @@ export default {
         },
         getContacts(state, payload){
             for(let i = 0; i < payload.length; i ++){
-                state.contacts.contact.push(payload[i])
+                state.contacts.push(payload[i])
             }
         },
         addMember(state, payload){
@@ -47,8 +63,10 @@ export default {
             state.members = payload
         },
         getPagesMember(state, payload){
-            for(let i = 0; i < payload.length; i ++){
-                state.members.push(payload[i])
+            if(payload.length){
+                for(let i = 0; i < payload.length; i ++){
+                    state.members.push(payload[i])
+                }
             }
         }
 
@@ -63,7 +81,7 @@ export default {
                     if(payload.p === undefined || payload.p === 1){
                         commit("getContact", response.data.data)
                     }else{
-                        commit("getContacts", response.data.data.contact)
+                        commit("getContacts", response.data.data)
                     }
                     commit("loading", false)
                 }).catch(err => {
@@ -75,7 +93,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `etalk/contact?${helper.q(payload)}`).then(response => {
                     resolve(response)
-                    commit("getContacts", response.data.data.contact)
+                    commit("getContacts", response.data.data)
                     commit("loading", false)
                 }).catch(err => {
                     reject(err)
@@ -145,6 +163,16 @@ export default {
                 })
             })
         },
+        blockUser({}, payload){
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/contact/block`, payload).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
         deleteMute({}, payload){
             return new Promise((resolve, reject) => {
                 axios.delete(config.apiUrl + `etalk/contact/mute`, {
@@ -152,6 +180,19 @@ export default {
                     data:{
                         id: payload._id
                     }
+                }).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        unblockUser({commit}, data){
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `etalk/contact/block`, {
+                    headers:{},
+                    data
                 }).then(response =>{
                     resolve(response)
                 }).catch(err => {
@@ -203,6 +244,34 @@ export default {
                 }).catch(err => {
                     reject(err)
                     helper.errorMessage(err.response)
+                })
+            })
+        },
+        getMessage({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `etalk/message?${helper.q(payload)}` ).then(response => {
+                    if(payload.p === 1){
+                        commit("getMessage", response.data.data)
+                    }else{
+                        commit("getMessages", response.data.data)
+                    }
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response)
+                })
+            })
+        },
+        sendMessage({commit}, payload){
+            commit("sendingMessage", true)
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/message`, payload).then(response => {
+                    resolve(response)
+                    commit("sendingMessage", false)
+                    commit("addMessage", response.data.data)
+                }).catch(err => {
+                    reject(err)
+                    commit("sendingMessage", false)
                 })
             })
         }

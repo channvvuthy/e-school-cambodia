@@ -125,7 +125,7 @@
                                                 <div class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
                                                     <input type="checkbox"  class="hidden">
                                                     <div>
-                                                        <CheckIcon :fill="darkMode?`#383838`:`#FFFFFF`" v-if="isMember(friend._id)"></CheckIcon>
+                                                        <CheckIcon :fill="darkMode?`#383838`:`#eaeaea`" v-if="isMember(friend._id)"></CheckIcon>
                                                     </div>
                                                 </div>
                                             </div>
@@ -151,35 +151,39 @@
                 <template v-else>
                     <div class="mt-2 pb-5 h-screen">
                         <div class="pt-5">
-                            <span class="text-sm" v-if="locale() === 'en'">{{members.length}} {{$t('member')}}{{members.length > 1?`s`:``}}</span>
-                            <span class="text-sm" v-else>{{$t('member')}} {{members.length}} នាក់</span>
+                            {{$t('group_member')}}
                         </div>
-                        ​<div class="h-full overflow-y-scroll pb-96" @scroll="onScroll">
-                            <!-- {{users}} -->
-                            <div v-for="(member, index) in members" :key="index" class="py-3  border-b flex items-center justify-between" :class="darkMode?`border-button`:`border-gray-200`">
-                                <div class="flex items-center">
-                                    <div class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300" :style="{backgroundImage:`url(${member.photo})`}"></div>
-                                    <div>
-                                        <div>{{member.name}}</div>
-                                        <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{$t('online')}}</div>
-                                    </div>
-                                </div>
-                                <div class="h-5 w-5 rounded-full flex items-center justify-center relative" :class="darkMode?`bg-pass`:`bg-primary`" @click="addUser(member)">
-                                    <div class="absolute cursor-pointer w-full h-full items-center justify-center flex flex-col">
-                                        <input type="checkbox"  class="hidden">
+                        <div class="contact-list">
+                            ​<ul class="h-screen overflow-y-scroll pb-96" @scroll="onScroll">
+                                <!-- {{users}} -->
+                                <li v-for="(member, index) in members" :key="index" class="py-3 border-b flex items-center justify-between" :id="member._id" :class="darkMode?`border-button ${member._id}`:`border-gray-200 ${member._id}`">
+                                    <div class="flex items-center">
+                                        <div class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300" :style="{backgroundImage:`url(${member.photo})`}"></div>
                                         <div>
-                                            <CheckIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="isMember(member._id)"></CheckIcon>
+                                            <div>{{member.name}}</div>
+                                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{$t('online')}}</div>
                                         </div>
                                     </div>
-                                </div>
-                               
-                            </div>
-                        </div> 
+                                    <div></div>
+                                    <div class="rounded-full flex items-center justify-center relative text-xs" :class="darkMode?`text-gray-500`:`text-gray-400`" v-if="isAdmin(member)">
+                                    <span> {{$t('admin')}}</span>
+                                    </div>
+                                    <div v-else class="flex items-end justify-end text-xs relative" :class="darkMode?`text-gray-500`:``">
+                                        <div :title="$t('remove_member')" @click="confirm(member)" class="cursor-pointer opacity-80" v-if="isHasPermission()">
+                                            <CloseIcon :fill="darkMode?`#909090`:`#181818`" :width="20"></CloseIcon>
+                                        </div>
+                                    </div>
+                                
+                                </li>
+                            </ul> 
+                        </div>
                     </div>
                 </template>
             </div>
         </div>
         <Add v-if="showAdd" @cancelRename="() => {this.showAdd = false}"></Add>
+        <BuyMsg v-if="isConfirm" @cancelModal="() => {this.isConfirm = false}" :msg="msg" @yes="yes"></BuyMsg>
+        
     </div>
 </template>
 <script>
@@ -191,13 +195,15 @@ import CheckIcon from "./../../components/CheckIcon.vue"
 import ChevronIcon from "./../../components/ChevronIcon.vue"
 import Add from "./components/Add.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
+import BuyMsg from "./../Component/BuyMsg.vue"
 export default {
     components:{
         SearchIcon,
         ChevronIcon,
         CheckIcon,
         Add,
-        CloseIcon
+        CloseIcon,
+        BuyMsg,
     },
     data(){
         return{
@@ -218,7 +224,11 @@ export default {
             photo: "",
             creatingGroup: false,
             loadingMember: false,
-            showFriend: false
+            showFriend: false,
+            user:{},
+            isConfirm: false,
+            msg: "delete_contact",
+            type: 1
         }
     },
     computed:{
@@ -229,16 +239,16 @@ export default {
         // search
         resultQuery(){
             if(this.searchQuery){
-                return this.contacts.contact.filter((item)=>{
+                return this.contacts.filter((item)=>{
                     return this.searchQuery.toLowerCase().split(' ').every(v => item.name.toLowerCase().includes(v))
                 })
             }else{
-                return this.contacts.contact;
+                return this.contacts;
             }
         },
     },
     methods:{
-        ...mapActions('etalk', ['getContact','getMember','addMember', 'deleteMember']),
+        ...mapActions('etalk', ['getContact','getMember','addMember', 'deleteMember', 'blockUser']),
         ...mapActions('network', ['getFriend']),
         formatTime(date){
             moment.locale('en');
@@ -252,6 +262,12 @@ export default {
                 this.showFriend = false
             }
         },
+        isHasPermission(){
+            if(this.contact.create_by === this.stProfile._id){
+                return true
+            }
+            return false
+        },
         isMember(contact_id){
             if(!this.members.length){
                 return false
@@ -263,13 +279,46 @@ export default {
             }
             return false
         },
+
+        isAdmin(member){
+           if(member._id === this.contact.create_by){
+               return true;
+           }
+           return false
+        },
+        confirm(member, type = 1){
+            this.type = type
+            
+            if(this.isAdmin(member)){
+                return 
+            }
+            this.member = member
+            this.isConfirm = true
+            if(type === 2){
+                this.msg = "block_contact"
+            }
+        },
+        yes(){
+            if(this.type === 1){
+                 this.addUser(this.member)
+            }else{
+                this.blockContact()
+            }
+            this.isConfirm = false
+        },
+        blockContact(){
+            this.blockUser({
+                id: this.member._id
+            })
+        },
         addUser(member){
+            
             let payload = {
                 user_id: member._id,
                 id: this.contact._id
             }
             if(this.isMember(member._id)){
-                if(!this.contact.is_admin){
+                if(this.contact.create_by !== this.stProfile._id){
                     helper.errorMessage("you_are_not_admin_in_this_group")
                     return;
                 }
@@ -372,13 +421,13 @@ export default {
     created(){
        this.contact = this.$route.params.contact
         this.getContact({}).then(() =>{
-            if(this.contacts.contact.length !== 'undefined' ){
-                for(let i = 0; i < this.contacts.contact.length; i ++){
-                    if(this.$route.params.contact._id === this.contacts.contact[i]._id){
+            if(this.contacts.length !== 'undefined' ){
+                for(let i = 0; i < this.contacts.length; i ++){
+                    if(this.$route.params.contact._id === this.contacts[i]._id){
                         this.active = i
                     }
                 }
-                this.contact = this.contacts.contact[this.active]
+                this.contact = this.contacts[this.active]
             }else{
                 this.contact =  {
                     name: "",
@@ -393,6 +442,7 @@ export default {
             this.loadingMember = false
         })
         this.$store.commit("network/gettingFriend", [])
+        
     }
 }
 </script>

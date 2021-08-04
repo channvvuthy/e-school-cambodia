@@ -303,6 +303,22 @@
   "search_friend":"Search Friend",
   "user_has_been_added_to_the_group": "User has been added to the group",
   "user_has_been_remove_from_group":"User has been removed from the group",
-  "you_are_not_admin_in_this_group":"You are not admin this group"
+  "you_are_not_admin_in_this_group":"You are not admin this group",
+  "admin":"Admin",
+  "delete_contact":"Are you sure to remove this member from the group?",
+  "block_contact":"Do you want to block this contact?",
+  "remove_member":"Remove Member",
+  "block": "Block",
+  "remove":"Remove",
+  "message":"Message",
+  "group_creator":"Group Creator",
+  "delete_member":"Member has been remove from the group",
+  "leave":"Leave",
+  "left_group":"Are you sure you want to leave the group?",
+  "leave_group":"Leave Group",
+  "mute":"Mute",
+  "unmute":"Unmute",
+  "unblock":"Unblock",
+  "unblock_contact":"Do you want to unblock this user?"
 
 }
