@@ -225,6 +225,34 @@
                                     </div>
                                 </div>
                             </template>
+                            <!-- Pdf -->
+                            <template v-if="message.content.type === 2">
+                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                    <div>
+                                        <div class="flex items-center" v-if="auth === message.sender._id">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                        <div class="relative rounded-3xl py-5 inline-flex items-center text-black max-w-sm">
+                                            <div :class="darkMode?`bg-button text-gray-300`:`bg-primary text-white`" class="cursor-pointer px-5 py-2 rounded-3xl text-base flex items-center">
+                                                <div class="mr-2">
+                                                    <DocumentIcon fill="#FFFFFF"></DocumentIcon>
+                                                </div>
+                                                <div>
+                                                    {{message._id}}.pdf
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center" v-if="auth !== message.sender._id">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         </li>
                     </ul>
                 </div>
@@ -258,7 +286,7 @@
                         <div class="flex items-center justify-center">
                             <img :src="imgUrl" v-if="type === 1">
                             <div v-else class="flex items-center">
-                                <PdfIcon :size="100" :fill="darkMode?`#909090`:`#0f3c7a`"></PdfIcon>
+                                <PdfIcon :size="80" :fill="darkMode?`#909090`:`#0f3c7a`"></PdfIcon>
                                 <div class="ml-3 text-lg">{{this.file.name}}</div>
                             </div>
                         </div>
@@ -287,6 +315,7 @@ import {mapState, mapActions} from "vuex"
 import Vue from "vue"
 import SearchIcon from "./../../components/SearchIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
+import DocumentIcon from "./../../components/DocumentIcon.vue"
 import PdfIcon from "./../../components/PdfIcon.vue"
 import ImageIcon from "./components/LinkIcon.vue"
 import ChevronIcon from "./../HotChat/components/ChevronIcon.vue"
@@ -319,7 +348,8 @@ export default {
         BuyMsg,
         MessageText,
         CloseIcon,
-        PdfIcon
+        PdfIcon,
+        DocumentIcon
     },
     data(){
         return{
