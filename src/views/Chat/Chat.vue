@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-screen m-5 text-sm">
-        <div class="w-82 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`" @scroll="onScroll">
+        <div class="w-96 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`" @scroll="onScroll">
             <div class="flex px-4 py-2 items-center justify-between relative" :class="darkMode?`text-gray-300`:`bg-white`">
                 <div class="py-3 font-bold" :class="darkMode?``:`text-primary`">E-TALK</div>
                 <div class="cursor-pointer" @click="() => {this.eTalkOption = true;}">
@@ -68,8 +68,8 @@
                                 <div class="flex justify-center" v-if="contact.unread">
                                     <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
-                                <div class="text-xs mt-1" :class="darkMode?`text-gray-500`:``">
-                                    {{formatTime(contact.last.date)}}
+                                <div class="text-xs mt-1" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                                    {{getDay(contact.last.date)}}
                                 </div>
                             </div>
                             
@@ -146,42 +146,134 @@
                 
             </div>
             <div class="flex-1 h-full flex flex-col pb-36 py-5">
-                <div class="flex-1 overflow-y-scroll h-full" ref="feed">
-                    <!-- User -->
-                    <div class="px-5 pr-14">
-                        <div v-for="(message, index) in messages" :key="index">
-                            <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
-                                <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
-                                <div class="relative rounded-3xl py-5 e-shadow inline-flex items-center px-5 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                    <div class="absolute w-4 h-full right-0 top-0 z-50 rounded-full" :class="darkMode?`bg-button`:`bg-white`" style="height:60%;top:20%"></div>
-                                    <MessageText :message="message" :isMind="auth === message.sender._id"></MessageText>
-                                </div>
-                            </div>
+                <div class="flex-1 overflow-y-scroll h-full" ref="feed" @scroll="getMoreMessage"> 
+                   
+                    <div class="flex items-center justify-center" v-if="loadingMessage ">
+                        <div :class="darkMode?`lds-ring`:`lds-ring-dark`">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                         </div>
-                        
                     </div>
-                    
+                    <!-- User -->
+                    <ul class="px-5 pr-14" id="box">
+                        <li v-for="(message, index) in messages" :key="index" :id="message._id">
+                            <!-- Text message -->
+                            <template v-if="message.content.type === 1">
+                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                    <div class="flex items-center mr-5" v-if="auth === message.sender._id">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                            {{getDay(message.date)}}
+                                        </div>
+                                    </div>
+                                    <div class="relative rounded-3xl py-5 e-shadow inline-flex items-center px-5 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                        <MessageText :message="message" :isMind="auth === message.sender._id"></MessageText>
+                                    </div>
+                                    <div class="flex items-center ml-5" v-if="auth !== message.sender._id">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                            {{getDay(message.date)}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <!-- Audio -->
+                            <template v-if="message.content.type === 4">
+                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                    <div>
+                                        <div class="flex items-center" v-if="auth === message.sender._id">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                        <div class="relative rounded-3xl py-5 inline-flex items-center text-black max-w-sm">
+                                            <audio controls class="focus:outline-none"
+                                                controlsList="nodownload">
+                                                <source :src="message.content.file.url" type="audio/wav">
+                                                Your browser does not support the <code>audio</code>
+                                                element.
+                                            </audio>
+                                        </div>
+                                        <div class="flex items-center" v-if="auth !== message.sender._id">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <!-- Photo -->
+                            <template v-if="message.content.type === 3">
+                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                    <div>
+                                        <div class="flex items-center" v-if="auth === message.sender._id">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                        <div class="relative rounded-3xl py-5 inline-flex items-center text-black max-w-sm">
+                                           <img class="max-w-xs rounded-md" :src="message.content.file.url"/>
+                                        </div>
+                                        <div class="flex items-center" v-if="auth !== message.sender._id">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </li>
+                    </ul>
                 </div>
-                <div class="h-40 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white e-shadow`">
-                    <div class="cursor-pointer">
+                <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white e-shadow`">
+                    <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
                         <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                     </div>
+                    <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
                     <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" 
                    :disabled="contact.block_by"
                    v-model="message.text"
                    @keyup.enter.exact="onMessage"
                     :placeholder="$t(`2112`)" :class="darkMode?`bg-youtube border-transparent text-gray-300`:``"></textarea>
                     <div class="w-14 flex justify-end">
-                        <!-- <div class="cursor-pointer h-12 w-12 rounded-full flex items-center justify-center transform rotate-90" :class="darkMode?``:``">
-                            <ChevronIcon :fill="darkMode?`#909090`:`#979797`" :size="50"></ChevronIcon>
-                        </div> -->
                         <div class="cursor-pointer  rounded-full ml-5 mt-2" :class="busy?'opacity-30':''">
                             <vue-record-audio @result="onResult" @stream="onStream"/>
                         </div>
                     </div>
                 </div>
+                <!-- Preview -->
+                <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="isPreview">
+                    <div class="w-96 rounded-lg flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
+                        <div class="py-4 px-5 relative">
+                            {{$t('preview')}}
+                            <div class="absolute right-3 top-3 cursor-pointer" @click="() => {this.isPreview = false}">
+                                <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                            </div>
+                        </div>
+                        <div class="border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                        <div class="h-5"></div>
+                        <div class="flex items-center justify-center">
+                            <img :src="imgUrl" v-if="type === 1">
+                            <div v-else class="flex items-center">
+                                <PdfIcon :size="100" :fill="darkMode?`#909090`:`#0f3c7a`"></PdfIcon>
+                                <div class="ml-3 text-lg">{{this.file.name}}</div>
+                            </div>
+                        </div>
+                        <div class="h-5"></div>
+                        <div class="flex justify-end px-5">
+                            <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="sendFile()">
+                                <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="sending">
+                                    <div class="loader"></div>
+                                </div>
+                                <span v-else>{{$t('send_message')}}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
         </div>
         <Rename v-if="isRename" @cancelRename="() => {this.isRename = false}" :group="contact"></Rename>
         <Member v-if="isMember" @closeMember="() => {this.isMember = false}" :contact="contact" @adminLeft="adminLeft"></Member>
@@ -194,6 +286,8 @@
 import {mapState, mapActions} from "vuex"
 import Vue from "vue"
 import SearchIcon from "./../../components/SearchIcon.vue"
+import CloseIcon from "./../../components/CloseIcon.vue"
+import PdfIcon from "./../../components/PdfIcon.vue"
 import ImageIcon from "./components/LinkIcon.vue"
 import ChevronIcon from "./../HotChat/components/ChevronIcon.vue"
 import helper from "./../../helper/helper"
@@ -223,7 +317,9 @@ export default {
         Rename,
         Member,
         BuyMsg,
-        MessageText
+        MessageText,
+        CloseIcon,
+        PdfIcon
     },
     data(){
         return{
@@ -237,6 +333,7 @@ export default {
             settingImage: false,
             enableScroll: true,
             page: 1,
+            chatPage: 1,
             isMember: false,
             isConfirm: false,
             isDisconnect: false,
@@ -245,6 +342,12 @@ export default {
             busy: false,
             audioUrl: "",
             auth: "",
+            loadingMessage: false,
+            isPreview: false,
+            imgUrl: "",
+            pdfUrl: "",
+            file:"",
+            type: 1,
             message: {
                 id: "",
                 reply_id: "",
@@ -260,7 +363,7 @@ export default {
     computed:{
         ...mapState('setting', ['darkMode']),
         ...mapState('auth', ['stProfile']),
-        ...mapState('etalk', ['loading','contacts','messages']),
+        ...mapState('etalk', ['loading','contacts','messages','sending']),
         contactActive:{
             get(){
                 return this.$store.state.etalk.active
@@ -273,10 +376,42 @@ export default {
     methods:{
         ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage', 
         'sendMessage',
-        'getContacts','getMessage','getMessages','deleteMember', 'blockUser', 'unblockUser']),
-        formatTime(date){
-            moment.locale(this.$i18n.locale);
-            return moment(date).fromNow();
+        'getContacts','getMessage','deleteMember', 'blockUser', 'unblockUser']),
+        getDay(oldDate){
+            if (helper.numDay(oldDate, moment().format()) === 0) {
+                return moment(oldDate).format('h:mm A')
+            } else {
+                return moment(oldDate).format('DD-MM-YYYY')
+            }
+        },
+        sendFile(){
+            if(this.type === 1){
+                this.message.photo = this.file
+            }else{
+                this.message.pdf = this.file
+            }
+            this.onMessage()
+        },
+        getExtension(filename) {
+            var parts = filename.split('.');
+            return parts[parts.length - 1];
+        },
+        onSelectFile(event){
+            this.isPreview = true
+            var input = event.target;
+                this.file = event.target.files[0] 
+                if(this.getExtension(this.file.name) === "pdf"){
+                    this.type = 2
+                }else{
+                    this.type = 1
+                }
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.imgUrl = e.target.result
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
         },
         cutString(text, limit){
             return helper.cutString(text, limit)
@@ -313,12 +448,16 @@ export default {
             })
         },
         selectedContact(contact, index){
+            this.enableScroll = true
+            this.chatPage = 1
             this.active = index
             this.contact = contact
             this.message.id = this.contact._id
             this.getMessage({
                 p: 1,
                 id: this.contact._id
+            }).then(() => {
+                this.scrollToBottom()
             })
             
         },
@@ -392,6 +531,31 @@ export default {
             this.isMember = false
             this.init()
         },
+        getMoreMessage({target: {scrollTop}}){
+            if(scrollTop === 0){
+                this.loadingMessage = true
+                this.chatPage ++
+                let payload = {}
+
+                payload.p = this.chatPage
+                payload.id = this.contact._id
+                
+                this.getMessage(payload).then((response) =>{
+                   if(response.data.data.length){
+                       this.scrollToTop()
+                   }
+                   this.loadingMessage = false
+                })
+                
+            }
+        },
+        scrollToTop()
+        {
+            setTimeout(() => {
+                 this.$refs.feed.scrollTop =  100
+            }, 100)
+        },
+
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= (scrollHeight - 1)) {
                 this.page ++ 
@@ -444,6 +608,9 @@ export default {
         },
         onMessage(){
             let form = new FormData()
+            if(!this.message.text.trim() && !this.message.voice && !this.message.photo && !this.message.pdf){
+                return;
+            }
             form.append("id", this.message.id)
             form.append("reply_id", this.message.reply_id)
             form.append("text", this.message.text)
@@ -453,29 +620,38 @@ export default {
             form.append("duration", this.message.duration)
             this.sendMessage(form).then(() =>{
                 this.message.text = ""
+                this.message.photo = ""
+                this.message.voice = ""
+                this.message.pdf = ""
+                this.isPreview = false
                 this.scrollToBottom()
             })
             
         },
+        blobToFile(theBlob, fileName){
+            return new File([theBlob], fileName, {lastModified: new Date().getTime(), type: "audio/mpeg"})
+        },
+        makeID() {
+            let result = '';
+            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let charactersLength = characters.length;
+            for (let i = 0; i < charactersLength; i++) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        },
         onResult(data)
         {
             this.getAudioDuration(data).then(duration => {
-                let group_id = this.message.group_id;
-                let sound = this.blobToFile(data, `${this.makeID(10)}.wav`)
+                let sound = this.blobToFile(data, `${this.makeID()}.wav`)
 
                 let reader = new FileReader();
                 reader.readAsDataURL(data);
                 reader.onloadend = () => {
-                    let base64String = reader.result;
-                    const formData = new FormData();
-
-                    formData.append('group_id', group_id);
-                    formData.append('sound', sound);
-                    formData.append('duration', duration);
-
-                    this.addChat(formData)
-                    this.onMessage(3, base64String)
-                    this.scrollToBottom()
+                    this.message.voice = sound
+                    this.message.duration = duration
+                    this.onMessage()
+                    
                 }
 
 
@@ -524,4 +700,61 @@ export default {
     .vue-audio-recorder:hover {
         background-color: #0f3c7a !important;
     }
+    .lds-ring, .lds-ring-dark {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        margin: 8px;
+        border: 4px solid #fff;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #fff transparent transparent transparent;
+    }
+    .lds-ring-dark {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .lds-ring-dark div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        margin: 8px;
+        border: 4px solid #0f3c7a;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #0f3c7a transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1), .lds-ring-dark div:nth-child(1) {
+        animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2), .lds-ring-dark div:nth-child(2) {
+        animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3), .lds-ring-dark div:nth-child(3) {
+        animation-delay: -0.15s;
+    }
+    @keyframes lds-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    textarea {
+        resize: none;
+    }
+
 </style>

@@ -27,7 +27,7 @@ export default {
         },
         getMessages(state, payload){
             for(let i = 0; i < payload.length; i ++){
-                state.messages.push(payload[i])
+                state.messages.unshift(payload[i])
             }
         },
         getAdminMessage(state, payload){
