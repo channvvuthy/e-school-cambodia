@@ -1,14 +1,7 @@
 <template>
     <div>
-        <div class="chevron absolute bottom-4 w-10 h-10 overflow-hidden" style="left:-2.44rem;" v-if="!isMind">
-            <img :src="darkMode?`chevron-dark.png`:`chevron.png`" class="absolute left-3">
-        </div>
-        <div class="relative">
+        <div :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
             {{message.content.text}}
-        </div>
-         <div class="chevron absolute bottom-4 w-10 h-10 overflow-hidden" v-if="isMind" :style="darkMode?{right:`-2rem`}:{right:`-2.3rem`}">
-            <img :src="darkMode?`chevron-right-dark.png`:`chevron-right.png`" class="absolute right-0" style="transform: rotate(-5deg);" v-if="darkMode">
-            <img :src="darkMode?`chevron-right-dark.png`:`chevron-right.png`" class="absolute right-0" style="transform: rotate(-7deg);" v-else>
         </div>
     </div>
 </template>
@@ -35,3 +28,41 @@ export default {
     }
 }
 </script>
+<style>
+    .chat-bubble:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 0;
+        height: 0;
+        border: 20px solid transparent;
+        border-bottom: 0;
+        margin-top: -10px;
+    }
+    .chat-bubble--right:after {
+        right: 0;
+        border-left-color: #ffffff;
+        border-right: 0;
+        margin-right: -39px;
+        
+    }
+    .chat-bubble-right-dark:after {
+        right: 0;
+        border-left-color: #383838;
+        border-right: 0;
+        margin-right: -39px;
+        
+    }
+    .bubble--left-dark:after {
+        left: 0;
+        border-right-color: #383838;
+        border-left: 0;
+        margin-left: -39px;
+    }
+    .bubble--left:after {
+        left: 0;
+        border-right-color: #ffffff;
+        border-left: 0;
+        margin-left: -39px;
+    }
+</style>

@@ -16,6 +16,14 @@ export default {
     },
 
     mutations:{
+        selectedContact(state, payload){
+            for (var i in state.messages) {
+                if (state.contacts[i]._id == payload._id) {
+                    state.contacts[i].unread = 0;
+                   break; //Stop this loop, we found it!
+                }
+              }
+        },
         addMessage(state, payload){
             state.messages.push(payload)
         },

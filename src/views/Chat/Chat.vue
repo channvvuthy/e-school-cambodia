@@ -147,7 +147,6 @@
             </div>
             <div class="flex-1 h-full flex flex-col pb-36 py-5">
                 <div class="flex-1 overflow-y-scroll h-full" ref="feed" @scroll="getMoreMessage"> 
-                   
                     <div class="flex items-center justify-center" v-if="loadingMessage ">
                         <div :class="darkMode?`lds-ring`:`lds-ring-dark`">
                             <div></div>
@@ -168,7 +167,7 @@
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
-                                    <div class="relative rounded-3xl py-5 e-shadow inline-flex items-center px-5 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                    <div class="relative rounded-xl py-5 e-shadow inline-flex items-center px-5 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
                                         <MessageText :message="message" :isMind="auth === message.sender._id"></MessageText>
                                     </div>
                                     <div class="flex items-center ml-5" v-if="auth !== message.sender._id">
@@ -188,7 +187,7 @@
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
-                                        <div class="relative rounded-3xl py-5 inline-flex items-center text-black max-w-sm">
+                                        <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
                                             <audio controls class="focus:outline-none"
                                                 controlsList="nodownload">
                                                 <source :src="message.content.file.url" type="audio/wav">
@@ -214,8 +213,10 @@
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
-                                        <div class="relative rounded-3xl py-5 inline-flex items-center text-black max-w-sm">
-                                           <img class="max-w-xs rounded-md" :src="message.content.file.url"/>
+                                        <div class="relative rounded-xl py-5 inline-flex flex-col items-start text-black max-w-sm">
+                                            <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
+                                            <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
+                                           
                                         </div>
                                         <div class="flex items-center" v-if="auth !== message.sender._id">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
@@ -235,13 +236,20 @@
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
-                                        <div class="relative rounded-3xl py-5 inline-flex items-center text-black max-w-sm">
-                                            <div :class="darkMode?`bg-button text-gray-300`:`bg-primary text-white`" class="cursor-pointer px-5 py-2 rounded-3xl text-base flex items-center">
+                                        <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
+                                            <div :class="darkMode?`bg-button text-gray-300`:`bg-white e-shadow`"
+                                            @click="readPdf(message.content.file.url)"
+                                             class="cursor-pointer px-5 py-2 rounded-xl text-base flex items-center">
                                                 <div class="mr-2">
-                                                    <DocumentIcon fill="#FFFFFF"></DocumentIcon>
+                                                    <DocumentIcon :fill="darkMode?`#FFFFFF`:`#000000`"></DocumentIcon>
                                                 </div>
                                                 <div>
-                                                    {{message._id}}.pdf
+                                                    <span v-if="message.content.text">
+                                                        {{message.content.text.includes('.pdf')?message.content.text:message.content.text + ".pdf"}}
+                                                    </span>
+                                                    <span v-else>
+                                                        {{message._id}}.pdf
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,24 +289,42 @@
                                 <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                             </div>
                         </div>
-                        <div class="border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
-                        <div class="h-5"></div>
-                        <div class="flex items-center justify-center">
-                            <img :src="imgUrl" v-if="type === 1">
+                        <div class="flex items-center justify-center px-3">
+                            <img :src="imgUrl" v-if="type === 1" class="rounded-lg">
                             <div v-else class="flex items-center">
-                                <PdfIcon :size="80" :fill="darkMode?`#909090`:`#0f3c7a`"></PdfIcon>
+                                <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
                                 <div class="ml-3 text-lg">{{this.file.name}}</div>
                             </div>
                         </div>
-                        <div class="h-5"></div>
-                        <div class="flex justify-end px-5">
-                            <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="sendFile()">
-                                <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="sending">
-                                    <div class="loader"></div>
-                                </div>
-                                <span v-else>{{$t('send_message')}}</span>
+                        <div class="h-3"></div>
+                        <div class="border-t" :class="darkMode?`border-button`:`border-gray-200`"></div>
+                        <div class="h-3"></div>
+                        <div class="flex justify-start px-3 w-full relative items-center">
+                            <input type="text" placeholder="Add a caption..." class="w-full py-2 mb-3 focus:outline-none pl-2" v-model="message.text" :class="darkMode?`bg-transparent`:``">
+                            <div class="flex items-center absolute -top-3 justify-center w-full text-center" v-if="sending">
+                                <div class="loader"></div>
+                            </div>
+                            <button class="transform rotate-45 mr-5 cursor-pointer focus:outline-none relative -top-2" @click="sendFile()" :disabled="sending">
+                                <SendMessageIcon :size="30" :fill="darkMode?`#1977f2`:`#3498db`"></SendMessageIcon>
                             </button>
                         </div>
+                    </div>
+                </div>
+                <!-- Read pdf -->
+                <div class="flex justify-center items-center left-0 top-0 fixed bg-black bg-opacity-90 w-full h-full z-50" v-if="isRead">
+                    <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
+                        <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
+                            <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
+                                <EnlargeIcon :size="16"></EnlargeIcon>
+                            </div>
+                            <div class="cursor-pointer" @click="() => {this.isRead = false}">
+                                <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                            </div>
+                        </div>
+                        <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
+                            <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"></SinglePdf>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -314,6 +340,8 @@
 import {mapState, mapActions} from "vuex"
 import Vue from "vue"
 import SearchIcon from "./../../components/SearchIcon.vue"
+import SendMessageIcon from "./../../components/SendMessageIcon.vue"
+import EnlargeIcon from "./../../components/EnlargeIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import DocumentIcon from "./../../components/DocumentIcon.vue"
 import PdfIcon from "./../../components/PdfIcon.vue"
@@ -329,6 +357,7 @@ import BuyMsg from "./../Component/BuyMsg.vue"
 import VueRecord from '@codekraft-studio/vue-record'
 import MessageText from "./components/Text.vue"
 import VueSocketIO from 'vue-socket.io'
+import SinglePdf from "./../Component/SinglePdf.vue"
 Vue.use(VueRecord)
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
@@ -349,7 +378,10 @@ export default {
         MessageText,
         CloseIcon,
         PdfIcon,
-        DocumentIcon
+        DocumentIcon,
+        SendMessageIcon,
+        SinglePdf,
+        EnlargeIcon
     },
     data(){
         return{
@@ -378,6 +410,7 @@ export default {
             pdfUrl: "",
             file:"",
             type: 1,
+            isRead: false,
             message: {
                 id: "",
                 reply_id: "",
@@ -414,11 +447,29 @@ export default {
                 return moment(oldDate).format('DD-MM-YYYY')
             }
         },
+        openFullscreen() {
+            var elem = document.getElementById("fullScreen");
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+        },
+        readPdf(pdf){
+            this.pdfUrl = pdf
+            this.isRead = true
+        },
         sendFile(){
             if(this.type === 1){
                 this.message.photo = this.file
             }else{
                 this.message.pdf = this.file
+                if(!this.message.text){
+                    this.message.text = this.file.name
+                }
+                
             }
             this.onMessage()
         },
@@ -478,6 +529,7 @@ export default {
             })
         },
         selectedContact(contact, index){
+            this.$store.commit("etalk/selectedContact",contact)
             this.enableScroll = true
             this.chatPage = 1
             this.active = index
@@ -697,6 +749,12 @@ export default {
     created(){
         this.init()
         this.auth = this.stProfile._id
+        this.sockets.subscribe('message', (data) => {
+           if(data.sender._id !== this.auth){
+               this.$store.commit("etalk/addMessage",data)
+               this.scrollToBottom()
+           }
+        });
     }
 }
 </script>
