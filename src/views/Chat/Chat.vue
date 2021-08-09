@@ -481,9 +481,6 @@ export default {
             }
             return message.sender._id
         },
-        mention(str){
-            return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
-        },
         senderPhoto(message){
             if(message.sender === undefined ){
                 return false
