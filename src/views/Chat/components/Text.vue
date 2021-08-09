@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
-            {{message.content.text}}
-        </div>
+        <div :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble" v-html="mention(message.content.text)"></div>
     </div>
 </template>
 <script>
@@ -25,6 +23,12 @@ export default {
     },
     computed:{
         ...mapState('setting', ['darkMode'])
+    },
+    methods:{
+        mention(str){
+            console.log(str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>"))
+            return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
+        },
     }
 }
 </script>

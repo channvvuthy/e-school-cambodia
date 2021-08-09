@@ -12,10 +12,14 @@ export default {
         active: 0,
         members: [],
         adminMessage: [],
-        sending: false
+        sending: false,
+        mentions: []
     },
 
     mutations:{
+        getMention(state, payload){
+            state.mentions = payload
+        },
         selectedContact(state, payload){
             for (var i in state.messages) {
                 if (state.contacts[i]._id == payload._id) {
@@ -280,6 +284,17 @@ export default {
                 }).catch(err => {
                     reject(err)
                     commit("sendingMessage", false)
+                })
+            })
+        },
+        getMention({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `etalk/message/mention?${helper.q(payload)}`).then(response => {
+                    commit("getMention", response.data.data)
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response)
                 })
             })
         }

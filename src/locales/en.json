@@ -320,6 +320,7 @@
   "unmute":"Unmute",
   "unblock":"Unblock",
   "unblock_contact":"Do you want to unblock this user?",
-  "send_message":"Send Message"
+  "send_message":"Send Message",
+  "reply":"Reply"
 
 }

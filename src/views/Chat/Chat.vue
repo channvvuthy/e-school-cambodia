@@ -1,5 +1,9 @@
 <template>
     <div class="flex h-screen m-5 text-sm">
+        <audio controls  id="message-sound" class="absolute" style="z-index:-1">
+            <source src="message.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
         <div class="w-96 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`" @scroll="onScroll">
             <div class="flex px-4 py-2 items-center justify-between relative" :class="darkMode?`text-gray-300`:`bg-white`">
                 <div class="py-3 font-bold" :class="darkMode?``:`text-primary`">E-TALK</div>
@@ -157,20 +161,20 @@
                     </div>
                     <!-- User -->
                     <ul class="px-5 pr-14" id="box">
-                        <li v-for="(message, index) in messages" :key="index" :id="message._id">
+                        <li v-for="(message, index) in messages" :key="index" :id="message._id"  @contextmenu="showReply()" class="relative">
                             <!-- Text message -->
                             <template v-if="message.content.type === 1">
-                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
-                                    <div class="flex items-center mr-5" v-if="auth === message.sender._id">
+                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
+                                    <div class="flex items-center mr-5" v-if="auth === sender(message)">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
                                     <div class="relative rounded-xl py-5 e-shadow inline-flex items-center px-5 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                        <MessageText :message="message" :isMind="auth === message.sender._id"></MessageText>
+                                        <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                     </div>
-                                    <div class="flex items-center ml-5" v-if="auth !== message.sender._id">
+                                    <div class="flex items-center ml-5" v-if="auth !== sender(message)">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                             {{getDay(message.date)}}
                                         </div>
@@ -179,10 +183,10 @@
                             </template>
                             <!-- Audio -->
                             <template v-if="message.content.type === 4">
-                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
                                     <div>
-                                        <div class="flex items-center" v-if="auth === message.sender._id">
+                                        <div class="flex items-center" v-if="auth === sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -195,7 +199,7 @@
                                                 element.
                                             </audio>
                                         </div>
-                                        <div class="flex items-center" v-if="auth !== message.sender._id">
+                                        <div class="flex items-center" v-if="auth !== sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -205,10 +209,10 @@
                             </template>
                             <!-- Photo -->
                             <template v-if="message.content.type === 3">
-                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
                                     <div>
-                                        <div class="flex items-center" v-if="auth === message.sender._id">
+                                        <div class="flex items-center" v-if="auth === sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -218,7 +222,7 @@
                                             <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                            
                                         </div>
-                                        <div class="flex items-center" v-if="auth !== message.sender._id">
+                                        <div class="flex items-center" v-if="auth !== sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -228,10 +232,10 @@
                             </template>
                             <!-- Pdf -->
                             <template v-if="message.content.type === 2">
-                                <div :class="auth === message.sender._id?`flex justify-end`:`flex justify-start`">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${message.sender.photo})`}" v-if="auth !== message.sender._id"></div>
+                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
                                     <div>
-                                        <div class="flex items-center" v-if="auth === message.sender._id">
+                                        <div class="flex items-center" v-if="auth === sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -253,7 +257,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center" v-if="auth !== message.sender._id">
+                                        <div class="flex items-center" v-if="auth !== sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -261,19 +265,33 @@
                                     </div>
                                 </div>
                             </template>
+                            
                         </li>
                     </ul>
                 </div>
                 <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white e-shadow`">
+                    <div class="h-48 overflow-y-scroll w-48 rounded-lg absolute bottom-28 left-0 mb-2" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow`" v-if="showMention">
+                        <ul>
+                            <li v-for="(mention, key) in mentions" :key="key"
+                                class="py-1 cursor-pointer h-12 flex items-center px-3"
+                                :class="darkMode?`border-b border-black`:`border-b border-gray-200`"
+                                @click="replaceMention(mention.name)">
+                                {{mention.name}}
+                            </li>
+                        </ul>
+                    </div>
                     <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
                         <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                     </div>
                     <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
-                    <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" 
-                   :disabled="contact.block_by"
-                   v-model="message.text"
-                   @keyup.enter.exact="onMessage"
-                    :placeholder="$t(`2112`)" :class="darkMode?`bg-youtube border-transparent text-gray-300`:``"></textarea>
+                    <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" :disabled="contact.block_by"
+                        @keydown="enableWatch"
+                        name="message"
+                        ref="message"
+                        v-model="message.text"
+                        @keyup.enter.exact="onMessage"
+                        :placeholder="$t(`2112`)" :class="darkMode?`bg-youtube border-transparent text-gray-300`:``">
+                    </textarea>
                     <div class="w-14 flex justify-end">
                         <div class="cursor-pointer  rounded-full ml-5 mt-2" :class="busy?'opacity-30':''">
                             <vue-record-audio @result="onResult" @stream="onStream"/>
@@ -300,7 +318,8 @@
                         <div class="border-t" :class="darkMode?`border-button`:`border-gray-200`"></div>
                         <div class="h-3"></div>
                         <div class="flex justify-start px-3 w-full relative items-center">
-                            <input type="text" placeholder="Add a caption..." class="w-full py-2 mb-3 focus:outline-none pl-2" v-model="message.text" :class="darkMode?`bg-transparent`:``">
+                            <input type="text" placeholder="Add a caption..." class="w-full py-2 mb-3 focus:outline-none pl-2" v-model="message.text" 
+                            :class="darkMode?`bg-transparent`:``">
                             <div class="flex items-center absolute -top-3 justify-center w-full text-center" v-if="sending">
                                 <div class="loader"></div>
                             </div>
@@ -329,6 +348,7 @@
                 </div>
             </div>
         </div>
+        
         <Rename v-if="isRename" @cancelRename="() => {this.isRename = false}" :group="contact"></Rename>
         <Member v-if="isMember" @closeMember="() => {this.isMember = false}" :contact="contact" @adminLeft="adminLeft"></Member>
         <BuyMsg v-if="isConfirm" @cancelModal="() => {this.isConfirm = false}" :msg="msg" @yes="leaveGroup()"></BuyMsg>
@@ -411,6 +431,10 @@ export default {
             file:"",
             type: 1,
             isRead: false,
+            onContext: "",
+            showMention: false,
+            mentionList: [],
+            mentionReplaced: false,
             message: {
                 id: "",
                 reply_id: "",
@@ -426,7 +450,7 @@ export default {
     computed:{
         ...mapState('setting', ['darkMode']),
         ...mapState('auth', ['stProfile']),
-        ...mapState('etalk', ['loading','contacts','messages','sending']),
+        ...mapState('etalk', ['loading','contacts','messages','sending','mentions']),
         contactActive:{
             get(){
                 return this.$store.state.etalk.active
@@ -438,7 +462,7 @@ export default {
     },
     methods:{
         ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage', 
-        'sendMessage',
+        'sendMessage','getMention',
         'getContacts','getMessage','deleteMember', 'blockUser', 'unblockUser']),
         getDay(oldDate){
             if (helper.numDay(oldDate, moment().format()) === 0) {
@@ -446,6 +470,58 @@ export default {
             } else {
                 return moment(oldDate).format('DD-MM-YYYY')
             }
+        },
+        enableWatch()
+        {
+            this.mentionReplaced = false
+        },
+        sender(message){
+            if(message.sender === undefined ){
+                return false
+            }
+            return message.sender._id
+        },
+        mention(str){
+            return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
+        },
+        senderPhoto(message){
+            if(message.sender === undefined ){
+                return false
+            }
+            return message.sender.photo
+        },
+        replaceMention(value){
+                let mention = "@" + value;
+                this.mentionList.push(mention)
+
+                this.mentionReplaced = true
+                this.showMention = false
+                let textArea = document.getElementsByName('message')[0];
+                let startPos = textArea.selectionStart,
+                    // get cursor's position:
+                    endPos = textArea.selectionEnd,
+                    cursorPos = startPos,
+                    tmpStr = textArea.value;
+
+                if (value === null) {
+                    return;
+                }
+
+
+                let a = tmpStr.substring(tmpStr.substring(0, startPos).lastIndexOf("@"), startPos) + value
+                this.message.text = tmpStr.substring(0, startPos) + value + tmpStr.substring(endPos, tmpStr.length);
+                this.message.text = this.message.text.replace(a, "@" + value)
+
+                // move cursor:
+                setTimeout(() => {
+                    cursorPos += value.length;
+                    textArea.selectionStart = textArea.selectionEnd = cursorPos;
+                }, 50);
+
+                this.$refs.message.focus()
+        },
+        getSecondPart(str){
+            return str.split('@').pop();
         },
         openFullscreen() {
             var elem = document.getElementById("fullScreen");
@@ -742,19 +818,52 @@ export default {
         onStream(){
             this.audioUrl = ""
         },
-        
-
+        lisentMessage(){
+            this.sockets.subscribe(`message_${this.contact._id}`, (data) => {
+               console.log(JSON.stringify(data))
+               
+            });
+        },
+        paySound(){
+            document.getElementById("message-sound").play()
+        },
+        showReply(message){
+           this.showReply = message._id
+        }
     },
-   
+    mounted(){
+        this.lisentMessage()
+        
+    },
     created(){
         this.init()
         this.auth = this.stProfile._id
-        this.sockets.subscribe('message', (data) => {
-           if(data.sender._id !== this.auth){
-               this.$store.commit("etalk/addMessage",data)
-               this.scrollToBottom()
-           }
-        });
+        
+    },
+    watch: {
+        'message.text': function (value) {
+            if (this.mentionReplaced) {
+                return
+            }
+            this.showMention = false
+            if(this.contact.type === 2){
+                if (value.includes("@"))
+                if (this.getSecondPart(value).length <= 5) {
+                    this.getMention({
+                        id: this.contact._id,
+                        s: this.getSecondPart(value)
+                    }).then((response) => {
+                        if (response.data.data && response.data.data.length) {
+                            this.showMention = true
+                        } else {
+                            this.showMention = false
+                        }
+                    })
+                } else {
+                    this.showMention = false
+                }
+            }
+        }
     }
 }
 </script>

@@ -332,6 +332,9 @@
                     this.$refs.feed.scrollTop = 10
                 }, 50)
             },
+            mention(str) {
+                return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
+            },
             scrollToBottom()
             {
                 let interval = setInterval(() => {
