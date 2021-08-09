@@ -26,7 +26,6 @@ export default {
     },
     methods:{
         mention(str){
-            console.log(str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>"))
             return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
         },
     }
