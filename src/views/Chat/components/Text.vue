@@ -46,26 +46,26 @@ export default {
         right: 0;
         border-left-color: #ffffff;
         border-right: 0;
-        margin-right: -39px;
+        margin-right: -30px;
         
     }
     .chat-bubble-right-dark:after {
         right: 0;
         border-left-color: #383838;
         border-right: 0;
-        margin-right: -39px;
+        margin-right: -30px;
         
     }
     .bubble--left-dark:after {
         left: 0;
         border-right-color: #383838;
         border-left: 0;
-        margin-left: -39px;
+        margin-left: -30px;
     }
     .bubble--left:after {
         left: 0;
         border-right-color: #ffffff;
         border-left: 0;
-        margin-left: -39px;
+        margin-left: -30px;
     }
 </style>

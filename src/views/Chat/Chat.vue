@@ -4,7 +4,7 @@
             <source src="message.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        <div class="w-96 h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`" @scroll="onScroll">
+        <div class="h-full overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white`" @scroll="onScroll" style="width:520px;">
             <div class="flex px-4 py-2 items-center justify-between relative" :class="darkMode?`text-gray-300`:`bg-white`">
                 <div class="py-3 font-bold" :class="darkMode?``:`text-primary`">E-TALK</div>
                 <div class="cursor-pointer" @click="() => {this.eTalkOption = true;}">
@@ -83,303 +83,320 @@
                 </div>
             </div>
         </div>
-        <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?`bg-youtube`:`bg-img-primary`">
-            <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
-                <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="contact.type === 0?``:`cursor-pointer`">
-                    <div class="loading" v-if="settingImage"></div>
-                </div>
-                <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
-                <div>
-                    <div class="font-semibold">
-                        {{contact.name}}
+        <div :class="darkMode?`bg-youtube`:`bg-img-primary`" class="w-full">
+            <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?``:`bg-black bg-opacity-10`">
+                <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
+                    <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="contact.type === 0?``:`cursor-pointer`">
+                        <div class="loading" v-if="settingImage"></div>
                     </div>
-                    <div class="text-xs text-gray-500">
-                        {{$t('online')}}
+                    <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
+                    <div>
+                        <div class="font-semibold">
+                            {{contact.name}}
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            {{$t('online')}}
+                        </div>
                     </div>
-                </div>
-                <div class="flex-1 flex flex-col items-end cursor-pointer" @click="() => {this.chatOption = true;}">
-                    <div class="w-1 h-1 rounded-full mb-1" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
-                    <div class="w-1 h-1 rounded-full mb-1" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
-                    <div class="w-1 h-1 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
-                </div>
-                <!-- eTalk option -->
-                <div :class="darkMode?`bg-button`:`bg-white`" class="rounded-md overflow-hidden e-shadow absolute right-5 top-20 z-50 cursor-pointer" v-if="chatOption">
-                     <template v-if="contact.type === 0">
+                    <div class="flex-1 flex flex-col items-end cursor-pointer" @click="() => {this.chatOption = true;}">
+                        <div class="w-1 h-1 rounded-full mb-1" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
+                        <div class="w-1 h-1 rounded-full mb-1" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
+                        <div class="w-1 h-1 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
+                    </div>
+                    <!-- eTalk option -->
+                    <div :class="darkMode?`bg-button`:`bg-white`" class="rounded-md overflow-hidden e-shadow absolute right-5 top-20 z-50 cursor-pointer" v-if="chatOption">
+                        <template v-if="contact.type === 0">
+                                <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                                    <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute')}}</span>
+                                    <span v-else @click="mute">{{$t('mute')}}</span>
+                                </div>
+                        </template>
+                        <template v-if="contact.type === 1">
+                                <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" 
+                                v-if="!contact.block_by"
+                                @click="() => {this.isDisconnect = true}">
+                                    {{$t('block')}}
+                                </div>
+                                <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`"
+                                v-else
+                                @click="() => {this.isUnblock = true}">
+                                    {{$t('unblock')}}
+                                </div>
+                                <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                                    <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute')}}</span>
+                                    <span v-else @click="mute">{{$t('mute')}}</span>
+                                </div>
+                        </template>
+                        <template v-if="contact.type === 2">
                             <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
-                                <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute')}}</span>
-                                <span v-else @click="mute">{{$t('mute')}}</span>
+                                <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute_group')}}</span>
+                                <span v-else @click="mute">{{$t('mute_group')}}</span>
                             </div>
-                     </template>
-                      <template v-if="contact.type === 1">
-                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" 
-                            v-if="!contact.block_by"
-                            @click="() => {this.isDisconnect = true}">
-                                {{$t('block')}}
+                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.isRename = true; this.chatOption = false;}">
+                                {{$t('rename_group')}}
                             </div>
-                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`"
-                            v-else
-                             @click="() => {this.isUnblock = true}">
-                                {{$t('unblock')}}
+                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="leftGroupConfrim()">
+                                <span>{{$t('leave_group')}}</span>
                             </div>
-                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
-                                <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute')}}</span>
-                                <span v-else @click="mute">{{$t('mute')}}</span>
+                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.$router.push({name: 'add-member', params:{contact}})}">
+                                {{$t('add_member')}}
                             </div>
-                     </template>
-                    <template v-if="contact.type === 2">
-                        <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
-                            <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute_group')}}</span>
-                            <span v-else @click="mute">{{$t('mute_group')}}</span>
-                        </div>
-                        <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.isRename = true; this.chatOption = false;}">
-                            {{$t('rename_group')}}
-                        </div>
-                        <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="leftGroupConfrim()">
-                            <span>{{$t('leave_group')}}</span>
-                        </div>
-                        <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.$router.push({name: 'add-member', params:{contact}})}">
-                            {{$t('add_member')}}
-                        </div>
-                        <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.isMember = true; this.chatOption = false}">
-                            {{$t('member')}}
-                        </div>
-                    </template>
-                </div>
-            </div>
-            <div class="flex-1 h-full flex flex-col pb-36 py-5">
-                <div class="flex-1 overflow-y-scroll h-full" ref="feed" @scroll="getMoreMessage"> 
-                    <div class="flex items-center justify-center" v-if="loadingMessage ">
-                        <div :class="darkMode?`lds-ring`:`lds-ring-dark`">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                            <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.isMember = true; this.chatOption = false}">
+                                {{$t('member')}}
+                            </div>
+                        </template>
                     </div>
-                    <!-- User -->
-                    <ul class="px-5 pr-14" id="box relative">
-                        <li v-for="(message, index) in messages" :key="index" :id="message._id"  @contextmenu="showReply(message)" class="relative">
-                            <div class="absolute w-full justify-center flex " 
-                                v-if="replyId._id === message._id" style="z-index:100;">
-                                <Reply 
-                                    @copy="copy()"
-                                    @reply="reply()">
-                                </Reply>
+                </div>
+                <div class="flex-1 h-full flex flex-col pb-36 py-5">
+                    <div class="flex-1 overflow-y-scroll h-full" ref="feed" @scroll="getMoreMessage"> 
+                        <div class="flex items-center justify-center" v-if="loadingMessage ">
+                            <div :class="darkMode?`lds-ring`:`lds-ring-dark`">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
                             </div>
-                            <!-- Text message -->
-                            <template v-if="message.content.type === 1">
-                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
-                                    <div class="flex items-center mr-5" v-if="auth === sender(message)">
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                            {{getDay(message.date)}}
-                                        </div>
-                                    </div>
-                                    <div class="relative rounded-xl py-5 e-shadow inline-flex items-center px-5 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                        <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
-                                    </div>
-                                    <div class="flex items-center ml-5" v-if="auth !== sender(message)">
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                            {{getDay(message.date)}}
-                                        </div>
-                                    </div>
-                                    
+                        </div>
+                        <!-- User -->
+                        <ul class="px-5 pr-14" id="box relative">
+                            <li v-for="(message, index) in messages" :key="index" :id="message._id"  @contextmenu="showReply(message)" class="relative">
+                                <div class="absolute w-full justify-center flex " 
+                                    v-if="replyId._id === message._id" style="z-index:100;">
+                                    <Reply 
+                                        @copy="copy()"
+                                        @reply="reply()">
+                                    </Reply>
                                 </div>
-                            </template>
-                            <!-- Audio -->
-                            <template v-if="message.content.type === 4">
-                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
-                                    <div>
-                                        <div class="flex items-center" v-if="auth === sender(message)">
+                                <!-- Text message -->
+                                <template v-if="message.content.type === 1">
+                                    <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center relative">
+                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
+                                        <div class="flex items-center mr-5" v-if="auth === sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
-                                        <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
-                                            <audio controls class="focus:outline-none"
-                                                controlsList="nodownload">
-                                                <source :src="message.content.file.url" type="audio/wav">
-                                                Your browser does not support the <code>audio</code>
-                                                element.
-                                            </audio>
-                                        </div>
-                                        <div class="flex items-center" v-if="auth !== sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                                {{getDay(message.date)}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                            <!-- Photo -->
-                            <template v-if="message.content.type === 3">
-                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
-                                    <div>
-                                        <div class="flex items-center" v-if="auth === sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                                {{getDay(message.date)}}
-                                            </div>
-                                        </div>
-                                        <div class="relative rounded-xl py-5 inline-flex flex-col items-start text-black max-w-sm">
-                                            <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
-                                            <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
-                                           
-                                        </div>
-                                        <div class="flex items-center" v-if="auth !== sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                                {{getDay(message.date)}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </template>
-                            <!-- Pdf -->
-                            <template v-if="message.content.type === 2">
-                                <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
-                                    <div>
-                                        <div class="flex items-center" v-if="auth === sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                                {{getDay(message.date)}}
-                                            </div>
-                                        </div>
-                                        <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
-                                            <div :class="darkMode?`bg-button text-gray-300`:`bg-white e-shadow`"
-                                            @click="readPdf(message.content.file.url)"
-                                             class="cursor-pointer px-5 py-2 rounded-xl text-base flex items-center">
-                                                <div class="mr-2">
-                                                    <DocumentIcon :fill="darkMode?`#FFFFFF`:`#000000`"></DocumentIcon>
+                                        <div>
+                                            <div v-if="message.reply !== undefined">
+                                                <div class="flex">
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">{{message.sender.name}} {{$t('reply_to')}} {{message.reply.sender.name}}</div>
                                                 </div>
-                                                <div>
-                                                    <span v-if="message.content.text">
-                                                        {{message.content.text.includes('.pdf')?message.content.text:message.content.text + ".pdf"}}
-                                                    </span>
-                                                    <span v-else>
-                                                        {{message._id}}.pdf
-                                                    </span>
+                                                <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
+                                                <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
+                                                <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                                    <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
+                                                </div>
+                                            </div>
+                                            <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                                <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="flex items-center ml-5" v-if="auth !== sender(message)">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                {{getDay(message.date)}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <!-- Audio -->
+                                <template v-if="message.content.type === 4">
+                                    <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center relative">
+                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
+                                        <div>
+                                            <div class="flex items-center" v-if="auth === sender(message)">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                    {{getDay(message.date)}}
+                                                </div>
+                                            </div>
+                                            <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
+                                                <audio controls class="focus:outline-none"
+                                                    controlsList="nodownload">
+                                                    <source :src="message.content.file.url" type="audio/wav">
+                                                    Your browser does not support the <code>audio</code>
+                                                    element.
+                                                </audio>
+                                            </div>
+                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                    {{getDay(message.date)}}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="flex items-center" v-if="auth !== sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
-                                                {{getDay(message.date)}}
+                                    </div>
+                                </template>
+                                <!-- Photo -->
+                                <template v-if="message.content.type === 3">
+                                    <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center relative">
+                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
+                                        <div>
+                                            <div class="flex items-center" v-if="auth === sender(message)">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                    {{getDay(message.date)}}
+                                                </div>
+                                            </div>
+                                            <div class="relative rounded-xl py-5 inline-flex flex-col items-start text-black max-w-sm">
+                                                <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
+                                                <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
+                                            
+                                            </div>
+                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                    {{getDay(message.date)}}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </template>
-                            
-                        </li>
-                    </ul>
-                </div>
-                <!-- Reply -->
-                <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
-                    <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
-                        <div>
-                            <div class="underline">
-                                {{replyContact.sender.name}}
-                            </div>
-                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 1" >
-                                {{cutString(replyContact.content.text,40)}}
-                            </div>
-                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 2" >
-                                {{$t('file')}}
-                            </div>
-                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
-                                <img :src="replyContact.content.file.url" class="rounded w-10"/>
-                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-2">
-                                    {{$t('image_message')}}
-                                </div>
-                            </div> 
-                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 4" >
-                                {{$t("voice_message")}}
-                            </div>
-                        </div>
-                        <div :class="darkMode?`bg-button`:`bg-gray-300`" class="cursor-pointer rounded-full w-7 h-7 flex items-center justify-center" @click="()=> {this.replyContact = ``}">
-                            <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
-                        </div>
-                    </div>
-                </div>
-                <!-- Mention -->
-                <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white ${replyContact?``:`e-shadow`}`">
-                    <div class="h-48 overflow-y-scroll w-48 rounded-lg absolute bottom-28 left-0 mb-2" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow`" v-if="showMention">
-                        <ul>
-                            <li v-for="(mention, key) in mentions" :key="key"
-                                class="py-1 cursor-pointer h-12 flex items-center px-3"
-                                :class="darkMode?`border-black ${key > 0?`border-t`:``}`:`border-gray-200 ${key > 0?`border-t`:``}`"
-                                @click="replaceMention(mention.name)">
-                                <div class="h-8 w-8 rounded-full shadow bg-cover bg-gray-300 mr-3" :style="{backgroundImage:`url(${mention.photo})`}"></div>
-                               <span> {{mention.name}}</span>
+                                </template>
+                                <!-- Pdf -->
+                                <template v-if="message.content.type === 2">
+                                    <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"  class="items-center relative">
+                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
+                                        <div>
+                                            <div class="flex items-center" v-if="auth === sender(message)">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                    {{getDay(message.date)}}
+                                                </div>
+                                            </div>
+                                            <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
+                                                <div :class="darkMode?`bg-button text-gray-300`:`bg-white e-shadow`"
+                                                @click="readPdf(message.content.file.url)"
+                                                class="cursor-pointer px-5 py-2 rounded-xl text-base flex items-center">
+                                                    <div class="mr-2">
+                                                        <DocumentIcon :fill="darkMode?`#FFFFFF`:`#000000`"></DocumentIcon>
+                                                    </div>
+                                                    <div>
+                                                        <span v-if="message.content.text">
+                                                            {{message.content.text.includes('.pdf')?message.content.text:message.content.text + ".pdf"}}
+                                                        </span>
+                                                        <span v-else>
+                                                            {{message._id}}.pdf
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                    {{getDay(message.date)}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                
                             </li>
                         </ul>
                     </div>
-                    <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
-                        <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
-                    </div>
-                    <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
-                    <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" :disabled="contact.block_by"
-                        @keydown="enableWatch"
-                        name="message"
-                        ref="message"
-                        v-model="message.text"
-                        @keyup.enter.exact="onMessage"
-                        :placeholder="$t(`2112`)" :class="darkMode?`bg-youtube border-transparent text-gray-300`:``">
-                    </textarea>
-                    <div class="w-14 flex justify-end">
-                        <div class="cursor-pointer  rounded-full ml-5 mt-2" :class="busy?'opacity-30':''">
-                            <vue-record-audio @result="onResult" @stream="onStream"/>
-                        </div>
-                    </div>
-                </div>
-               
-                <!-- Preview -->
-                <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="isPreview">
-                    <div class="w-96 rounded-lg flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
-                        <div class="py-4 px-5 relative">
-                            {{$t('preview')}}
-                            <div class="absolute right-3 top-3 cursor-pointer" @click="() => {this.isPreview = false}">
-                                <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                    <!-- Reply -->
+                    <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
+                        <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
+                            <div>
+                                <div class="underline">
+                                    {{replyContact.sender.name}}
+                                </div>
+                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 1" >
+                                    {{cutString(replyContact.content.text,40)}}
+                                </div>
+                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 2" >
+                                    {{$t('file')}}
+                                </div>
+                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
+                                    <img :src="replyContact.content.file.url" class="rounded w-10"/>
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-2">
+                                        {{$t('image_message')}}
+                                    </div>
+                                </div> 
+                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 4" >
+                                    {{$t("voice_message")}}
+                                </div>
                             </div>
-                        </div>
-                        <div class="flex items-center justify-center px-3">
-                            <img :src="imgUrl" v-if="type === 1" class="rounded-lg">
-                            <div v-else class="flex items-center">
-                                <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
-                                <div class="ml-3 text-lg">{{this.file.name}}</div>
+                            <div :class="darkMode?`bg-button`:`bg-gray-300`" class="cursor-pointer rounded-full w-7 h-7 flex items-center justify-center" @click="()=> {this.replyContact = ``}">
+                                <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
                             </div>
-                        </div>
-                        <div class="h-3"></div>
-                        <div class="border-t" :class="darkMode?`border-button`:`border-gray-200`"></div>
-                        <div class="h-3"></div>
-                        <div class="flex justify-start px-3 w-full relative items-center">
-                            <input type="text" placeholder="Add a caption..." class="w-full py-2 mb-3 focus:outline-none pl-2" v-model="message.text" 
-                            :class="darkMode?`bg-transparent`:``">
-                            <div class="flex items-center absolute -top-3 justify-center w-full text-center" v-if="sending">
-                                <div class="loader"></div>
-                            </div>
-                            <button class="transform rotate-45 mr-5 cursor-pointer focus:outline-none relative -top-2" @click="sendFile()" :disabled="sending">
-                                <SendMessageIcon :size="30" :fill="darkMode?`#1977f2`:`#3498db`"></SendMessageIcon>
-                            </button>
                         </div>
                     </div>
-                </div>
-                <!-- Read pdf -->
-                <div class="flex justify-center items-center left-0 top-0 fixed bg-black bg-opacity-90 w-full h-full z-50" v-if="isRead">
-                    <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
-                        <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
-                            <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
-                                <EnlargeIcon :size="16"></EnlargeIcon>
-                            </div>
-                            <div class="cursor-pointer" @click="() => {this.isRead = false}">
-                                <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                    <!-- Mention -->
+                    <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white ${replyContact?``:`e-shadow`}`">
+                        <div class="h-48 overflow-y-scroll w-48 rounded-lg absolute bottom-28 left-0 mb-2" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow`" v-if="showMention">
+                            <ul>
+                                <li v-for="(mention, key) in mentions" :key="key"
+                                    class="py-1 cursor-pointer h-12 flex items-center px-3"
+                                    :class="darkMode?`border-black ${key > 0?`border-t`:``}`:`border-gray-200 ${key > 0?`border-t`:``}`"
+                                    @click="replaceMention(mention.name)">
+                                    <div class="h-8 w-8 rounded-full shadow bg-cover bg-gray-300 mr-3" :style="{backgroundImage:`url(${mention.photo})`}"></div>
+                                <span> {{mention.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
+                            <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
+                        </div>
+                        <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
+                        <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" :disabled="contact.block_by"
+                            @keydown="enableWatch"
+                            name="message"
+                            ref="message"
+                            v-model="message.text"
+                            @keyup.enter.exact="onMessage"
+                            :placeholder="$t(`2112`)" :class="darkMode?`bg-youtube border-transparent text-gray-300`:``">
+                        </textarea>
+                        <div class="w-14 flex justify-end">
+                            <div class="cursor-pointer  rounded-full ml-5 mt-2" :class="busy?'opacity-30':''">
+                                <vue-record-audio @result="onResult" @stream="onStream"/>
                             </div>
                         </div>
-                        <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
-                            <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"></SinglePdf>
+                    </div>
+                
+                    <!-- Preview -->
+                    <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="isPreview">
+                        <div class="w-96 rounded-lg flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
+                            <div class="py-4 px-5 relative">
+                                {{$t('preview')}}
+                                <div class="absolute right-3 top-3 cursor-pointer" @click="() => {this.isPreview = false}">
+                                    <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-center px-3">
+                                <img :src="imgUrl" v-if="type === 1" class="rounded-lg">
+                                <div v-else class="flex items-center">
+                                    <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
+                                    <div class="ml-3 text-lg">{{this.file.name}}</div>
+                                </div>
+                            </div>
+                            <div class="h-3"></div>
+                            <div class="border-t" :class="darkMode?`border-button`:`border-gray-200`"></div>
+                            <div class="h-3"></div>
+                            <div class="flex justify-start px-3 w-full relative items-center">
+                                <input type="text" placeholder="Add a caption..." class="w-full py-2 mb-3 focus:outline-none pl-2" v-model="message.text" 
+                                :class="darkMode?`bg-transparent`:``">
+                                <div class="flex items-center absolute -top-3 justify-center w-full text-center" v-if="sending">
+                                    <div class="loader"></div>
+                                </div>
+                                <button class="transform rotate-45 mr-5 cursor-pointer focus:outline-none relative -top-2" @click="sendFile()" :disabled="sending">
+                                    <SendMessageIcon :size="30" :fill="darkMode?`#1977f2`:`#3498db`"></SendMessageIcon>
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                    <!-- Read pdf -->
+                    <div class="flex justify-center items-center left-0 top-0 fixed bg-black bg-opacity-90 w-full h-full z-50" v-if="isRead">
+                        <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
+                            <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
+                                <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
+                                    <EnlargeIcon :size="16"></EnlargeIcon>
+                                </div>
+                                <div class="cursor-pointer" @click="() => {this.isRead = false}">
+                                    <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                                </div>
+                            </div>
+                            <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
+                                <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"></SinglePdf>
+                            </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -415,6 +432,11 @@ import MessageText from "./components/Text.vue"
 import VueSocketIO from 'vue-socket.io'
 import SinglePdf from "./../Component/SinglePdf.vue"
 import Reply from "./components/Reply.vue"
+import ReplyIcon from "./components/ReplyIcon.vue"
+import TextReply from "./components/TextReply.vue"
+import PdfReply from "./components/PdfReply.vue"
+import ImageReply from "./components/ImageReply.vue"
+import VoiceReply from "./components/VoiceReply.vue"
 Vue.use(VueRecord)
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
@@ -439,7 +461,12 @@ export default {
         SendMessageIcon,
         SinglePdf,
         EnlargeIcon,
-        Reply
+        Reply,
+        ReplyIcon,
+        TextReply,
+        ImageReply,
+        PdfReply,
+        VoiceReply
     },
     data(){
         return{
@@ -522,6 +549,9 @@ export default {
             return message.sender._id
         },
         senderPhoto(message){
+            if(this.contact.type === 0){
+                return this.contact.photo
+            }
             if(message.sender === undefined ){
                 return false
             }
@@ -884,7 +914,7 @@ export default {
             this.sockets.subscribe(`message_${this.contact._id}`, (data) => {
                 if(this.contact._id === data.room_id){
                     if(data.sender !== undefined && data.sender._id !== this.auth){
-                        this.$store.commit("etalk/addMessage",data)
+                        this.$store.commit("etalk/broadcastMessage",data)
                         this.scrollToBottom()
                     }
                 }

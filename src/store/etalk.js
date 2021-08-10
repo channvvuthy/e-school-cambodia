@@ -20,6 +20,10 @@ export default {
         getMention(state, payload){
             state.mentions = payload
         },
+        broadcastMessage(state, payload){
+            console.log(payload)
+            state.messages.push(payload)
+        },
         selectedContact(state, payload){
             for (var i in state.messages) {
                 if (state.contacts[i]._id == payload._id) {

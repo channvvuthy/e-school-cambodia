@@ -323,6 +323,8 @@
   "send_message":"Send Message",
   "reply":"Reply",
   "voice_message":"Voice message",
-  "image_message":"Image message"
+  "image_message":"Image message",
+  "reply_to":"Replied to",
+  "file":"File message"
 
 }
