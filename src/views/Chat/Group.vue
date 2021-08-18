@@ -11,13 +11,13 @@
                 </div>
                 <!-- eTalk option -->
                 <div :class="darkMode?`bg-button`:`bg-white`" class="rounded-md overflow-hidden e-shadow absolute right-5 top-14 cursor-pointer" v-if="eTalkOption" style="z-index:55">
-                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="goTo('network')">
                         {{$t('connect_friend')}}
                     </div>
                     <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="goTo(`create-group`)" id="group">
                         {{$t('create_group')}}
                     </div>
-                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="goTo('hot-chat')">
                         {{$t('need_support')}}
                     </div>
                     <div class="px-8 h-12 flex items-center justify-center" :class="darkMode?`border-youtube`:`border-gray-400`">
@@ -43,7 +43,7 @@
                 </div>
                 <div v-else>
                     <!-- Contact List -->
-                    <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in contacts.contact" :key="index" 
+                    <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in contacts" :key="index" 
                     @click="selectedContact(contact, index)"
                     :class="darkMode?`border-b border-black ${active === index ?`bg-button`:``}`:`border-b ${active === index?`bg-blue-100`:``}`">
                         <div>
@@ -51,7 +51,9 @@
                         </div>
                         <div>
                             <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">{{contact.name}}</div>
-                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{cutString(contact.last.message, 30)}}</div>
+                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                                {{contact.last == undefined?$t('ticket') + ' ' + contact.ticket:cutString(contact.last.message, 20)}}
+                            </div>
                         </div>
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
@@ -59,7 +61,7 @@
                                     <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
                                 <div class="text-xs mt-1" :class="darkMode?`text-gray-500`:``">
-                                    {{formatTime(contact.last.date)}}
+                                    {{contact.last == undefined?$t('unread') + ' ' + contact.unread:formatTime(contact.last.date)}}
                                 </div>
                             </div>
                             
@@ -86,7 +88,7 @@
                 </div>
                 <div class="flex flex-col items-end cursor-pointer" @click="nextPage">
                     <span :class="darkMode?``:`text-primary`" v-if="isNext">
-                        <div v-if="creatingGroup" class="bg-red-300 flex items-center justify-center relative h-full">
+                        <div v-if="creatingGroup" class="flex items-center justify-center relative h-full">
                             <div class="loader absolute -top-7 right-5"></div>
                         </div>
                         <span v-else>{{$t('done')}}</span>
@@ -194,7 +196,7 @@ export default {
     },
     data(){
         return{
-            active: null,
+            active: 1,
             contact: {},
             searchQuery: "",
             eTalkOption: false,
@@ -286,7 +288,7 @@ export default {
               
                 if(this.enableScroll){
                     this.getContacts(payload).then(res =>{
-                        if(res.data.data.contact.length <= 0){
+                        if(res.data.data.length <= 0){
                             this.enableScroll = false
                         }
                     })
@@ -304,6 +306,11 @@ export default {
             }else{
                 this.$router.push("chat")
             }
+        },
+        goTo(page){
+            this.$router.push({
+                name: page
+            }).catch((err)=>{err})
         },
         nextPage(){
             if(!this.isNext){
@@ -355,14 +362,7 @@ export default {
     created(){
         this.loadingFriend = true
         this.getContact({}).then(() =>{
-            if(this.contacts.contact.length !== 'undefined' ){
-                this.contact = this.contacts.contact[0]
-            }else{
-                this.contact =  {
-                    name: "",
-                    photo: ""
-                }
-            }
+            this.contact = this.contacts[0]
         })
 
         this.getFriend({

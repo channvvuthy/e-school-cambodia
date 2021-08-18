@@ -39,12 +39,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-10 px-10 h-full overflow-y-scroll pb-40" style="position:relative;z-index:1">
+                <div class="mt-10 h-full overflow-y-scroll pb-40" style="position:relative;z-index:1">
                     <!-- User -->
-                    <div class="w-72 relative rounded-3xl py-5 e-shadow flex items-center px-5 text-black mb-5" :class="darkMode?`bg-button text-gray-300`:`bg-white`" v-for="i in 10" :key="i">
-                        <div class="chevron absolute bottom-5 z-10" style="left:-2.51rem;">
-                            <img :src="darkMode?`chevron-dark.png`:`chevron.png`">
-                        </div>
+                    <div class="w-72 relative rounded-xl py-5 e-shadow flex items-center px-5 text-black mb-5" :class="darkMode?`bg-button text-gray-300`:`bg-white`" v-for="i in 10" :key="i">
                         <div class="relative z-50">
                             សួស្តី! តើមានបញ្ហាអ្វីចង់អោយ ខាង 
                             E-School ជួយ?   

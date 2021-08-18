@@ -17,11 +17,13 @@ export default {
     },
 
     mutations:{
+        removeMessage(state, payload){
+            state.messages = state.messages.filter(item => item._id != payload)
+        },
         getMention(state, payload){
             state.mentions = payload
         },
         broadcastMessage(state, payload){
-            console.log(payload)
             state.messages.push(payload)
         },
         selectedContact(state, payload){
@@ -39,11 +41,11 @@ export default {
             state.sending = payload
         },
         getMessage(state, payload){
-            state.messages = payload.reverse()
+            state.messages = payload.message.reverse()
         },
         getMessages(state, payload){
-            for(let i = 0; i < payload.length; i ++){
-                state.messages.unshift(payload[i])
+            for(let i = 0; i < payload.message.length; i ++){
+                state.messages.unshift(payload.message[i])
             }
         },
         getAdminMessage(state, payload){
@@ -64,6 +66,10 @@ export default {
             for(let i = 0; i < payload.length; i ++){
                 state.contacts.push(payload[i])
             }
+        },
+        removeSelectedMember(state, payload){
+            const result = state.members.filter(item => item._id != payload._id);
+            state.members = result
         },
         addMember(state, payload){
             state.members.push(payload)
@@ -299,6 +305,19 @@ export default {
                 }).catch(err => {
                     reject(err)
                     helper.errorMessage(err.response)
+                })
+            })
+        },
+        deleteMessage({}, data){
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `etalk/message`, {
+                    headers:{
+                    },
+                    data
+                }).then(response => {
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
                 })
             })
         }

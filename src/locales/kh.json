@@ -283,6 +283,7 @@
   "connect_friend":"ភ្ជាប់ទំនាក់ទំនងមិត្ត",
   "create_group":"បង្កើតក្រុម",
   "mute_all": "ស្ងាត់ទាំងអស់",
+  "unmute_all":"បើកសំលេងទាំងអស់",
   "need_support":"ត្រូវការជំនួយ",
   "disconnect":"ផ្ដាច់",
   "mute_group":"បិតសំលេង",
@@ -326,6 +327,19 @@
   "voice_message":"សារជាសំលេង",
   "image_message":"សារជារូបភាព",
   "reply_to":"ឆ្លើយតបទៅកាន់",
-  "file":"សារជាឯកសារ"
+  "file":"សារជាឯកសារ",
+  "hime_self":"ខ្លួនគាត់",
+  "delete_message":"លុប",
+  "copy_text":"ចំលង",
+  "save":"រក្សាទុក",
+  "file_downloaded":"ឯកសារត្រូវបានរក្សាទុក",
+  "remove_message":"តើអ្នកពិតជាចង់លុបសារនេះមែនទេ?",
+  "student":"សិស្ស",
+  "unknown":"មិនស្គាល់",
+  "yourself":"ខ្លួនអ្នក",
+  "you":"អ្នក",
+  "themselves":"ខ្លួនឯង",
+  "ticket":"សំបុត្រ",
+  "unread":"មិនទាន់អាន"
 
 }

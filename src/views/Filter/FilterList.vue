@@ -69,8 +69,9 @@
                 this.getList({
                     s: this.s,
                     filter_id: this.filter_id
-                }).then(() => {
+                }).then((response) => {
                     this.$store.commit('setting/setPagination', 1)
+                    this.$emit("filterSearch", response)
                 })
             }
         },

@@ -6,6 +6,8 @@ let {CookieMap} = require('cookiefile/http-cookiefile')
 let cookieFile = new CookieMap(path.join(__static, 'cookies.txt'));
 const cookies = cookieFile.toRequestHeader().replace('Cookie: ', '');
 const {autoUpdater} = require('electron-updater')
+const {download} = require('electron-dl');
+
 import {
     app,
     protocol,
@@ -73,8 +75,14 @@ protocol.registerSchemesAsPrivileged([{
         standard: true
     }
 }]);
+ipcMain.on("saveFile", async(event, url) => {
+    const win = BrowserWindow.getFocusedWindow();
+    await download(win, url)
+    event.reply("fileSaved", url)
+    
+})
 
-ipcMain.on("updateVersion", (event, arg) => {
+ipcMain.on("updateVersion", async (event, arg) => {
     autoUpdater.checkForUpdates()
 })
 ipcMain.on("downloadLocation", (event, arg) => {

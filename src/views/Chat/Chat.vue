@@ -1,5 +1,7 @@
 <template>
     <div class="flex h-screen m-5 text-sm">
+        <!-- Copy text  -->
+        <input type="text" id="chat-text" class="absolute" v-model="chatText" style="z-index:-1"/>
         <audio controls  id="message-sound" class="absolute" style="z-index:-1">
             <source src="message.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
@@ -15,17 +17,17 @@
                 </div>
                 <!-- eTalk option -->
                 <div :class="darkMode?`bg-button`:`bg-white`" class="rounded-md overflow-hidden e-shadow absolute right-5 top-14 cursor-pointer" v-if="eTalkOption" style="z-index:55">
-                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="goTo('network')">
                         {{$t('connect_friend')}}
                     </div>
                     <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="goTo(`create-group`)" id="group">
                         {{$t('create_group')}}
                     </div>
-                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
+                    <div class="px-8 h-12 flex items-center justify-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="goTo('hot-chat')">
                         {{$t('need_support')}}
                     </div>
-                    <div class="px-8 h-12 flex items-center justify-center" :class="darkMode?`border-youtube`:`border-gray-400`">
-                        {{$t('mute_all')}}
+                    <div class="px-8 h-12 flex items-center justify-center" :class="darkMode?`border-youtube`:`border-gray-400`" @click="muteAll()">
+                        {{$t(muteLabel)}}
                     </div>
                 </div>
                 <!-- Overlay -->
@@ -65,15 +67,17 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{cutString(contact.last.message, 20)}}</div>
+                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                                {{contact.last == undefined?$t('ticket') + ' ' + contact.ticket:cutString(contact.last.message, 20)}}
+                            </div>
                         </div>
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
                                 <div class="flex justify-center" v-if="contact.unread">
                                     <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
-                                <div class="text-xs mt-1" :class="darkMode?`text-gray-500`:`text-gray-400`">
-                                    {{getDay(contact.last.date)}}
+                                <div class="text-xs mt-1 whitespace-nowrap" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                                    {{contact.last == undefined?$t('unread') + ' ' + contact.unread:getDay(contact.last.date)}}
                                 </div>
                             </div>
                             
@@ -98,7 +102,7 @@
                             {{$t('online')}}
                         </div>
                     </div>
-                    <div class="flex-1 flex flex-col items-end cursor-pointer" @click="() => {this.chatOption = true;}">
+                    <div class="flex-1 flex flex-col items-end cursor-pointer" @click="() => {this.chatOption = true;}" v-if="contact.type">
                         <div class="w-1 h-1 rounded-full mb-1" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
                         <div class="w-1 h-1 rounded-full mb-1" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
                         <div class="w-1 h-1 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
@@ -158,21 +162,27 @@
                             </div>
                         </div>
                         <!-- User -->
-                        <ul class="px-5 pr-14" id="box relative">
+                        <ul class="px-5 pr-14 pb-20" id="box relative">
                             <li v-for="(message, index) in messages" :key="index" :id="message._id"  @contextmenu="showReply(message)" class="relative">
                                 <div class="absolute w-full justify-center flex " 
                                     v-if="replyId._id === message._id" style="z-index:100;">
                                     <Reply 
+                                        :contact="contact"
+                                        :message="message"
+                                        @deleteMessage="dlMessage"
                                         @copy="copy()"
+                                        @save="save()"
                                         @reply="reply()">
                                     </Reply>
                                 </div>
                                 <!-- Text message -->
                                 <template v-if="message.content.type === 1">
                                     <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center relative">
-                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
+                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)">
+                                            <div class="h-13 w-13"></div>
+                                        </div>
                                         <div class="flex items-center mr-5" v-if="auth === sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
@@ -180,7 +190,9 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">{{message.sender.name}} {{$t('reply_to')}} {{message.reply.sender.name}}</div>
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
+                                                    </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
                                                 <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
@@ -196,7 +208,7 @@
                                             
                                         </div>
                                         <div class="flex items-center ml-5" v-if="auth !== sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
@@ -208,11 +220,23 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
                                         <div>
                                             <div class="flex items-center" v-if="auth === sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
-                                            <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
+                                            <div v-if="message.reply !== undefined">
+                                                <div class="flex">
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                       {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
+                                                    </div>
+                                                </div>
+                                                <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
+                                                <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
+                                            </div>
+                                            <div class="relative rounded-xl inline-flex items-center text-black max-w-sm">
                                                 <audio controls class="focus:outline-none"
                                                     controlsList="nodownload">
                                                     <source :src="message.content.file.url" type="audio/wav">
@@ -221,7 +245,7 @@
                                                 </audio>
                                             </div>
                                             <div class="flex items-center" v-if="auth !== sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap my-1">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
@@ -234,17 +258,28 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
                                         <div>
                                             <div class="flex items-center" v-if="auth === sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
-                                            <div class="relative rounded-xl py-5 inline-flex flex-col items-start text-black max-w-sm">
+                                            <div v-if="message.reply !== undefined">
+                                                <div class="flex">
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                          {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
+                                                    </div>
+                                                </div>
+                                                <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
+                                                <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
+                                            </div>
+                                            <div class="relative rounded-xl inline-flex flex-col items-start text-black max-w-sm">
                                                 <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
-                                            
                                             </div>
                                             <div class="flex items-center" v-if="auth !== sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
@@ -257,11 +292,23 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)"></div>
                                         <div>
                                             <div class="flex items-center" v-if="auth === sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
-                                            <div class="relative rounded-xl py-5 inline-flex items-center text-black max-w-sm">
+                                            <div v-if="message.reply !== undefined">
+                                                <div class="flex">
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
+                                                    </div>
+                                                </div>
+                                                <TextReply :message="message" v-if="message.reply.type === 1" ></TextReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
+                                                <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
+                                            </div>
+                                            <div class="relative rounded-xl inline-flex items-center text-black max-w-sm mb-1">
                                                 <div :class="darkMode?`bg-button text-gray-300`:`bg-white e-shadow`"
                                                 @click="readPdf(message.content.file.url)"
                                                 class="cursor-pointer px-5 py-2 rounded-xl text-base flex items-center">
@@ -279,7 +326,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center" v-if="auth !== sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap my-1">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
@@ -295,7 +342,7 @@
                         <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
                             <div>
                                 <div class="underline">
-                                    {{replyContact.sender.name}}
+                                    {{replyTo(replyContact)}}
                                 </div>
                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 1" >
                                     {{cutString(replyContact.content.text,40)}}
@@ -401,12 +448,15 @@
                 </div>
             </div>
         </div>
+        
         <div class="fixed bg-black w-full h-full left-0 top-0 bg-opacity-70" style="z-index:50;" v-if="replyId" @click="() => {this.replyId = false}"></div>
         <Rename v-if="isRename" @cancelRename="() => {this.isRename = false}" :group="contact"></Rename>
         <Member v-if="isMember" @closeMember="() => {this.isMember = false}" :contact="contact" @adminLeft="adminLeft"></Member>
         <BuyMsg v-if="isConfirm" @cancelModal="() => {this.isConfirm = false}" :msg="msg" @yes="leaveGroup()"></BuyMsg>
         <BuyMsg v-if="isDisconnect" @cancelModal="() => {this.isDisconnect = false}" :msg="`block_contact`" @yes="disconnect()"></BuyMsg>
         <BuyMsg v-if="isUnblock" @cancelModal="() => {this.isUnblock = false}" :msg="`unblock_contact`" @yes="unblock()"></BuyMsg>
+        <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
+        
     </div>
 </template>
 <script>
@@ -437,6 +487,8 @@ import TextReply from "./components/TextReply.vue"
 import PdfReply from "./components/PdfReply.vue"
 import ImageReply from "./components/ImageReply.vue"
 import VoiceReply from "./components/VoiceReply.vue"
+import help from '../../store/help'
+const { ipcRenderer } = require('electron')
 Vue.use(VueRecord)
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
@@ -466,11 +518,11 @@ export default {
         TextReply,
         ImageReply,
         PdfReply,
-        VoiceReply
+        VoiceReply,
     },
     data(){
         return{
-            active: 0,
+            active: 1,
             contact: {},
             searchQuery: "",
             eTalkOption: false,
@@ -502,6 +554,11 @@ export default {
             mentionReplaced: false,
             replyId: "",
             replyContact: "",
+            muteLabel:"mute_alll",
+            chatText: "",
+            fileUrl:"",
+            isDelete: false,
+            messageId: null,
             message: {
                 id: "",
                 reply_id: "",
@@ -529,7 +586,7 @@ export default {
     },
     methods:{
         ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage', 
-        'sendMessage','getMention',
+        'sendMessage','getMention','deleteMessage',
         'getContacts','getMessage','deleteMember', 'blockUser', 'unblockUser']),
         getDay(oldDate){
             if (helper.numDay(oldDate, moment().format()) === 0) {
@@ -538,14 +595,75 @@ export default {
                 return moment(oldDate).format('DD-MM-YYYY')
             }
         },
-        enableWatch()
-        {
+        replyUser(message){
+             if(message.sender == undefined){
+                if(message.is_admin){
+                    return this.contact.name
+                }
+                return 1
+            }
+            return replyContact.sender.name
+        },
+        replyTo(replyContact){
+            if(replyContact.sender == undefined){
+                if(replyContact.is_admin){
+                    return this.contact.name
+                }
+                return this.stProfile.first_name + " " + this.stProfile.last_name
+            }
+            return replyContact.sender.name
+        },
+        replyName(message){
+            if(this.contact.type == 0){
+                if((message.is_admin == 0 &&  message.reply.is_admin == 0)){
+                    return this.$i18n.t('yourself')
+                }
+                if((message.is_admin == 1 &&  message.reply.is_admin == 0)){
+                    return this.$i18n.t('you')
+                }
+                if((message.is_admin == 1 &&  message.reply.is_admin == 1)){
+                    return this.$i18n.t('themselves')
+                }
+
+                return this.$i18n.t('admin')
+            }
+            
+            try{
+                if(message.sender._id === message.reply.sender._id){
+                 return this.$i18n.t('hime_self')
+                }
+            }catch(err){
+                return this.$i18n.t('unknown')
+            }
+
+            return message.reply.sender.name
+        },
+        enableWatch(){
             this.mentionReplaced = false
         },
+        senderName(message){
+            if(this.contact.type == 0){
+                if((message.is_admin == 0 && message.reply.is_admin == 0) || (message.is_admin == 0 && message.reply.is_admin == 1)){
+                   return this.$i18n.t('you')
+                }
+                return this.contact.name
+            }
+            if(message.sender == undefined){
+                return this.$i18n.t('unknown')
+            }
+            return message.sender.name
+        },
         sender(message){
+            if(this.contact.type == 0){
+                if((message.is_admin == undefined || message.is_admin == 0)){
+                    return this.auth
+                }
+            }
+
             if(message.sender === undefined ){
                 return false
             }
+
             return message.sender._id
         },
         senderPhoto(message){
@@ -560,10 +678,14 @@ export default {
         reply(){
             this.replyContact = this.replyId
             this.replyId = false
-
         },
         copy(){
             this.replyId = false
+            this.copyText()
+        },
+        save(){
+             this.replyId = false
+             ipcRenderer.send("saveFile", this.fileUrl)
         },
         replaceMention(value){
                 let mention = "@" + value;
@@ -689,7 +811,8 @@ export default {
             this.message.id = this.contact._id
             this.getMessage({
                 p: 1,
-                id: this.contact._id
+                id: this.contact._id,
+                type: this.contact.type
             }).then(() => {
                 this.scrollToBottom()
                 this.lisentMessage()
@@ -738,7 +861,8 @@ export default {
         },
         receiveAdminMessage(){
             this.getMessage({
-                id: this.contact._id
+                id: this.contact._id,
+                type: this.contact.type
             })
         },
         changeContactPhoto(event){
@@ -774,6 +898,7 @@ export default {
 
                 payload.p = this.chatPage
                 payload.id = this.contact._id
+                payload.type = this.contact.type
                 
                 this.getMessage(payload).then((response) =>{
                    if(response.data.data.length){
@@ -823,7 +948,8 @@ export default {
                     this.message.id = this.contact._id
                     this.getMessage({
                         p: 1,
-                        id: this.contact._id
+                        id: this.contact._id,
+                        type: this.contact.type
                     }).then(() => {
                         this.scrollToBottom()
                         this.lisentMessage()
@@ -849,8 +975,6 @@ export default {
                 return;
             }
             form.append("id", this.message.id)
-            form.append("reply_id", this.message.reply_id)
-
             if(this.message.text){
                 let mentionList = [...new Set(this.mentionList)];
                 for (let i = 0; i < mentionList.length; i++) {
@@ -860,7 +984,7 @@ export default {
             if(this.replyContact){
                 form.append("reply_id", this.replyContact._id)
             }
-
+            form.append("type", this.contact.type)
             form.append("text", this.message.text.trim())
             form.append("photo", this.message.photo)
             form.append("pdf", this.message.pdf)
@@ -914,6 +1038,9 @@ export default {
             this.sockets.subscribe(`message_${this.contact._id}`, (data) => {
                 if(this.contact._id === data.room_id){
                     if(data.sender !== undefined && data.sender._id !== this.auth){
+                        if(!this.contact.is_mute){
+                            this.paySound()
+                        }
                         this.$store.commit("etalk/broadcastMessage",data)
                         this.scrollToBottom()
                     }
@@ -925,13 +1052,78 @@ export default {
             document.getElementById("message-sound").play()
         },
         showReply(message){
+            this.chatText = message.content.text
+            if(message.content.file != undefined){
+                this.fileUrl = message.content.file.url
+            }
             this.replyId = message
             
+        },
+        goTo(page){
+            this.$router.push({
+                name: page
+            })
+        },
+        muteAll(){
+            if((localStorage.getItem('mute_all') == undefined || localStorage.getItem('mute_all') == 0)){
+                this.muteContact().then(()=>{
+                    this.eTalkOption = false
+                    localStorage.setItem('mute_all', 1)
+                    this.getMute()
+                })
+            }
+            if(localStorage.getItem('mute_all') == 1){
+                this.deleteMute({
+                    id: ""
+                }).then(() =>{
+                    this.eTalkOption = false
+                    localStorage.setItem('mute_all', 0)
+                    this.getMute()
+                })
+            }
+            
+        },
+        copyText() {
+            var copyText = document.getElementById("chat-text");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            helper.success("Copied")
+        },
+        getMute(){
+            if(localStorage.getItem("mute_all") == undefined || localStorage.getItem("mute_all") == 0){
+                this.muteLabel = "mute_all"
+            }else{
+                this.muteLabel = "unmute_all"
+            }
+        },
+        dlMessage(){
+            this.isDelete = true
+            this.messageId = this.replyId
+            this.replyId = ""
+        },
+        confirmDelete(){
+            this.isDelete = false
+            this.deleteMessage({
+                id: this.messageId._id,
+                type: this.contact.type
+            }).then((response) => {
+               if(response.data.msg != undefined){
+                   helper.errorMessage(response.data.msg)
+               }else{
+                   this.$store.commit("etalk/removeMessage", this.messageId._id)
+               }
+            })
         }
     },
     created(){
         this.init()
+        this.getMute()
         this.auth = this.stProfile._id
+        ipcRenderer.on("fileSaved", (event,arg) => {
+            helper.success('file_downloaded')
+            this.fileUrl = ""
+        })
         
     },
     watch: {

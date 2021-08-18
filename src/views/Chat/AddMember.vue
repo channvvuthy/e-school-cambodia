@@ -51,7 +51,9 @@
                         </div>
                         <div>
                             <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">{{contact.name}}</div>
-                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">{{cutString(contact.last.message, 30)}}</div>
+                            <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                                {{contact.last == undefined?$t('ticket') + ' ' + contact.ticket:cutString(contact.last.message, 20)}}
+                            </div>
                         </div>
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
@@ -59,7 +61,7 @@
                                     <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
                                 <div class="text-xs mt-1" :class="darkMode?`text-gray-500`:``">
-                                    {{formatTime(contact.last.date)}}
+                                    {{contact.last == undefined?$t('unread') + ' ' + contact.unread:formatTime(contact.last.date)}}
                                 </div>
                             </div>
                             
@@ -86,10 +88,10 @@
                 </div>
                 <div class="flex flex-col items-end cursor-pointer" @click="nextPage">
                     <span :class="darkMode?``:`text-primary`">
-                        <div v-if="creatingGroup" class="bg-red-300 flex items-center justify-center relative h-full">
-                            <div class="loader absolute -top-7 right-5"></div>
+                        <div v-if="addingMember" class="flex items-center justify-center relative h-full">
+                            <div class="loader absolute -top-6 right-5"></div>
                         </div>
-                        <span>{{$t('done')}}</span>
+                        <span v-else>{{$t('done')}}</span>
                     </span>
                 </div>
             </div>
@@ -228,7 +230,8 @@ export default {
             user:{},
             isConfirm: false,
             msg: "delete_contact",
-            type: 1
+            type: 1,
+            addingMember: false
         }
     },
     computed:{
@@ -322,16 +325,15 @@ export default {
                     helper.errorMessage("you_are_not_admin_in_this_group")
                     return;
                 }
-
                 this.deleteMember(payload).then((response) =>{
                     if(response.data.msg !== undefined){
-                        helper.errorMessage(response.data.msg)
+                        this.$store.commit("etalk/removeSelectedMember", member)
+                        this.selectedMember = this.selectedMember.filter(item => item != member._id)
                     }
                 })
             }else{
-                this.addMember(payload).then(() =>{
-                    helper.success("user_has_been_added_to_the_group")
-                })
+                this.selectedMember.push(member._id)
+                this.$store.commit("etalk/addMember", member)
             }
         },
         selectedContact(contact, index){
@@ -394,8 +396,16 @@ export default {
             this.$router.push({name:"chat"})
         },
         nextPage(){
-            this.$store.commit("etalk/setActive", this.contact._id)
-            this.$router.push({name:"chat"})
+            this.addingMember = true
+            let payload = {
+                id: this.contact._id,
+                user_id: JSON.stringify(this.selectedMember)
+            }
+            this.addMember(payload).then(() =>{ 
+                this.addingMember = false
+                this.$store.commit("etalk/setActive", this.contact._id)
+                this.$router.push({name:"chat"})
+            })            
         },
         locale(){
             return this.$i18n.locale

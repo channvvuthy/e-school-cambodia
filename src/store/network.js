@@ -15,7 +15,9 @@ export default {
     },
     mutations: {
         cancelRequest(state, payload){
-            state.myRequest.list = state.myRequest.list.filter(item => item._id != payload)
+            if(state.myRequest.length > 0){
+                state.myRequest.list = state.myRequest.list.filter(item => item._id != payload)
+            }
         },
         unFriend(state, payload){
             state.friends.list = state.friends.list.filter(item => item._id != payload.id)

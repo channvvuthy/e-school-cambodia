@@ -282,6 +282,7 @@
   "connect_friend":"Connect Friend",
   "create_group":"Create Group",
   "mute_all": "Mute All",
+  "unmute_all":"Unmute All",
   "need_support":"Need Support",
   "disconnect":"Disconnect",
   "mute_group":"Mute Group",
@@ -324,7 +325,20 @@
   "reply":"Reply",
   "voice_message":"Voice message",
   "image_message":"Image message",
-  "reply_to":"Replied to",
-  "file":"File message"
+  "reply_to":"replied to",
+  "file":"File message",
+  "hime_self":"Himself",
+  "delete_message":"Delete",
+  "copy_text":"Copy Text",
+  "save":"Save",
+  "file_downloaded":"File has been downloaded",
+  "remove_message":"Do you want to remove this message?",
+  "student":"Student",
+  "unknown":"Unknown",
+  "yourself":"Yourself",
+  "you":"You",
+  "themselves":"Themselves",
+  "ticket":"Ticket",
+  "unread":"Unread"
 
 }

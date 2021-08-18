@@ -1,6 +1,6 @@
 <template>
     <div>
-        <img :src="message.reply.file.url" class="w-40 rounded-md my-2 opacity-70">
+        <img :src="message.reply.file.url" class="w-36 rounded-md my-2 opacity-60">
     </div>
 </template>
 <script>

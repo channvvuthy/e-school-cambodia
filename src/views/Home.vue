@@ -6,7 +6,7 @@
         <template v-else>
             <Signin></Signin>
         </template>
-        <FilterList></FilterList>
+        <FilterList @filterSearch="filterSearch"></FilterList>
         <VideoList></VideoList>
     </div>
 </template>
@@ -58,6 +58,14 @@
                     }
                 }
             },
+            filterSearch(list){
+                if(list.data.data.list.length != undefined){
+                    if(list.data.data.list.length < 1){
+                        alert(1)
+                    }
+                }
+                
+            }
         },
         created(){
             this.getList({
