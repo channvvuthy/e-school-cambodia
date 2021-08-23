@@ -14,7 +14,8 @@ export default {
         adminMessage: [],
         sending: false,
         mentions: [],
-        admin: []
+        admin: [],
+        hot: [],
     },
 
     mutations:{
@@ -117,6 +118,15 @@ export default {
     },
 
     actions:{
+        hotChat({commit}, payload){
+            return new Promise((resolve, reject) =>{
+                axios.post(config.apiUrl + `etalk/hot-chat`, payload).then(response => {
+                    resolve(response)
+                }).catch(err=>{
+                    reject(err)
+                })
+            })
+        },
         getContact({commit}, payload){
             commit("loading", true)
             return new Promise((resolve, reject) => {
