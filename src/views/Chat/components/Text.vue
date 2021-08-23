@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble" v-html="mention(message.content.text)"></div>
+        <div v-if="isAdmin" :class="isAdmin?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble" v-html="mention(message.content.text)"></div>
+        <div v-else :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble" v-html="mention(message.content.text)"></div>
+        
     </div>
 </template>
 <script>
@@ -8,6 +10,11 @@ import {mapState} from "vuex"
 export default {
 
     props:{
+        isAdmin:{
+            default:()=>{
+                return false
+            }
+        },
         isMind:{
             default:()=>{
                 return  false

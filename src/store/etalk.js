@@ -13,10 +13,19 @@ export default {
         members: [],
         adminMessage: [],
         sending: false,
-        mentions: []
+        mentions: [],
+        admin: []
     },
 
     mutations:{
+        getAdminContact(state, payload){
+            state.admin = payload
+        },
+        getAdminPageContact(state, payload){
+            for(let i = 0; i < payload.length; i ++){
+                state.admin.push(payload[i])
+            }
+        },
         removeMessage(state, payload){
             state.messages = state.messages.filter(item => item._id != payload)
         },
@@ -26,13 +35,26 @@ export default {
         broadcastMessage(state, payload){
             state.messages.push(payload)
         },
-        selectedContact(state, payload){
-            for (var i in state.messages) {
-                if (state.contacts[i]._id == payload._id) {
-                    state.contacts[i].unread = 0;
-                   break; //Stop this loop, we found it!
+        selectedAdminContact(state, payload){
+            if(state.admin.length){
+                for (var i in state.messages) {
+                    if (state.admin[i]._id == payload._id) {
+                        state.admin[i].unread = 0;
+                       break; //Stop this loop, we found it!
+                    }
                 }
-              }
+            }
+        },
+        selectedContact(state, payload){
+            if(state.contacts.length){
+                for (var i in state.messages) {
+                    if (state.contacts[i]._id == payload._id) {
+                        state.contacts[i].unread = 0;
+                       break; //Stop this loop, we found it!
+                    }
+                }
+            }
+            
         },
         addMessage(state, payload){
             state.messages.push(payload)
@@ -317,6 +339,21 @@ export default {
                 }).then(response => {
                     resolve(response)
                 }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        getAdminContact({commit},payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `etalk/admin/contact?${helper.q(payload)}`).then(response => {
+                    resolve(response)
+                    if(payload.p == 1){
+                        commit("getAdminContact", response.data.data)
+                    }else{
+                        commit("getAdminPageContact", response.data.data)
+                    }
+                    
+                }).catch(err => {
                     reject(err)
                 })
             })

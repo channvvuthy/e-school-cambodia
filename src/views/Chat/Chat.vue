@@ -456,6 +456,7 @@
         <BuyMsg v-if="isDisconnect" @cancelModal="() => {this.isDisconnect = false}" :msg="`block_contact`" @yes="disconnect()"></BuyMsg>
         <BuyMsg v-if="isUnblock" @cancelModal="() => {this.isUnblock = false}" :msg="`unblock_contact`" @yes="unblock()"></BuyMsg>
         <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
+        <AdminMember v-if="showAdminMember" @closeAdminMember="() => {showAdminMember = false}" @selectedChat="selectedChat($event)"></AdminMember>
         
     </div>
 </template>
@@ -487,7 +488,7 @@ import TextReply from "./components/TextReply.vue"
 import PdfReply from "./components/PdfReply.vue"
 import ImageReply from "./components/ImageReply.vue"
 import VoiceReply from "./components/VoiceReply.vue"
-import help from '../../store/help'
+import AdminMember from "./components/AdminMember.vue"
 const { ipcRenderer } = require('electron')
 Vue.use(VueRecord)
 Vue.use(new VueSocketIO({
@@ -519,6 +520,7 @@ export default {
         ImageReply,
         PdfReply,
         VoiceReply,
+        AdminMember
     },
     data(){
         return{
@@ -559,6 +561,7 @@ export default {
             fileUrl:"",
             isDelete: false,
             messageId: null,
+            showAdminMember: false,
             message: {
                 id: "",
                 reply_id: "",
@@ -779,6 +782,9 @@ export default {
                 this.isUnblock = false
             })
         },
+        selectedChat(chat){
+            console.log(chat)
+        },
         disconnect(){
             let form = new FormData()
             form.append("id", this.contact._id)
@@ -806,6 +812,11 @@ export default {
             this.$store.commit("etalk/selectedContact",contact)
             this.enableScroll = true
             this.chatPage = 1
+           
+            if(contact.type == 10){
+                this.$router.push('chat-admin')
+                return;
+            }
             this.active = index
             this.contact = contact
             this.message.id = this.contact._id

@@ -244,6 +244,11 @@ const routes = [
         component: () => import('../views/Chat/Chat'),
     },
     {
+        path: '/chat-admin',
+        name: 'chat-admin',
+        component: () => import('../views/Chat/Admin'),
+    },
+    {
         path: '/create-group',
         name: 'create-group',
         component: () => import('../views/Chat/Group'),
