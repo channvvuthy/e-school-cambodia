@@ -1,5 +1,7 @@
 <template>
      <div class="flex h-screen m-5 text-sm">
+        <!-- Copy text  -->
+        <input type="text" id="chat-text" class="absolute" v-model="chatText" style="z-index:-1"/>
         <audio controls  id="message-sound" class="absolute" style="z-index:-1">
             <source src="message.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
@@ -87,8 +89,9 @@
                     </div>
                     <!-- Message -->
                     <div class="relative h-screen z-50 pt-3 justify-between flex flex-col pb-36">
-                        <ul class="overflow-y-scroll flex-1 px-5"  ref="feed" @scroll="getMoreMessage">
-                             <div class="flex items-center justify-center" v-if="loadingMessage ">
+                        <ul class="overflow-y-scroll flex-1 px-5"  ref="feed" @scroll="getMoreMessage" style="z-index:999;">
+                            <div class="fixed bg-black w-full h-full left-0 top-0 bg-opacity-70 z-50" v-if="replyId" @click="() => {this.replyId = false}"></div>
+                            <div class="flex items-center justify-center" v-if="loadingMessage ">
                             <div :class="darkMode?`lds-ring`:`lds-ring-dark`">
                                     <div></div>
                                     <div></div>
@@ -96,7 +99,17 @@
                                     <div></div>
                                 </div>
                             </div>
-                            <li v-for="(message, index) in messages" :key="index" class="w-full">
+                            <li v-for="(message, index) in messages" :key="index" class="w-full relative" @contextmenu="showReply(message)">
+                                <div class="absolute w-full justify-center flex z-50" v-if="replyId._id === message._id">
+                                    <Reply 
+                                        :contact="contact"
+                                        :message="message"
+                                        @deleteMessage="dlMessage"
+                                        @copy="copy()"
+                                        @save="save()"
+                                        @reply="reply()">
+                                    </Reply>
+                                </div>
                                 <!-- Text message -->
                                 <template v-if="message.content.type === 1">
                                     <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`" class="items-center relative">
@@ -262,6 +275,34 @@
                             </li>
                         </ul>
                         <!-- End message -->
+                        <!-- Reply -->
+                        <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
+                            <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
+                                <div>
+                                    <div class="underline">
+                                        {{replyTo(replyContact)}}
+                                    </div>
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 1" >
+                                        {{cutString(replyContact.content.text,40)}}
+                                    </div>
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 2" >
+                                        {{$t('file')}}
+                                    </div>
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
+                                        <img :src="replyContact.content.file.url" class="rounded w-10"/>
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-2">
+                                            {{$t('image_message')}}
+                                        </div>
+                                    </div> 
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 4" >
+                                        {{$t("voice_message")}}
+                                    </div>
+                                </div>
+                                <div :class="darkMode?`bg-button`:`bg-gray-300`" class="cursor-pointer rounded-full w-7 h-7 flex items-center justify-center" @click="()=> {this.replyContact = ``}">
+                                    <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Textarea -->
                         <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white ${replyContact?``:`e-shadow`}`">
                             <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
@@ -333,6 +374,7 @@
 
             </div>
         </div>
+        <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
      </div>
 </template>
 <script>
@@ -358,6 +400,7 @@ import CloseIcon from "./../../components/CloseIcon.vue"
 import SendMessageIcon from "./../../components/SendMessageIcon.vue"
 import DocumentIcon from "./../../components/DocumentIcon.vue"
 import VueSocketIO from 'vue-socket.io'
+import BuyMsg from "./../Component/BuyMsg.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -382,7 +425,8 @@ export default {
         PdfIcon,
         SendMessageIcon,
         CloseIcon,
-        DocumentIcon
+        DocumentIcon,
+        BuyMsg
     },
     data(){
         return{
@@ -393,16 +437,21 @@ export default {
             auth: "",
             replyId: "",
             loadingMessage: false,
+            mentionList: [],
             busy:false,
             imgUrl: "",
             pdfUrl: "",
+            fileUrl:"",
             file:"",
             isPreview: false,
             type: 1,
+            chatText: "",
             isRead: false,
             enableScroll: true,
+            replyContact:"",
             chatPage: 1,
             searchQuery: "",
+            isDelete: false,
             contact:{
                 id:"",
                 name: "",
@@ -432,7 +481,7 @@ export default {
     },
     methods:{
         ...mapActions('etalk', ['getAdminContact','getMessage',
-        'sendMessage']),
+        'sendMessage','deleteMessage']),
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= (scrollHeight - 1)) {
                 this.page ++ 
@@ -447,7 +496,62 @@ export default {
                     })
                 }
             }
-        },   
+        },
+        reply(){
+            this.replyContact = this.replyId
+            this.replyId = false
+        },
+        copy(){
+            this.replyId = false
+            this.copyText()
+        },
+        save(){
+             this.replyId = false
+             ipcRenderer.send("saveFile", this.fileUrl)
+        },
+        showReply(message){
+            this.chatText = message.content.text
+            if(message.content.file != undefined){
+                this.fileUrl = message.content.file.url
+            }
+            this.replyId = message
+            
+        },
+        confirmDelete(){
+            this.isDelete = false
+            this.deleteMessage({
+                id: this.messageId._id,
+                type: this.contact.type
+            }).then((response) => {
+               if(response.data.msg != undefined){
+                   helper.errorMessage(response.data.msg)
+               }else{
+                   this.$store.commit("etalk/removeMessage", this.messageId._id)
+               }
+            })
+        }, 
+        replyTo(replyContact){
+            if(replyContact.is_admin == 0){
+                return replyContact.sender.name
+            }
+            
+            if(replyContact.sender && replyContact.sender._id == this.stProfile._id){
+                return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('yourself')
+            }
+            return replyContact.sender.name
+        },
+        copyText() {
+            var copyText = document.getElementById("chat-text");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            helper.success("Copied")
+        },
+        dlMessage(){
+            this.isDelete = true
+            this.messageId = this.replyId
+            this.replyId = ""
+        },
         blobToFile(theBlob, fileName){
             return new File([theBlob], fileName, {lastModified: new Date().getTime(), type: "audio/mpeg"})
         },
@@ -568,15 +672,6 @@ export default {
         enableWatch(){
 
         },
-        copy(){
-
-        },
-        save(){
-
-        },
-        reply(){
-
-        },
         getMoreMessage({target: {scrollTop}}){
             if(scrollTop === 0){
                 this.loadingMessage = true
@@ -596,8 +691,18 @@ export default {
                 
             }
         },
-        sender(){
+        sender(message){
+            if(this.contact.type == 0){
+                if((message.is_admin == undefined || message.is_admin == 0)){
+                    return this.auth
+                }
+            }
 
+            if(message.sender === undefined ){
+                return false
+            }
+
+            return message.sender._id
         },
         senderPhoto(message){
             if(message.is_admin == 0){
@@ -613,6 +718,9 @@ export default {
         },
         senderName(message){
             if(message.sender != undefined){
+                if(message.sender._id == this.stProfile._id){
+                    return this.$i18n.t('you')
+                }
                 return message.sender.name
             }
             return this.$i18n.t('unknown')
@@ -622,6 +730,9 @@ export default {
             if(message.is_admin == 0){
                 return this.$i18n.t('hime_self')
             }else{
+                if(message.sender && message.sender._id == this.stProfile._id){
+                    return this.$i18n.t('yourself')
+                }
                 return this.$i18n.t('admin')
             }
         },

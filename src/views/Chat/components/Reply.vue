@@ -2,13 +2,13 @@
     <div class="w-56 rounded-lg" :class="darkMode?`bg-button text-white`:`bg-white e-shadow`">
         <div class="h-12 flex items-center cursor-pointer px-3 border-b" :class="darkMode?`border-youtube`:``" @click="reply()">{{$t('reply')}}</div>
         
-        <div class="h-12 flex items-center cursor-pointer px-3 border-b" :class="darkMode?`border-youtube`:``" @click="save" v-if="message.content.file">
+        <div class="h-12 flex items-center cursor-pointer px-3" :class="darkMode?`border-youtube`:``" @click="save" v-if="message.content.file">
             {{$t('save')}}
         </div>
-        <div class="h-12 flex items-center cursor-pointer px-3 border-b" :class="darkMode?`border-youtube`:``" @click="copy" v-else>
+        <div class="h-12 flex items-center cursor-pointer px-3 border-t" :class="darkMode?`border-youtube`:``" @click="copy" v-else>
             {{$t('copy_text')}}
         </div>
-        <div class="h-12 flex items-center cursor-pointer px-3" :class="darkMode?``:``" @click="deleteMessage" v-if="stProfile._id == sender(message) && isDelete()">{{$t('delete_message')}}</div>
+        <div class="h-12 flex items-center cursor-pointer px-3 border-t" :class="darkMode?`border-youtube`:``" @click="deleteMessage" v-if="stProfile._id == sender(message) && isDelete()">{{$t('delete_message')}}</div>
     </div>
 </template>
 <script>

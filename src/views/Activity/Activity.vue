@@ -237,7 +237,24 @@ export default {
             this.dataSource.data[2].value = response.data.data.do_quiz
             this.loading = false
         })
+        let body = document.getElementById("body")
+        if(this.darkMode){
+            body.classList.add("dark")
+        }else{
+            body.classList.remove('dark')
+        }
         
+        
+    },
+    watch:{
+        'darkMode': (darkMode)=>{
+            let body = document.getElementById("body")
+            if(darkMode){
+                body.classList.add("dark")
+            }else{
+                body.classList.remove('dark')
+            }
+        }
     }
 }
 </script>
@@ -248,5 +265,12 @@ export default {
     div[id^='fc-'] > span > svg > defs + g > g:nth-child(26) {
         display:none !important;
     }
+    .dark rect {
+        fill:#212121;
+    }
+    .dark text{
+       fill:#ffffff;
+    }
+
 
 </style>

@@ -494,6 +494,8 @@ Vue.use(VueRecord)
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
+
+
 export default {
     sockets: {
         connect: function () {
