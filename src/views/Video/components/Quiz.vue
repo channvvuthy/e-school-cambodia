@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-5 h-screen flex pb-40 items-center justify-center" :class="darkMode?`bg-secondary text-gray-300`:`bg-white border-t`">
+    <div class="ml-5 h-screen flex pb-40 items-center justify-center" :class="darkMode?`bg-secondary text-gray-300`:`bg-img-primary border-t`">
         <div v-if="loading">
             <div class="flex justify-center items-center"></div>
         </div>

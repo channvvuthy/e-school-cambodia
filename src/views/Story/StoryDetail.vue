@@ -46,9 +46,9 @@
                 <div :class="darkMode?'bg-secondary text-textSecondary':'bg-white'" class="absolute z-50 left-0 w-full h-full overflow-y-scroll  rounded-xl shadow-md" @scroll="onScroll" v-if="showViewer">
                     <div class="top-0 sticky relative pt-14 pb-4" :class="darkMode?`bg-secondary`:`text-black bg-white`"> 
                         <div class="absolute right-3 top-0 cursor-pointer opacity-70 z-50 top-4" @click="()=>{this.showViewer = false}">
-                            <close-icon :fill="darkMode?'#afb0b4':'#000000'" :width="20" :height="20"></close-icon>
+                            <close-icon :fill="darkMode?'#afb0b4':'#000000'"></close-icon>
                         </div>
-                        <div class="flex ml-5 text-xs font-semibold items-center">
+                        <div class="flex ml-5 text-sm font-semibold items-center">
                             <span><Eye :fill="darkMode?'#ffffff':'#000000'"></Eye></span>
                             <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{storyDetail.view}}</span>
                             <span class="pr-1" :class="darkMode?`text-white`:`text-black`">{{$t('1004')}}</span>

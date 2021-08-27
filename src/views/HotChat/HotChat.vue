@@ -128,7 +128,7 @@
                                                 <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
-                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                            <div class="flex items-center" v-if="message.is_admin == 0">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}}
                                                 </div>
@@ -215,7 +215,7 @@
                                                     element.
                                                 </audio>
                                             </div>
-                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                            <div class="flex items-center" v-if="message.is_admin == 0">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap my-1">
                                                     {{getDay(message.date)}}
                                                 </div>
@@ -286,7 +286,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-24 flex items-center mb-32 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`" style="position:relative;z-index:10">
+            <div class="flex h-24 items-center mb-32 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`" style="position:relative;z-index:10">
                 <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
                     <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                 </div>
@@ -298,7 +298,25 @@
                 :class="darkMode?`bg-youtube border-transparent text-gray-300`:``"></textarea>
                 <div class="w-14 flex justify-end">
                     <div class="cursor-pointer  rounded-full ml-5 mt-2">
-                        <vue-record-audio @result="onResult" @stream="onStream"/>
+                        <!-- <vue-record-audio @result="onResult" @stream="onStream"/> -->
+                        <VueRecord class="record" @result="onResult">
+                        <div class="w-13 h-13 rounded-full flex items-center justify-center" :class="darkMode?`bg-youtube`:`bg-primary`">
+                            <mic-icon :size="28" :fill="darkMode?`#9CA3AF`:`#FFFFFF`"></mic-icon>
+                        </div>
+                        <template slot="isInitiating">
+                            Voice
+                        </template>
+                        <template slot="isRecording">
+                            <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`FFFFFF`"></mic-icon>
+                            </div>
+                        </template>
+                        <template slot="isCreating">
+                            <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                            </div>
+                        </template>
+                    </VueRecord>
                     </div>
                 </div>
             </div>
@@ -416,16 +434,19 @@ import {mapState,mapActions} from "vuex"
 import VueSocketIO from 'vue-socket.io'
 import helper from "./../../helper/helper"
 import config from "./../../config"
-import VueRecord from '@codekraft-studio/vue-record'
+// import VueRecord from '@codekraft-studio/vue-record'
 import DocumentIcon from "./../../components/DocumentIcon.vue"
 import EnlargeIcon from "./../../components/EnlargeIcon.vue"
 import moment from "moment"
 import getBlobDuration from 'get-blob-duration'
 import SinglePdf from "./../Component/SinglePdf.vue"
+import Recorder from 'recorder-js'
+import VueRecord from "@loquiry/vue-record-audio"
+import MicIcon from "./components/MicIcon.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
-Vue.use(VueRecord)
+// Vue.use(VueRecord)
 export default {
     components:{
         eHeader,
@@ -443,7 +464,9 @@ export default {
         SendMessageIcon,
         DocumentIcon,
         EnlargeIcon,
-        SinglePdf
+        SinglePdf,
+        MicIcon,
+        VueRecord
     },
     data(){
         return{
@@ -568,7 +591,8 @@ export default {
             }
             return result;
         },
-        onResult(data){
+        onResult(blob){
+            let data = blob.blob
             this.getAudioDuration(data).then(duration => {
                 let sound = this.blobToFile(data, `${this.makeID()}.wav`)
 
@@ -795,9 +819,42 @@ export default {
             }else{
                 this.$router.push('chat')
             }
+        },
+        startRecording(stop){
+        const audioContext =  new (window.AudioContext || window.webkitAudioContext)();
+ 
+        const recorder = new Recorder(audioContext, {
+        // An array of 255 Numbers
+        // You can use this to visualize the audio stream
+        // If you use react, check out react-wave-stream
+        // onAnalysed: data => console.log(data),
+        });
+        
+        let isRecording = false;
+        let blob = null;
+        
+        navigator.mediaDevices.getUserMedia({audio: true})
+        .then(stream => { 
+            recorder.init(stream)
+            if(stop==0){
+                recorder.stop().then(({blob, buffer}) => {
+                console.log(blob)
+                console.log(buffer)
+            
+                // buffer is an AudioBuffer
+                })
+            }else{
+                recorder.start().then(() => isRecording = true);
+            }
+        }
+       
+        )
+        .catch(err => console.log('Uh oh... unable to get stream...', err));
         }
     },
     mounted(){
+
+        document.querySelector('.needsInitiation').click();
         if(this.auth){
             let payload = {
                 p: 1,
@@ -812,6 +869,10 @@ export default {
         }
     },
     created(){
+
+
+
+
         if(localStorage.getItem('token') != undefined && localStorage.getItem('token') != null){
             this.auth = localStorage.getItem('token')
         }
@@ -834,4 +895,40 @@ export default {
     .vue-audio-recorder:hover {
         background-color: #0f3c7a !important;
     }  
+    .pulse {
+        border-radius: 50%;
+        background: #1977f2;
+        cursor: pointer;
+        box-shadow: 0 0 0 rgba(11, 184, 214, 0.4);
+        animation: pulse 2s infinite;
+    }
+       
+    .record{
+        outline:none;
+    }
+    @-webkit-keyframes pulse {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+    }
+    @keyframes pulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+    }
 </style>
