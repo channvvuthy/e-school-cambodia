@@ -14,28 +14,28 @@
             </div>
             <div class="px-5 flex-1 h-screen">
                 <div class="flex items-center justify-center w-full my-5">
-                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`">
+                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`" @click="openLink(messanger)">
                         <div class="mr-3">
                             <MessagerIcon></MessagerIcon>
                         </div>
                         <div>
-                            Messager
+                            {{ $t('messenger') }}
                         </div>
                     </div>
-                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`">
+                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`" @click="openLink(telegram)">
                         <div class="mr-3">
                             <TelegramIcon></TelegramIcon>
                         </div>
                         <div>
-                            Telegram
+                            {{ $t('telegram') }}
                         </div>
                     </div>
-                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`">
+                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`"  @click="openLink(video)">
                         <div class="mr-3">
                             <VideoIcon></VideoIcon>
                         </div>
                         <div>
-                            Video
+                            {{ $t('video') }}
                         </div>
                     </div>
                 </div>
@@ -443,6 +443,7 @@ import SinglePdf from "./../Component/SinglePdf.vue"
 import Recorder from 'recorder-js'
 import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./components/MicIcon.vue"
+const { ipcRenderer } = require('electron')
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -485,6 +486,9 @@ export default {
             sending: false,
             isRead: false,
             pdfUrl:"",
+            messanger:"https://www.facebook.com/eschoolcambodia",
+            telegram:"https://t.me/eschool_community",
+            video:"https://www.youtube.com/channel/UCXAVs_YRUwsnx5I-Toy-7Dg",
             message: {
                 id: "",
                 reply_id: "",
@@ -811,6 +815,9 @@ export default {
                    
                 }               
             })
+        },
+        openLink(link){
+            ipcRenderer.send('openLink', link)
         },
         
         chat(){
