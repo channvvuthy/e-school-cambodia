@@ -23,7 +23,6 @@
         <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}" id="main">
             <router-view></router-view>
         </div>
-
     </div>
 </template>
 <script>
