@@ -15,7 +15,7 @@
                 <div class="font-khmer_os h-screen flex justify-center items-center relative"
                     v-if="guardians && guardians.length <= 0">
                     <div class="text-center relative -top-20">
-                        <img src="/icon/Empty/Empty.svg" class="w-64  mb-5"/>
+                        <Empty></Empty>
                     </div>
                 </div>
                 <div v-if="guardians && guardians.length">
@@ -50,6 +50,7 @@
     import Message from "./../Favorite/components/Message.vue"
     import Loading from "./../../components/Loading"
     import eHeader from "./../Video/components/Header.vue"
+    import Empty from "./../Component/Empty.vue"
     export default{
         name: "Guardian",
         components: {
@@ -58,7 +59,8 @@
             DeleteIcon,
             Message,
             Loading,
-            eHeader
+            eHeader,
+            Empty
         },
         data(){
             return {

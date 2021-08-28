@@ -28,6 +28,9 @@
                <Loading></Loading>
            </div>
            <div v-else class="h-screen pb-72 overflow-y-scroll" @scroll="onScroll">
+                <div v-if="favoritedVideo.length == 0" class="h-screen pb-10" style="display:block;">
+                    <Empty></Empty>
+                </div>
                <!-- Video -->
                 <template v-if="type === `video`">
                     <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
@@ -116,6 +119,7 @@ import CartIcon from "./../../components/CartIcon.vue"
 import FavoriteFill from "./../../components/FavoriteFill.vue";
 import helper from "./../../helper/helper"
 import BuyMsg from "./../Component/BuyMsg.vue"
+import Empty from "./../Component/Empty.vue"
 import Cart from "./../Component/Cart.vue"
 import ReceiptInfo from "./..//MyCourse/components/ReceiptInfo.vue"
 import VideoADS from "./../Video/ads/VideoADS.vue"
@@ -139,6 +143,7 @@ export default {
         NewIcon,
         LibraryAudio,
         Cart,
+        Empty,
         ReceiptInfo
     },
     computed:{

@@ -5,6 +5,9 @@
             <div v-if="loading">
                 <loading></loading>
             </div>
+             <div v-if="certificate.length == 0" class="h-screen pb-40 flex items-center justify-center w-full">
+                <Empty></Empty>
+            </div>
             <div class="grid md:grid-cols-2 2xl:grid-cols-3 gap-5" v-else>
                 <div v-for="(cer, index) in certificate" :key="index">
                     <div class="rounded-xl relative shadow overflow-hidden" @click="viewCertificate(cer)">
@@ -44,6 +47,7 @@ import eHeader from "./../Video/components/Header.vue"
 import {mapActions, mapState} from "vuex"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import Loading from "./../../components/Loading.vue"
+import Empty from "./../Component/Empty.vue"
 export default {
     computed:{
         ...mapState('setting', ['darkMode']),
@@ -51,7 +55,8 @@ export default {
     components:{
         eHeader,
         CloseIcon,
-        Loading
+        Loading,
+        Empty
     },
     data(){
         return{

@@ -7,9 +7,13 @@
             <div>
                 <BoxFilter @enableUserScroll="enableUserScroll($event)" @closeFilter="closeFilter($event)" :filter_id="filter_id" @filterSearch="filterSearch($event)"></BoxFilter>
             </div>
+           
             <div class="px-5 mt-5">
                 <div v-if="loading">
                     <Loading></Loading>
+                </div>
+                <div v-if="course.list.length == 0" class="h-screen items-center pb-40">
+                     <Empty></Empty>
                 </div>
                 <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5" v-else>
                     <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl p-5 flex items-center justify-center flex-col cursor-pointer" v-for="(list, index) in course.list" :key="index">
@@ -41,12 +45,14 @@
 import eHeader from "./../Activity/components/eHeader.vue"
 import Loading from "./../../components/Loading.vue"
 import BoxFilter from "../Component/BoxFilter.vue"
+import Empty from "./../Component/Empty"
 import {mapActions, mapState} from "vuex"
 export default {
     components:{
         eHeader,
         Loading,
-        BoxFilter
+        BoxFilter,
+        Empty
     },
     computed:{
         ...mapState('setting', ['darkMode']),

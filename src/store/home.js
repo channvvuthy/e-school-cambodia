@@ -30,7 +30,7 @@ export default {
             state.paginationLoading = status
         },
         receivePagination(state, payload) {
-            if (payload.list.length) {
+            if (payload) {
                 for (let i = 0; i < payload.list.length; i++) {
                     state.list.push(payload.list[i])
                 }
@@ -65,7 +65,11 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `home?${qs}`).then(response => {
                     commit("homeLoading", false)
-                    commit("receiveList", response.data.data)
+                    if(response.data.msg != undefined){
+                        helper.errorMessage(response.data.msg)
+                    }else{
+                        commit("receiveList", response.data.data)
+                    }
                     resolve(response)
                 }).catch(err => {
                     commit("homeLoading", false)
@@ -88,7 +92,7 @@ export default {
                     resolve(response)
                 }).catch(err => {
                     commit("paginationLoading", false)
-                    helper.errorMessage(err.response.data.msg)
+                    helper.errorMessage(err.response)
                     reject(err)
                 })
             })

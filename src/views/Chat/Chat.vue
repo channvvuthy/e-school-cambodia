@@ -527,7 +527,9 @@ export default {
     data(){
         return{
             active: 1,
-            contact: {},
+            contact: {
+                type: 0,
+            },
             searchQuery: "",
             eTalkOption: false,
             chatOption: false,
@@ -810,6 +812,9 @@ export default {
             })
         },
         selectedContact(contact, index){
+            this.active = index
+            this.contact = contact
+            
             this.sockets.unsubscribe(`message_${this.contact._id}`);
             this.$store.commit("etalk/selectedContact",contact)
             this.enableScroll = true
@@ -819,8 +824,6 @@ export default {
                 this.$router.push('chat-admin')
                 return;
             }
-            this.active = index
-            this.contact = contact
             this.message.id = this.contact._id
             this.getMessage({
                 p: 1,
@@ -953,7 +956,7 @@ export default {
                     if(this.contactActive){
                         for(let i = 0; i < this.contacts.length; i ++){
                             if(this.contactActive === this.contacts[i]._id){
-                                this.active = i;
+                                this.active = this.contacts.length > 1 ?i:0 
                             }
                         }
                     }

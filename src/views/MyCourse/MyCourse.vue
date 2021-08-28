@@ -7,9 +7,9 @@
                     <loading></loading>
                 </h1>
             </div>
-            <div class="flex justify-center items-center  h-screen" v-if="!isEmpty(myCourses.list)">
-                <div class="text-center relative -top-40">
-                    <img src="/icon/Empty/Empty.svg" class="w-64  mb-5"/>
+            <div class="flex justify-center items-center  h-screen pb-40" v-if="!isEmpty(myCourses.list)">
+                <div class="text-center relative">
+                    <Empty></Empty>
                 </div>
             </div>
 
@@ -94,6 +94,7 @@
     import YoutubeIcon from "./../../components/YoutubeIcon.vue"
     import NewIcon from "./../../components/NewIcon.vue"
     import Cart from "./../Component/Cart.vue"
+    import Empty from "./../Component/Empty.vue"
     import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
 
     export default{
@@ -109,6 +110,7 @@
             YoutubeIcon,
             NewIcon,
             Cart,
+            Empty,
             ReceiptInfo
         },
         data(){
@@ -209,9 +211,10 @@
 
                     if(this.enableScroll){
                         this.myCourseList(payload).then(response =>{
-                            if(response.data.data.list.length <= 0){
-                                this.enableScroll = false
-                            }
+                            if(response.data.msg == undefined)
+                                if(response.data.data.list.length <= 0)
+                                    this.enableScroll = false
+
                         })
                     }
                 }

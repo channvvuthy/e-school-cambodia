@@ -6,6 +6,9 @@
             </div>
         </div>
         <div v-else>
+            <div v-if="partners.length == 0" class="h-screen pb-10" style="display:block;">
+                <Empty></Empty>
+            </div>
             <div class="grid gap-6 md:grid-cols-3 2xl:grid-cols-4 px-5 mt-5" v-if="(partners && partners.length)">
                <div v-for="(partner, index) in partners" :key="index" class="rounded-xl shadow-md" :class="darkMode?`bg-secondary text-gray-300 ${partner.packages.length > 1?`col-span-2`:``}`:`bg-white ${partner.packages.length > 1?`col-span-2`:``}`">
                    <div>
@@ -58,6 +61,7 @@
     import Cart from "./../MyCourse/components/Cart"
     const {ipcRenderer} = require('electron')
     import BuyMsg from "./../Component/BuyMsg.vue"
+    import Empty from "./../Component/Empty.vue"
     import helper from "./../../helper/helper"
     export default{
         components: {
@@ -65,7 +69,8 @@
             CartIcon,
             VueHorizontal,
             Cart,
-            BuyMsg
+            BuyMsg,
+            Empty
         },
         data(){
             return {

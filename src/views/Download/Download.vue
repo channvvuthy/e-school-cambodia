@@ -1,8 +1,8 @@
 <template>
     <div>
         <div :class="downloaded.length<=0?`flex flex-col p-5`:`p-5`">
-            <div class="h-screen flex justify-center items-center" v-if="downloaded.length <= 0 || active ===2">
-                <img src="/icon/Empty/Empty.svg" class="w-64  mb-5 relative -top-28"/>
+            <div class="h-screen flex justify-center items-center pb-40" v-if="downloaded.length <= 0 || active ===2">
+                <Empty></Empty>
             </div>
             <div class="flex justify-start font-siemreap h-screen overflow-y-scroll pb-40" v-else>
                 <div class="grid gap-4" :class="isHide?`md:grid-cols-4 2xl:grid-cols-5`:`md:grid-cols-3 2xl:grid-cols-4`">
@@ -79,6 +79,7 @@
     import YoutubeIcon from "./../../components/YoutubeIcon.vue"
     import {mapState} from "vuex"
     import BuyMsg from "./../Component/BuyMsg.vue"
+    import Empty from "./../Component/Empty.vue"
     export default{
         components:{
             CertificateIcon,
@@ -87,7 +88,8 @@
             ChatIcon,
             YoutubeIcon,
             DeleteIcon,
-            BuyMsg
+            BuyMsg,
+            Empty
         },
         data(){
             return {

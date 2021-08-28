@@ -75,7 +75,7 @@
             <div v-if="loadingMore">
                 <Loading></Loading>
             </div>
-            <template v-if="videos.list && videos.list.length <= 0">
+            <template v-if="videos.list == undefined || videos.list.length <= 0">
                 <div class="h-65 flex items-center justify-center">
                     <Empty></Empty>
                 </div>

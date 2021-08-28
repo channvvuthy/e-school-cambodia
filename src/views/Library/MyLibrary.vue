@@ -43,6 +43,9 @@
                 <Loading></Loading>
             </div>
             <div class="mx-5" v-else>
+                <div v-if="libraries.list.length == 0" class="h-screen pb-80">
+                    <Empty></Empty>
+                </div>
                 <div class="grid gap-6" :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-3 2xl:grid-cols-6`">
                     <div v-for="(book, index) in libraries.list" :key="index">
                        <template v-if="type != 'sound'">
@@ -118,6 +121,8 @@ import BorderBottom from "./../../components/BorderBottom.vue"
 import LibraryAudio from "./Audio.vue"
 import helper from "./../../helper/helper"
 import eHeader from "./../Video/components/Header.vue"
+import Empty from "./../Component/Empty.vue"
+
 import moment from "moment"
 
 export default {
@@ -132,7 +137,8 @@ export default {
         ReadingBook,
         LibraryAudio,
         BorderBottom,
-        eHeader
+        eHeader,
+        Empty
     },
     data(){
         return{

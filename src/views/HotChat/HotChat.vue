@@ -425,6 +425,7 @@ import ChevronIcon from "./components/ChevronIcon.vue"
 import VideoIcon from "./components/VideoIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import MessageText from "./../Chat/components/Text.vue"
+import ImageReply from "./../Chat/components/ImageReply.vue"
 import ReplyIcon from "./../Chat/components/ReplyIcon.vue"
 import VoiceReply from "./../Chat/components/VoiceReply.vue"
 import TextReply from "./../Chat/components/TextReply.vue"
@@ -467,7 +468,8 @@ export default {
         EnlargeIcon,
         SinglePdf,
         MicIcon,
-        VueRecord
+        VueRecord,
+        ImageReply
     },
     data(){
         return{

@@ -5,12 +5,12 @@
         <div></div>
         <!-- End View -->
         <!-- Edit -->
-        <div v-if="showEdit" class="h-screen overflow-y-scroll m-5 pb-40" :class="darkMode?`text-gray-300`:``">
+        <div v-if="!showEdit" class="h-screen overflow-y-scroll m-5 pb-40" :class="darkMode?`text-gray-300`:``">
            <div class="flex items-center ">
                <div class="w-20 h-20 rounded-full bg-primary bg-cover" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                <div class="font-semibold ml-10">
                    <div class="text-lg">{{stProfile.first_name + ' ' + stProfile.last_name}}</div>
-                   <div class="text-sm text-center text-gray-400 mt-2">+855{{stProfile.phone}}</div>
+                   <div class="text-sm text-gray-400 mt-2">+855{{stProfile.phone}}</div>
                </div>
 
            </div>

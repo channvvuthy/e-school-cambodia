@@ -138,7 +138,11 @@ export default {
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + `library?${helper.q(payload)}`).then(response =>{
                     resolve(response)
+                   if(response.data.msg != undefined){
+                       helper.errorMessage(response.data.msg)
+                   }else{
                     commit("receivingLibrary", response.data.data)
+                   }
                     commit("gettingLibrary", false)
                 }).catch(err =>{
                     reject(err)

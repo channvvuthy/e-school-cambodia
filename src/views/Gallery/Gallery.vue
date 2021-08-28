@@ -90,6 +90,9 @@
         </div>
         <div v-else class="m-5">
             <div class="h-screen pb-40 overflow-y-scroll"  @scroll="getMoreGallery($event)">
+                <div v-if="galleries.length == 0" class="h-screen pb-10">
+                    <Empty></Empty>
+                </div>
                 <div :class="window.width <= 1315?`container-4`:`container-5`">
                     <div v-for="(gallery, index) in galleries" :key="index" class="cursor-pointer" @click="viewImg(gallery,index)">
                         <img :src="gallery.photo.name">
@@ -107,6 +110,7 @@ import Loading from "./../../components/Loading.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import ChevronIcon from "./../../components/ChevronIcon.vue"
 import Eye from "./../../components/Eye.vue"
+import Empty from "./../Component/Empty.vue"
 import VueMomentsAgo from "vue-moments-ago";
 
 export default {
@@ -133,6 +137,7 @@ export default {
         VueMomentsAgo,
         ChevronIcon,
         Eye,
+        Empty
     },
     computed:{
         ...mapState('gallery', ['loading', 'galleries']),

@@ -23,7 +23,7 @@
             </div>
             <div class="profile bg-primary px-10 py-8 flex items-end text-white justify-between">
                 <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
-                    <div class="w-20 h-20 rounded-full bg-cover m-auto bg-white cursor-pointer relative"
+                    <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                          :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}" @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}" @click="() => {token?this.$refs.photo.click():``}">
                          <div class="absolute flex items-end pb-2 justify-center w-full h-full bg-gradient-to-t from-black rounded-full" v-if="isEdit"><CameraIcon fill="#fff"></CameraIcon></div>
                          <div class="absolute w-full h-full rounded-full flex items-start justify-center bg-gradient-to-t from-black" v-if="loading">

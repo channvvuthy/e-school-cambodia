@@ -50,10 +50,10 @@
                             s: this.s,
                             p: this.page
                         }).then(response =>{
-                            if(response.data.data.list !== undefined && response.data.data.list.length <= 0){
+                           if(response.data.msg == undefined){
                                 this.enableScroll = false
                                 this.$store.commit('setting/setPagination', 1)
-                            }
+                           } 
                         })
                     }
                 }

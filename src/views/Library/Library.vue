@@ -47,6 +47,9 @@
             </div>
             <!-- Book -->
             <div class="mx-5" v-else>
+                <div v-if="(libraries.list == undefined || libraries.list.length <= 0)" class="h-screen pb-60" style="display:block;">
+                    <Empty></Empty>
+                </div>
                 <div class="grid gap-6" :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-4 2xl:grid-cols-6`">
                     <div v-for="(book, index) in libraries.list" :key="index">
                         <!-- Book & Video -->
@@ -121,6 +124,7 @@ import BorderBottom from "./../../components/BorderBottom.vue"
 import LibraryAudio from "./Audio.vue"
 import helper from "./../../helper/helper"
 import BuyMsg from "./../Component/BuyMsg.vue"
+import Empty from "./../Component/Empty.vue"
 
 export default {
     components:{
@@ -134,7 +138,8 @@ export default {
         ReadingBook,
         LibraryAudio,
         BorderBottom,
-        BuyMsg
+        BuyMsg,
+        Empty
     },
     data(){
         return{

@@ -1,4 +1,5 @@
 import axios from "axios"
+import helper from "../helper/helper"
 import config from "./../config"
 import store from "./../store"
 export default {
@@ -71,7 +72,9 @@ export default {
             return new Promise((resolve, reject) =>{
                 axios.get(config.apiUrl + 'cart').then(response =>{
                     commit("gettingCart", false)
-                    commit("receivedCart", response.data.data)
+                    if(!response.data.msg != undefined){
+                        commit("receivedCart", response.data.data)
+                    }
                     resolve(response)
                 }).catch(err =>{
                     commit("gettingCart", false)

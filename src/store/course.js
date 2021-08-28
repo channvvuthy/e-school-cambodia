@@ -178,7 +178,7 @@ export default {
                     commit('loadingVideo', false);
                     dispatch('getVideo', response.data.data)
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
                 }).catch(err => {
                     commit('loadingVideo', false)
@@ -194,7 +194,7 @@ export default {
                     commit("pagesLoading", false)
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     resolve(response.data.data.lesson)
@@ -220,13 +220,15 @@ export default {
                     resolve(response)
     
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
-                    }
-                    if(payload.p > 1){
-                        commit('pushtMyCourse', response.data.data)
+                        helper.errorMessage(response.data.msg)
                     }else{
-                        dispatch('getMyCourse', response.data.data)
+                        if(payload.p > 1){
+                            commit('pushtMyCourse', response.data.data)
+                        }else{
+                            dispatch('getMyCourse', response.data.data)
+                        }
                     }
+                    
                    
                 }).catch(err => {
                     commit('loadingMyCourse', false)
@@ -248,7 +250,7 @@ export default {
                     commit('getLoadingCourseDetail', false);
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     dispatch("gettingCourseDetail", response.data.data)
@@ -269,7 +271,7 @@ export default {
                     commit("gettingCourseByScroll", response.data.data)
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     resolve()
@@ -286,7 +288,7 @@ export default {
                 axios.get(config.apiUrl + 'lesson/video/view?video_id=' + video_id).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     dispatch("countView", response.data)
@@ -321,7 +323,7 @@ export default {
                 axios.get(config.apiUrl + 'course/video?s=' + this.state.course.s + "&grade_id=" + this.state.course.gradeID).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     commit("gettingVideoCourse", false)
@@ -340,7 +342,7 @@ export default {
                 axios.get(config.apiUrl + 'course/video?s=' + this.state.course.s + "&grade_id=" + this.state.course.gradeID + "&p=" + page).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     commit("gettingVideoCoursePagination", false)
@@ -364,7 +366,7 @@ export default {
                     axios.get(config.apiUrl + "course/member?s=" + this.state.course.s + "&p=" + page).then(response => {
 
                         if (response.data.status && response.data.status === 2) {
-                            err.err(response.data.msg)
+                            helper.errorMessage(response.data.msg)
                         }
 
                         commit('gettingEbook', false)
@@ -388,7 +390,7 @@ export default {
                     .then(response => {
 
                         if (response.data.status && response.data.status === 2) {
-                            err.err(response.data.msg)
+                            helper.errorMessage(response.data.msg)
                         }
 
                         commit("gettingCourseEbook", false)
@@ -408,7 +410,7 @@ export default {
                     .then(response => {
 
                         if (response.data.status && response.data.status === 2) {
-                            err.err(response.data.msg)
+                            helper.errorMessage(response.data.msg)
                         }
 
                         commit("gettingCourseEbookPagination", false)
@@ -426,7 +428,7 @@ export default {
                 axios.get(config.apiUrl + "lesson/e-book?course_id=" + params.course_id + "&order=" + params.order).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     commit('getReadingBook', false)

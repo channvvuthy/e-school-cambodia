@@ -125,6 +125,9 @@
                     <Loading></Loading>
                 </div>
                 <div v-else>
+                    <div v-if="relatives.length == 0" class="h-screen items-center pb-40">
+                        <Empty></Empty>
+                    </div>
                     <div class="grid md:grid-cols-2 2xl:grid-cols-3">
                         <div v-for="(relative, index) in relatives" :key="index" :class="darkMode?`bg-secondary`:`bg-white`" class="rounded-xl e-shadow p-5 flex items-center cursor-pointer" @click="relativeDetail(relative)">
                             <div class="w-24 h-24 rounded-full bg-gray-300 bg-cover" :style="{backgroundImage:`url(${relative.photo})`}"></div>
@@ -161,6 +164,7 @@ import WatchIcon from "./../../components/YoutubeIcon.vue"
 import BookIcon from "./../../components/BookIcon.vue"
 import AttendantIcon from "./../../components/AttendantIcon.vue"
 import Loading from "./../../components/Loading.vue"
+import Empty from "./../Component/Empty.vue"
 import {mapState, mapActions} from "vuex"
 export default {
     components:{
@@ -172,7 +176,8 @@ export default {
         WatchIcon,
         BookIcon,
         AttendantIcon,
-        Loading
+        Loading,
+        Empty
     },
     data(){
         return{

@@ -1,4 +1,5 @@
 import axios from "axios";
+import helper from "../helper/helper";
 import config from "./../config";
 export default {
     namespaced: true,
@@ -86,7 +87,11 @@ export default {
            return new Promise((resolve, reject) =>{
                axios.get(config.apiUrl + `video?${qs}`).then(response =>{
                 commit("gettingVideo", false);
-                commit("receivingVideo", response.data.data);
+                if(response.data.msg !=undefined){
+                    helper.errorMessage(response.data.msg)
+                }else{
+                    commit("receivingVideo", response.data.data);
+                }
                 resolve(response)
                }).catch(err =>{
                    reject(err)

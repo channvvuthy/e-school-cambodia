@@ -147,8 +147,10 @@ export default {
     created(){
         if(this.token){
             this.getCart().then(response =>{
-                if(response.data.data.list !== `undefinded` &&  response.data.data.list.length !== `undefinded`){
-                    this.itemInCart = response.data.data.list.length
+                if(response.data.msg == undefined){
+                    if(response.data.data.list != undefined){
+                        this.itemInCart = response.data.data.list.length
+                    }
                 }
             })
         }
