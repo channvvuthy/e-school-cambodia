@@ -1,6 +1,5 @@
 <template>
     <div class="h-screen">
-        <eHeader :isRoute="false" @exit="exit"></eHeader>
         <template v-if="showDetail">
             <div class="flex mt-5 px-5">
                 <div class="w-3/5 rounded-xl overflow-hidden shadow-md relative">

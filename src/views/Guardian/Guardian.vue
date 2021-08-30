@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader></eHeader>
         <div class="px-5 relative py-5 h-screen overflow-y-scroll pb-40" :class="darkMode?`bg-youtube text-gray-300`:``">
             <div v-if="loadingGuardian" class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_os relative -top-10">

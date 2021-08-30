@@ -270,7 +270,7 @@ export default {
     lastWatchVideo() {
       let last_watch = {
         mark: this.vid.currentTime,
-        duration: this.vid.duration
+        duration: Math.round(this.vid.duration)
       };
 
       this.$emit("lastWatchVideo", last_watch);

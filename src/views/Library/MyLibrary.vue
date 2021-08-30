@@ -1,6 +1,5 @@
 <template>
     <div> 
-        <eHeader></eHeader>
         <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo" @shopNow="shopNow" :is_favorite="true"></ViewBook>
         <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
         <LibraryAudio v-if="showAudio"></LibraryAudio>

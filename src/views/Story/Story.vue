@@ -13,7 +13,7 @@
             </div>
             <div class="list mt-5 relative" :class="darkMode?`text-gray-300`:``">
                 <div class="absolute -right-3  h-full flex items-center justify-center z-50 text-white">
-                    <div class="bg-secondary w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-button" :title="$t('see_all_story')" v-if="seeMore" @click="listOfStory">
+                    <div class="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-button" :title="$t('see_all_story')" @click="listOfStory" :class="darkMode?`bg-button`:`bg-secondary`">
                         <ArrowRight :size="16" fill="#F3F4F6"></ArrowRight>
                     </div>
                 </div>

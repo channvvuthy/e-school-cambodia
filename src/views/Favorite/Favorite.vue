@@ -1,6 +1,5 @@
 <template>
     <div>
-       <eHeader :title="title"></eHeader>
        <div class="mt-3">
            <div class="px-5 pt-7 shadow-md text-sm" :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
                 <!-- Tab -->
@@ -27,12 +26,14 @@
            <div v-if="loading">
                <Loading></Loading>
            </div>
+           
            <div v-else class="h-screen pb-72 overflow-y-scroll" @scroll="onScroll">
-                <div v-if="favoritedVideo.length == 0" class="h-screen pb-10" style="display:block;">
-                    <Empty></Empty>
-                </div>
+               
                <!-- Video -->
                 <template v-if="type === `video`">
+                     <div v-if="favoritedVideo.length == 0" class="h-screen pb-10" style="display:block;">
+                        <Empty></Empty>
+                    </div>
                     <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
                             <div v-for="(view,index) in favoritedVideo" class="cursor-pointer rounded overflow-hidden" :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
                             <div class="relative" @mouseover="hideAndShowDuration(view._id)" @mouseleave="hideAndShowDuration('')" @click="viewVideo(view)">
@@ -71,6 +72,9 @@
                 </template>
                 <!-- Book -->
                 <template v-else>
+                    <div v-if="favoritedBook.length == 0" class="h-screen pb-10" style="display:block;">
+                        <Empty></Empty>
+                    </div>
                     <div class="grid gap-4" :class="isHide?'md:grid-cols-3 2xl:grid-cols-4':'md:grid-cols-2 2xl:grid-cols-3'">
                         <div v-for="(book, index) in favoritedBook" :key="index">
                             <div class="flex rounded-xl shadow p-4 relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">

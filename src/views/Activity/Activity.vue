@@ -1,8 +1,5 @@
 <template>
     <div>
-         <div>
-             <eHeader></eHeader>
-         </div>
         <div class="h-screen pb-40 overflow-y-scroll">
             <div class="flex items-center my-5 px-5 h-32 text-sm" :class="darkMode?`bg-secondary text-white`:`bg-white`">
             <button class="flex flex-col items-center justify-center h-12  mr-5  focus:outline-none text-center " @click="filterSummary('this_month')">

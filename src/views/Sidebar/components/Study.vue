@@ -49,18 +49,6 @@
                         {{$t('1110')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center" @click="goTo('network')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `network`?`bg-byline`:`bg-button`}`:`${$route.name === `network`?`bg-primary`:`bg-gray-100`} shadow-md`">
-                        <div>
-                            <NetworkIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `network`"></NetworkIcon>
-                            <NetworkIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></NetworkIcon>
-                        </div>
-                    </div>
-                    <div class="text-xs whitespace-nowrap mt-3">
-                        {{$t('4120')}}
-                    </div>
-                </div>
-               
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('document')">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `document` || $route.name === `document-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `document`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>

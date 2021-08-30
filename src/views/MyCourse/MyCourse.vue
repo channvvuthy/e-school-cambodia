@@ -1,6 +1,5 @@
 <template>
     <div class="my-course font-siemreap">
-        <eHeader></eHeader>
         <div class="px-5 mt-5 h-screen overflow-y-scroll pb-40" @scroll="onScroll">
             <div v-if="loadingCourse " class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_os relative -top-32">

@@ -13,9 +13,11 @@
                     </template>
                 </div>
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
-                    <div v-if="$route.name === 'video'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
-                    <div v-else><WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon></div>
-                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video')">
+                    <div v-if="$route.name === 'video' || $route.name === 'video-detail'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
+                    <div v-else>
+                        <WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon>
+                    </div>
+                    <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video' || $route.name === 'video-detail')">
                         {{$t('2108')}}
                     </p>
                     <template v-if="$route.name === 'video'">

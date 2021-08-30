@@ -125,7 +125,9 @@ export default {
     lastWatchVideo(event) {
       if(this.token != null){
         event.id = this.id;
-        this.stopWatch(event);        
+        this.stopWatch(event).then(()=>{
+          this.$store.commit("home/stopWatch", event)
+        });        
       }
     },
     cutString(text, limit){
@@ -176,6 +178,8 @@ export default {
 
       if(video.vdo.last_watch){
           this.$store.commit('playVideo/setLastWatched',video.vdo.last_watch.mark)
+      }else{
+        this.$store.commit('playVideo/setLastWatched',0)
       }
 
       this.$store.commit("playVideo/getVideoUrl", video.vdo.video);

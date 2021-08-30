@@ -1,6 +1,5 @@
 <template>
     <div>
-        <VideoHeader :isExam="showExam" @exit="exit"></VideoHeader>
         <BuyMsg @cancelModal="cancelModal" @yes="yes" v-if="showBuy"></BuyMsg>
         <ModalPhoto v-if="showModalPhoto" :imgUrl="imgUrl" @cancel="cancel" @send="send($event)"></ModalPhoto>
         <Cart v-if="showCart" @closeCart="closeCart" @showInvoice="(data) =>{ this.showCart = false; this.showReceipt = true;this.receiptDetail = data}"></Cart>
@@ -14,7 +13,7 @@
                         <source src=""/>
                     </video>
                 </div>
-                <div class="rounded-b-lg shadow pb-2 flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `"
+                <div class="rounded-b-md shadow pb-2 flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `"
                      v-else>
                     <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)"></VideoPlaylist>
                     <div class="mx-5 mt-6">
@@ -406,7 +405,7 @@
             window.addEventListener('resize', this.handleResize);
 
             this.handleResize();
-            if(this.window.width <= 1315){
+            if(this.window.width <= 1440){
                 this.$store.commit('setting/toggleSidebar', true)
             }
             this.loading = true

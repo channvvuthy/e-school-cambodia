@@ -1,8 +1,5 @@
 <template>
     <div>
-        
-        <eHeader :title="'1113'"></eHeader>
-       
         <!-- Popup -->
         <div class="fixed w-full h-full top-0 left-0 z-50 bg-black bg-opacity-95 p-5 overflow-y-scroll flex items-center justify-center" v-if="previewStory">
             <div class="md:w-96 2xl:w-100 text-gray-300 bg-secondary rounded-lg flex flex-col justify-between relative" style="height:90%;">

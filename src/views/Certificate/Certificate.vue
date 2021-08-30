@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader :title="`1114`"></eHeader>
         <div class="h-screen pb-40 overflow-y-scroll p-5">
             <div v-if="loading">
                 <loading></loading>

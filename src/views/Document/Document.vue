@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader :title="`1112`"></eHeader>
         <div :class="darkMode?`bg-youtube text-gray-300 mt-5 px-5 `:`mt-5 px-5 `" class="h-screen pb-80 overflow-y-scroll" @scroll="onScroll">
             <div class="w-1/2">
                 <div class="relative">

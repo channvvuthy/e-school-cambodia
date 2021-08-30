@@ -14,6 +14,16 @@ export default {
         selectedFilterName: "all"
     },
     mutations: {
+        stopWatch(state, payload){
+            payload.percentage = Math.round((payload.mark*100)/payload.duration)
+            state.list.filter(item => {
+                if(item.type == 'vdo'){
+                    if(payload.id == item.vdo._id){
+                        item.vdo.last_watch = payload
+                    }
+                }
+            })
+        },
         removeFavorite(state, payload) {
             let updateList = state.list.filter(item => {
                 if(item.type==='vdo'){

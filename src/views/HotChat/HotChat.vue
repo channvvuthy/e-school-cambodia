@@ -1,6 +1,5 @@
 <template>
     <div class="h-screen">
-        <eHeader :title="`1128`"></eHeader>
         <div :class="darkMode?`bg-youtube text-gray-300`:`bg-img-primary`" class="rounded-xl bg-repeat m-5 h-full flex flex-col">
             <div class="flex items-center px-5 py-3 rounded-t-xl e-shadow" :class="darkMode?`bg-secondary`:`bg-white`">
                 <div class="rounded-full h-16 w-16 bg-gray-300 bg-cover bg-no-repeat" 

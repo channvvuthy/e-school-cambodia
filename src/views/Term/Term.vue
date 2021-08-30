@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader></eHeader>
         <div class="py-5 px-3 text-sm " :class="darkMode?`bg-youtube text-gray-400`:`bg-gray-50 border-t`">
             <div v-if="loadingTerm " class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_os relative -top-10">

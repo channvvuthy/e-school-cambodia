@@ -56,16 +56,12 @@
         },
         methods: {
             hideMenu(){
-                if(this.$route.name === 'video-detail' || this.$route.name === 'library-video' || this.$route.name === 'my-library' 
-                || this.$route.name === 'policy' || this.$route.name === 'invoice' || this.$route.name === 'my-course'
-                || this.$route.name === 'parent' || this.$route.name === 'insurance' || this.$route.name === 'profile'
-                || this.$route.name === 'certificate' || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
-                || this.$route.name === 'document' || this.$route.name === 'document-detail' || this.$route.name === 'gallery'
-                || this.$route.name === 'network' || this.$route.name === 'download-detail' || this.$route.name === 'activity'
-                || this.$route.name === 'watch-video' || this.$route.name === 'activity-detail' || this.$route.name === 'attendant'
-                || this.$route.name === 'relative' || this.$route.name === 'hot-chat'
-                || this.$route.name === 'read-book' || this.$route.name === 'watch-detail' || this.$route.name === 'read-book-detail'
-                || this.$route.name === 'favorite' || this.$route.name === 'about' || this.$route.name === 'help'){
+                if(this.$route.name === 'library-video' 
+                || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
+                || this.$route.name === 'document-detail'
+                || this.$route.name === 'network' || this.$route.name === 'download-detail'
+                || this.$route.name === 'activity-detail' || this.$route.name === 'attendant'
+                || this.$route.name === 'watch-detail' || this.$route.name === 'read-book-detail'){
                     return true
                 }
                 return false

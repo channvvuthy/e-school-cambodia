@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader></eHeader>
         <div class="px-5 h-screen py-5 overflow-y-scroll pb-40" :class="darkMode?`bg-youtube text-gray-300`:``" @scroll="onScroll">
             <div v-if="receipts && receipts.length<=0" class="flex justify-center h-screen">
                  <Empty></Empty>

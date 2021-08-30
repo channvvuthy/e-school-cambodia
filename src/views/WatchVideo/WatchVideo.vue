@@ -1,8 +1,5 @@
 <template>
     <div>
-        <div class="mb-5">
-            <eHeader :user="course.user"></eHeader>
-        </div>
         <div class="overflow-y-scroll pb-40 h-screen"  @scroll="onScroll">
             <div>
                 <BoxFilter @enableUserScroll="enableUserScroll($event)" @closeFilter="closeFilter($event)" :filter_id="filter_id" @filterSearch="filterSearch($event)"></BoxFilter>

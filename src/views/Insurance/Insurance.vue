@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader></eHeader>
         <div class="h-screen flex" :class="darkMode?`text-gray-400 ${insuranceStatus === 0?`justify-center items-center flex-col`:``}`:`${insuranceStatus === 0?`justify-center items-center flex-col`:``}`">
             <div v-if="checkingInsurance"  class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_siemreap relative -top-10">

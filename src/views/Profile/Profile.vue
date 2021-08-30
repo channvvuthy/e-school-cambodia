@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader></eHeader>
         <!-- View -->
         <div></div>
         <!-- End View -->

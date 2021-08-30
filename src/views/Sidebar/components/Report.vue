@@ -6,7 +6,7 @@
         </div>
         <div class="px-3 mt-7">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
-                <div class="text-center flex flex-col justify-center items-center z-50" @click="goTo('activity')">
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('activity')">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `activity` || $route.name === `activity-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `activity` || $route.name === `activity-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <ActivityIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `activity` || $route.name === `activity-detail`"></ActivityIcon>
@@ -18,7 +18,7 @@
                         {{$t('summary')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center z-50" @click="goTo('watch-video')" >
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('watch-video')" >
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <WatchVideoIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
@@ -30,7 +30,7 @@
                         {{$t('1117')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center z-50" @click="goTo('read-book')" >
+                <div class="text-center flex flex-col justify-center items-center" @click="goTo('read-book')" >
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `read-book`?`bg-byline`:`bg-button`}`:`${$route.name === `read-book`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <BookIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `read-book`"></BookIcon>
@@ -42,19 +42,6 @@
                         {{$t('1118')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center" @click="goTo('attendant')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `attendant`?`bg-byline`:`bg-button`}`:`${$route.name === `attendant`?`bg-primary`:`bg-gray-100`} shadow-md`">
-                        <div>
-                            <QuizIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `attendant`"></QuizIcon>
-                            <QuizIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></QuizIcon>
-                        </div>
-
-                    </div>
-                    <div class="text-xs whitespace-nowrap mt-3">
-                        {{$t('attendant')}}
-                    </div>
-                </div>
-
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('relative')">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `relative`?`bg-byline`:`bg-button`}`:`${$route.name === `relative`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>

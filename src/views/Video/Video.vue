@@ -21,21 +21,21 @@
                             <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
                                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                                 <div class="text-sm font-semibold mt-3">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
-                                <div class="flex items-end w-full justify-between mt-3 text-center text-sm">
+                                <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
                                     <div class="cursor-pointer">
-                                        <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
+                                        <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></YoutubeIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                             {{ video.total_video?video.total_video: 0}}
                                         </div>
                                     </div>
                                     <div class="cursor-pointer">
-                                        <PdfIcon :fill="darkMode?`#909090`:`#000000`"></PdfIcon>
+                                        <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></PdfIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                             {{ video.total_pdf?video.total_pdf:0 }}
                                     </div>
                                     </div>
                                     <div class="cursor-pointer">
-                                        <ChatIcon :fill="darkMode?`#909090`:`#000000`"></ChatIcon>
+                                        <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></ChatIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_support?$t('1008'):$t('1009') }}
                                         </div>   
