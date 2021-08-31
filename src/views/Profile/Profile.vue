@@ -1,33 +1,30 @@
 <template>
-    <div>
-        <!-- View -->
-        <div></div>
-        <!-- End View -->
+    <div class="h-screen">
         <!-- Edit -->
-        <div v-if="!showEdit" class="h-screen overflow-y-scroll m-5 pb-40" :class="darkMode?`text-gray-300`:``">
+        <div class="overflow-y-scroll m-5 pb-10 rounded-lg p-5 w-3/4" :class="darkMode?`text-gray-300`:`bg-white e-shadow`">
            <div class="flex items-center ">
-               <div class="w-20 h-20 rounded-full bg-primary bg-cover" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
-               <div class="font-semibold ml-10">
+               <div class="w-20 h-20 rounded-full bg-primary bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+               <div class="font-semibold ml-5">
                    <div class="text-lg">{{stProfile.first_name + ' ' + stProfile.last_name}}</div>
-                   <div class="text-sm text-gray-400 mt-2">+855{{stProfile.phone}}</div>
+                   <div class="text-xs" :class="darkMode?`text-white`:`text-black`">(+855) {{stProfile.phone}}</div>
                </div>
 
            </div>
-           <div class="w-1/2 mt-10">
+           <div class="mt-10">
                 <!-- Name -->
                 <div class="grid grid-cols-2 gap-5">
                     <div>
                         <label>
                             <div>{{$t('2013')}}</div>
                             <div class="h-2"></div>
-                            <input type="text" ref="first_name" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.first_name" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `">
+                            <input type="text" ref="first_name" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.first_name" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" @keypress="enableUpdate">
                         </label>
                     </div>
                     <div>
                         <label>
                             <div>{{$t('2014')}}</div>
                             <div class="h-2"></div>
-                            <input type="text" ref="last_name" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.last_name" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `">
+                            <input type="text" ref="last_name" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.last_name" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" @keypress="enableUpdate">
                         </label>
                     </div>
                 </div>
@@ -38,14 +35,14 @@
                         <label>
                             <div>{{$t('2009')}}</div>
                             <div class="h-2"></div>
-                            <input type="text" ref="phone" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.phone" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `">
+                            <input type="text" ref="phone" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.phone" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" @keypress="enableUpdate">
                         </label>
                     </div>
                     <div>
                         <label>
                             <div>{{$t('date_of_birth')}}</div>
                             <div class="h-2"></div>
-                            <input type="date" ref="dob" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.date_of_birth" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `">
+                            <input type="date" ref="dob" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.date_of_birth" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" @change="enableUpdate">
 
                         </label>
                     </div>
@@ -59,7 +56,7 @@
                             <div>{{$t('gender')}}</div>
                             <div class="h-2"></div>
 
-                            <select class="w-full border h-10 rounded-md focus:outline-none" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" ref="gender" v-model="stProfile.gender">
+                            <select class="w-full border h-10 rounded-md focus:outline-none" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" ref="gender" v-model="stProfile.gender" @change="enableUpdate">
                                 <option value="F" :selected="stProfile.gender === `F`">{{$t('2016')}}</option>
                                 <option value="M" :selected="stProfile.gender === `M`">{{$t('2015')}}</option>
                             </select>
@@ -73,32 +70,43 @@
                         <label>
                             <div>{{$t('2124')}}</div>
                             <div class="h-2"></div>
-                            <select class="w-full border h-10 rounded-md focus:outline-none"  @change="onChange($event)" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" v-model="stProfile.province">
-                                <option v-if="(stProfile.province && stProfile.province.name)" :value="stProfile.province">{{stProfile.school.name}}</option>
-                                <option v-for="(province, index) in provinces" :key="index" :value="province" :selected="(stProfile.province && stProfile.province._id) && stProfile.province._id === province._id">{{province.name}}</option>
+                            <select class="w-full border h-10 rounded-md focus:outline-none" id="provinces" @change="onChange($event)" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `">
+                                <option v-for="(province, index) in provinces" :key="index" :selected="defaultSelectedProvince(province)" :value="province._id">
+                                    {{ province.name }}
+                                </option>
                             </select>
                         </label>
                     </div>
-                    <div class="relative">
-
+                    <div class="relative w-full">
+                        <div class="absolute right-14 top-6 z-50">
+                            <div class="loader" v-if="loadingSchool"></div>
+                        </div>
                         <label>
                             <div>{{$t('2123')}}</div>
                             <div class="h-2"></div>
-                            <select class="w-full border h-10 rounded-md  focus:outline-none" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" v-model="stProfile.school">
-                                <option v-for="(school, index) in schools" :key="index" :value="school">{{school.name}}</option>
-                            </select>
+                            <div class="border cursor-pointer rounded w-full h-10 relative flex items-center pl-2 text-sm" :class="darkMode?`bg-secondary border-button`:`bg-softGray border border-gray-300`" @click="() => {this.showSchool = !this.showSchool}">
+                                {{ school.name }}
+                                <div class="absolute right-2 top-6" style="margin-top:-4px;">
+                                    <ExpendIcon :size="9" :fill="darkMode?`#fff`:`#000`"></ExpendIcon>
+                                </div>
+                                <div class="absolute right-2 top-3 transform rotate-180">
+                                    <ExpendIcon :size="9" :fill="darkMode?`#fff`:`#000`"></ExpendIcon>
+                                </div>
+                            </div>
                         </label>
-                        <div class="absolute bottom-10 left-0 items-center w-full flex items-center justify-center" v-if="showSchool">
-                            <div class="loader"></div>
-                        </div>
+                        <ul class="w-full border mt-1 rounded overflow-y-scroll h-full absolute  left-0 z-50" :class="darkMode?`border-button bg-secondary `:`bg-softGray`" v-if="showSchool && schools.length">
+                            <li v-for="(school,index) in schools" :key="index" class="h-10 px-3 flex items-center justify-start cursor-pointer" @click="takeSchool(school)">
+                                {{ school.name }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
 
-                <div class="flex justify-center items-center mt-10">
-                    <button class="h-11 rounded-lg bg-primary focus:outline-none px-20 text-white relative" @click="updateProfile">
+                <div class="flex justify-end items-center mt-10">
+                    <button class="h-12 rounded-lg bg-primary focus:outline-none px-20 text-white relative" @click="updateProfile" :disabled="(noUpdate || updating)" :class="(noUpdate || updating)?`bg-opacity-60`:``">
                        
-                        <div class="flex items-center justify-center w-full absolute top-0 left-0" v-if="loading">
+                        <div class="flex items-center justify-center w-full absolute -top-1 left-0" v-if="updating">
                             <div class="loader"></div>
                         </div>
                          <span v-else>{{$t('save_change')}}</span>
@@ -107,46 +115,7 @@
            </div>
         </div>
         <!-- End edit -->
-        <div v-else>
-            <div class="flex mt-5 px-5">
-                <div class="w-3/5 rounded-xl overflow-hidden shadow-md relative">
-                    <div class="h-full w-full absolute top-0 left-0 flex flex-col items-center justify-center">
-                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover" :style="{backgroundImage:`url(${relative.photo})`}"></div>
-                    </div>
-                    <div class="w-full bg-red-100 bg-cover h-40" style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;">
-                    
-                    </div>
-                    <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
-                            {{relative.name}}
-                        </div>
-                        <div class="text-center" v-if="relative.grade">
-                            {{relative.grade}}
-                        </div>
-                    </div>
-                </div>
-                <div class="grid grid-cols-3 gap-3 ml-5 w-full">
-                    <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3">
-                            <div>
-                                {{$t('location')}}
-                            </div>
-                            <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
-                            </div>
-                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
-                                <div class="mt-8">
-                                    <SchoolIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></SchoolIcon>
-                                </div>
-                                <div class="mt-2">
-                                    <!-- {{relative.province}} -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                 </div>
-            </div>
-        </div>
+       
     </div>
 </template>
 
@@ -167,6 +136,7 @@
     import School from "./components/School"
     import eHeader from "./../Video/components/Header.vue"
     import helper from "./../../helper/helper"
+    import ExpendIcon from "./components/ExpendIcon.vue"
 
 
     export default{
@@ -184,7 +154,8 @@
             School,
             eHeader,
             SchoolIcon,
-            ChevronIcon
+            ChevronIcon,
+            ExpendIcon
         },
         data(){
             return {
@@ -192,10 +163,18 @@
                 err: false,
                 errMessage: null,
                 loading: false,
+                noUpdate: true,
                 showProvince: false,
                 showSchool: false,
-                province:{},
-                showEdit: false
+                province:{
+                    _id:"",
+                    name:"",
+                },
+                school:{
+                    _id: "",
+                    name:"",
+                },
+                updating: false,
             }
         },
         computed: {
@@ -216,6 +195,12 @@
 
             changePhoto(){
                 this.$refs.image.click()
+            },
+            defaultSelectedProvince(province){
+                if(this.stProfile.province != undefined && this.stProfile.province._id != undefined){
+                    return province._id == this.stProfile.province._id
+                }
+                return false
             },
 
             showAllProvince(){
@@ -243,19 +228,28 @@
                     this.$refs.dob.focus()
                     return
                 }
+                if(this.school._id == ""){
+                      helper.errorMessage("4118")
+                    return;
+                }
 
-                this.loading = true
+                this.updating = true
+                this.stProfile.province = this.province
+                this.stProfile.school = this.school
                 this.changeProfile(this.stProfile).then(() => {
-                    this.loading = false
+                    this.updating = false
                     helper.success("account_updated")
                     this.getStudentProfile(this.stProfile)
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
                 }).catch(() => {
                     this.err = true
                     this.errMessage = "ការកែប្រែពត៍មានត្រូវបានបរាជ័យ"
-                    this.loading = false
+                    this.updating = false
                 })
 
+            },
+            filterSchool(event){
+               
             },
             closeMessage()
             {
@@ -265,19 +259,34 @@
             changeGender(gender){
                 this.stProfile.gender = gender
             },
-            selectProvince(province)
-            {
-                this.getSchool(province._id).then(() => {
-                    this.showProvince = false
-                    this.stProfile.province = province
-                })
-            }
-            ,
-            onChange() {
-                this.showSchool = true
-                this.getSchool(this.stProfile.province._id).then(() => {
-                    this.showSchool = false
-                
+            enableUpdate(){
+                this.noUpdate = false
+                if(this.province.name == ""){
+                    this.province = this.stProfile.province
+                }
+            },
+            takeSchool(school){
+                this.noUpdate = false
+                if(this.province.name == ""){
+                    this.province = this.stProfile.province
+                }
+                this.school = school
+                this.showSchool = false
+            },
+            onChange(e) {
+                this.noUpdate = false
+                this.showSchool = false
+                try{
+                    let name = e.target.options[e.target.options.selectedIndex].text
+                    let province = {
+                        _id: e.target.value,
+                        name: name
+                    }
+                    this.province = province
+                }catch(errr){}
+                this.getSchool(e.target.value).then(()=>{
+                    this.school.name = ""
+                    this.school._id = ""
                 })
             },
             showAllSchool()
@@ -286,18 +295,7 @@
                     return false
                 }
                 this.showSchool = true
-            }
-            ,
-
-            selectSchool(school)
-            {
-
-                this.showSchool = false
-                this.stProfile.school = school
-
-            }
-            ,
-
+            },
             onFileChange(e)
             {
                 const file = e.target.files[0];
@@ -315,9 +313,21 @@
                 }).catch(() => {})
             }
         },
-
         created(){
-            this.getProvinces()
+            this.getProvinces().then(()=>{
+                if(this.stProfile.province)
+                    this.getSchool(this.stProfile.province._id).then((response) =>{
+                        if(response.msg == undefined){
+                            for(let index = 0; index < response.data.length; index++){
+                                if(this.stProfile.school._id == response.data[index]._id){
+                                    this.school = response.data[index]
+                                }
+                            }
+                        }else{
+                            helper.errorMessage(response.msg)
+                        }
+                    })
+            })
         }
     }
 </script>

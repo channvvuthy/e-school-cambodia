@@ -52,10 +52,11 @@ export  default {
                 commit("gettingProvince", true)
                 return new Promise((resolve, reject) => {
                     axios.get(config.apiUrl + 'province').then(response => {
+                        resolve(response)
                         commit("gettingProvince", false)
                         commit("getAllProvince", response.data.data)
                         localStorage.setItem('provinces', JSON.stringify(response.data.data))
-                        resolve(response.data)
+                       
                     }).catch(err => {
                         commit("gettingProvince", false)
                         reject(err)

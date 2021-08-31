@@ -72,8 +72,24 @@
                 <!--End ads-->
             </div>
         </div>
+        <!-- End -->
         <template v-if="list.length <= 0">
             <Empty></Empty>
+        </template>
+        <!-- Load more button -->
+        <template v-else>
+          <div class="h-5"></div>
+          <div class="text-xs text-center" :class="darkMode?`text-gray-300`:``">{{$t('scrolling_problem')}}</div>
+          <div class="flex items-center justify-center mt-2">
+              <button class="focus:outline-none text-xs rounded-full px-2 py-1" :class="darkMode?`bg-pass text-white`:`bg-primary text-white`" @click="loadMore">
+                  <div class="flex items-center justify-center">
+                      <div class="px-14 py-1" v-if="loading">
+                          <div class="loader relative -top-6"></div>
+                      </div> 
+                      <span v-else>{{$t('load_more')}} </span>
+                  </div>
+              </button>
+          </div>
         </template>
         <div v-if="showAds">
             <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)"></VideoADS>
@@ -109,6 +125,7 @@ export default {
       videoUrl: "",
       id: "",
       showMsg: false,
+      loading: false,
       msg: "2006"
     };
   },
@@ -121,7 +138,9 @@ export default {
   methods: {
     ...mapActions("playVideo", ["stopWatch", "playVideo"]),
     ...mapActions('favorite', ['add','removeFavorite']),
-
+    loadMore(){
+      this.$emit("loadMore")
+    },
     lastWatchVideo(event) {
       if(this.token != null){
         event.id = this.id;

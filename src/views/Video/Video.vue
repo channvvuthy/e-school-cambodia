@@ -22,31 +22,31 @@
                                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                                 <div class="text-sm font-semibold mt-3">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
                                 <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
-                                    <div class="cursor-pointer">
+                                    <div class="cursor-pointer" :title="$t('2108')">
                                         <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></YoutubeIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                             {{ video.total_video?video.total_video: 0}}
                                         </div>
                                     </div>
-                                    <div class="cursor-pointer">
+                                    <div class="cursor-pointer" :title="$t('pdf')">
                                         <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></PdfIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                             {{ video.total_pdf?video.total_pdf:0 }}
                                     </div>
                                     </div>
-                                    <div class="cursor-pointer">
+                                    <div class="cursor-pointer" :title="$t('support')">
                                         <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></ChatIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_support?$t('1008'):$t('1009') }}
                                         </div>   
                                     </div>
-                                    <div class="cursor-pointer">
+                                    <div class="cursor-pointer" :title="$t('2111')">
                                         <TestIcon :fill="darkMode?`#909090`:`#000000`"></TestIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_quiz?$t('1008'):$t('1009') }}
                                         </div>
                                     </div>
-                                    <div class="cursor-pointer">
+                                    <div class="cursor-pointer" :title="$t('1114')">
                                         <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_certificate?$t('1008'):$t('1009') }}

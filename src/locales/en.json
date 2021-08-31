@@ -142,6 +142,7 @@
   "4110": "This lesson do not have quiz",
   "4111": "Congratulations!!! Free trial has been approved",
   "4112": "Coupon is required",
+  "4132":"Please select a province",
   "4113": "Please set your province to continue",
   "4114": "You already use this coupon code",
   "4115": "Your number not allow to use this coupon",
@@ -343,6 +344,8 @@
   "please_enter_your_info": "Please enter your information",
   "messenger":"Messenger",
   "telegram":"Telegram",
-  "video":"Video"
+  "video":"Video",
+  "pdf":"Pdf",
+  "support":"Support"
 
 }

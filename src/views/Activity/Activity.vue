@@ -49,7 +49,7 @@
                 <BorderBottom :class="darkMode?`bg-fb relative top-3`:`bg-primary relative top-3`" v-if="active === `this_year`"></BorderBottom>
             </button>
             </div>
-            <div class="m-5 rounded-xl shadow-lg w-3/4 py-10" :class="darkMode?`bg-secondary`:`bg-white`">
+            <div class="m-5 rounded-lg e-shadow w-3/4 py-10" :class="darkMode?`bg-secondary`:`bg-white`">
                 <div v-if="loading" class="px-5">
                     <Loading></Loading>
                 </div>

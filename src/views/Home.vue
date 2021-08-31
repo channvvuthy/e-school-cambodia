@@ -7,7 +7,7 @@
             <Signin></Signin>
         </template>
         <FilterList @filterSearch="filterSearch"></FilterList>
-        <VideoList></VideoList>
+        <VideoList @loadMore="loadMore"></VideoList>
     </div>
 </template>
 
@@ -19,6 +19,7 @@
     import Story from "./Story/Story.vue"
     import {mapActions, mapState} from "vuex"
     import Signin from "./Component/Signin.vue"
+    import helper from "./../helper/helper"
 
     export default {
         name: 'Home',
@@ -40,7 +41,19 @@
         },
         methods: {
             ...mapActions('home', ['getList', 'getListPagination']),
-
+            loadMore(){
+                this.$store.commit('setting/setPagination', this.page + 1)
+                this.getListPagination({
+                    filter_id: this.filter_id,
+                    s: this.s,
+                    p: this.page
+                }).then(response =>{
+                    if(response.data.data.list !=undefined && response.data.data.list.length <= 0){
+                        helper.success('no_more_result')
+                    }
+                })
+                
+            },
             onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
                 if (scrollTop + clientHeight >= scrollHeight) {
                     if(this.enableScroll){
@@ -50,10 +63,10 @@
                             s: this.s,
                             p: this.page
                         }).then(response =>{
-                           if(response.data.msg == undefined){
+                            if(response.data.data.list != undefined && response.data.data.list.length <= 0){
                                 this.enableScroll = false
                                 this.$store.commit('setting/setPagination', 1)
-                           } 
+                            }
                         })
                     }
                 }

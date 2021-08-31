@@ -262,7 +262,7 @@
                 }
 
                 this.register(this.studentInfo).then(response => {
-                    if (response.status === 1) {
+                    if (response.msg != undefined) {
                         helper.errorMessage(response.msg)
                         return false
                     } else {
