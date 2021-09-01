@@ -127,7 +127,7 @@
                     <div v-if="relatives.length == 0" class="h-screen items-center pb-40">
                         <Empty></Empty>
                     </div>
-                    <div class="grid md:grid-cols-2 2xl:grid-cols-3">
+                    <div class="grid md:grid-cols-2 2xl:grid-cols-3 gap-5">
                         <div v-for="(relative, index) in relatives" :key="index" :class="darkMode?`bg-secondary`:`bg-white`" class="rounded-xl e-shadow p-5 flex items-center cursor-pointer" @click="relativeDetail(relative)">
                             <div class="w-24 h-24 rounded-full bg-gray-300 bg-cover" :style="{backgroundImage:`url(${relative.photo})`}"></div>
                             <div class="h-24 w-1 border-l mx-3 border-dashed" :class="darkMode?`border-button`:`border-gray-400`">

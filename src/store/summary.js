@@ -5,6 +5,7 @@ import helper from "../helper/helper"
 export default {
     namespaced: true,
     state: {
+        active: "this_month",
         summaries: {
             watch_video: 0,
         },
@@ -15,6 +16,9 @@ export default {
         attendant:[]
     },
     mutations: {
+        setActive(state, payload){
+            state.active = payload
+        },
         getCourse(state, payload){
             state.course = payload
         },

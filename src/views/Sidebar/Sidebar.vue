@@ -21,7 +21,7 @@
                     <img src="/icon/Menu/menu-rotate.png" class="h-5">
                 </template>
             </div>
-            <div class="profile bg-primary px-10 py-8 flex items-end text-white justify-between">
+            <div class="profile bg-primary px-10 py-8 flex items-center text-white justify-center">
                 <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
                     <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                          :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}" @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}" @click="() => {token?this.$refs.photo.click():``}">
@@ -39,13 +39,13 @@
                     </div>
 
                 </div>
-                <template>
+                <!-- <template>
                     <div class="h-5 border border-white border-t-0 border-b-0 border-r-0 border-opacity-30"></div>
                     <div class="flex flex-col justify-center items-center text-center">
                         <img src="/icon/Menu/point.png" class="h-8">
                         <div class="mt-3" :class="localize==='en'?'text-base':'text-sm'">100 {{$t('2020')}}</div>
                     </div>
-                </template>
+                </template> -->
             </div>
             <div class="px-5 py-3 overflow-y-scroll h-screen pb-40">
                 <template v-if="token">

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <eHeader :title="`1112`"></eHeader>
+        <eHeader :lable="$t('1112') + ' / ' + title"></eHeader>
         <div :class="darkMode?`bg-youtube text-gray-300 mt-5 px-5 `:`mt-5 px-5 `" class="h-screen pb-80 overflow-y-scroll" @scroll="onScroll">
             <div class="w-1/2">
                 <div class="relative">
@@ -23,7 +23,8 @@
                         <div class="p-8 rounded-xl inline-block cursor-pointer" :class="darkMode?`bg-button`:`bg-softGray`" @click="previewFile(document)">
                             <FolderIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 1"></FolderIcon>
                             <PdfIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 2"></PdfIcon>
-                            <ImageIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 3"></ImageIcon>
+                            <!-- <ImageIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 3"></ImageIcon> -->
+                            <img :src="document.url" v-if="document.type === 3" class="h-20 rounded">
                         </div>
                         <div class="font-semibold text-lg mt-5" :class="darkMode?`text-gray-300`:`text-primary`" :title="document.name">
                             {{cutString(document.name, 25)}}
@@ -78,7 +79,7 @@
         <Directroy v-if="showDirectory" @closeDirectory="closeDirectory"></Directroy>
         <!-- Preview Image -->
         <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="showPreview">
-            <div class="w-96 rounded-xl flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
+            <div class="w-96 rounded-lg flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
                 <div class="py-4 px-5 relative">
                     {{$t('preview')}}
                     <div class="absolute right-2 top-3 cursor-pointer" @click="() => {this.showPreview = false}">
@@ -101,7 +102,7 @@
                 </div>
                 <div class="h-5"></div>
                 <div class="flex justify-end px-5">
-                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="createImage" :disabled="loading">
+                    <button class="bg-primary h-11 text-white w-40 rounded mb-5 focus:outline-none relative" @click="createImage" :disabled="loading">
                         <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="loading">
                             <div class="loader"></div>
                         </div>
@@ -215,7 +216,8 @@
                 s:"",
                 page: 1,
                 enableScroll:true,
-                loadingDoc: false
+                loadingDoc: false,
+                title: "",
                 
             }
         },
@@ -396,6 +398,7 @@
             })
         },
         created(){
+            this.title = this.$route.params.name
             this.user_id = this.stProfile._id
         }
     }

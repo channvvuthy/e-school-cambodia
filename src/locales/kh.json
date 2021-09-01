@@ -347,6 +347,9 @@
   "telegram":"តេលេក្រាម",
   "video":"វីដេអូ",
   "pdf":"Pdf",
-  "support":"ការគាំទ្រ"
-
+  "support":"ការគាំទ្រ",
+  "there_is_no_graph_to_display":"មិនមានក្រាហ្វដើម្បីបង្ហាញទេ",
+  "read_book_summary":"សង្ខេបការអានសៀវភៅ",
+  "video_summary":"ការមើលវីដេអូសង្ខេប",
+  "quiz_summary":"សង្ខេបការធ្វើតេស"
 }

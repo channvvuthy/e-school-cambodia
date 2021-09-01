@@ -19,6 +19,13 @@ export default {
     },
 
     mutations:{
+        lastMessage(state, payload){
+            state.contacts.filter(item =>{
+                if(item._id == payload.room_id){
+                    item.last = payload.last
+                }
+            })
+        },
         getAdminContact(state, payload){
             state.admin = payload
         },
@@ -34,7 +41,8 @@ export default {
             state.mentions = payload
         },
         broadcastMessage(state, payload){
-            state.messages.push(payload)
+            if(state.messages[state.messages.length - 1]._id != payload._id)
+                state.messages.push(payload)
         },
         selectedAdminContact(state, payload){
             if(state.admin.length){

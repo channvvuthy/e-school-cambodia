@@ -19,7 +19,8 @@
                         <div class="p-8 rounded-xl inline-block cursor-pointer" :class="darkMode?`bg-button`:`bg-softGray`" @click="previewFile(document)">
                             <FolderIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 1"></FolderIcon>
                             <PdfIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 2"></PdfIcon>
-                            <ImageIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 3"></ImageIcon>
+                            <!-- <ImageIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 3"></ImageIcon> -->
+                            <img :src="document.url" v-if="document.type === 3" class="h-20 rounded">
                         </div>
                         <div class="font-semibold text-lg mt-5" :class="darkMode?`text-gray-300`:`text-primary`" :title="document.name">
                             {{cutString(document.name, 25)}}
@@ -349,7 +350,7 @@
                     return;
                 }
                 if(file.type === 1){
-                    this.$router.push({name:'document-detail', params:{folder: file._id}})
+                    this.$router.push({name:'document-detail', params:{folder: file._id, name:file.name}})
 
                 }
             },

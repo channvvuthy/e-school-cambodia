@@ -346,6 +346,10 @@
   "telegram":"Telegram",
   "video":"Video",
   "pdf":"Pdf",
-  "support":"Support"
+  "support":"Support",
+  "there_is_no_graph_to_display":"There is no graph to display",
+  "read_book_summary":"Book reading summary",
+  "video_summary":"Watching video summary",
+  "quiz_summary":"Quiz summary"
 
 }

@@ -143,7 +143,6 @@ export default {
     },
     data(){
         return{
-            type: 'pdf',
             filter_id: null,
             minHeight: 0,
             page: 1,
@@ -160,7 +159,7 @@ export default {
     computed:{
         ...mapState('setting', ['darkMode','isHide']),
         ...mapState('cart', ['carts']),
-        ...mapState('library', ['loading', 'libraries','showList', 'details'])
+        ...mapState('library', ['loading', 'libraries','showList', 'details','type'])
     },
     methods:{
         ...mapActions('library', ['getLibrary','getLibraryPagination','getLibraryDetail', 'getMyPackage']),
@@ -192,9 +191,8 @@ export default {
         },
 
         changeType(type){
-            
             this.showAudio = false
-            this.type = type
+            this.$store.commit("library/setType", type)
             let filter = {
                 type: this.type
             }

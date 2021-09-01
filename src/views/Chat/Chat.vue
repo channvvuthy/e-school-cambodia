@@ -500,7 +500,7 @@ export default {
     sockets: {
         connect: function () {
             console.log('socket connected')
-        },
+        }
     },
     components:{
         SearchIcon,
@@ -760,19 +760,20 @@ export default {
         onSelectFile(event){
             this.isPreview = true
             var input = event.target;
-                this.file = event.target.files[0] 
-                if(this.getExtension(this.file.name) === "pdf"){
-                    this.type = 2
-                }else{
-                    this.type = 1
-                }
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.imgUrl = e.target.result
+            this.file = event.target.files[0] 
+                if(this.file && this.file.name != undefined)
+                    if(this.getExtension(this.file.name) === "pdf"){
+                        this.type = 2
+                    }else{
+                        this.type = 1
                     }
-                    reader.readAsDataURL(input.files[0]);
-                }
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.imgUrl = e.target.result
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
         },
         cutString(text, limit){
             return helper.cutString(text, limit)
@@ -787,7 +788,6 @@ export default {
             })
         },
         selectedChat(chat){
-            console.log(chat)
         },
         disconnect(){
             let form = new FormData()
@@ -814,7 +814,6 @@ export default {
         selectedContact(contact, index){
             this.active = index
             this.contact = contact
-            
             this.sockets.unsubscribe(`message_${this.contact._id}`);
             this.$store.commit("etalk/selectedContact",contact)
             this.enableScroll = true
@@ -1014,6 +1013,7 @@ export default {
                 this.replyContact = ""
                 this.isPreview = false
                 this.scrollToBottom()
+                
             })
             
         },
@@ -1050,10 +1050,11 @@ export default {
             this.audioUrl = ""
         },
         lisentMessage(){
-            this.sockets.unsubscribe(`message_${this.contact._id}`);
-            this.sockets.subscribe(`message_${this.contact._id}`, (data) => {
+            
+            this.sockets.subscribe(`message_${this.contact._id}`, function(data){
+                this.$store.commit('etalk/lastMessage', data)
                 if(this.contact._id === data.room_id){
-                    if(data.sender !== undefined && data.sender._id !== this.auth){
+                    if(data.sender._id !== this.auth){
                         if(!this.contact.is_mute){
                             this.paySound()
                         }
@@ -1061,8 +1062,7 @@ export default {
                         this.scrollToBottom()
                     }
                 }
-            });
-            
+            })
         },
         paySound(){
             document.getElementById("message-sound").play()

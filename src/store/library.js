@@ -4,6 +4,7 @@ import helper from "./../helper/helper"
 export default {
     namespaced: true,
     state: {
+       type:"pdf",
        libraries:{},
        loading: false,
        showList: false,
@@ -13,6 +14,9 @@ export default {
        readingPdf: ''
     },
     mutations: {
+        setType(state, payload){
+            state.type = payload
+        },
         getPackageDetail(state, payload){
             state.libraries.list = payload.list
             state.libraries.filter = payload.filter

@@ -1,7 +1,7 @@
 <template>
     <div class="h-screen">
         <!-- Edit -->
-        <div class="overflow-y-scroll m-5 pb-10 rounded-lg p-5 w-3/4" :class="darkMode?`text-gray-300`:`bg-white e-shadow`">
+        <div class="overflow-y-scroll m-5 rounded-lg p-5 w-3/4" :class="darkMode?`text-gray-300`:`bg-white e-shadow`">
            <div class="flex items-center ">
                <div class="w-20 h-20 rounded-full bg-primary bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                <div class="font-semibold ml-5">
@@ -30,12 +30,12 @@
                 </div>
 
                 <!-- Phone-->
-                <div class="grid grid-cols-2 gap-5 mt-10">
+                <div class="grid grid-cols-2 gap-5 mt-6">
                     <div>
                         <label>
                             <div>{{$t('2009')}}</div>
                             <div class="h-2"></div>
-                            <input type="text" ref="phone" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.phone" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" @keypress="enableUpdate">
+                            <input type="text" ref="phone" class="border focus:outline-none h-10 rounded-md w-full pl-2" v-model="stProfile.phone" :class="darkMode?`bg-secondary border-button`:`bg-softGray border-gray-300 `" @keypress="enableUpdate" disabled>
                         </label>
                     </div>
                     <div>
@@ -50,7 +50,7 @@
 
 
                 <!-- Gender-->
-                <div class="grid grid-cols-1 gap-5 mt-10">
+                <div class="grid grid-cols-1 gap-5 mt-6">
                     <div>
                         <label>
                             <div>{{$t('gender')}}</div>
@@ -65,7 +65,7 @@
                 </div>
 
                 <!-- Province -->
-                <div class="grid grid-cols-2 gap-5 mt-10">
+                <div class="grid grid-cols-2 gap-5 mt-6">
                     <div>
                         <label>
                             <div>{{$t('2124')}}</div>
@@ -103,8 +103,8 @@
                 </div>
 
 
-                <div class="flex justify-end items-center mt-10">
-                    <button class="h-12 rounded-lg bg-primary focus:outline-none px-20 text-white relative" @click="updateProfile" :disabled="(noUpdate || updating)" :class="(noUpdate || updating)?`bg-opacity-60`:``">
+                <div class="flex justify-end items-center mt-6 mb-2">
+                    <button class="h-12 rounded-md bg-primary focus:outline-none px-20 text-white relative" @click="updateProfile" :disabled="(noUpdate || updating)" :class="(noUpdate || updating)?`bg-opacity-60`:``">
                        
                         <div class="flex items-center justify-center w-full absolute -top-1 left-0" v-if="updating">
                             <div class="loader"></div>

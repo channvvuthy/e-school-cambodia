@@ -54,12 +54,12 @@
                     <Loading></Loading>
                 </div>
                 <div class="text-center" v-else>
-                    <div class="font-bold text-3xl" :class="darkMode?`text-white`:`text-primary`">
+                    <div class="font-bold text-xl" :class="darkMode?`text-white`:`text-primary`">
                         {{$t('study_graph')}}
                     </div>
                     <div class="flex w-2/3 m-auto mt-10">
                         <div class="grid grid-cols-3 gap-10 w-full text-lg text-white">
-                            <div style="background-color:#f7b616" class="rounded-xl py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',1,active)">
+                            <div style="background-color:#f7b616" class="rounded-md py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',1,active)">
                                 <div class="text-5xl font-black mb-5">
                                     {{summaries.watch_video}}
                                 </div>
@@ -67,7 +67,7 @@
                                     {{$t('1117')}}
                                 </div>
                             </div>
-                            <div style="background-color:#bfca33" class="rounded-xl py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',2,active)">
+                            <div style="background-color:#bfca33" class="rounded-md py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',2,active)">
                                 <div class="text-5xl font-black mb-5">
                                     {{summaries.read_book}}
                                 </div>
@@ -75,7 +75,7 @@
                                     {{$t('1118')}}
                                 </div>
                             </div>
-                            <div style="background-color:#189faf" class="rounded-xl py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',3,active)">
+                            <div style="background-color:#189faf" class="rounded-md py-7 shadow cursor-pointer" @click="summaryDetail('activity-detail',3,active)">
                                 <div class="text-5xl font-black mb-5">
                                     {{summaries.do_quiz}}
                                 </div>
@@ -99,6 +99,9 @@
                             </fusioncharts>
                         </div>
                     </div>
+                    <div v-else class="text-base mt-14" :class="darkMode?`text-white`:``">
+                        {{ $t('there_is_no_graph_to_display') }}
+                    </div>
         
                 </div>
             </div>     
@@ -110,11 +113,7 @@ import eHeader from "./components/eHeader.vue"
 import {mapState,mapActions} from "vuex"
 import CalendarIcon from "./../../components/CalendarIcon.vue"
 import BorderBottom from "./../../components/BorderBottom.vue"
-// import Vue from "vue"
-// import VueApexCharts from 'vue-apexcharts'
-// Vue.use(VueApexCharts)
 import Loading from "./../../components/Loading.vue"
-// Include Dependencies
 import Vue from 'vue';
 import VueFusionCharts from 'vue-fusioncharts';
 import FusionCharts from 'fusioncharts';
@@ -133,11 +132,10 @@ export default {
     computed:{
         ...mapState('setting', ['darkMode']),
         ...mapState('auth', ['stProfile']),
-        ...mapState('summary', ['summaries'])
+        ...mapState('summary', ['summaries','active'])
     },
     data(){
         return{
-            active: "this_month",
             loading:false,
             type: "doughnut2d",
             width: "50%",
@@ -175,7 +173,7 @@ export default {
     methods:{
         ...mapActions('summary', ['getSummary']), 
         filterSummary(filter){
-            this.active = filter
+            this.$store.commit("summary/setActive", filter)
             let payload = {}
             payload.id = this.$route.params.user_id
             payload.filter = filter
@@ -225,7 +223,7 @@ export default {
     created(){
         this.loading = true
         this.getSummary({
-            filter:"this_month",
+            filter:this.active,
             id: this.$route.params.user_id
         }).then(response => {
            

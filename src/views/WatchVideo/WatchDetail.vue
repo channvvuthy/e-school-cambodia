@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="mb-5">
-            <eHeader></eHeader>
+        <div>
+            <eHeader :user="courseDetail.user"></eHeader>
         </div>
         <div class="overflow-y-scroll pb-40 h-screen">
             <div class="px-5 mt-5">
@@ -10,10 +10,10 @@
                 </div>
                 <div class="flex justify-between" v-else>
                     <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl shadow-md px-10 py-20 w-2/5 flex flex-col">
-                        <div class="font-bold text-3xl mb-10" :class="darkMode?`text-white`:`text-primary`">
+                        <div class="font-bold text-xl mb-10 text-center" :class="darkMode?`text-white`:`text-primary`">
                             {{$t('study_graph')}}
                         </div>
-                        <div class="progressVideoDetail">
+                        <div class="progressVideoDetail flex items-center justify-center">
                             <div>
                                 <div class="relative z-50 relative flex justify-between" style="top:170px;">
                                     <div class="text-xs -ml-1" :class="darkMode?`text-gray-400`:`text-gray-500`">0%</div>
@@ -68,14 +68,12 @@ export default {
             page: 1 ,
             enableScroll: true,
             filter_id: "",
-            s: ""
+            s: "",
+
         }
     },
     methods:{
         ...mapActions('summary', ['getCourseDetail']),
-        enableUserScroll(){
-
-        }
     },
     created(){
         let payload = {}

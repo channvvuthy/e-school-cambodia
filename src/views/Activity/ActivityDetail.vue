@@ -1,15 +1,18 @@
 <template>
     <div class="text-sm" :class="darkMode?`text-gray-400`:``">
         <div>
-             <eHeader :title="`study_graph`"></eHeader>
+             <eHeader :title="title"></eHeader>
         </div>
        <div class="mt-5 px-5 h-screen pb-40 overflow-y-scroll" @scroll="onScroll">
            <div v-if="loading">
                <loading></loading>
            </div>
            <div v-else>
-                <div v-for="(summary, index) in summariesDetail" :key="index" class="mb-5 max-w-screen-lg rounded-xl shadow-md" :class="darkMode?`bg-secondary`:`bg-white`">
-                    <div class="rounded-t-xl h-14 flex items-center justify-start pl-5 text-base" :class="darkMode?`bg-primary text-white`:`bg-dadada`">
+               <div v-if="summariesDetail.length == 0" class="h-screen items-center pb-40">
+                    <Empty></Empty>
+                </div>
+                <div v-for="(summary, index) in summariesDetail" :key="index" class="mb-5 max-w-screen-lg rounded-lg shadow-md" :class="darkMode?`bg-secondary`:`bg-white`">
+                    <div class="rounded-t-lg h-14 flex items-center justify-start pl-5 text-base" :class="darkMode?`bg-primary text-white`:`bg-dadada`">
                         {{formatDate(summary.date)}}
                     </div>
                     <!-- List -->
@@ -31,7 +34,7 @@
                                 </template>
                                 <template v-if="$route.params.type == 2">
                                     <div class="rounded-full h-14 w-14 flex items-center justify-center" style="background-color:#bfca33">
-                                       <!-- <BookIcon></BookIcon> -->
+                                       <BookIcon></BookIcon>
                                     </div>
                                     <div class="ml-5 text-lg">
                                         {{$t('read_book')}} {{summary.count}} {{$t('time')}}
@@ -47,7 +50,7 @@
                                 </template>
                             </div>
                             <div v-for="(list, key) in summary.list" :key="key" class="flex justify-start items-center py-5">
-                                <div class="w-40" :class="darkMode?``:`text-primary`">
+                                <div class="w-32" :class="darkMode?``:`text-primary`">
                                     <div class="flex items-center">
                                         <div class="mr-2"><ClockIcon :size="20" :fill="darkMode?`#909090`:`#0f3c7a`"></ClockIcon></div>
                                         <div>{{formatTime(list.time)}}</div>
@@ -72,6 +75,7 @@ import TestIcon from "./components/TestIcon.vue"
 import moment from "moment"
 import Loading from "./../../components/Loading.vue"
 import BookIcon from "./components/BookIcon.vue"
+import Empty from "./../Component/Empty.vue"
 
 export default {
     components:{
@@ -80,12 +84,14 @@ export default {
         YoutubeIcon,
         Loading,
         BookIcon,
-        TestIcon
+        TestIcon,
+        Empty
     },
     data(){
         return{
             enableScroll: true,
             page: 1,
+            title: "",
         }
     },
     computed:{
@@ -131,6 +137,15 @@ export default {
     },
     created(){
         this.getReportDetail()
+        if(this.$route.params.type == 1){
+            this.title = 'video_summary'
+        }
+        if(this.$route.params.type == 2){
+            this.title = 'read_book_summary'
+        }
+        if(this.$route.params.type == 3){
+            this.title = 'quiz_summary'
+        }
     }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="mb-5">
-            <eHeader></eHeader>
+            <eHeader :user="courseDetail.user"></eHeader>
         </div>
         <div class="overflow-y-scroll pb-40 h-screen">
             <div class="px-5 mt-5">
@@ -9,8 +9,8 @@
                     <Loading></Loading>
                 </div>
                 <div class="flex justify-between" v-else>
-                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl shadow-md px-10 py-20 w-2/5 flex flex-col">
-                        <div class="font-bold text-3xl mb-10" :class="darkMode?`text-white`:`text-primary`">
+                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl shadow-md px-10 text-center py-20 w-2/5 flex flex-col">
+                        <div class="font-bold text-xl mb-10" :class="darkMode?`text-white`:`text-primary`">
                             {{$t('study_graph')}}
                         </div>
                         <div class="progressBookDetail">
