@@ -62,7 +62,7 @@
                                     <div>
                                         {{contact.name}}
                                     </div>
-                                    <div v-if="contact.type===0" class="h-4 w-4 rounded-full ml-3 flex items-center justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
+                                    <div v-if="contact.type===0" class="notification rounded-full ml-3 flex items-center justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
                                        <span style="font-size:10px;">&#10003;</span>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
                                 <div class="flex justify-center" v-if="contact.unread">
-                                    <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
+                                    <div class="notification rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
                                 <div class="text-xs mt-1 whitespace-nowrap" :class="darkMode?`text-gray-500`:`text-gray-400`">
                                     {{contact.last == undefined?$t('unread') + ' ' + contact.unread:getDay(contact.last.date)}}
@@ -90,7 +90,7 @@
         <div :class="darkMode?`bg-youtube`:`bg-img-primary`" class="w-full">
             <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?``:`bg-black bg-opacity-10`">
                 <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
-                    <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="contact.type === 0?``:`cursor-pointer`">
+                    <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="(contact.type === 0 || this.contact.type === 1 )?``:`cursor-pointer`">
                         <div class="loading" v-if="settingImage"></div>
                     </div>
                     <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
@@ -594,7 +594,7 @@ export default {
     methods:{
         ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage', 
         'sendMessage','getMention','deleteMessage',
-        'getContacts','getMessage','deleteMember', 'blockUser', 'unblockUser']),
+        'getContacts','getMessage','deleteMember', 'blockUser', 'unblockUser','readMessage']),
         getDay(oldDate){
             if (helper.numDay(oldDate, moment().format()) === 0) {
                 return moment(oldDate).format('h:mm A')
@@ -831,6 +831,10 @@ export default {
             }).then(() => {
                 this.scrollToBottom()
                 this.lisentMessage()
+                this.readMessage({
+                    id: this.contact._id,
+                    type: this.contact.type
+                })
             })
             
         },
@@ -869,7 +873,7 @@ export default {
             })
         },
         contactPhoto(){
-             if(this.contact.type === 0){
+             if((this.contact.type === 0 || this.contact.type === 1 || this.contact.type === 10)){
                 return;
             }
             this.$refs.contactPhoto.click()
@@ -1050,7 +1054,6 @@ export default {
             this.audioUrl = ""
         },
         lisentMessage(){
-            
             this.sockets.subscribe(`message_${this.contact._id}`, function(data){
                 this.$store.commit('etalk/lastMessage', data)
                 if(this.contact._id === data.room_id){
@@ -1061,6 +1064,7 @@ export default {
                         this.$store.commit("etalk/broadcastMessage",data)
                         this.scrollToBottom()
                     }
+                    this.$store.commit('etalk/removeUread', this.contact._id)
                 }
             })
         },
@@ -1130,6 +1134,17 @@ export default {
                    this.$store.commit("etalk/removeMessage", this.messageId._id)
                }
             })
+        }
+    },
+    updated(){
+        if(this.contacts.length){
+            for(let i = 0; i < this.contacts.length; i++){
+                this.sockets.subscribe(`message_${this.contacts[i]._id}`, function(data){
+                    if(this.contacts[i]._id != this.contact._id){
+                        this.$store.commit('etalk/lastMessage', data)
+                    }
+                })
+            }
         }
     },
     created(){
@@ -1254,6 +1269,17 @@ export default {
     }
     textarea {
         resize: none;
+    }
+    .notification{
+        display: flex;
+        border-radius: 50%;
+        min-width: 20px;
+        min-height: 20px;
+        text-align: center;
+        line-height: 1;
+        box-sizing: content-box;
+        white-space: nowrap;
+        vertical-align: middle;
     }
 
 </style>

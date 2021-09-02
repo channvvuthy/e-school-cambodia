@@ -19,10 +19,21 @@ export default {
     },
 
     mutations:{
+        removeUread(state, payload){
+            return state.contacts.filter(item =>{
+                if(item._id===payload){
+                    item.unread = 0
+                }
+            })
+        },
         lastMessage(state, payload){
             state.contacts.filter(item =>{
                 if(item._id == payload.room_id){
+                    if(item.last.date != payload.last.date){
+                        item.unread++
+                    }
                     item.last = payload.last
+                    
                 }
             })
         },
@@ -42,7 +53,8 @@ export default {
         },
         broadcastMessage(state, payload){
             if(state.messages[state.messages.length - 1]._id != payload._id)
-                state.messages.push(payload)
+                if(state.messages[state.messages.length - 1].room_id ==  payload.room_id)
+                    state.messages.push(payload)
         },
         selectedAdminContact(state, payload){
             if(state.admin.length){
@@ -372,6 +384,15 @@ export default {
                     }
                     
                 }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        readMessage({commit}, payload){
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `/etalk/message/read?${helper.q(payload)}`).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
                     reject(err)
                 })
             })

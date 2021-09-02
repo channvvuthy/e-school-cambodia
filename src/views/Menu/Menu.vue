@@ -45,7 +45,7 @@
                             <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
                         </template>
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('support')">
+                    <!-- <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('support')">
                         <div v-if="$route.name === 'support'"><SupporterIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SupporterIcon></div>
                         <div v-else><SupporterIcon :fill="darkMode?`#909090`:`#0f3c7a`"></SupporterIcon></div>
                         <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'support')">
@@ -54,7 +54,7 @@
                         <template v-if="$route.name === 'support'">
                             <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
                         </template>
-                    </div>
+                    </div> -->
                 </template>
             </div>
             <div class="flex justify-end" v-if="token">

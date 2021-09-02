@@ -31,14 +31,17 @@
                         </div>
                     </div>
                 </div>
-                 <!-- Add friend -->
-                <AddFriend :friendNotInContact="friendNotInContact" v-if="active === `add_friend`"></AddFriend>
-                <!-- Friend -->
-                <Friend :friends="friends" v-if="active === `friend`"></Friend>
-                <!-- Request -->
-                <Request :request="myRequest" v-if="active === `your_request`" :s="s"></Request>
-                <!-- Rriend request -->
+                <template v-else>
+                    <!-- Add friend -->
+                    <AddFriend :friendNotInContact="friendNotInContact" v-if="active === `add_friend`"></AddFriend>
+                    <!-- Friend -->
+                    <Friend :friends="friends" v-if="active === `friend`"></Friend>
+                    <!-- Request -->
+                    <Request :request="myRequest" v-if="active === `your_request`" :s="s"></Request>
+                    <!-- Rriend request -->
                 <friendRequest  :friendRequest="friendRequest" v-if="active === `friend_request`"></friendRequest>
+
+                </template>
 
             </div>
         </div>
