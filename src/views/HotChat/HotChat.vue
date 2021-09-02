@@ -405,6 +405,7 @@ import MessageText from "./../Chat/components/Text.vue"
 import ImageReply from "./../Chat/components/ImageReply.vue"
 import ReplyIcon from "./../Chat/components/ReplyIcon.vue"
 import VoiceReply from "./../Chat/components/VoiceReply.vue"
+import PdfIcon from "./../../components/PdfIcon.vue"
 import TextReply from "./../Chat/components/TextReply.vue"
 import SendMessageIcon from "./../../components/SendMessageIcon.vue"
 import Reply from "./../Chat/components/Reply.vue"
@@ -446,6 +447,7 @@ export default {
         SinglePdf,
         MicIcon,
         VueRecord,
+        PdfIcon,
         ImageReply
     },
     data(){
@@ -637,6 +639,13 @@ export default {
         reply(){
             this.replyContact = this.replyId
             this.replyId = false
+        },
+        copyText() {
+            var copyText = document.getElementById("chat-text");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            helper.success("Copied")
         },
         copy(){
             this.replyId = false
