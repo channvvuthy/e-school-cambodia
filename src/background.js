@@ -128,7 +128,7 @@ async function createWindow() {
         minWidth: 1250,
         minHeight: 760,
         webPreferences: {
-            devTools: true,
+            // devTools: true,
             webSecurity: false,
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
         },
@@ -150,7 +150,7 @@ async function createWindow() {
         if (!process.env.IS_loadingScreen) win.webContents.openDevTools()
     } else {
 
-
+        win.webContents.openDevTools()
         createProtocol('app');
         // Load the index.html when not in development
         win.loadURL('app://./index.html')

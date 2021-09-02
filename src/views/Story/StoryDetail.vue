@@ -1,6 +1,6 @@
 <template>
     <div class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black">
-            <div class="md:w-96 2xl:w-100 h-85 rounded-xl bg-secondary flex flex-col justify-between text-gray-300 relative">
+            <div class="md:w-96 2xl:w-100 h-85 rounded-lg flex flex-col justify-between text-white relative" :style="{backgroundColor:`${backgroundColor}`,color:`${color}`}">
                 <!-- Profile -->
                 <div class="flex items-center left-3 justify-start p-4" v-if="storyDetail.user">
                     <div class="w-12 h-12 rounded-full bg-cover mr-3" :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>
@@ -25,20 +25,20 @@
                 </div>
                  <!-- Close -->
                 <div class="absolute right-3 top-4 cursor-pointer z-50" @click="closeStory">
-                    <close-icon fill="#ffffff"></close-icon>
+                    <close-icon :fill="color"></close-icon>
                 </div>
                 <div class="flex-1 flex items-center justify-center overflow-hidden" style="max-height:80%;">
-                     <img :src="storyDetail.photo.name" style="max-height:100%;"/>
+                     <img :src="storyDetail.photo.name" style="max-height:100%;" class="story-profile"/>
                 </div>
                 <div class="h-4"></div>
                 <!-- Viewer -->
                 <div class="cursor-pointer w-full flex justify-start px-3  items-end text-sm mb-2 relative z-50"
                     >
                     <div class="flex items-center mb-4" @click="showUserViewer(storyDetail._id)">
-                        <span><Eye fill="#ffffff"></Eye></span>
+                        <span><Eye :fill="color"></Eye></span>
                         <span class="px-1"> {{storyDetail.view}}</span>
                         <span class="pr-1">{{$t('1004')}}</span>
-                        <span><ChevronIcon fill="#ffffff" :size="18"></ChevronIcon></span>
+                        <span><ChevronIcon :fill="color" :size="18"></ChevronIcon></span>
                     </div>
                 </div>
                 <!-- End viewer -->
@@ -73,6 +73,8 @@ import CloseIcon from "./../../components/CloseIcon.vue";
 import ChevronIcon from "./../../components/ChevronIcon.vue";
 import Eye from "./../../components/Eye.vue";
 import VueMomentsAgo from "vue-moments-ago";
+import FastAverageColor from 'fast-average-color';
+const fac = new FastAverageColor();
 export default {
   components: {
     VueMomentsAgo,
@@ -87,7 +89,9 @@ export default {
           page: 1,
           id: "",
           next:true,
-          previous:true
+          previous:true,
+          backgroundColor:"",
+          color:"",
       }
   },
   computed: {
@@ -119,6 +123,7 @@ export default {
     },
 
     previousStory(){
+        this.averageColor()
         this.showViewer = false;
         let storyIndex = this.storyIndex - 1
         if(storyIndex <= 0){
@@ -135,7 +140,17 @@ export default {
         }
 
     },
+    averageColor(){
+        fac.getColorAsync(document.querySelector('.story-profile'))
+        .then(color => {
+            this.backgroundColor = color.rgba
+            this.color = color.isDark ? '#fff' : '#000';
+        }).catch(e => {
+            console.log(e);
+        });
+    },
     nextStory(){
+        this.averageColor()
         this.showViewer = false
         this.previous = true
         let storyIndex = this.storyIndex + 1
@@ -153,10 +168,14 @@ export default {
         
     }
   },
+  mounted(){
+      this.averageColor()
+  },
   created() {
       if(this.storyIndex <= 0){
           this.previous = false
       }
+      
   }
 };
 </script>

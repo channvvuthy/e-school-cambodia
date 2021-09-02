@@ -1,5 +1,10 @@
 <template>
     <div class="h-screen">
+        <input type="text" id="chat-text" class="absolute" v-model="chatText" style="z-index:-1"/>
+        <audio controls  id="message-sound" class="absolute" style="z-index:-1">
+            <source src="message.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
         <div :class="darkMode?`bg-youtube text-gray-300`:`bg-img-primary`" class="rounded-xl bg-repeat m-5 h-full flex flex-col">
             <div class="flex items-center px-5 py-3 rounded-t-xl e-shadow" :class="darkMode?`bg-secondary`:`bg-white`">
                 <div class="rounded-full h-16 w-16 bg-gray-300 bg-cover bg-no-repeat" 
@@ -63,10 +68,7 @@
                                 </div>
                                 <!-- Text message -->
                                 <template v-if="message.content.type === 1">
-                                    <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`" class="items-center relative">
-                                        <div class="sender h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0">
-                                            <div class="h-13 w-13"></div>
-                                        </div>
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center relative">
                                         <div class="flex items-center mr-5" v-if="auth === 0">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}}
@@ -85,15 +87,15 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                    <MessageText :message="message" :isMind="message.is_admin == 1"></MessageText>
+                                                    <MessageText :message="message" :isMind="message.sender._id == authId"></MessageText>
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                <MessageText :message="message" :isMind="message.is_admin == 1" :isAdmin="message.is_admin"></MessageText>
+                                                <MessageText :message="message" :isMind="message.sender._id == authId" :isAdmin="message.is_admin"></MessageText>
                                             </div>
                                             
                                         </div>
-                                        <div class="flex items-center ml-5" v-if="message.is_admin == 1">
+                                        <div class="flex items-center ml-5" v-if="message.sender._id == authId">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}}
                                             </div>
@@ -103,10 +105,10 @@
                                 <!-- End message text -->
                                 <!-- Photo -->
                                 <template v-if="message.content.type === 3">
-                                    <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"  class="items-center relative">
-                                        <div class="sender h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0"></div>
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative">
+                        
                                         <div>
-                                            <div class="flex items-center" v-if="message.is_admin == 1">
+                                            <div class="flex items-center" v-if="message.sender._id == authId">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}}
                                                 </div>
@@ -138,10 +140,9 @@
                                 <!-- End photo -->
                                 <!-- Pdf -->
                                 <template v-if="message.content.type === 2">
-                                    <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"  class="items-center relative mb-3">
-                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0"></div>
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative mb-3">
                                         <div>
-                                            <div class="flex items-center" v-if="message.is_admin == 1">
+                                            <div class="flex items-center" v-if="message.sender._id == authId">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
                                                     {{getDay(message.date)}}
                                                 </div>
@@ -186,10 +187,9 @@
                                 <!-- End pdf -->
                                 <!-- Audio -->
                                 <template v-if="message.content.type === 4">
-                                    <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"  class="items-center relative">
-                                        <div class="sender h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0"></div>
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative">
                                         <div>
-                                            <div class="flex items-center" v-if="message.is_admin == 1">
+                                            <div class="flex items-center" v-if="message.sender._id == authId">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
                                                     {{getDay(message.date)}}
                                                 </div>
@@ -285,7 +285,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex h-24 items-center mb-32 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`" style="position:relative;z-index:10">
+            <div class="flex h-24 items-center mb-36 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`" style="position:relative;z-index:10">
                 <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
                     <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                 </div>
@@ -473,6 +473,7 @@ export default {
     data(){
         return{
             auth: "",
+            authId:"",
             isInfo: false,
             loading: false,
             password: "",
@@ -490,6 +491,8 @@ export default {
             messanger:"https://www.facebook.com/eschoolcambodia",
             telegram:"https://t.me/eschool_community",
             video:"https://www.youtube.com/channel/UCXAVs_YRUwsnx5I-Toy-7Dg",
+            room_id: "",
+            chatText:"",
             message: {
                 id: "",
                 reply_id: "",
@@ -705,11 +708,13 @@ export default {
                 
             }
         },
+        paySound(){
+            document.getElementById("message-sound").play()
+        },
         lisentMessage(){
-            this.sockets.subscribe(`message_${this.stProfile._id}`, (data) => {
-                alert(1)
-                if(this.stProfile._id === data.room_id){
-                    if(data.sender !== undefined && data.sender._id !== this.stProfile._id){
+            this.sockets.subscribe(`message_${this.room_id}`, (data) => {
+                if(this.room_id === data.room_id){
+                    if(data.sender._id !== this.stProfile._id){
                         if(!this.contact.is_mute){
                             this.paySound()
                         }
@@ -746,19 +751,27 @@ export default {
                 if(message.sender._id == this.stProfile._id){
                     return this.$i18n.t('you')
                 }
-                return message.sender.name
+                return this.$i18n.t('admin')
             }
             return this.$i18n.t('unknown')
           
         },
         replyName(message){
-            if(message.is_admin == 0){
-                return this.$i18n.t('hime_self')
-            }else{
-                if(message.sender && message.sender._id == this.stProfile._id){
-                    return this.$i18n.t('yourself')
+            try{
+                if(message.reply.sender._id != this.authId){
+                    return this.$i18n.t('themselves')
+                }else{
+                    if(this.authId== message.sender._id){
+                        return this.$i18n.t('yourself')
+                    }
+                    if(message.reply.sender._id == this.authId){
+                        return this.$i18n.t('you')
+                    }
+                    return this.$i18n.t('themselves')
+                    
                 }
-                return this.$i18n.t('admin')
+            }catch(err){
+                return  this.$i18n.t('admin')
             }
         },
         showReply(message){
@@ -861,15 +874,17 @@ export default {
         }
     },
     mounted(){
-
         document.querySelector('.needsInitiation').click();
         if(this.auth){
+            this.authId = this.stProfile._id
             let payload = {
                 p: 1,
                 id: this.stProfile._id,
                 type: 0
             }
-            this.getMessage(payload).then(()=>{
+            this.getMessage(payload).then((response)=>{
+                this.room_id = response.data.data.room._id
+                this.lisentMessage()
                 this.scrollToBottom()
             })
         }else{
@@ -877,9 +892,6 @@ export default {
         }
     },
     created(){
-
-
-
 
         if(localStorage.getItem('token') != undefined && localStorage.getItem('token') != null){
             this.auth = localStorage.getItem('token')
