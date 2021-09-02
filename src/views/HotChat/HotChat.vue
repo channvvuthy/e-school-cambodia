@@ -68,12 +68,12 @@
                                 </div>
                                 <!-- Text message -->
                                 <template v-if="message.content.type === 1">
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center relative">
-                                        <div class="flex items-center mr-5" v-if="auth === 0">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
-                                                {{getDay(message.date)}}
-                                            </div>
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
+                                            {{getDay(message.date)}}
                                         </div>
+                                    </div>
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center relative">
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
@@ -87,17 +87,11 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                    <MessageText :message="message" :isMind="message.sender._id == authId"></MessageText>
+                                                    <MessageText :message="message" :isMind="message.sender._id != authId"></MessageText>
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                <MessageText :message="message" :isMind="message.sender._id == authId" :isAdmin="message.is_admin"></MessageText>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="flex items-center ml-5" v-if="message.sender._id == authId">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
-                                                {{getDay(message.date)}}
+                                                <MessageText :message="message" :isMind="message.sender._id == authId"></MessageText>
                                             </div>
                                         </div>
                                     </div>
@@ -105,14 +99,13 @@
                                 <!-- End message text -->
                                 <!-- Photo -->
                                 <template v-if="message.content.type === 3">
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
+                                            {{getDay(message.date)}}
+                                        </div>
+                                    </div>
                                     <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative">
-                        
                                         <div>
-                                            <div class="flex items-center" v-if="message.sender._id == authId">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
-                                                    {{getDay(message.date)}}
-                                                </div>
-                                            </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
@@ -129,24 +122,19 @@
                                                 <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
-                                            <div class="flex items-center" v-if="message.is_admin == 0">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
-                                                    {{getDay(message.date)}}
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </template>
                                 <!-- End photo -->
                                 <!-- Pdf -->
                                 <template v-if="message.content.type === 2">
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
+                                            {{getDay(message.date)}}
+                                        </div>
+                                    </div>
                                     <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative mb-3">
                                         <div>
-                                            <div class="flex items-center" v-if="message.sender._id == authId">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
-                                                    {{getDay(message.date)}}
-                                                </div>
-                                            </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
@@ -176,24 +164,19 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center" v-if="message.is_admin == 0">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap my-1">
-                                                    {{getDay(message.date)}}
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </template>
                                 <!-- End pdf -->
                                 <!-- Audio -->
                                 <template v-if="message.content.type === 4">
+                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
+                                            {{getDay(message.date)}}
+                                        </div>
+                                    </div>
                                     <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative">
                                         <div>
-                                            <div class="flex items-center" v-if="message.sender._id == authId">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
-                                                    {{getDay(message.date)}}
-                                                </div>
-                                            </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
@@ -213,11 +196,6 @@
                                                     Your browser does not support the <code>audio</code>
                                                     element.
                                                 </audio>
-                                            </div>
-                                            <div class="flex items-center" v-if="message.is_admin == 0">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap my-1">
-                                                    {{getDay(message.date)}}
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
