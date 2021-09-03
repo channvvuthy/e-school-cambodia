@@ -51,6 +51,7 @@
             </div>
         </div>
         <BuyMsg v-if="showMsg" :msg="$t(`no_audio`)" @yes="yes" @cancelModal="cancelModal"></BuyMsg>
+        <BuyMsg v-if="noFree" @yes="shopNow" @cancelModal="()=>{this.noFree = false}"></BuyMsg>
     </div>
 </template>
 <script>
@@ -74,7 +75,8 @@ export default {
     },
     data(){
         return{
-            showMsg: false
+            showMsg: false,
+            noFree: false,
         }
     },
     components:{
@@ -100,7 +102,13 @@ export default {
         },
         listenAudio(details){
             if(details.list.length){
-                this.$emit('listenAudio', details)
+                if(this.details.is_buy == 1 || this.details.list[0].free_wacth == 1){
+                    this.$emit('listenAudio', details)
+                }else{
+                    this.noFree = true
+                    return;
+                }
+                
             }else{
                 this.showMsg = true
             }
