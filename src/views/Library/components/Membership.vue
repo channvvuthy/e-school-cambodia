@@ -15,7 +15,7 @@
             </div>
             <vue-horizontal v-else :button="false">
                 <section v-for="(pk, index) in libraries.package" :key="index" class="mr-5">
-                    <div class="flex items-end rounded-xl h-44 w-80 bg-cover relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" :style="{backgroundImage:`url(${pk.thumbnail})`}">
+                    <div class="flex items-end rounded-xl h-44 w-80 bg-cover relative bg-center" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" :style="{backgroundImage:`url(${pk.thumbnail})`}">
                         <div class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer" @click="showConfirm(pk)"></div>
                         <div class="px-5 py-3 text-white relative z-50 w-full">
                             <div class="text-base">{{pk.title}}</div>
@@ -115,12 +115,6 @@ export default {
             this.showCart = false
         },
         showConfirm(pk){
-        //    if(pk.is_buy == 0){
-        //         this.showMsg = true
-        //         this.pk = pk
-        //    }else{
-        //        this.getDetail(pk)
-        //    }
              this.getDetail(pk)
         },
         getDetail(pk){

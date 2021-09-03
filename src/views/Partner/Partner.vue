@@ -196,6 +196,11 @@
         destroyed() {
             window.removeEventListener('resize', this.handleResize);
         },
+        updated(){
+            this.$nextTick(() => {
+                this.matchHeight()
+            })
+        },
         mounted(){
             this.$nextTick(() => {
                 this.matchHeight()

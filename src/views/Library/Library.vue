@@ -330,6 +330,9 @@ export default {
     created(){
         this.getLibraryBook()
     },
+    updated(){
+         this.matchHeight()
+    },
     watch:{
         'type':function(type){
             if(type ==='sound'){
