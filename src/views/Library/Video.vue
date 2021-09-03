@@ -179,14 +179,19 @@
                                 <img :src="list.thumbnail" class="rounded-md">
                                 <div class="absolute h-1 bg-red-600 bottom-0 left-0" v-if="list.last_watch"  :style="{width:`${list.last_watch.percentage}%`}"></div>
                             </div>
-                            <div class="flex flex-col justify-between py-2">
-                                <div>{{index + 1}}. {{list.title}}</div>
-                                <div class="flex items-center">
-                                    <div>
+                            <div class="flex flex-col justify-between py-2 w-full flex-1">
+                                <div>{{index + 1}}. {{cutString(list.title,40)}}</div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div>
                                         <Eye :fill="darkMode?`#000000`:`#000000`" v-if="order === index"></Eye>
                                         <Eye :fill="darkMode?`#D1D5DB`:`#000000`" v-else></Eye>
-                                    </div> 
-                                    <div class="ml-3">{{kFormatter(list.view)}} {{$t('1003')}}</div>
+                                        </div> 
+                                        <div class="ml-3">{{kFormatter(list.view)}} {{$t('1003')}}</div>
+                                    </div>
+                                    <template v-if="!canWatch(list)">
+                                        <LockIcon :width="20" :height="20" :fill="darkMode?`#fff`:`#000`"></LockIcon>
+                                    </template>
                                 </div>
                             </div>
                         </div>
@@ -194,6 +199,10 @@
                 </div>
             </div>
         </div>
+        <!-- Message -->
+        <BuyMsg v-if="isPayment" @cancelModal="() => {this.isPayment = false}" @yes="yes"></BuyMsg>
+        <Cart v-if="showCart" @closeCart="()=>{this.showCart = false}" @showInvoice="(data) =>{ this.showCart = false; this.showReceipt = true;this.receiptDetail = data}"></Cart>
+        <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
     </div>
 </template>
 <script>
@@ -209,7 +218,10 @@ import SoundIcon from "./../MyCourse/components/media/SoundIcon.vue";
 import MutedIcon from "./../MyCourse/components/media/MutedIcon.vue";
 import Eye from "./../../components/Eye.vue"
 import helper from "./../../helper/helper"
-
+import BuyMsg from "./../Component/BuyMsg.vue"
+import Cart from "./../Component/Cart.vue"
+import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
+import LockIcon from "./../../components/LockIcon.vue"
 export default {
     components:{
         VideoHeader,
@@ -221,7 +233,11 @@ export default {
         SettingIcon,
         SoundIcon,
         MutedIcon,
-        Eye
+        Eye,
+        BuyMsg,
+        Cart,
+        ReceiptInfo,
+        LockIcon
     },
     computed:{
         ...mapState('library', ['details']),
@@ -262,18 +278,28 @@ export default {
             showToolbar: false,
             defaultQuality: 360,
             lastWatch: 0,
+            isPayment: false,
+            course:{},
+            showCart: false,
+            showReceipt:false,
+            receiptDetail: {},
+
             
         }
         
     },
     methods:{
         ...mapActions('library', ['stopWatch']),
+        ...mapActions('cart', ['addCart', 'getCart']),
         kFormatter(num){
             return helper.kFormatter(num)
         },
         showQualityModal() {
             this.showQuality = true;
             this.showSetting = false;
+        },
+        cutString(text, limit){
+            return helper.cutString(text, limit)
         },
         backQuality() {
             this.showSetting = true;
@@ -334,11 +360,34 @@ export default {
                 this.vid.mozRequestFullScreen();
             }
         },
+        canWatch(videos){
+            if((this.details.is_buy == 1 ||  videos.free_watch == 1)){
+                return true
+            }
+            return false
+        },
+        yes(){
+            let payload = new FormData();
+            payload.append("id", this.course._id)
+            this.addCart(payload).then(() =>{
+                this.getCart().then(()=>{
+                    this.isPayment = false
+                    this.showCart = true
+                })
+            })
+        },
         nextVideo(videos, index){
+            if(!this.canWatch(videos)){
+                this.isPayment = true
+                this.course = videos.course
+                return;
+            }
             this.videos =  videos
             this.videoUrl = this.videos.video.filter(items => items.quality == `${this.defaultQuality}p`)[0]['url']
             this.order = index
             this.vid.src = this.videoUrl
+            
+                
         },
         playPause() {
             this.showSetting = false;
@@ -354,8 +403,11 @@ export default {
         endedVideo(){
             this.showPlay = false
             if(this.order < (this.details.list.length - 1)){
+                this.videos = this.details.list[this.order + 1]
+                if(!this.canWatch(this.videos)){
+                    return;
+                }
                 this.order ++
-                this.videos = this.details.list[this.order]
                 this.videoUrl = this.videos.video.filter(items => items.quality == `${this.defaultQuality}p`)[0]['url']
                 this.vid.src = this.videoUrl
                 if(this.videos.last_watch){

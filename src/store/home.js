@@ -6,6 +6,7 @@ export default {
     namespaced: true,
     state: {
         list: [],
+        ads:{},
         filter: [],
         homeLoading: false,
         paginationLoading: false,
@@ -60,6 +61,7 @@ export default {
             state.homeLoading = status
         },
         receiveList(state, payload) {
+            state.ads = payload.menu_ads
             state.list = payload.list
             state.filter = payload.filter
         }

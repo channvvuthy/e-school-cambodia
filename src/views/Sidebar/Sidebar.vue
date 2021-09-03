@@ -44,17 +44,25 @@
 
                 </div>
             </div>
-            <div class="px-5 py-3 overflow-y-scroll h-screen pb-40">
-                <template v-if="token">
-                    <Study></Study>
-                    <div class="h-10"></div>
-                    <Report></Report>
-                    <div class="h-10"></div>
-                    <Privacy></Privacy>
-                    <div class="h-10"></div>
-                </template>
-                <eSchool></eSchool>
-                <div class="h-10"></div>
+            <div class="py-3 overflow-y-scroll h-screen pb-40">
+                <div class="px-5">
+                    <template v-if="token">
+                        <Study></Study>
+                        <div class="h-10"></div>
+                        <Report></Report>
+                        <div class="h-10"></div>
+                        <Privacy></Privacy>
+                        <div class="h-10"></div>
+                    </template>
+                    <eSchool></eSchool>
+                    <div class="h-5"></div>
+                </div>
+                <div v-if="ads.banner" class="relative max-w-full">
+                    <div class="absolute right-2 top-2 ads z-50 bg-primary flex items-center justify-center w-8 h-6 text-white bg-opacity-70 rounded text-xs">
+                      Ads
+                    </div>
+                    <img :src="ads.banner" @click="openLink(ads.link)" class="cursor-pointer max-h-full"/>
+                </div>
             </div>
         </div>
     </div>
@@ -67,7 +75,7 @@
     import CameraIcon from "./../../components/CameraIcon.vue"
     import eSchool from "./components/eSchool.vue"
     import {mapActions, mapState} from "vuex"
-
+    const {ipcRenderer} = require('electron')
     export default{
         components: {
             BackIcon,
@@ -85,7 +93,8 @@
         },
         computed: {
             ...mapState('auth', ['token', 'stProfile']),
-            ...mapState('setting', ['localize','darkMode','isHide'])
+            ...mapState('setting', ['localize','darkMode','isHide']),
+            ...mapState('home', ['ads'])
         },
 
         methods: {
@@ -97,6 +106,9 @@
                     this.$store.commit('setting/toggleSidebar', true)
 
                 }
+            },
+            openLink(link){
+                ipcRenderer.send('openLink', link)
             },
             onSelectedPhoto(event){
                 if (event.target.value) {

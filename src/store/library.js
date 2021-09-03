@@ -94,24 +94,25 @@ export default {
             state.loadingDetail = payload
         },
         deleteCart(state, payload){
-            
-            if(state.libraries && state.libraries.list && libraries.list.length){
-                state.libraries.list = state.libraries.list.filter(item =>{
-                    if(item._id === payload){
-                        item.is_in_cart = 0
-                    }
-                    return item
-                })
-            }
-
-            if(state.libraries && state.libraries.package && state.libraries.package.length){
-                state.libraries.package = state.libraries.package.filter(item =>{
-                    if(item._id === payload){
-                        item.is_in_cart = 0
-                    }
-                    return item
-                })
-            }
+            try{
+                if(state.libraries && state.libraries.list && libraries.list.length){
+                    state.libraries.list = state.libraries.list.filter(item =>{
+                        if(item._id === payload){
+                            item.is_in_cart = 0
+                        }
+                        return item
+                    })
+                }
+    
+                if(state.libraries && state.libraries.package && state.libraries.package.length){
+                    state.libraries.package = state.libraries.package.filter(item =>{
+                        if(item._id === payload){
+                            item.is_in_cart = 0
+                        }
+                        return item
+                    })
+                }
+            }catch(err){}
         },
         addToCart(state, payload){
             try{

@@ -63,9 +63,13 @@
                             s: this.s,
                             p: this.page
                         }).then(response =>{
-                            if(response.data.data.list != undefined && response.data.data.list.length <= 0){
-                                this.enableScroll = false
-                                this.$store.commit('setting/setPagination', 1)
+                            try{
+                                if(response.data.data.list.length == 0){
+                                    this.enableScroll = false
+                                    this.$store.commit('setting/setPagination', 1)
+                                }
+                            }catch(err){
+
                             }
                         })
                     }
@@ -74,7 +78,6 @@
             filterSearch(list){
                 if(list.data.data.list.length != undefined){
                     if(list.data.data.list.length < 1){
-                        alert(1)
                     }
                 }
                 

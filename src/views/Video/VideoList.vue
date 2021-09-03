@@ -8,7 +8,7 @@
                 <!--Vdo-->
                 <div v-if="view.type ==='vdo'" @mouseover="hideAndShowDuration(view.vdo._id)"
                      @mouseleave="hideAndShowDuration('')">
-                    <div class="relative" @click="viewVideo(view)">
+                    <div class="relative" @click="viewVideo(view)" :title="view.vdo.title">
                         <div class="absolute z-30 w-full h-full flex justify-center items-center">
                             <video :src="playWhenOver(view.vdo.video)" autoplay="autoplay"
                                    class="flex justify-center items-center"
@@ -49,6 +49,9 @@
                 <div class="relative" v-if="view.type ==='ads'" @click="viewAds(view)"
                      @mouseover="hideAndShowDuration(view.ads._id)"
                      @mouseleave="hideAndShowDuration('')">
+                    <div class="absolute right-2 top-2 ads z-40 bg-primary flex items-center justify-center w-8 h-6 text-white bg-opacity-70 rounded text-xs">
+                      Ads
+                    </div>
                     <div class="absolute top-0 right-0 bg-white bg-opacity-50 p-1 text-sm">{{$t('1005')}}</div>
                     <div class="relative">
                         <div class="absolute z-30 w-full h-full flex justify-center items-center"

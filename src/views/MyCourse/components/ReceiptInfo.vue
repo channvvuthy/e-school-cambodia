@@ -26,7 +26,7 @@
                                     <li class="flex justify-between items-center my-2"
                                         v-for="(receipt, key) in receiptDetail.detail" :key="key">
                                         <div>- {{receipt.title}}</div>
-                                        <div class="text-gray-500">
+                                        <div class="text-placeholder">
                                             <span class="font-mono">${{parseFloat(receipt.amount)}}</span> {{duration(receipt.duration)}}
                                         </div>
                                     </li>

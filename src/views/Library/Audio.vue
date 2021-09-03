@@ -66,7 +66,7 @@
             <div class="w-2/5 rounded-2xl shadow px-3" :class="darkMode?`bg-secondary text-gray-300`:`bg-white `">
                 <div class="flex  py-7 flex justify-center items-center relative text-sm">
                     <div>{{details.book.title}}</div>
-                    <div class="absolute top-3 right-1 cursor-pointer" @click="()=>{this.showAudioList = false}"><CloseIcon :width="18" :fill="darkMode?`#ffffff`:`#000000`"></CloseIcon></div>
+                    <div class="absolute top-3 right-1 cursor-pointer" @click="()=>{this.showAudioList = false}"><CloseIcon :fill="darkMode?`#ffffff`:`#000000`"></CloseIcon></div>
                 </div>
                 <div class="max-h-96 overflow-y-scroll">
                     <div class="flex items-center justify-between py-4 px-5 cursor-pointer border-t" :class="darkMode?`border-button`:``" v-for="(ad, index) in details.list" :key="index" @click="selectingAudio(ad,index)">
@@ -76,8 +76,13 @@
                             </div>
                             <div class="ml-5">{{ad.title}}</div>
                         </div>
-                        <div class="h-5 w-5 rounded-full flex justify-center items-center" :class="order !== index?`border ${darkMode?``:`border-button`}`:``" >
-                            <div class="w-5 h-5 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`" v-if="order === index"></div>
+                        <div class="h-5 w-5 rounded-full flex justify-center items-center border" :class="order !== index?`border ${darkMode?``:`border-button`}`:``" >
+                            <div class="w-5 h-5 rounded-full flex items-center justify-center" v-if="!canWatch(ad)">
+                                <CloseIcon :width="15" :fill="darkMode?`#FFF`:`#000`"></CloseIcon>
+                            </div>
+                            <template v-else>
+                                <div class="w-5 h-5 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`" v-if="order === index"></div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -298,6 +303,9 @@ export default {
             }, 200);
         },
         selectingAudio(audio, order){
+            if(!this.canWatch(audio)){
+                return false;
+            }
             this.audioUrl = audio.filename
             this.audio.src = this.audioUrl
             this.defaultAudio = audio
@@ -309,6 +317,9 @@ export default {
             if(this.order < this.details.list.length - 1 ){
                 this.order++
                 let audio = this.details.list[this.order]
+                if(!this.canWatch(audio)){
+                    return false;
+                }
                 this.audioUrl = audio.filename
                 this.audio.src = this.audioUrl
                 this.defaultAudio = audio
@@ -319,6 +330,11 @@ export default {
             if(this.order > 0){
                 this.order--
                 let audio = this.details.list[this.order]
+
+                if(!this.canWatch(audio)){
+                    return false;
+                }
+
                 this.audioUrl = audio.filename
                 this.audio.src = this.audioUrl
                 this.defaultAudio = audio
@@ -333,8 +349,14 @@ export default {
         initialAudio(){
             this.defaultAudio = this.details.list[this.order]
             this.audioUrl = this.defaultAudio.filename
-            // this.audio.src = this.defaultAudio.filename
             this.mainTitle = this.details.book.title
+        },
+        canWatch(audio){
+            if((this.details.is_buy == 1 || audio.free_watch == 1)){
+                return true
+            }else{
+                return false
+            }
         }
     },
     mounted(){
