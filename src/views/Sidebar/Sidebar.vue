@@ -25,11 +25,15 @@
                 <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
                     <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                          :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}" @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}" @click="() => {token?this.$refs.photo.click():``}">
-                         <div class="absolute flex items-end pb-2 justify-center w-full h-full bg-gradient-to-t from-black rounded-full" v-if="isEdit"><CameraIcon fill="#fff"></CameraIcon></div>
-                         <div class="absolute w-full h-full rounded-full flex items-start justify-center bg-gradient-to-t from-black" v-if="loading">
-                             <div class="loader mt-3"></div>
-                         </div>
-                         <input type="file" ref="photo" class="hidden" @change="onSelectedPhoto">
+                         <template v-if="token">
+                             <div class="absolute flex items-end pb-2 justify-center w-full h-full bg-gradient-to-t from-black rounded-full" v-if="isEdit">
+                                <CameraIcon fill="#fff"></CameraIcon>
+                            </div>
+                            <div class="absolute w-full h-full rounded-full flex items-start justify-center bg-gradient-to-t from-black" v-if="loading">
+                                <div class="loader mt-3"></div>
+                            </div>
+                            <input type="file" ref="photo" class="hidden" @change="onSelectedPhoto">
+                         </template>
                     </div>
                     <div class="flex justify-between items-end mt-3  cursor-pointer"
                          :class="localize==='en'?'text-xs':'text-xs'">
@@ -39,13 +43,6 @@
                     </div>
 
                 </div>
-                <!-- <template>
-                    <div class="h-5 border border-white border-t-0 border-b-0 border-r-0 border-opacity-30"></div>
-                    <div class="flex flex-col justify-center items-center text-center">
-                        <img src="/icon/Menu/point.png" class="h-8">
-                        <div class="mt-3" :class="localize==='en'?'text-base':'text-sm'">100 {{$t('2020')}}</div>
-                    </div>
-                </template> -->
             </div>
             <div class="px-5 py-3 overflow-y-scroll h-screen pb-40">
                 <template v-if="token">

@@ -68,12 +68,12 @@
                                 </div>
                                 <!-- Text message -->
                                 <template v-if="message.content.type === 1">
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center mb-1">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center relative">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center">
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
@@ -87,11 +87,11 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                    <MessageText :message="message" :isMind="message.sender._id != authId"></MessageText>
+                                                    <MessageText :message="message" :isMind="message.is_admin"></MessageText>
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                <MessageText :message="message" :isMind="message.sender._id == authId"></MessageText>
+                                                <MessageText :message="message" :isMind="message.is_admin"></MessageText>
                                             </div>
                                         </div>
                                     </div>
@@ -99,12 +99,12 @@
                                 <!-- End message text -->
                                 <!-- Photo -->
                                 <template v-if="message.content.type === 3">
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`" class="items-center">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center mb-1">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center relative">
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
@@ -128,12 +128,12 @@
                                 <!-- End photo -->
                                 <!-- Pdf -->
                                 <template v-if="message.content.type === 2">
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative mb-3">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center relative mb-3">
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
@@ -170,12 +170,12 @@
                                 <!-- End pdf -->
                                 <!-- Audio -->
                                 <template v-if="message.content.type === 4">
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
-                                    <div :class="message.sender._id == authId?`flex justify-end`:`flex justify-start`"  class="items-center relative">
+                                    <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center relative">
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
@@ -277,23 +277,23 @@
                     <div class="cursor-pointer  rounded-full ml-5 mt-2">
                         <!-- <vue-record-audio @result="onResult" @stream="onStream"/> -->
                         <VueRecord class="record" @result="onResult">
-                        <div class="w-13 h-13 rounded-full flex items-center justify-center" :class="darkMode?`bg-youtube`:`bg-primary`">
-                            <mic-icon :size="28" :fill="darkMode?`#9CA3AF`:`#FFFFFF`"></mic-icon>
-                        </div>
-                        <template slot="isInitiating">
-                            Voice
-                        </template>
-                        <template slot="isRecording">
-                            <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
-                                <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`FFFFFF`"></mic-icon>
+                            <div class="w-13 h-13 rounded-full flex items-center justify-center" :class="darkMode?`bg-youtube`:`bg-primary`">
+                                <mic-icon :size="28" :fill="darkMode?`#9CA3AF`:`#FFFFFF`"></mic-icon>
                             </div>
-                        </template>
-                        <template slot="isCreating">
-                            <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
-                                <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
-                            </div>
-                        </template>
-                    </VueRecord>
+                            <template slot="isInitiating">
+                                Voice
+                            </template>
+                            <template slot="isRecording">
+                                <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                    <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`FFFFFF`"></mic-icon>
+                                </div>
+                            </template>
+                            <template slot="isCreating">
+                                <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                    <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                </div>
+                            </template>
+                        </VueRecord>
                     </div>
                 </div>
             </div>
@@ -352,7 +352,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center px-3">
-                    <img :src="imgUrl" v-if="type === 1" class="rounded-lg">
+                    <img :src="imgUrl" v-if="type === 1" class="rounded">
                     <div v-else class="flex items-center">
                         <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
                         <div class="ml-3 text-lg">{{this.file.name}}</div>
@@ -413,20 +413,17 @@ import {mapState,mapActions} from "vuex"
 import VueSocketIO from 'vue-socket.io'
 import helper from "./../../helper/helper"
 import config from "./../../config"
-// import VueRecord from '@codekraft-studio/vue-record'
 import DocumentIcon from "./../../components/DocumentIcon.vue"
 import EnlargeIcon from "./../../components/EnlargeIcon.vue"
 import moment from "moment"
 import getBlobDuration from 'get-blob-duration'
 import SinglePdf from "./../Component/SinglePdf.vue"
-import Recorder from 'recorder-js'
 import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./components/MicIcon.vue"
 const { ipcRenderer } = require('electron')
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
-// Vue.use(VueRecord)
 export default {
     components:{
         eHeader,
@@ -828,55 +825,26 @@ export default {
                 this.$router.push('chat')
             }
         },
-        startRecording(stop){
-        const audioContext =  new (window.AudioContext || window.webkitAudioContext)();
- 
-        const recorder = new Recorder(audioContext, {
-        // An array of 255 Numbers
-        // You can use this to visualize the audio stream
-        // If you use react, check out react-wave-stream
-        // onAnalysed: data => console.log(data),
-        });
-        
-        let isRecording = false;
-        let blob = null;
-        
-        navigator.mediaDevices.getUserMedia({audio: true})
-        .then(stream => { 
-            recorder.init(stream)
-            if(stop==0){
-                recorder.stop().then(({blob, buffer}) => {
-                console.log(blob)
-                console.log(buffer)
-            
-                // buffer is an AudioBuffer
-                })
-            }else{
-                recorder.start().then(() => isRecording = true);
-            }
-        }
-       
-        )
-        .catch(err => console.log('Uh oh... unable to get stream...', err));
-        }
     },
     mounted(){
         document.querySelector('.needsInitiation').click();
-        if(this.auth){
-            this.authId = this.stProfile._id
-            let payload = {
-                p: 1,
-                id: this.stProfile._id,
-                type: 0
+        try{
+            if(this.auth){
+                this.authId = this.stProfile._id
+                let payload = {
+                    p: 1,
+                    id: this.stProfile._id,
+                    type: 0
+                }
+                this.getMessage(payload).then((response)=>{
+                    this.room_id = response.data.data.room._id
+                    this.lisentMessage()
+                    this.scrollToBottom()
+                })
+            }else{
+                this.isInfo = true
             }
-            this.getMessage(payload).then((response)=>{
-                this.room_id = response.data.data.room._id
-                this.lisentMessage()
-                this.scrollToBottom()
-            })
-        }else{
-            this.isInfo = true
-        }
+        }catch(err){}
     },
     created(){
 

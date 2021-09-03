@@ -319,7 +319,25 @@
                             </textarea>
                             <div class="w-14 flex justify-end">
                                 <div class="cursor-pointer  rounded-full ml-5 mt-2" :class="busy?'opacity-30':''">
-                                    <vue-record-audio @result="onResult" @stream="onStream"/>
+                                    <!-- <vue-record-audio @result="onResult" @stream="onStream"/> -->
+                                    <VueRecord class="record" @result="onResult">
+                                        <div class="w-13 h-13 rounded-full flex items-center justify-center" :class="darkMode?`bg-youtube`:`bg-primary`">
+                                            <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                        </div>
+                                        <template slot="isInitiating">
+                                            Voice
+                                        </template>
+                                        <template slot="isRecording">
+                                            <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                                <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                            </div>
+                                        </template>
+                                        <template slot="isCreating">
+                                            <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                                <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                            </div>
+                                        </template>
+                                    </VueRecord>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +354,7 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center px-3">
-                    <img :src="imgUrl" v-if="type === 1" class="rounded-lg">
+                    <img :src="imgUrl" v-if="type === 1">
                     <div v-else class="flex items-center">
                         <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
                         <div class="ml-3 text-lg">{{this.file.name}}</div>
@@ -395,12 +413,14 @@ import config from "./../../config"
 import VoiceReply from "./components/VoiceReply.vue"
 import ImageIcon from "./components/LinkIcon.vue"
 import PdfIcon from "./../../components/PdfIcon.vue"
-import VueRecord from '@codekraft-studio/vue-record'
+// import VueRecord from '@codekraft-studio/vue-record'
 import CloseIcon from "./../../components/CloseIcon.vue"
 import SendMessageIcon from "./../../components/SendMessageIcon.vue"
 import DocumentIcon from "./../../components/DocumentIcon.vue"
 import VueSocketIO from 'vue-socket.io'
 import BuyMsg from "./../Component/BuyMsg.vue"
+import VueRecord from "@loquiry/vue-record-audio"
+import MicIcon from "./../HotChat/components/MicIcon.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -426,7 +446,9 @@ export default {
         SendMessageIcon,
         CloseIcon,
         DocumentIcon,
-        BuyMsg
+        BuyMsg,
+        MicIcon,
+        VueRecord
     },
     data(){
         return{
@@ -564,8 +586,9 @@ export default {
             }
             return result;
         },
-        onResult(data)
+        onResult(blob)
         {
+            let data = blob.blob
             this.getAudioDuration(data).then(duration => {
                 let sound = this.blobToFile(data, `${this.makeID()}.wav`)
 
@@ -800,7 +823,7 @@ export default {
                     }
                     this.$store.commit('etalk/removeUread', this.contact._id)
                 }
-            })   
+            })
         },
     },
     updated(){
@@ -813,6 +836,9 @@ export default {
                 })
             }
         }
+    },
+    mounted(){
+         document.querySelector('.needsInitiation').click();
     },
     created(){
         this.auth = this.stProfile._id
@@ -834,6 +860,50 @@ export default {
 }
 </script>
 <style>
+    .vue-audio-recorder {
+        background-color: #00a0e4 !important;;
+        width: 55px !important;
+        height: 55px !important;
+    }
+
+    .vue-audio-recorder:hover {
+        background-color: #0f3c7a !important;
+    }  
+    .pulse {
+        border-radius: 50%;
+        background: #1977f2;
+        cursor: pointer;
+        box-shadow: 0 0 0 rgba(11, 184, 214, 0.4);
+        animation: pulse 2s infinite;
+    }
+    .record{
+        outline:none;
+    }
+    @-webkit-keyframes pulse {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+    }
+    @keyframes pulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+    }
     .notification{
         display: flex;
         border-radius: 50%;
@@ -844,5 +914,6 @@ export default {
         box-sizing: content-box;
         white-space: nowrap;
         vertical-align: middle;
+        padding:1px;
     }
 </style>

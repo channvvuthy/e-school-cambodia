@@ -21,7 +21,7 @@
                                accept="image/png, image/gif, image/jpeg">
                     </form>
                     <textarea
-                            class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full" :class="darkMode?`bg-gray-300 placeholder-secondary`:`border-gray-400`"
+                            class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full text-sm" :class="darkMode?`bg-facebook placeholder-placeholder border-none text-gray-300`:`border-gray-400`"
                             :placeholder="$t('2112')" @keyup.enter.exact="postComment" v-model="text"></textarea>
                 </div>
                 <div class="overflow-y-scroll h-4/5 pb-72" @scroll="onScroll" ref="feed">

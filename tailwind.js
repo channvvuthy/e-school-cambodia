@@ -38,6 +38,8 @@ module.exports = {
             darkYellow:"#f5a623",
             button:"#383838",
             border:"#cbcbcb",
+            facebook:"#3a3b3c",
+            placeholder:"#abaeb3",
             black: colors.black,
             white: colors.white,
             gray: colors.coolGray,

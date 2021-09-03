@@ -54,7 +54,7 @@
                     @click="selectedContact(contact, index)"
                     :class="darkMode?`border-b border-black ${active === index ?`bg-button`:``}`:`border-b ${active === index?`bg-blue-100`:``}`">
                         <div>
-                            <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-3" :style="{backgroundImage:`url(${contact.photo})`}"></div>
+                            <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-3 bg-center" :style="{backgroundImage:`url(${contact.photo})`}"></div>
                         </div>
                         <div>
                             <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">
@@ -90,13 +90,13 @@
         <div :class="darkMode?`bg-youtube`:`bg-img-primary`" class="w-full">
             <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?``:`bg-black bg-opacity-10`">
                 <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
-                    <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="(contact.type === 0 || this.contact.type === 1 )?``:`cursor-pointer`">
+                    <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center bg-center" :style="{backgroundImage:`url(${contact.photo})`}" @click="contactPhoto()" :class="(contact.type === 0 || this.contact.type === 1 )?``:`cursor-pointer`">
                         <div class="loading" v-if="settingImage"></div>
                     </div>
                     <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
                     <div>
                         <div class="font-semibold">
-                            {{contact.name}}
+                            {{contact.name?contact.name:$t('unknown')}}
                         </div>
                         <div class="text-xs text-gray-500">
                             {{$t('online')}}
@@ -152,6 +152,12 @@
                     </div>
                 </div>
                 <div class="flex-1 h-full flex flex-col pb-36 py-5">
+                    <div class="h-full flex items-center justify-center flex-col" :class="darkMode?`text-gray-400`:`text-gray-500`" v-if="!isSelectedContact">
+                        <BoubleIcon :size="100" :fill="darkMode?`#9CA3AF`:`#6B7280`"></BoubleIcon>
+                        <div class="text-lg">
+                            {{ $t('please_select_contact_to_chat') }}
+                        </div>
+                    </div>
                     <div class="flex-1 overflow-y-scroll h-full" ref="feed" @scroll="getMoreMessage"> 
                         <div class="flex items-center justify-center" v-if="loadingMessage ">
                             <div :class="darkMode?`lds-ring`:`lds-ring-dark`">
@@ -382,7 +388,7 @@
                             <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                         </div>
                         <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
-                        <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" :disabled="contact.block_by"
+                        <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" :disabled="contact.block_by || !isSelectedContact"
                             @keydown="enableWatch"
                             name="message"
                             ref="message"
@@ -392,7 +398,24 @@
                         </textarea>
                         <div class="w-14 flex justify-end">
                             <div class="cursor-pointer  rounded-full ml-5 mt-2" :class="busy?'opacity-30':''">
-                                <vue-record-audio @result="onResult" @stream="onStream"/>
+                                <VueRecord class="record" @result="onResult">
+                                    <div class="w-13 h-13 rounded-full flex items-center justify-center" :class="darkMode?`bg-youtube`:`bg-primary`">
+                                        <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                    </div>
+                                    <template slot="isInitiating">
+                                        Voice
+                                    </template>
+                                    <template slot="isRecording">
+                                        <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                            <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                        </div>
+                                    </template>
+                                    <template slot="isCreating">
+                                        <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
+                                            <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                        </div>
+                                    </template>
+                                </VueRecord>
                             </div>
                         </div>
                     </div>
@@ -406,8 +429,8 @@
                                     <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-center px-3">
-                                <img :src="imgUrl" v-if="type === 1" class="rounded-lg">
+                            <div class="flex items-center justify-center px-3 overflow-y-scroll max-h-96">
+                                <img :src="imgUrl" v-if="type === 1">
                                 <div v-else class="flex items-center">
                                     <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
                                     <div class="ml-3 text-lg">{{this.file.name}}</div>
@@ -478,7 +501,6 @@ import moment from "moment"
 import Rename from "./components/Rename.vue"
 import Member from "./components/Member.vue"
 import BuyMsg from "./../Component/BuyMsg.vue"
-import VueRecord from '@codekraft-studio/vue-record'
 import MessageText from "./components/Text.vue"
 import VueSocketIO from 'vue-socket.io'
 import SinglePdf from "./../Component/SinglePdf.vue"
@@ -490,7 +512,9 @@ import ImageReply from "./components/ImageReply.vue"
 import VoiceReply from "./components/VoiceReply.vue"
 import AdminMember from "./components/AdminMember.vue"
 const { ipcRenderer } = require('electron')
-Vue.use(VueRecord)
+import VueRecord from "@loquiry/vue-record-audio"
+import MicIcon from "./../HotChat/components/MicIcon.vue"
+import BoubleIcon from "./components/BoubleIcon.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -503,6 +527,7 @@ export default {
         }
     },
     components:{
+        MicIcon,
         SearchIcon,
         ImageIcon,
         ChevronIcon,
@@ -522,11 +547,13 @@ export default {
         ImageReply,
         PdfReply,
         VoiceReply,
-        AdminMember
+        AdminMember,
+        VueRecord,
+        BoubleIcon
     },
     data(){
         return{
-            active: 1,
+            active: "",
             contact: {
                 type: 0,
             },
@@ -566,6 +593,7 @@ export default {
             isDelete: false,
             messageId: null,
             showAdminMember: false,
+            isSelectedContact: false,
             message: {
                 id: "",
                 reply_id: "",
@@ -818,7 +846,7 @@ export default {
             this.$store.commit("etalk/selectedContact",contact)
             this.enableScroll = true
             this.chatPage = 1
-           
+            this.isSelectedContact = true
             if(contact.type == 10){
                 this.$router.push('chat-admin')
                 return;
@@ -954,33 +982,7 @@ export default {
             }
         },   
         init(){
-            this.getContact({}).then(() =>{
-                if(this.contacts.length !== 'undefined'){
-                    if(this.contactActive){
-                        for(let i = 0; i < this.contacts.length; i ++){
-                            if(this.contactActive === this.contacts[i]._id){
-                                this.active = this.contacts.length > 1 ?i:0 
-                            }
-                        }
-                    }
-                    this.contact = this.contacts[this.active]
-                    this.message.id = this.contact._id
-                    this.getMessage({
-                        p: 1,
-                        id: this.contact._id,
-                        type: this.contact.type
-                    }).then(() => {
-                        this.scrollToBottom()
-                        this.lisentMessage()
-                        
-                    })
-                }else{
-                    this.contact =  {
-                        name: "",
-                        photo: ""
-                    }
-                }
-            })
+            this.getContact({}).then(() =>{})
         } ,
         getAudioDuration(blob){
             return new Promise(resolve => {
@@ -989,6 +991,9 @@ export default {
 
         },
         onMessage(){
+            if(!this.isSelectedContact){
+                return;
+            }
             let form = new FormData()
             if(!this.message.text.trim() && !this.message.voice && !this.message.photo && !this.message.pdf){
                 return;
@@ -1033,8 +1038,9 @@ export default {
             }
             return result;
         },
-        onResult(data)
+        onResult(blob)
         {
+            let data = blob.blob
             this.getAudioDuration(data).then(duration => {
                 let sound = this.blobToFile(data, `${this.makeID()}.wav`)
 
@@ -1146,6 +1152,9 @@ export default {
                 })
             }
         }
+    },
+    mounted(){
+        document.querySelector('.needsInitiation').click();
     },
     created(){
         this.init()
@@ -1280,6 +1289,52 @@ export default {
         box-sizing: content-box;
         white-space: nowrap;
         vertical-align: middle;
+        padding: 1px;
+    }
+    .vue-audio-recorder {
+        background-color: #00a0e4 !important;;
+        width: 55px !important;
+        height: 55px !important;
+    }
+
+    .vue-audio-recorder:hover {
+        background-color: #0f3c7a !important;
+    }  
+    .pulse {
+        border-radius: 50%;
+        background: #1977f2;
+        cursor: pointer;
+        box-shadow: 0 0 0 rgba(11, 184, 214, 0.4);
+        animation: pulse 2s infinite;
+    }
+       
+    .record{
+        outline:none;
+    }
+    @-webkit-keyframes pulse {
+    0% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -webkit-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -webkit-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+    }
+    @keyframes pulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
     }
 
 </style>

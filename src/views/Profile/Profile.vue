@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                         </label>
-                        <ul class="w-full border mt-1 rounded overflow-y-scroll h-full absolute  left-0 z-50" :class="darkMode?`border-button bg-secondary `:`bg-softGray`" v-if="showSchool && schools.length">
+                        <ul class="w-full border mt-1 rounded overflow-y-scroll absolute  left-0 z-50" :class="darkMode?`border-button bg-secondary `:`bg-softGray`" v-if="showSchool && schools.length">
                             <li v-for="(school,index) in schools" :key="index" class="h-10 px-3 flex items-center justify-start cursor-pointer" @click="takeSchool(school)">
                                 {{ school.name }}
                             </li>

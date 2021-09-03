@@ -3,7 +3,7 @@
             <div class="md:w-96 2xl:w-100 h-85 rounded-lg flex flex-col justify-between text-white relative" :style="{backgroundColor:`${backgroundColor}`,color:`${color}`}">
                 <!-- Profile -->
                 <div class="flex items-center left-3 justify-start p-4" v-if="storyDetail.user">
-                    <div class="w-12 h-12 rounded-full bg-cover mr-3" :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>
+                    <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center" :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>
                     <div class="flex flex-col items-center justify-start text-left text-base">
                         <div>
                             <div>{{storyDetail.user.name}}</div>
@@ -57,7 +57,7 @@
                     <div class="mt-5">
                         <div v-for="(viewer,index) in storyDetail.viewer" :key="index" class="text-black text-xs font-semibold">
                             <div class="flex items-center mb-5 px-5">
-                                <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5" :style="{backgroundImage:`url(${viewer.photo})`}"></div>
+                                <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center" :style="{backgroundImage:`url(${viewer.photo})`}"></div>
                                 <div :class="darkMode?'text-textSecondary':''">{{viewer.name}}</div>
                             </div>
                                 
@@ -123,7 +123,6 @@ export default {
     },
 
     previousStory(){
-        this.averageColor()
         this.showViewer = false;
         let storyIndex = this.storyIndex - 1
         if(storyIndex <= 0){
@@ -138,6 +137,9 @@ export default {
         }else{
             this.previous = false
         }
+        setTimeout(()=>{
+             this.averageColor()
+        },500)
 
     },
     averageColor(){
@@ -150,7 +152,7 @@ export default {
         });
     },
     nextStory(){
-        this.averageColor()
+        
         this.showViewer = false
         this.previous = true
         let storyIndex = this.storyIndex + 1
@@ -165,7 +167,9 @@ export default {
         }else{
             this.next = false
         }
-        
+        setTimeout(()=>{
+             this.averageColor()
+        },500)
     }
   },
   mounted(){
