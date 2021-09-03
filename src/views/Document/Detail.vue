@@ -83,7 +83,7 @@
                 <div class="py-4 px-5 relative">
                     {{$t('preview')}}
                     <div class="absolute right-2 top-3 cursor-pointer" @click="() => {this.showPreview = false}">
-                        <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        <CloseIcon :width="18" :fill="darkMode?`#abaeb3`:`#000000`"></CloseIcon>
                     </div>
                 </div>
                 <div class="border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
