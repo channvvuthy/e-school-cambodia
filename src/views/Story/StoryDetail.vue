@@ -56,7 +56,7 @@
                     </div>
                     <div class="mt-5">
                         <div v-for="(viewer,index) in storyDetail.viewer" :key="index" class="text-black text-xs font-semibold">
-                            <div class="flex items-center mb-5 px-5">
+                            <div class="flex itemls-center mb-5 px-5">
                                 <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center" :style="{backgroundImage:`url(${viewer.photo})`}"></div>
                                 <div :class="darkMode?'text-textSecondary':''">{{viewer.name}}</div>
                             </div>

@@ -32,12 +32,12 @@
                         <input type="file" ref="file" class="hidden" accept="image/x-png,image/gif,image/jpeg" @change="chooseFilt">
                     </div>
                     <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index" @click="getStoryDetail(my_story,index)">
-                        <div class="w-10 h-10 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 bg-white flex justify-center items-center"
+                        <div class="w-10 h-10 border-3 rounded-full bg-center bg-cover absolute z-40 left-2 top-2 bg-white flex justify-center items-center"
                         :class="darkMode?`border-fb`:`border-fb`"
                              :style="{backgroundImage:`url(${my_story.user.photo})`}"
                         >
                         </div>
-                        <div class="box-story relative h-36 bg-black w-24 bg-cover bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
+                        <div class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
                              :style="{backgroundImage:`url(${my_story.photo.name})`}"
                         >
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
