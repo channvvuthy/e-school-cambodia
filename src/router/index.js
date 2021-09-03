@@ -26,6 +26,11 @@ const routes = [
         component: ForgotPassword,
     },
     {
+        path: '/splash',
+        name: 'splash',
+        component: () => import('../views/Splash/Splash'),
+    },
+    {
         path: '/',
         name: 'home',
         component: Home,

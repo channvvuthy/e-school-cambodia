@@ -33,6 +33,7 @@
     import NotificationDetail from "./components/NotificationDetail.vue"
     import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue"
     import {mapState} from "vuex"
+    const {ipcRenderer} = require('electron')
     export default{
         data(){
             return {
@@ -54,6 +55,11 @@
         computed: {
             ...mapState('setting', ['isHide', 'darkMode'])
         },
+        created(){
+            setTimeout(()=>{
+                ipcRenderer.send('splashScreen', true)
+            },5000)
+        },
         methods: {
             hideMenu(){
                 if(this.$route.name === 'library-video' 
@@ -70,7 +76,7 @@
                 this.showCart = true
             },
             escapeRoute(){
-                if (this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password') {
+                if (this.$route.name === 'login' || this.$route.name === 'register' || this.$route.name === 'forgot-password' || this.$route.name === 'splash') {
                     this.$store.commit('setting/toggleSidebar', true);
                     return true;
 

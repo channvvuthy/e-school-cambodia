@@ -12,4 +12,8 @@
     font-family: 'Mukta';
     src: url('./../../../public/font/Mukta.ttf')
 }
+@font-face {
+    font-family: 'Nokora';
+    src: url('./../../../public/font/Nokora.ttf')
+}
 @tailwind utilities;

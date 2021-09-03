@@ -116,19 +116,43 @@ ipcMain.on("openLink", async (event, arg) => {
 })
 
 
+
+
 let win
 // let appIcon = null
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
 })
+let splash
+
+// Close splash screen
+ipcMain.on('splashScreen',()=>{
+    splash.destroy();
+});
 
 async function createWindow() {
+
+    // splash screen
+    splash = new BrowserWindow({
+        alwaysOnTop: true,
+        frame: false,
+        width:'100%',
+        height:'100%',
+        parent:win,
+        center:true,
+        webPreferences: {
+            devTools: true,
+            webSecurity: false,
+            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
+        },
+        icon: path.join(__static, 'icon.png')
+    });
     // Create the browser window.
     win = new BrowserWindow({
         minWidth: 1250,
         minHeight: 760,
         webPreferences: {
-            // devTools: true,
+            devTools: true,
             webSecurity: false,
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
         },
@@ -144,13 +168,15 @@ async function createWindow() {
         event.preventDefault()
     })
 
+    splash.loadURL(process.env.WEBPACK_DEV_SERVER_URL + `#splash`)
+    splash.show()
+    splash.maximize();
+
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
         if (!process.env.IS_loadingScreen) win.webContents.openDevTools()
     } else {
-
-        win.webContents.openDevTools()
         createProtocol('app');
         // Load the index.html when not in development
         win.loadURL('app://./index.html')
