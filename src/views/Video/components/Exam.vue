@@ -35,7 +35,7 @@
                                             </div>
                                             <div>
                                                <katex-element :expression="toLatex(list.value)"/>
-                                              <!-- <span class="bg-red-400 absolute "> {{toLatex(list.value)}}</span> -->
+                                               <!-- <span class="absolute bg-red-100 z-50"> {{toLatex(list.value) }}</span> -->
                                             </div>
                                         </label>
                                         
@@ -141,6 +141,7 @@ export default {
         toLatex(str){
             var str = str.toString()
             return str.replace(/\[math]/g,"").replace(/\[\/math]/g,"").replace(/&nbsp;/g,"").replace("។","")
+            .replace(/ℜ/g,"\\Re").replace(/\\left{/,"\\left\\{").replace(/\\right}/,"\\right\\}")
             .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f').replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
 
         },

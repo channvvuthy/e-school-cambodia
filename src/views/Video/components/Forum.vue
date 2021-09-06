@@ -24,11 +24,14 @@
                             class="ml-5 border h-10 flex-1 resize-none leading-10 pl-5 focus:outline-none rounded-full text-sm" :class="darkMode?`bg-facebook placeholder-placeholder border-none text-gray-300`:`border-gray-400`"
                             :placeholder="$t('2112')" @keyup.enter.exact="postComment" v-model="text"></textarea>
                 </div>
-                <div class="overflow-y-scroll h-4/5 pb-72" @scroll="onScroll" ref="feed">
+                <div class="overflow-y-scroll h-4/5 pb-72" @scroll="onScroll" ref="feed" :class="forums.length?``:`${darkMode?`bg-secondary text-white flex items-center justify-center`:`bg-white flex items-center justify-center`}`">
+                    <div v-if="!forums.length">
+                        {{$t('there_is_no_comment_to_show') }}
+                    </div>
                     <div v-for="(forum,index) in forums" :key="index"
                          class=" mb-3" :class="darkMode?`bg-secondary rounded-md`:`bg-white rounded-md shadow hover:bg-lightBlue`">
                         <div class="mb-3 flex p-5 cursor-pointer" @click="forumDetail(forum)">
-                            <div class="h-16 w-16 rounded-full bg-cover bg-gray-300"
+                            <div class="h-16 w-16 rounded-full bg-cover bg-center bg-gray-300"
                                  :style="{backgroundImage:`url(${forum.user.photo})`}"></div>
                             <div class="ml-4 flex-1 w-full">
                                 <div>
@@ -47,7 +50,7 @@
                         </div>
                         <div class="h-1 my-2" :class="darkMode?`rgba`:`border-t border-primay `"></div>
                         <div class="flex px-5 items-center justify-between">
-                            <div class="w-10 h-10 bg-gray-500 rounded-full bg-cover"
+                            <div class="w-10 h-10 bg-gray-500 rounded-full bg-cover bg-center"
                                  :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                             <div>
                                 <textarea  :placeholder="$t('2114') + `...`"

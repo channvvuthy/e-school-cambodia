@@ -27,7 +27,7 @@
                 <div class="h-screen overflow-y-scroll pb-80"  :class="darkMode?`bg-secondary`:`bg-white`" ref="feed" @scroll="onScroll">
                     <div class="px-5 pl-4 pb-4" :class="darkMode?`bg-secondary rgba`:`bg-softGray `">
                         <div class="flex pt-7">
-                            <div class="w-16 h-16 bg-white rounded-full bg-cover" :style="{backgroundImage:`url(${comments.forum.user.photo})`}"></div>
+                            <div class="w-16 h-16 bg-white rounded-full bg-cover bg-center" :style="{backgroundImage:`url(${comments.forum.user.photo})`}"></div>
                             <div class="text-primary font-semibold ml-4">
                                 <div :class="darkMode?`text-gray-300`:``">{{comments.forum.user.name}}</div>
                                 <div class="text-gray-500 flex items-center mt-1">
@@ -49,7 +49,7 @@
                         <template v-if="comments.comment">
                             <div v-for="(comment, index) in comments.comment" :key="index">
                                 <div class="flex pt-7">
-                                    <div class="w-14 h-14 bg-white rounded-full bg-cover" :style="{backgroundImage:`url(${comment.user.photo})`}"></div>
+                                    <div class="w-14 h-14 bg-white rounded-full bg-cover bg-center" :style="{backgroundImage:`url(${comment.user.photo})`}"></div>
                                     <div class="text-primary font-semibold ml-4">
                                         <div :class="darkMode?`text-gray-300`:``">{{comment.user.name}}</div>
                                         <div class="text-gray-500 flex items-center mt-1">

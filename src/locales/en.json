@@ -351,6 +351,7 @@
   "read_book_summary":"Book reading summary",
   "video_summary":"Watching video summary",
   "quiz_summary":"Quiz summary",
-  "please_select_contact_to_chat":"Please select a contact to start message"
+  "please_select_contact_to_chat":"Please select a contact to start message",
+  "there_is_no_comment_to_show":"There is no comment to show"
 
 }
