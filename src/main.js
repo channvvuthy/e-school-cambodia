@@ -14,6 +14,9 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 
 Vue.use(VueSweetalert2);
 
+import OneSignalVue from 'onesignal-vue'
+
+Vue.use(OneSignalVue);
 
 axios.interceptors.request.use(
     (config) => {
@@ -59,7 +62,17 @@ new Vue({
     store,
     i18n,
     render: h => h(App),
+    beforeMount() {
+        this.$OneSignal.init({ appId: 'dcb08d69-2cfa-49dd-b361-c36da3cfff86' }).then(() => {
+            alert(1)
+            console.log("work")
+        });
+    },
+    
     created(){
+        this.$OneSignal.on('subscriptionChange', function(isSubscribed) {
+            console.log("The user's subscription state is now:", isSubscribed);
+        });
         if (localStorage.getItem('token')) {
             store.commit('auth/studentProfile', JSON.parse(localStorage.getItem('stProfile')))
         }

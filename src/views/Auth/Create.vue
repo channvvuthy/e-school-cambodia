@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col justify-between h-screen">
+    <div class="flex flex-col justify-between h-screen bg-white">
         <div class="flex justify-center items-center h-full flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
             <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:``">
                 <div class="flex justify-between items-center">
