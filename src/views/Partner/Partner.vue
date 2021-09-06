@@ -13,13 +13,13 @@
                <div v-for="(partner, index) in partners" :key="index" class="rounded-xl shadow-md" :class="darkMode?`bg-secondary text-gray-300 ${partner.packages.length > 1?`col-span-2`:``}`:`bg-white ${partner.packages.length > 1?`col-span-2`:``}`">
                    <div>
                         <div class="flex items-center p-3">
-                            <div class="h-12 w-12 bg-cover rounded-full" :class="darkMode?`bg-byline`:`bg-gray-300`" :style="{backgroundImage:`url(${partner.photo})`}"></div>
+                            <div class="h-12 w-12 bg-cover rounded-full bg-center" :class="darkMode?`bg-byline`:`bg-gray-300`" :style="{backgroundImage:`url(${partner.photo})`}"></div>
                             <div class="ml-3 text-sm font-semibold">{{partner.name}}</div>
                         </div>
                         <template v-if="partner.type === 2">
                             <vue-horizontal>
                                 <section v-for="(pk, key) in partner.packages" :key="key" class="pb-3 px-3">
-                                     <div class="bg-cover rounded cursor-pointer overflow-hidden" @click="openWebView(pk)">
+                                     <div class="bg-cover bg-center rounded cursor-pointer overflow-hidden" @click="openWebView(pk)">
                                          <img :src="pk.thumbnail" :style="minHeight?{height:`${minHeight}px`}:{}">
                                     </div>
                                     <div class="flex items-center h-14 justify-between relative top-3">

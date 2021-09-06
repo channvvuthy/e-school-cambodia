@@ -1,133 +1,136 @@
 <template>
-    <div class="flex justify-center items-center min-h-screen" :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
-        <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:``">
-            <div class="flex justify-between items-center">
-                <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
-                    <ChevronIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ChevronIcon>
-                </div>
-                <div class="flex-1 text-center text-md">
-                    {{$t('2008')}}
-                </div>
-            </div>
-            <div class="h-12"></div>
-            <form class="flex-col text-sm font-khmer_os">
-                <div class="relative">
-                    <div class="opacity-50 absolute top-3" :class="darkMode?`left-2`:`left-0`">
-                       <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
+    <div class="flex flex-col justify-between h-screen">
+        <div class="flex justify-center items-center h-full flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
+            <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:``">
+                <div class="flex justify-between items-center">
+                    <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
+                        <ChevronIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ChevronIcon>
                     </div>
-                    <input
-                            type="text"
-                            ref="first_name"
-                            :placeholder="$t('2013')"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
-                            class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
-                            v-model="studentInfo.first_name"
-                    />
+                    <div class="flex-1 text-center text-md">
+                        {{$t('2008')}}
+                    </div>
                 </div>
-                <div class="relative">
-                    <div class="opacity-50 absolute top-3" :class="darkMode?`left-2`:`left-0`">
+                <div class="h-12"></div>
+                <form class="flex-col text-sm font-khmer_os">
+                    <div class="relative">
+                        <div class="opacity-50 absolute top-3" :class="darkMode?`left-2`:`left-0`">
                         <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
+                        </div>
+                        <input
+                                type="text"
+                                ref="first_name"
+                                :placeholder="$t('2013')"
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
+                                class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
+                                v-model="studentInfo.first_name"
+                        />
                     </div>
-                    <input
-                            type="text"
-                            ref="last_name"
-                            :placeholder="$t('2014')"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
+                    <div class="relative">
+                        <div class="opacity-50 absolute top-3" :class="darkMode?`left-2`:`left-0`">
+                            <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
+                        </div>
+                        <input
+                                type="text"
+                                ref="last_name"
+                                :placeholder="$t('2014')"
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
 
-                            class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
-                            v-model="studentInfo.last_name"
-                    />
-                </div>
-            </form>
-            <div class="flex justify-start mt-3 items-center text-sm font-khmer_os">
-                <label class="flex mr-10">
-                    <div @click="setGender('male')"
-                         class="mr-4 flex justify-center items-center border border-borderGray w-4 h-4 rounded-full">
-                        <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.gender==='M'"></div>
+                                class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
+                                v-model="studentInfo.last_name"
+                        />
                     </div>
-                    <input type="radio" class="mr-2 hidden" name="gender" value="M" v-model="studentInfo.gender"
-                           ref="male"/>
-                    <span>{{$t('2015')}}</span>
-                </label>
-                <label class="flex">
-                    <div @click="setGender('female')"
-                         class="mr-4 flex justify-center items-center border border-borderGray w-4 h-4 rounded-full">
-                        <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.gender==='F'"></div>
-                    </div>
-                    <input type="radio" class="mr-2 hidden" name="gender" value="F" v-model="studentInfo.gender"
-                           ref="female"/>
-                    <span>{{$t('2016')}}</span>
-                </label>
-            </div>
-            <div class="h-5"></div>
-            <form class="flex-col text-sm font-khmer_os w-full">
-                <div class="relative">
-                    <span class="absolute mt-3 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
-                        <PhoneIcon size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
-                    </span>
-                    <input type="text" :placeholder="$t('2009')"
-                           ref="phone"
-                           v-model="studentInfo.phone"
-                           @keypress="isNumber($event)"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
-
-                           class="h-12 placeholder-gray-500 p-2 w-full focus:outline-none mb-4 pl-8"/>
+                </form>
+                <div class="flex justify-start mt-3 items-center text-sm font-khmer_os">
+                    <label class="flex mr-10">
+                        <div @click="setGender('male')"
+                            class="mr-4 flex justify-center items-center border border-borderGray w-4 h-4 rounded-full">
+                            <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.gender==='M'"></div>
+                        </div>
+                        <input type="radio" class="mr-2 hidden" name="gender" value="M" v-model="studentInfo.gender"
+                            ref="male"/>
+                        <span>{{$t('2015')}}</span>
+                    </label>
+                    <label class="flex">
+                        <div @click="setGender('female')"
+                            class="mr-4 flex justify-center items-center border border-borderGray w-4 h-4 rounded-full">
+                            <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.gender==='F'"></div>
+                        </div>
+                        <input type="radio" class="mr-2 hidden" name="gender" value="F" v-model="studentInfo.gender"
+                            ref="female"/>
+                        <span>{{$t('2016')}}</span>
+                    </label>
                 </div>
-                <div class="relative">
-                    <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
-                             <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                <div class="h-5"></div>
+                <form class="flex-col text-sm font-khmer_os w-full">
+                    <div class="relative">
+                        <span class="absolute mt-3 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
+                            <PhoneIcon size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
                         </span>
-                    <input type="password" :placeholder="$t('2010')"
-                           v-model="studentInfo.password"
-                           ref="password"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
+                        <input type="text" :placeholder="$t('2009')"
+                            ref="phone"
+                            v-model="studentInfo.phone"
+                            @keypress="isNumber($event)"
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
 
-                           class="h-12 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4 pl-8"/>
+                            class="h-12 placeholder-gray-500 p-2 w-full focus:outline-none mb-4 pl-8"/>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
+                                <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                            </span>
+                        <input type="password" :placeholder="$t('2010')"
+                            v-model="studentInfo.password"
+                            ref="password"
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
 
-                </div>
-                <div class="relative">
-                    <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
-                             <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
-                        </span>
-                    <input type="password" :placeholder="$t('2017')"
-                           ref="confirm_password"
-                           v-model="studentInfo.confirm_password"
-                            :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
-                           class="h-12 placeholder-gray-500 p-2 px-0  w-full focus:outline-none mb-4 pl-8"/>
-                </div>
-            </form>
-            <div class="flex justify-start items-center mt-4">
-                <label class="flex text-sm">
-                    <div @click="()=>{studentInfo.accepted_term=true}"
-                         class="mr-4 flex justify-center items-center border border-borderGray w-4 h-4 rounded-full">
-                        <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.accepted_term"></div>
+                            class="h-12 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4 pl-8"/>
+
                     </div>
-                    <input type="radio" class="mr-3 cursor-pointer hidden" v-model="studentInfo.accepted_term"
-                           :checked="studentInfo.accepted_term"
-                           value="1"
-                           name="term"
-                    >
-                    <div class="flex"><span class="pr-1">{{$t('2018')}}</span><span
-                            class="cursor-pointer"
-                            :class="darkMode?`text-gray-300 underline`:`text-blue-700`"
-                            @click="showTermAndCondition">{{$t('2019')}}</span>
+                    <div class="relative">
+                        <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
+                                <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                            </span>
+                        <input type="password" :placeholder="$t('2017')"
+                            ref="confirm_password"
+                            v-model="studentInfo.confirm_password"
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
+                            class="h-12 placeholder-gray-500 p-2 px-0  w-full focus:outline-none mb-4 pl-8"/>
                     </div>
-                </label>
+                </form>
+                <div class="flex justify-start items-center mt-4">
+                    <label class="flex text-sm">
+                        <div @click="()=>{studentInfo.accepted_term=true}"
+                            class="mr-4 flex justify-center items-center border border-borderGray w-4 h-4 rounded-full">
+                            <div class="bg-gray-500 w-2 h-2 rounded-full" v-if="studentInfo.accepted_term"></div>
+                        </div>
+                        <input type="radio" class="mr-3 cursor-pointer hidden" v-model="studentInfo.accepted_term"
+                            :checked="studentInfo.accepted_term"
+                            value="1"
+                            name="term"
+                        >
+                        <div class="flex"><span class="pr-1">{{$t('2018')}}</span><span
+                                class="cursor-pointer"
+                                :class="darkMode?`text-gray-300 underline`:`text-blue-700`"
+                                @click="showTermAndCondition">{{$t('2019')}}</span>
+                        </div>
+                    </label>
+                </div>
+                <div class="h-5"></div>
+                <button class="focus:outline-none p-3 mt-4 text-center relative text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                        @click="createAccount" :disabled="loadingRegister"
+                        :class="darkMode?`bg-button`:`bg-primary`"
+                        >
+                    
+                    <div class="absolute flex justify-center items-center w-full left-0 -top-3 " v-if="loadingRegister">
+                        <div class="loader"></div>
+                    </div>
+                    <span v-else>{{$t('2008')}}</span>
+                </button>
+                <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
+                <TermAndCondition v-if="showTerm" @closeTermAndCondition="closeTermAndCondition"></TermAndCondition>
             </div>
-            <div class="h-5"></div>
-            <button class="focus:outline-none p-3 mt-4 text-center relative text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                    @click="createAccount" :disabled="loadingRegister"
-                    :class="darkMode?`bg-button`:`bg-primary`"
-                    >
-                
-                <div class="absolute flex justify-center items-center w-full left-0 -top-3 " v-if="loadingRegister">
-                    <div class="loader"></div>
-                </div>
-                <span v-else>{{$t('2008')}}</span>
-            </button>
-            <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
-            <TermAndCondition v-if="showTerm" @closeTermAndCondition="closeTermAndCondition"></TermAndCondition>
         </div>
+       <img src="e-footer.png" class="w-full" v-if="!darkMode">
     </div>
 </template>
 

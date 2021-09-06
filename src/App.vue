@@ -1,27 +1,32 @@
 <template>
-    <div class="font-khmer_siemreab" :class="darkMode?`bg-youtube`:``">
-        <!-- Cart -->
-        <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
-        <!-- Receipt info -->
-        <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
-        <!-- Notification -->
-        <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}" @readNotification="readNotification($event)"></Notification>
-        <!-- NotificationDetail -->
-        <NotificationDetail v-if="showNotificationDetail" @closeNotificationDetail="closeNotificationDetail"></NotificationDetail>
-        <div class="flex" v-if="!escapeRoute()">
-            <div>
-                <!--Sidebar-->
-                <Sidebar/>
-            </div>
-            <div class="w-full border border-t-0 h-32 flex items-end"
-                v-if="!hideMenu()"
-                :class="darkMode?'bg-secondary border-secondary text-textSecondary':'bg-white border-gray-300'"
-                :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}">
-                <Menu @showItemIncart="showItemIncart" @notification="() =>{this.showNotification = true}"/>
-            </div>
+    <div>
+        <div v-if="isSplashScreen" class="fixed top-0 left-0  w-full h-full" style="z-index: 100;">
+            <Splash></Splash>
         </div>
-        <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}" id="main">
-            <router-view></router-view>
+        <div class="font-khmer_siemreab" :class="darkMode?`bg-youtube`:``">
+            <!-- Cart -->
+            <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
+            <!-- Receipt info -->
+            <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
+            <!-- Notification -->
+            <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}" @readNotification="readNotification($event)"></Notification>
+            <!-- NotificationDetail -->
+            <NotificationDetail v-if="showNotificationDetail" @closeNotificationDetail="closeNotificationDetail"></NotificationDetail>
+            <div class="flex" v-if="!escapeRoute()">
+                <div>
+                    <!--Sidebar-->
+                    <Sidebar/>
+                </div>
+                <div class="w-full border border-t-0 h-32 flex items-end"
+                    v-if="!hideMenu()"
+                    :class="darkMode?'bg-secondary border-secondary text-textSecondary':'bg-white border-gray-300'"
+                    :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}">
+                    <Menu @showItemIncart="showItemIncart" @notification="() =>{this.showNotification = true}"/>
+                </div>
+            </div>
+            <div :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}" id="main">
+                <router-view></router-view>
+            </div>
         </div>
     </div>
 </template>
@@ -33,7 +38,7 @@
     import NotificationDetail from "./components/NotificationDetail.vue"
     import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue"
     import {mapState} from "vuex"
-    const {ipcRenderer} = require('electron')
+    import Splash from "./views/Splash/Splash.vue"
     export default{
         data(){
             return {
@@ -41,25 +46,24 @@
                 showNotification: false,
                 showReceipt: false,
                 receiptDetail:{},
-                showNotificationDetail: false
+                showNotificationDetail: false,
+                isSplashScreen: true
             }
         },
+
         components: {
             Sidebar,
             Menu,
             Cart,
             Notification,
             ReceiptInfo,
-            NotificationDetail
+            NotificationDetail,
+            Splash
         },
         computed: {
             ...mapState('setting', ['isHide', 'darkMode'])
         },
-        created(){
-            setTimeout(()=>{
-                ipcRenderer.send('splashScreen', true)
-            },5000)
-        },
+
         methods: {
             hideMenu(){
                 if(this.$route.name === 'library-video' 
@@ -98,6 +102,11 @@
             closeNotificationDetail(){
                 this.showNotificationDetail = false
             }
+        },
+        created(){
+            setTimeout(()=>{
+                this.isSplashScreen = false
+            },4000)
         }
     }
 </script>

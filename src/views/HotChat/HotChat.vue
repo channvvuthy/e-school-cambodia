@@ -87,11 +87,11 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                    <MessageText :message="message" :isMind="message.is_admin"></MessageText>
+                                                    <MessageText :message="message" :isMind="message.is_admin == 0"></MessageText>
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                <MessageText :message="message" :isMind="message.is_admin"></MessageText>
+                                                <MessageText :message="message" :isMind="message.is_admin == 0"></MessageText>
                                             </div>
                                         </div>
                                     </div>
@@ -390,6 +390,7 @@
 
             </div>
         </div>
+        <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
     </div>
 </template>
 <script>
@@ -420,6 +421,7 @@ import getBlobDuration from 'get-blob-duration'
 import SinglePdf from "./../Component/SinglePdf.vue"
 import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./components/MicIcon.vue"
+import BuyMsg from "./../Component/BuyMsg.vue"
 const { ipcRenderer } = require('electron')
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
@@ -445,7 +447,8 @@ export default {
         MicIcon,
         VueRecord,
         PdfIcon,
-        ImageReply
+        ImageReply,
+        BuyMsg
     },
     data(){
         return{
@@ -470,6 +473,7 @@ export default {
             video:"https://www.youtube.com/channel/UCXAVs_YRUwsnx5I-Toy-7Dg",
             room_id: "",
             chatText:"",
+            isDelete: false,
             message: {
                 id: "",
                 reply_id: "",
@@ -503,7 +507,7 @@ export default {
         ...mapState('etalk', ['messages'])
     },
     methods:{
-        ...mapActions('etalk', ['getMessage', 'hotChat','sendMessage']),
+        ...mapActions('etalk', ['getMessage', 'hotChat','sendMessage','deleteMessage']),
         ...mapActions('auth', ['getStudentProfile', 'getToken']),
         isNumber(evt){
             return helper.isNumber(evt)
@@ -551,7 +555,7 @@ export default {
             if(this.replyContact){
                 form.append("reply_id", this.replyContact._id)
             }
-            form.append("type", 10)
+            form.append("type", 0)
             form.append("text", this.message.text.trim())
             form.append("photo", this.message.photo)
             form.append("pdf", this.message.pdf)
@@ -770,6 +774,19 @@ export default {
             this.isDelete = true
             this.messageId = this.replyId
             this.replyId = ""
+        },
+        confirmDelete(){
+            this.isDelete = false
+            this.deleteMessage({
+                id: this.messageId._id,
+                type: this.contact.type
+            }).then((response) => {
+               if(response.data.msg != undefined){
+                   helper.errorMessage(response.data.msg)
+               }else{
+                   this.$store.commit("etalk/removeMessage", this.messageId._id)
+               }
+            })
         },
         onSubmit(){
             if(!this.user.first_name.trim()){

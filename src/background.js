@@ -123,30 +123,8 @@ let win
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
 })
-let splash
-
-// Close splash screen
-ipcMain.on('splashScreen',()=>{
-    splash.destroy();
-});
-
 async function createWindow() {
 
-    // splash screen
-    splash = new BrowserWindow({
-        alwaysOnTop: true,
-        frame: false,
-        width:'100%',
-        height:'100%',
-        parent:win,
-        center:true,
-        webPreferences: {
-            devTools: true,
-            webSecurity: false,
-            nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
-        },
-        icon: path.join(__static, 'icon.png')
-    });
     // Create the browser window.
     win = new BrowserWindow({
         minWidth: 1250,
@@ -167,11 +145,6 @@ async function createWindow() {
         win.hide()
         event.preventDefault()
     })
-
-    splash.loadURL(process.env.WEBPACK_DEV_SERVER_URL + `#splash`)
-    splash.show()
-    splash.maximize();
-
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -200,11 +173,12 @@ if (!gotTheLock) {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+    app.quit()
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+    // if (process.platform !== 'darwin') {
+    //     app.quit()
+    // }
 });
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the

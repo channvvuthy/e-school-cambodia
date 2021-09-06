@@ -44,8 +44,8 @@
 
                 </div>
             </div>
-            <div class="py-3 overflow-y-scroll h-screen pb-40">
-                <div class="px-5">
+            <div class="py-3 overflow-y-scroll h-screen pb-40 flex flex-col justify-between">
+                <div class="px-5 flex-1">
                     <template v-if="token">
                         <Study></Study>
                         <div class="h-10"></div>
