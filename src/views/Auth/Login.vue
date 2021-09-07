@@ -170,6 +170,8 @@
                         this.$router.push({
                             name: "home"
                         })
+                    }).catch(err=>{
+                        helper.errorMessage(err.response.data.msg)
                     });
 
                     return;

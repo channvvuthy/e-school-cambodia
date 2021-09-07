@@ -46,7 +46,7 @@
                                     <div>
                                         {{contact.name}}
                                     </div>
-                                    <div v-if="contact.type===0" class="notification rounded-full ml-3 flex items-center justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
+                                    <div v-if="contact.type===0" class="notification h-4 w-4 rounded-full ml-3 flex items-center justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
                                        <span style="font-size:10px;">&#10003;</span>
                                     </div>
                                 </div>
@@ -58,7 +58,7 @@
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
                                 <div class="flex justify-center" v-if="contact.unread">
-                                    <div class="notification rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
+                                    <div class="notification h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
                                 <div class="text-xs mt-1 whitespace-nowrap" :class="darkMode?`text-gray-500`:`text-gray-400`">
                                     {{contact.last == undefined?$t('unread') + ' ' + contact.unread:getDay(contact.last.date)}}

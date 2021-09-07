@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="fixed w-full h-full left-0 top-0 flex justify-center items-center text-sm bg-black bg-opacity-90" style="z-index:55" v-if="showPay === false">
-            <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"  class="rounded-2xl shadow relative py-3 w-4/12">
+            <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"  class="rounded-xl shadow relative py-3 w-4/12">
                 <div @click="closeCart" class="absolute top-3 right-3 cursor-pointer" id="closeCart">
                     <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`" :width="20"></CloseIcon>
                 </div>
