@@ -1,6 +1,5 @@
 <template>
     <div>
-        <eHeader></eHeader>
         <div class="flex items-center h-14 text-sm px-5 mt-3" :class="darkMode?`text-gray-300 bg-secondary`:`bg-white shadow`">
             <div class="cursor-pointer" :class="active === `friend`?`font-bold ${darkMode?`text-fb`:`text-primary`}`:``" @click="switchMenu('friend')">{{$t('friend')}}</div>
             <div class="mx-10 cursor-pointer" :class="active === `friend_request`?`font-bold ${darkMode?`text-fb`:`text-primary`}`:``" @click="switchMenu('friend_request')">{{$t('friend_request')}}</div>
