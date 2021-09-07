@@ -1,10 +1,6 @@
 'use strict';
 import path from 'path'
 const fs = require("fs");
-const ytdl = require('ytdl-core');
-let {CookieMap} = require('cookiefile/http-cookiefile')
-let cookieFile = new CookieMap(path.join(__static, 'cookies.txt'));
-const cookies = cookieFile.toRequestHeader().replace('Cookie: ', '');
 const {autoUpdater} = require('electron-updater')
 const {download} = require('electron-dl');
 
@@ -54,15 +50,6 @@ const downloadFile = async (fileUrl, info) => {
         throw new Error(err);
     }
 };
-
-const opt = {
-    requestOptions: {
-        headers: {
-            'Cookie': cookies
-        }
-    }
-};
-
 
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production';

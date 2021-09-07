@@ -111,11 +111,6 @@ const routes = [
         component: () => import('../views/Partner/Partner'),
     },
     {
-        path: '/discuss',
-        name: 'discuss',
-        component: () => import('../views/Discuss/Discuss'),
-    },
-    {
         path: '/video',
         name: 'video',
         component: () => import('../views/Video/Video'),
