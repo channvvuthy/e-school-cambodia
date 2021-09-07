@@ -17,6 +17,21 @@
                             <div class="mt-3 whitespace-nowrap absolute bottom-0 left-0 w-full bg-gradient-to-t from-black h-full text-white flex justify-start items-end text-sm p-3" :title="st.user.name">{{cutString(st.user.name,15)}}</div>
                         </div>
                     </div>
+                    <!-- Load more button -->
+                    <template >
+                    <div class="h-5"></div>
+                    <div class="text-xs text-center" :class="darkMode?`text-gray-300`:``">{{$t('scrolling_problem')}}</div>
+                    <div class="flex items-center justify-center mt-2">
+                        <button class="focus:outline-none text-xs rounded-full px-2 py-1" :class="darkMode?`bg-pass text-white`:`bg-primary text-white`" @click="loadMore">
+                            <div class="flex items-center justify-center">
+                                <div class="px-14 py-1" v-if="loading">
+                                    <div class="loader relative -top-6"></div>
+                                </div> 
+                                <span v-else>{{$t('load_more')}} </span>
+                            </div>
+                        </button>
+                    </div>
+                    </template>
                 </div>
             </div>
         </div>
@@ -47,7 +62,8 @@ export default {
             enableScroll: true,
             page: 1,
             showStory: false,
-            loadingStory: false
+            loadingStory: false,
+            loading: false
         }
     },
     methods: {
@@ -58,13 +74,23 @@ export default {
         cutString(text, limit){
             return helper.cutString(text, limit)
         },
+        loadMore(){
+            this.page ++ 
+            this.loading = true
+            this.getStory(this.page).then(response =>{
+                this.loading = false
+                if(response.data.data.length == 0){
+                    helper.success('no_more_result')
+                }
+            })
+        },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= (scrollHeight - 1)) {
                 this.page ++ 
             
                 if(this.enableScroll){
-                    this.getStory(this.page).then(res =>{
-                        if(res.data.data.length <= 0){
+                    this.getStory(this.page).then(response =>{
+                        if(response.data.data.length == 0){
                             this.enableScroll = false
                         }
                     })

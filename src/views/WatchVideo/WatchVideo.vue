@@ -9,7 +9,7 @@
                 <div v-if="loading">
                     <Loading></Loading>
                 </div>
-                <div v-if="course.list.length == 0" class="h-screen items-center pb-40">
+                <div v-if="course.list && course.list.length == 0" class="h-screen items-center pb-40">
                      <Empty></Empty>
                 </div>
                 <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5" v-else>

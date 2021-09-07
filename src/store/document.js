@@ -62,6 +62,15 @@ export default {
                })
            })
        },
+       rename({commit}, payload){
+           return new Promise((resolve, reject) =>{
+               axios.put(config.apiUrl + `document`,payload).then(response =>{
+                   resolve(response)
+               }).catch(err=>{
+                   reject(err)
+               })
+           })
+       },
        deleteDocument({commit}, payload){
            commit("deletingDocument", true)
            return new Promise((resolve, reject) =>{

@@ -30,7 +30,7 @@
             ...mapActions('other', ['getOther']),
             back(){
                 this.$router.push({
-                    name:"other-refresh"
+                    name:"other"
                 }).catch(err=>{err})
             }
         },

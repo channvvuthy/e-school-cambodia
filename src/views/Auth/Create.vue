@@ -19,7 +19,7 @@
                         <input
                                 type="text"
                                 ref="first_name"
-                                :placeholder="$t('2013')"
+                                :placeholder="$t('2013') + '*'"
                                 :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
                                 class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
                                 v-model="studentInfo.first_name"
@@ -32,7 +32,7 @@
                         <input
                                 type="text"
                                 ref="last_name"
-                                :placeholder="$t('2014')"
+                                :placeholder="$t('2014')+ '*'"
                                 :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
 
                                 class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
@@ -66,7 +66,7 @@
                         <span class="absolute mt-3 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
                             <PhoneIcon size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
                         </span>
-                        <input type="text" :placeholder="$t('2009')"
+                        <input type="text" :placeholder="$t('2009')+ '*'"
                             ref="phone"
                             v-model="studentInfo.phone"
                             @keypress="isNumber($event)"
@@ -78,7 +78,7 @@
                         <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
                                 <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                             </span>
-                        <input type="password" :placeholder="$t('2010')"
+                        <input type="password" :placeholder="$t('2010')+ '*'"
                             v-model="studentInfo.password"
                             ref="password"
                                 :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
@@ -90,7 +90,7 @@
                         <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
                                 <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                             </span>
-                        <input type="password" :placeholder="$t('2017')"
+                        <input type="password" :placeholder="$t('2017')+ '*'"
                             ref="confirm_password"
                             v-model="studentInfo.confirm_password"
                                 :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
@@ -136,7 +136,7 @@
 
 <script>
     import {mapState, mapActions} from "vuex"
-    import ErrMessage from "./components/ErrMessage"
+    import ErrMessage from "./components/ErrMessage.vue"
     import Loader from "./../../components/Loader"
     import helper from "./../../helper/helper"
     import TermAndCondition from "./components/TermAndCondition.vue"
@@ -149,6 +149,7 @@
     Vue.use(VueToast);
     import config from "./../../config"
     import LockIcon from '../../components/LockIcon.vue'
+    import studentProfileData from "./../../data/student"
     export default{
         name: "Create",
         components: {
@@ -171,7 +172,7 @@
                     phone: null,
                     password: null,
                     confirm_password: null,
-                    gender: null,
+                    gender: "M",
                     device_id: null,
                     device_name: null,
                     device_os: null,
@@ -186,7 +187,7 @@
             ...mapState('setting', ['darkMode'])
         },
         methods: {
-            ...mapActions('auth', ['register']),
+            ...mapActions('auth', ['register','getStudentProfile','getToken']),
 
             closeTermAndCondition(){
                 this.showTerm = false
@@ -272,7 +273,44 @@
                         Vue.$toast.success(this.$i18n.t('account_created'), {
                             position: "top-right"
                         })
-                        this.$router.push({name: 'login'});
+                        // this.$router.push({name: 'login'});
+                        let data = response.data;
+                        localStorage.setItem('token', data.token);
+                        let stProfile = studentProfileData.studentProfileData
+                        stProfile._id = data._id
+                        stProfile.first_name = data.first_name
+                        stProfile.gender = data.gender
+                        stProfile.grade_id = data.grade_id ? data.grade_id : ""
+                        stProfile.group_type = data.group_type ? data.group_type : ""
+                        stProfile.is_login = data.is_login ? data.is_login : ""
+                        stProfile.last_name = data.last_name ? data.last_name : ""
+                        stProfile.my_cart = data.my_cart ? data.my_cart : ""
+                        stProfile.phone = data.phone ? data.phone : ""
+                        stProfile.photo = data.photo ? data.photo : ""
+                        if (data.province) {
+                            stProfile.province = data.province
+                        } else {
+                            stProfile.province = {
+                                _id: "",
+                                name: "E-School"
+                            }
+                        }
+                        if (data.school) {
+                            stProfile.school = data.school
+                        } else {
+                            stProfile.school = {
+                                _id: "",
+                                name: "E-School"
+                            }
+                        }
+                        localStorage.setItem('stProfile', JSON.stringify(stProfile));
+                        this.getStudentProfile(stProfile)
+                        this.getToken(data.token)
+                        this.$store.commit('auth/receivingToken', data.token)
+                        this.$store.commit("setting/toggleSidebar", false)
+                        this.$router.push({
+                            name: "home"
+                        })
                     }
                 }).catch(err => {
                     this.message = err

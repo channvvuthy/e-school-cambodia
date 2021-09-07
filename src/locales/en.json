@@ -352,6 +352,10 @@
   "video_summary":"Watching video summary",
   "quiz_summary":"Quiz summary",
   "please_select_contact_to_chat":"Please select a contact to start message",
-  "there_is_no_comment_to_show":"There is no comment to show"
+  "there_is_no_comment_to_show":"There is no comment to show",
+  "invoice":"Invoice",
+  "other":"Other",
+  "rename":"Rename",
+  "please_enter_name": "Please enter name"
 
 }

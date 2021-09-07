@@ -29,8 +29,14 @@
                             <div class="text-gray-400 font-normal text-sm">
                                 {{formatDate(document.date)}}
                             </div>
-                            <div class="cursor-pointer" @click="confirmDelete(document._id)">
-                                <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
+                            <div class="flex items-center ">
+                                <div class="cursor-pointer" @click="showEdit(document)">
+                                    <EditIcon :fill="darkMode?`#909090`:`#c0272d`" :size="18"></EditIcon>
+                                </div>
+                                <div class="w-4"></div>
+                                <div class="cursor-pointer" @click="confirmDelete(document._id)">
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,6 +175,7 @@
                 <img :src="preivewImage" class="max-w-full">
             </div>
         </div>
+        <Edit @cancelRename="()=>{this.isEdit = false}" v-if="isEdit" :group="files"></Edit>
     </div>
 </template>
 <script>
@@ -181,6 +188,7 @@
     import ImageIcon from "./../../components/AddImageIcon.vue"
     import EnlargeIcon from "./../../components/EnlargeIcon.vue"
     import DeleteIcon from "./../MyCourse/components/DeleteIcon.vue"
+    import EditIcon from "./../../components/EditIcon.vue"
     import AddIcon from "./../../components/AddIcon.vue"
     import {mapState, mapActions} from "vuex"
     import Directroy from "./components/Directory.vue"
@@ -189,6 +197,7 @@
     import BuyMsg from "./../Component/BuyMsg.vue"
     import SinglePdf from "./../Component/SinglePdf.vue"
     import Loading from "./../../components/Loading.vue"
+    import Edit from "./components/Edit.vue"
     export default {
         data(){
             return{
@@ -210,7 +219,9 @@
                 s:"",
                 page: 1,
                 enableScroll:true,
-                loadingDoc: false
+                loadingDoc: false,
+                isEdit: false,
+                files:{}
                 
             }
         },
@@ -228,7 +239,9 @@
             BuyMsg,
             SinglePdf,
             EnlargeIcon,
-            Loading
+            Loading,
+            EditIcon,
+            Edit
         },
         computed:{
             ...mapState('document', ['documents', 'loading']),
@@ -237,8 +250,9 @@
         },
         methods:{
             ...mapActions('document', ['getDocument','createDocument', 'deleteDocument', 'getMoreDocument']),
-            attachFile(){
-
+            showEdit(files){
+                this.files = files
+                this.isEdit = true
             },
             confirmDelete(id){
                 this.id = id

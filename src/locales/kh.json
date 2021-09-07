@@ -353,5 +353,9 @@
   "video_summary":"ការមើលវីដេអូសង្ខេប",
   "quiz_summary":"សង្ខេបការធ្វើតេស",
   "please_select_contact_to_chat":"សូមជ្រើសរើសទំនាក់ទំនងដើម្បីចាប់ផ្តើមសារ",
-  "there_is_no_comment_to_show":"មិនមានយោបល់ដើម្បីបង្ហាញទេ"
+  "there_is_no_comment_to_show":"មិនមានយោបល់ដើម្បីបង្ហាញទេ",
+  "invoice":"វិក្កយបត្រ",
+  "other":"ផ្សេងទៀត",
+  "rename":"ដូរឈ្មោះ",
+  "please_enter_name": "សូមបញ្ចូលឈ្មោះ"
 }

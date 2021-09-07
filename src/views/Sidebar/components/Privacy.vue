@@ -59,7 +59,19 @@
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
-                        {{$t('1125')}}
+                        {{$t('invoice')}}
+                    </div>
+                </div>
+                 <div class="text-center flex flex-col justify-center items-center"  @click="goTo('other')">
+                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `other`|| $route.name === `other-refresh`?`bg-byline`:`bg-button`}`:`${$route.name === `other` || $route.name === `other-refresh`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                        <div>
+                            <OtherIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `other` || $route.name === `other-refresh`"></OtherIcon>
+                            <OtherIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></OtherIcon>
+                        </div>
+
+                    </div>
+                    <div class="text-xs whitespace-nowrap mt-3">
+                        {{$t('other')}}
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
@@ -83,6 +95,7 @@
     import InsuranceIcon from "./../../../components/InsuranceIcon"
     import InvoiceIcon from "./../../../components/BillInvoiceIcon.vue"
     import LogoutIcon from "./../../../components/LogoutIcon"
+    import OtherIcon from "./../../../components/OtherIcon.vue"
     
     export default{
         components:{
@@ -91,7 +104,8 @@
             GuardianIcon,
             InsuranceIcon,
             InvoiceIcon,
-            LogoutIcon
+            LogoutIcon,
+            OtherIcon
         },
         computed: {
             ...mapState('setting', ['darkMode'])

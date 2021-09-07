@@ -35,7 +35,6 @@
         name: "ErrMessage",
         props: {
             message: {
-                type: String,
                 default: () => {
                     return "លេខទូរស័ព្ទមិនត្រឹមត្រូវ"
                 }

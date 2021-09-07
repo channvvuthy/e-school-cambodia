@@ -4,7 +4,7 @@
             <div class="flex mt-5 px-5">
                 <div class="w-3/5 rounded-xl overflow-hidden shadow-md relative">
                     <div class="h-full w-full absolute top-0 left-0 flex flex-col items-center justify-center">
-                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover" :style="{backgroundImage:`url(${relative.photo})`}"></div>
+                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center" :style="{backgroundImage:`url(${relative.photo})`}"></div>
                     </div>
                     <div class="w-full bg-red-100 bg-cover h-40" style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;">
                     

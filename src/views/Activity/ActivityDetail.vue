@@ -108,8 +108,11 @@ export default {
             this.getSummaryDetail(payload)
         },
         formatDate(date){
-            moment.locale(this.$i18n.locale === 'en'?`en`:`km`);
-            return moment(date).format('LL');
+            moment.locale("en")
+            if(this.$i18n.locale =='en'){
+                return "Date " +  moment(date).format('DD-MM-YYYY');
+            }
+            return "ថ្ងៃទី " + moment(date).format('DD') + " ខែ "+moment(date).format('MM')+" ឆ្នាំ "+moment(date).format('YYYY');
         },
         formatTime(date){
             moment.locale(this.$i18n.locale === 'en'?`en`:`km`);

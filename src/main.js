@@ -74,7 +74,6 @@ new Vue({
             store.commit('setting/setDarkMode', localStorage.setItem('darkMode',false))
         }
 
-        store.dispatch('online/onlineOffline');
         if (!localStorage.getItem('localize')) {
             localStorage.setItem('localize', 'en')
         }

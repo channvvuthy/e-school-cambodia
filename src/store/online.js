@@ -1,6 +1,6 @@
 import axios from "axios"
+import helper from "../helper/helper"
 import config from "./../config"
-import err from "./../helper/err"
 export default {
     namespaced: true,
     state: {
@@ -17,7 +17,7 @@ export default {
                 commit("onlineOffline", true)
             }).catch(() => {
                 commit("onlineOffline", false)
-                err.connectionErr("សូមពិនិត្យការភ្ជាប់អ៊ីនធឺណិតរបស់អ្នកឬព្យាយាមម្តងទៀតពេលក្រោយ")
+                helper.errorMessage("សូមពិនិត្យការភ្ជាប់អ៊ីនធឺណិតរបស់អ្នកឬព្យាយាមម្តងទៀតពេលក្រោយ")
             })
         }
     }

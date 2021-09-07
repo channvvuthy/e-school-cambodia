@@ -57,11 +57,13 @@
                     <eSchool></eSchool>
                     <div class="h-5"></div>
                 </div>
-                <div v-if="ads.banner" class="relative max-w-full">
-                    <div class="absolute right-2 top-2 ads z-50 bg-primary flex items-center justify-center w-8 h-6 text-white bg-opacity-70 rounded text-xs">
-                      Ads
+                <div v-if="ads">
+                    <div v-if="ads.banner" class="relative max-w-full">
+                        <div class="absolute right-2 top-2 ads z-50 bg-primary flex items-center justify-center w-8 h-6 text-white bg-opacity-70 rounded text-xs">
+                        Ads
+                        </div>
+                        <img :src="ads.banner" @click="openLink(ads.link)" class="cursor-pointer max-h-full"/>
                     </div>
-                    <img :src="ads.banner" @click="openLink(ads.link)" class="cursor-pointer max-h-full"/>
                 </div>
             </div>
         </div>

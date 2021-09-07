@@ -1,7 +1,136 @@
 <template>
     <div class="h-screen">
+        <!-- Detail -->
+         <template v-if="!isEdit">
+            <div class="flex mt-5 px-5">
+                <div class="w-3/5 rounded-xl overflow-hidden shadow-md relative">
+                    <div class="h-full w-full absolute top-0 left-0 flex flex-col items-center justify-center">
+                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                    </div>
+                    <div class="w-full bg-red-100 bg-cover h-40" style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;">
+                    
+                    </div>
+                    <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
+                        </div>
+                        <div class="text-center">
+                            <!-- {{relative.grade}} -->
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3 ml-5 w-full">
+                    <div class="shadow-md rounded-xl relative cursor-pointer" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"  @click="()=>{this.isEdit = true}">
+                        <div class="flex items-center justify-between px-10 py-3">
+                            <div>
+                                {{$t('location')}}
+                            </div>
+                            <div class="cursor-pointer">
+                                <EditIcon :fill="darkMode?`#909090`:`#000000`" :size="18"></EditIcon>
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <MarkerIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></MarkerIcon>
+                                </div>
+                                <div class="mt-2">
+                                    <span v-if="stProfile.province">
+                                        {{stProfile.province.name}}
+                                    </span>
+                                    <span v-else>
+                                        E-School
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3 cursor-pointer" @click="()=>{this.isEdit = true}">
+                            <div>
+                                {{$t('2123')}}
+                            </div>
+                            <div class="cursor-pointer">
+                                <EditIcon :fill="darkMode?`#909090`:`#000000`" :size="18"></EditIcon>
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <SchoolIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></SchoolIcon>
+                                </div>
+                                <div class="mt-2">
+                                    <span v-if="stProfile.school">
+                                        {{stProfile.school.name}}
+                                    </span>
+                                    <span v-else>
+                                        E-School
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cursor-pointer shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3" @click="reportDetail('activity', stProfile._id)">
+                            <div>
+                                {{$t('summary')}}
+                            </div>
+                            <div class="transform -rotate-90">
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <QuizIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></QuizIcon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cursor-pointer shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3" @click="reportDetail('watch-video', stProfile._id)">
+                            <div>
+                            {{$t('1117')}}
+                            </div>
+                            <div class="transform -rotate-90">
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <WatchIcon :fill="darkMode?`#909090`:`#0f3c7a`" :width="50" :height="50"></WatchIcon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cursor-pointer shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3" @click="reportDetail('read-book', stProfile._id)">
+                            <div>
+                            {{$t('1118')}}
+                            </div>
+                            <div class="transform -rotate-90">
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <BookIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></BookIcon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cursor-pointer shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3" @click="reportDetail('attendant', stProfile._id)">
+                            <div>
+                            {{$t('attendant')}}
+                            </div>
+                            <div class="transform -rotate-90">
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <Attendant :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></Attendant>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <!-- End Detail -->
         <!-- Edit -->
-        <div class="overflow-y-scroll m-5 rounded-lg p-5 w-3/4" :class="darkMode?`text-gray-300`:`bg-white e-shadow`">
+        <div v-if="isEdit" class="m-5 rounded-lg p-5 w-3/4 z-10" :class="darkMode?`text-gray-300`:`bg-white e-shadow`">
            <div class="flex items-center ">
                <div class="w-20 h-20 rounded-full bg-primary bg-cover bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                <div class="font-semibold ml-5">
@@ -94,7 +223,7 @@
                                 </div>
                             </div>
                         </label>
-                        <ul class="w-full border mt-1 rounded overflow-y-scroll absolute  left-0 z-50" :class="darkMode?`border-button bg-secondary `:`bg-softGray`" v-if="showSchool && schools.length">
+                        <ul class="w-full border mt-1 rounded overflow-y-scroll absolute  left-0 z-50" :class="darkMode?`border-button bg-secondary `:`bg-softGray`" v-if="showSchool && schools.length" style="z-index:100;height:300px;">
                             <li v-for="(school,index) in schools" :key="index" class="h-10 px-3 flex items-center justify-start cursor-pointer" @click="takeSchool(school)">
                                 {{ school.name }}
                             </li>
@@ -137,10 +266,17 @@
     import eHeader from "./../Video/components/Header.vue"
     import helper from "./../../helper/helper"
     import ExpendIcon from "./components/ExpendIcon.vue"
+    import MarkerIcon from "./../../components/MarkerIcon.vue"
+    import QuizIcon from "./../../components/QuizIcon.vue"
+    import WatchIcon from "./../../components/YoutubeIcon.vue"
+    import BookIcon from "./../../components/BookIcon.vue"
+    import Attendant from "./../../components/AttendantIcon.vue"
+    import EditIcon from "./../../components/EditIcon.vue"
 
 
     export default{
         components: {
+            Attendant,
             CameraIcon,
             EditUserIcon,
             CalendarIcon,
@@ -155,7 +291,13 @@
             eHeader,
             SchoolIcon,
             ChevronIcon,
-            ExpendIcon
+            ExpendIcon,
+            MarkerIcon,
+            QuizIcon,
+            WatchIcon,
+            BookIcon,
+            EditIcon
+            
         },
         data(){
             return {
@@ -166,6 +308,7 @@
                 noUpdate: true,
                 showProvince: false,
                 showSchool: false,
+                isEdit: false,
                 province:{
                     _id:"",
                     name:"",
@@ -184,7 +327,9 @@
         methods: {
             ...mapActions('setting', ['getProvinces', 'getSchool']),
             ...mapActions('auth', ['changeProfile', 'getStudentProfile', 'changeProfilePhotoPhoto']),
-
+             reportDetail(page,user_id){
+                this.$router.push({name: page, params:{user_id}})
+            },
             closeProvince(){
                 this.showProvince = false
             },
@@ -241,6 +386,7 @@
                     helper.success("account_updated")
                     this.getStudentProfile(this.stProfile)
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
+                    this.isEdit = false
                 }).catch(() => {
                     this.err = true
                     this.errMessage = "ការកែប្រែពត៍មានត្រូវបានបរាជ័យ"
@@ -310,6 +456,7 @@
                     this.stProfile.photo = response.data.photo
                     this.getStudentProfile(this.stProfile)
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
+                    
                 }).catch(() => {})
             }
         },

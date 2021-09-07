@@ -31,6 +31,16 @@ const routes = [
         component: () => import('../views/Splash/Splash'),
     },
     {
+        path: '/other',
+        name: 'other',
+        component: () => import('../views/Other/Other'),
+    },
+    {
+        path: '/other-refresh',
+        name: 'other-refresh',
+        component: () => import('../views/Other/Refresh'),
+    },
+    {
         path: '/',
         name: 'home',
         component: Home,
@@ -124,11 +134,6 @@ const routes = [
         path: '/favorite',
         name: 'favorite',
         component: () => import('../views/Favorite/Favorite'),
-    },
-    {
-        path: '/other',
-        name: 'other',
-        component: () => import('../views/Other/Other'),
     },
     {
         path: '/help',
