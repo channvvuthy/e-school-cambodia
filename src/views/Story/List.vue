@@ -1,6 +1,6 @@
 <template>
     <div>
-        <eHeader :title="'4120'"></eHeader>
+    <eHeader :title="'all_story'" :ml="3"></eHeader>
         <div class="p-5">
             <div v-if="loadingStory">
                 <Loading></Loading>

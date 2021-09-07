@@ -1,5 +1,5 @@
 <template>
-    <svg width="33px" height="33px" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg :width="size" :height="size" viewBox="0 0 33 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <!-- Generator: sketchtool 52.5 (67469) - http://www.bohemiancoding.com/sketch -->
         <title>71429647-2338-4396-9D8F-DA23EF22091A</title>
         <desc>Created with sketchtool.</desc>
@@ -24,3 +24,14 @@
         </g>
     </svg>
 </template>
+<script>
+export default {
+    props:{
+        size:{
+            default:()=>{
+                return 33
+            }
+        }
+    }
+}
+</script>

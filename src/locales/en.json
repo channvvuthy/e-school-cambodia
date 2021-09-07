@@ -356,6 +356,9 @@
   "invoice":"Invoice",
   "other":"Other",
   "rename":"Rename",
-  "please_enter_name": "Please enter name"
+  "please_enter_name": "Please enter name",
+  "contact":"Contact Us",
+  "version":"Version",
+  "all_story":"All story"
 
 }

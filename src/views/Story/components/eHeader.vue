@@ -7,7 +7,7 @@
              @click="back()">
                 <BackIcon :width="20" :height="20" :fill="darkMode?`#D1D5DB`:`#000000`"></BackIcon>
             </div>
-            <div class="text-sm font-mediums">{{$t(title)}}</div>
+            <div :class="`text-sm font-mediums ml-${ml}`">{{$t(title)}}</div>
         </div>
         <div class="flex-1 w-full flex justify-end px-5 items-center cursor-pointer" @click="() => {this.$router.push({name:'network'})}">
                 <AddUserIcon :fill="darkMode?`#909090`:`#0f3c7a`"></AddUserIcon>
@@ -37,6 +37,11 @@
             title:{
                 default:() =>{
                     return '2126'
+                }
+            },
+            ml:{
+                default:() =>{
+                    return 0
                 }
             }
         },

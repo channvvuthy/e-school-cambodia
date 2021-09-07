@@ -119,7 +119,7 @@ export default {
         ...mapState('cart', ['carts']),
         ...mapState('auth', ['token']),
         myCart(){
-            return this.carts.list ?this.carts.list.length: 0
+            return this.carts;
         }
 
     },
@@ -152,8 +152,8 @@ export default {
         
     },
     watch:{
-        'myCart':function(value){
-            this.itemInCart = value
+        'myCart':function(carts){
+            this.itemInCart = carts.list.length
         }
     }
 };

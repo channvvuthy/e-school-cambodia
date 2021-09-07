@@ -108,7 +108,6 @@ export default {
             this.getSummaryDetail(payload)
         },
         formatDate(date){
-            moment.locale("en")
             if(this.$i18n.locale =='en'){
                 return "Date " +  moment(date).format('DD-MM-YYYY');
             }
