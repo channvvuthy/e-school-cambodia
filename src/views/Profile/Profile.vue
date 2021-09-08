@@ -56,7 +56,7 @@
                                 </div>
                                 <div class="mt-2">
                                     <span v-if="stProfile.school">
-                                        {{stProfile.school.name}}
+                                       <span :title="stProfile.school.name"> {{cutString(stProfile.school.name,20)}}</span>
                                     </span>
                                     <span v-else>
                                         E-School
@@ -139,7 +139,7 @@
                </div>
 
            </div>
-           <div class="mt-10">
+           <div class="mt-5">
                 <!-- Name -->
                 <div class="grid grid-cols-2 gap-5">
                     <div>
@@ -346,6 +346,9 @@
                     return province._id == this.stProfile.province._id
                 }
                 return false
+            },
+            cutString(text,limit){
+                return helper.cutString(text, limit)
             },
 
             showAllProvince(){

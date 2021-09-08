@@ -17,6 +17,9 @@ module.exports = {
                     "protocol":"https",
                    "releaseType":"release",
                 },
+                "mac":{
+                    "target":["pkg"]
+                },
                 "win": {
                     "target": [
                         {

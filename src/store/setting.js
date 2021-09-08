@@ -11,7 +11,7 @@ export  default {
         isHide: false,
         localize: localStorage.getItem('localize') ? localStorage.getItem('localize') : "en",
         page: 1,
-        darkMode: localStorage.getItem('darkMode') ? localStorage.getItem('darkMode') : false,
+        darkMode: false,
     },
     mutations: {
     setDarkMode(state, payload){

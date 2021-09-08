@@ -65,7 +65,7 @@ new Vue({
         }
         
         if (localStorage.getItem('darkMode')) {
-            if(localStorage.getItem('darkMode') == "false" || localStorage.getItem('darkMode') == false){
+            if((localStorage.getItem('darkMode') == null || localStorage.getItem('darkMode') == "false" || localStorage.getItem('darkMode') == false)){
                 store.commit('setting/setDarkMode', false)
             }else{
                 store.commit('setting/setDarkMode', true)

@@ -129,8 +129,12 @@ async function createWindow() {
     Menu.setApplicationMenu(null)
     win.maximize();
     win.on("close", (event) => {
-        win.hide()
-        event.preventDefault()
+        if (app.quitting) {
+            win = null
+          } else {
+            event.preventDefault()
+            win.hide()
+          }
     })
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
@@ -160,12 +164,11 @@ if (!gotTheLock) {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    app.quit()
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    // if (process.platform !== 'darwin') {
-    //     app.quit()
-    // }
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
 });
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the

@@ -58,7 +58,7 @@
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
                                 <div class="flex justify-center" v-if="contact.unread">
-                                    <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
+                                    <div class="notification h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{contact.unread}}</div>
                                 </div>
                                 <div class="text-xs mt-1" :class="darkMode?`text-gray-500`:``">
                                     {{contact.last == undefined?$t('unread') + ' ' + contact.unread:formatTime(contact.last.date)}}

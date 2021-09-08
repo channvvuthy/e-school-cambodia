@@ -182,7 +182,7 @@
                                     </Reply>
                                 </div>
                                 <!-- Text message -->
-                                <template v-if="message.content.type === 1">
+                                <template v-if="(message.content.type === 1 || message.content.type === 0)">
                                     <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center relative">
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)">
                                             <div class="h-13 w-13"></div>
@@ -205,10 +205,16 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                                    <span v-if="message.content.type == 0" class="pr-1" :class="darkMode?`text-fb`:`text-primary`">
+                                                        {{ message.sender.name }}
+                                                    </span>
                                                     <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                                <span v-if="message.content.type == 0" class="pr-1" :class="darkMode?`text-fb`:`text-primary`">
+                                                    {{ message.sender.name }}
+                                                </span>
                                                 <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                             </div>
                                             

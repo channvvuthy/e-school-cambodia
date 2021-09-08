@@ -868,7 +868,6 @@ export default {
         if(localStorage.getItem('token') != undefined && localStorage.getItem('token') != null){
             this.auth = localStorage.getItem('token')
         }
-        
     }
 }
 </script>

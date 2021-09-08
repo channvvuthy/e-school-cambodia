@@ -29,9 +29,9 @@
                                    {{ company.address }} <span :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer underline" @click="openLink(mapUrl)">មើលផែនទី</span>
                                </div>
                            </li>
-                           <li class="flex items-center h-12">
+                           <li class="flex items-center h-12 cursor-pointer" @click="openLink(company.website )">
                                <WebIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24"></WebIcon>
-                               <div class="ml-3">
+                               <div class="ml-3" :class="darkMode?`text-fb`:`text-primary`">
                                    {{ company.website }}
                                </div>
                            </li>
