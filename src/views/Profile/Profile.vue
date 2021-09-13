@@ -14,7 +14,7 @@
                         <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
                         </div>
                         <div class="text-center">
-                            <!-- {{relative.grade}} -->
+                            <!-- {{stProfile.date_of_birth}} -->
                         </div>
                     </div>
                 </div>

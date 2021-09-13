@@ -7,10 +7,10 @@
         <div class="px-3 mt-7">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('activity')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `activity` || $route.name === `activity-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `activity` || $route.name === `activity-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('activity')">
                         <div>
-                            <ActivityIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `activity` || $route.name === `activity-detail`"></ActivityIcon>
-                            <ActivityIcon :fill="darkMode?`#909090`:`#055174`" v-else></ActivityIcon>
+                            <ActivityIcon fill="#FFFFFF" :size="24" v-if="$route.name === `activity` || $route.name === `activity-detail`"></ActivityIcon>
+                            <ActivityIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else></ActivityIcon>
                         </div>
 
                     </div>
@@ -19,10 +19,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('watch-video')" >
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"  :class="activeClass('watch-video')">
                         <div>
-                            <WatchVideoIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
-                            <WatchVideoIcon :fill="darkMode?`#909090`:`#055174`" v-else></WatchVideoIcon>
+                            <WatchVideoIcon fill="#FFFFFF" :size="24" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
+                            <WatchVideoIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else></WatchVideoIcon>
                         </div>
 
                     </div>
@@ -31,10 +31,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('read-book')" >
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `read-book`?`bg-byline`:`bg-button`}`:`${$route.name === `read-book`?`bg-primary`:`bg-gray-100`} shadow-md`">
-                        <div>
-                            <BookIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `read-book`"></BookIcon>
-                            <BookIcon :fill="darkMode?`#909090`:`#055174`" v-else></BookIcon>
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('read-book')">
+                        <div> 
+                            <BookIcon fill="#FFFFFF" :size="24" v-if="$route.name === `read-book`"></BookIcon>
+                            <BookIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></BookIcon>
                         </div>
 
                     </div>
@@ -43,10 +43,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('relative')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `relative`?`bg-byline`:`bg-button`}`:`${$route.name === `relative`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('relative')">
                         <div>
-                            <RelativeIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `relative`"></RelativeIcon>
-                            <RelativeIcon :fill="darkMode?`#909090`:`#055174`" v-else></RelativeIcon>
+                            <RelativeIcon fill="#FFFFFF" :size="24" v-if="$route.name === `relative`"></RelativeIcon>
+                            <RelativeIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></RelativeIcon>
                         </div>
 
                     </div>
@@ -61,7 +61,7 @@
 <script>
     import {mapState} from "vuex"
     import ActivityIcon from "./../../../components/ActivityIcon.vue"
-    import WatchVideoIcon from "./../../../components/WatchVideoIcon.vue"
+    import WatchVideoIcon from "./../../../components/YoutubeIcon.vue"
     import RelativeIcon from "./../../../components/RelativeIcon.vue"
     import BookIcon from "./../../../components/BookIcon.vue"
     import QuizIcon from "./../../../components/QuizIcon.vue"
@@ -82,6 +82,18 @@
             goTo(page) {
                 this.$router.push({ name: page, params:{user_id:this.stProfile._id} }).catch((err)=>{err});
             },
+            activeClass(currentRoute){
+                if(this.$route.name === currentRoute){
+                    if(this.darkMode){
+                        return "bg-button"
+                    }
+                   return "bg-primary"
+                }
+                if(this.darkMode){
+                    return "border border-roundBorder"
+                }
+                return "border border-roundBorder"
+            }
         }
     }
 </script>

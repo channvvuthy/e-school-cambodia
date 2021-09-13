@@ -1,7 +1,7 @@
 <template>
     <div class="w-full text-xs" :class="darkMode?'bg-secondary':'bg-white'">
         <div class="pl-12 pr-5 flex justify-between items-center">
-            <div class="grid grid-cols-5 gap-6">
+            <div class="grid grid-cols-5 gap-8">
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('home')">
                     <div v-if="$route.name === 'home'"><HomeFillIcon :fill="darkMode?`#ffffff`:`#055174`"></HomeFillIcon></div>
                     <div v-else><HomeIcon :fill="darkMode?`#909090`:`#055174`"></HomeIcon></div>

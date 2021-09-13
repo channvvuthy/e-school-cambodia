@@ -6,10 +6,10 @@
         <div class="px-3 my-3 mt-7">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('hot-chat')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `hot-chat`?`bg-byline`:`bg-button`}`:`${$route.name === `hot-chat`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('hot-chat')">
                         <div>
-                            <ChatIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `hot-chat`"></ChatIcon>
-                            <ChatIcon :fill="darkMode?`#909090`:`#055174`" v-else></ChatIcon>
+                            <ChatIcon fill="#FFFFFF"  v-if="$route.name === `hot-chat`"></ChatIcon>
+                            <ChatIcon  :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></ChatIcon>
                         </div>
 
                     </div>
@@ -18,10 +18,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('policy')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `policy`?`bg-byline`:`bg-button`}`:`${$route.name === `policy`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('policy')">
                         <div>
-                            <PolicyIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `policy`"></PolicyIcon>
-                            <PolicyIcon :fill="darkMode?`#909090`:`#055174`" v-else></PolicyIcon>
+                            <PolicyIcon fill="#FFFFFF" v-if="$route.name === `policy`"></PolicyIcon>
+                            <PolicyIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></PolicyIcon>
                         </div>
 
                     </div>
@@ -30,10 +30,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center"  @click="goTo('help')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `help`?`bg-byline`:`bg-button`}`:`${$route.name === `help`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('help')">
                         <div>
-                            <HelpIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `help`"></HelpIcon>
-                            <HelpIcon :fill="darkMode?`#909090`:`#055174`" v-else></HelpIcon>
+                            <HelpIcon fill="#FFFFFF"  v-if="$route.name === `help`"></HelpIcon>
+                            <HelpIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></HelpIcon>
                         </div>
 
                     </div>
@@ -42,10 +42,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('about')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `about`?`bg-byline`:`bg-button`}`:`${$route.name === `about`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('about')">
                         <div>
-                            <AboutIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `about`"></AboutIcon>
-                            <AboutIcon :fill="darkMode?`#909090`:`#055174`" v-else></AboutIcon>
+                            <AboutIcon fill="#FFFFFF" v-if="$route.name === `about`"></AboutIcon>
+                            <AboutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></AboutIcon>
 
                         </div>
 
@@ -55,8 +55,8 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="shareApp">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <div><ShareIcon :fill="darkMode?`#909090`:`#055174`"></ShareIcon></div>
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('')">
+                        <div><ShareIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></ShareIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -64,8 +64,8 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="setDarkMode(darkMode)">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <div><ModeIcon :fill="darkMode?`#909090`:`#055174`"></ModeIcon></div>
+                    <div class="flex-col rounded flex justify-center items-center  cursor-pointer h-13 w-13 rounded-full" :class="activeClass('')">
+                        <div><ModeIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></ModeIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -73,10 +73,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center">
-                    <div class="flex-col rounded flex justify-center items-center h-10 w-full cursor-pointer" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `"
+                    <div class="flex-col rounded flex justify-center items-center  cursor-pointer h-13 w-13 rounded-full" :class="activeClass('')"
                          @click="setLocalization(localize==='kh'?'en':'kh')">
-                        <div v-if="localize==='en'"><KhIcon :fill="darkMode?`#909090`:`#055174`" ></KhIcon></div>
-                        <div v-else><EnIcon :fill="darkMode?`#909090`:`#055174`" ></EnIcon></div>
+                        <div v-if="localize==='en'"><KhIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" ></KhIcon></div>
+                        <div v-else><EnIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" ></EnIcon></div>
 
 
                     </div>
@@ -134,9 +134,9 @@
     import ChatIcon from "./../../../components/ChatIcon"
     import PolicyIcon from "./../../../components/PolicyIcon"
     import HelpIcon from "./../../../components/HelpIcon"
-    import AboutIcon from "./../../../components/AboutIcon"
+    import AboutIcon from "./../../../components/AboutIcon.vue"
     import ShareIcon from "./../../../components/ShareIcon"
-    import ModeIcon from "./../../../components/ModeIcon"
+    import ModeIcon from "./../../../components/ModeIcon.vue"
     import KhIcon from "./../../../components/KhIcon.vue"
     import CloseIcon from "./../../../components/CloseIcon"
     import EnIcon from "./../../../components/EnIcon.vue"
@@ -197,6 +197,18 @@
                 copyText.setSelectionRange(0, 99999)
                 document.execCommand("copy");
                 helper.success("Copied the text: " + copyText.value)
+            },
+            activeClass(currentRoute){
+                if(this.$route.name === currentRoute){
+                    if(this.darkMode){
+                        return "bg-button"
+                    }
+                   return "bg-primary"
+                }
+                if(this.darkMode){
+                    return "border border-roundBorder"
+                }
+                return "border border-roundBorder"
             }
         }
     }

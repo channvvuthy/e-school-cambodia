@@ -6,10 +6,10 @@
         <div class="px-3 mt-8">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('profile')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `profile`?`bg-byline`:`bg-button`}`:`${$route.name === `profile`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('profile')">
                         <div>
-                            <ProfileIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `profile`"></ProfileIcon>
-                            <ProfileIcon :fill="darkMode?`#909090`:`#055174`" v-else></ProfileIcon>
+                            <ProfileIcon fill="#FFFFFF" :size="24"  v-if="$route.name === `profile`"></ProfileIcon>
+                            <ProfileIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else></ProfileIcon>
                         </div>
 
                     </div>
@@ -18,8 +18,8 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center"  @click="goTo('change-password')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><LockIcon :fill="darkMode?`#909090`:`#055174`"></LockIcon></div>
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"  :class="activeClass('change-password')">
+                        <div><LockIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></LockIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -27,10 +27,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('parent')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `parent`?`bg-byline`:`bg-button`}`:`${$route.name === `parent`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('parent')">
                         <div>
-                            <GuardianIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `parent`"></GuardianIcon>
-                            <GuardianIcon :fill="darkMode?`#909090`:`#055174`" v-else></GuardianIcon>
+                            <GuardianIcon fill="#FFFFFF"  v-if="$route.name === `parent`"></GuardianIcon>
+                            <GuardianIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></GuardianIcon>
                         </div>
 
                     </div>
@@ -39,10 +39,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('insurance')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `insurance`?`bg-byline`:`bg-button`}`:`${$route.name === `insurance`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('insurance')">
                         <div>
-                            <InsuranceIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `insurance`"></InsuranceIcon>
-                            <InsuranceIcon :fill="darkMode?`#909090`:`#055174`" v-else></InsuranceIcon>
+                            <InsuranceIcon fill="#FFFFFF" v-if="$route.name === `insurance`"></InsuranceIcon>
+                            <InsuranceIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></InsuranceIcon>
                         </div>
 
                     </div>
@@ -51,10 +51,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center"  @click="goTo('invoice')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `invoice`?`bg-byline`:`bg-button`}`:`${$route.name === `invoice`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('invoice')">
                         <div>
-                            <InvoiceIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `invoice`"></InvoiceIcon>
-                            <InvoiceIcon :fill="darkMode?`#909090`:`#055174`" v-else></InvoiceIcon>
+                            <InvoiceIcon fill="#FFFFFF"  v-if="$route.name === `invoice`"></InvoiceIcon>
+                            <InvoiceIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></InvoiceIcon>
                         </div>
 
                     </div>
@@ -63,10 +63,10 @@
                     </div>
                 </div>
                  <div class="text-center flex flex-col justify-center items-center"  @click="goTo('other')">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `other`|| $route.name === `other-refresh`?`bg-byline`:`bg-button`}`:`${$route.name === `other` || $route.name === `other-refresh`?`bg-primary`:`bg-gray-100`} shadow-md`">
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('other')">
                         <div>
-                            <OtherIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `other` || $route.name === `other-refresh`"></OtherIcon>
-                            <OtherIcon :fill="darkMode?`#909090`:`#055174`" v-else></OtherIcon>
+                            <OtherIcon fill="#FFFFFF" v-if="$route.name === `other` || $route.name === `other-refresh`"></OtherIcon>
+                            <OtherIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></OtherIcon>
                         </div>
 
                     </div>
@@ -75,8 +75,8 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
-                    <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><LogoutIcon :fill="darkMode?`#909090`:`#055174`"></LogoutIcon></div>
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('other')">
+                        <div><LogoutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></LogoutIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -121,6 +121,18 @@
             goTo(page) {
                 this.$router.push({ name: page }).catch((err)=>{err});
             },
+            activeClass(currentRoute){
+                if(this.$route.name === currentRoute){
+                    if(this.darkMode){
+                        return "bg-button"
+                    }
+                   return "bg-primary"
+                }
+                if(this.darkMode){
+                    return "border border-roundBorder"
+                }
+                return "border border-roundBorder"
+            }
         }
     }
 </script>

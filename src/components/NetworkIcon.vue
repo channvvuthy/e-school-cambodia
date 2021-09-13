@@ -1,7 +1,7 @@
 <template>
     
     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        height="24"
+        :height="size"
         viewBox="0 0 505.4 505.4" style="enable-background:new 0 0 505.4 505.4;" xml:space="preserve">
         <g :fill="fill">
             <g>
@@ -32,6 +32,11 @@ export default {
             default:() =>{
                 return "#055174"
             }
+        },
+        size:{
+           default:() =>{
+                return 24
+            } 
         }
     }
 }

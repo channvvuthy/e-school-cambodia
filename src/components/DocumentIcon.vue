@@ -1,7 +1,6 @@
 <template>
-    
     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        height="24"
+        :height="size"
         viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
         <g :fill="fill">
             <path d="M57.49,27H54v-6.268C54,19.226,52.774,18,51.268,18H48v-2.414l-0.495-0.495c-0.001,0-0.001-0.001-0.001-0.002l-7.296-7.296
@@ -26,6 +25,11 @@ export default {
             default:() =>{
                 return "#055174"
             }
+        },
+        size:{
+           default:() =>{
+                return 24
+            } 
         }
     }
 }

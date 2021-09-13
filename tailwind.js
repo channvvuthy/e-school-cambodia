@@ -15,8 +15,10 @@ module.exports = {
         colors: {
             transparent: 'transparent',
             roundBorder: "#979797",
+            iconColor:"#4A4A4A",
             current: 'currentColor',
             primary: '#055174',
+            darkBlue:"#02141C",
             act:"#EAF3FF",
             dadada:"#dadada",
             borderGray:"#c9c9c9",
@@ -109,6 +111,7 @@ module.exports = {
         backgroundColor: (theme) => theme('colors'),
         backgroundImage: {
             'img-primary': "url('/bg.jpg')",
+            "dark":"url('/dark-mode.jpg')",
             none: 'none',
             'gradient-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
             'gradient-to-tr': 'linear-gradient(to top right, var(--tw-gradient-stops))',
