@@ -9,7 +9,7 @@
                         <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
                     </div>
                     <div v-else class="cursor-pointer" @click="addToFavorite(details)">
-                        <FavoriteIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"/>
+                        <FavoriteIcon :fill="darkMode?`#ffffff`:`#055174`"/>
                     </div>
                 </div>
                 <div class="flex flex-col ml-14 justify-start">

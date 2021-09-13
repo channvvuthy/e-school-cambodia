@@ -4,7 +4,7 @@
             <div class="flex items-center my-5 px-5 h-32 text-sm" :class="darkMode?`bg-secondary text-white`:`bg-white`">
             <button class="flex flex-col items-center justify-center h-12  mr-5  focus:outline-none text-center " @click="filterSummary('this_month')">
                 <div class="mb-5 flex items-center justify-center w-14 h-14 rounded-full" :class="activeClass('this_month')">
-                    <CalendarIcon :size="30" :fill="colorIcon('this_month', '#0f3c7a')"></CalendarIcon>
+                    <CalendarIcon :size="30" :fill="colorIcon('this_month', '#055174')"></CalendarIcon>
                 </div>
                 <div :class="darkMode?`${active === `this_month`?`text-fb`:``}`:`${active === `this_month`?`text-primary`:``}`">
                     {{$t('this_month')}}

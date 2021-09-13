@@ -29,7 +29,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <MarkerIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></MarkerIcon>
+                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></MarkerIcon>
                                 </div>
                                 <div class="mt-2">
                                     <span v-if="stProfile.province">
@@ -52,7 +52,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <SchoolIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></SchoolIcon>
+                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
                                 </div>
                                 <div class="mt-2">
                                     <span v-if="stProfile.school">
@@ -75,7 +75,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <QuizIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></QuizIcon>
+                                    <QuizIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></QuizIcon>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +90,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <WatchIcon :fill="darkMode?`#909090`:`#0f3c7a`" :width="50" :height="50"></WatchIcon>
+                                    <WatchIcon :fill="darkMode?`#909090`:`#055174`" :width="50" :height="50"></WatchIcon>
                                 </div>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <BookIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></BookIcon>
+                                    <BookIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></BookIcon>
                                 </div>
                             </div>
                         </div>
@@ -120,7 +120,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <Attendant :fill="darkMode?`#909090`:`#0f3c7a`" :size="50"></Attendant>
+                                    <Attendant :fill="darkMode?`#909090`:`#055174`" :size="50"></Attendant>
                                 </div>
                             </div>
                         </div>

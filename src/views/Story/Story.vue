@@ -4,7 +4,7 @@
             <div class="flex text-primary  text-md gap-4">
                 <div>
                     <div class="mr-3">
-                        <SmileIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SmileIcon>
+                        <SmileIcon :fill="darkMode?`#ffffff`:`#055174`"></SmileIcon>
                     </div>
                 </div>
                 <div class="text-base font-medium" :class="darkMode?'text-white':''"><span class="uppercase">{{$t('2003')}}</span> <span>

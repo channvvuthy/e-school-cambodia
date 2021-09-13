@@ -9,7 +9,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `hot-chat`?`bg-byline`:`bg-button`}`:`${$route.name === `hot-chat`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <ChatIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `hot-chat`"></ChatIcon>
-                            <ChatIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></ChatIcon>
+                            <ChatIcon :fill="darkMode?`#909090`:`#055174`" v-else></ChatIcon>
                         </div>
 
                     </div>
@@ -21,7 +21,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `policy`?`bg-byline`:`bg-button`}`:`${$route.name === `policy`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <PolicyIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `policy`"></PolicyIcon>
-                            <PolicyIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></PolicyIcon>
+                            <PolicyIcon :fill="darkMode?`#909090`:`#055174`" v-else></PolicyIcon>
                         </div>
 
                     </div>
@@ -33,7 +33,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `help`?`bg-byline`:`bg-button`}`:`${$route.name === `help`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <HelpIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `help`"></HelpIcon>
-                            <HelpIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></HelpIcon>
+                            <HelpIcon :fill="darkMode?`#909090`:`#055174`" v-else></HelpIcon>
                         </div>
 
                     </div>
@@ -45,7 +45,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `about`?`bg-byline`:`bg-button`}`:`${$route.name === `about`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <AboutIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `about`"></AboutIcon>
-                            <AboutIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></AboutIcon>
+                            <AboutIcon :fill="darkMode?`#909090`:`#055174`" v-else></AboutIcon>
 
                         </div>
 
@@ -56,7 +56,7 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="shareApp">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <div><ShareIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ShareIcon></div>
+                        <div><ShareIcon :fill="darkMode?`#909090`:`#055174`"></ShareIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -65,7 +65,7 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="setDarkMode(darkMode)">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md`">
-                        <div><ModeIcon :fill="darkMode?`#909090`:`#0f3c7a`"></ModeIcon></div>
+                        <div><ModeIcon :fill="darkMode?`#909090`:`#055174`"></ModeIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -75,8 +75,8 @@
                 <div class="text-center flex flex-col justify-center items-center">
                     <div class="flex-col rounded flex justify-center items-center h-10 w-full cursor-pointer" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `"
                          @click="setLocalization(localize==='kh'?'en':'kh')">
-                        <div v-if="localize==='en'"><KhIcon :fill="darkMode?`#909090`:`#0f3c7a`" ></KhIcon></div>
-                        <div v-else><EnIcon :fill="darkMode?`#909090`:`#0f3c7a`" ></EnIcon></div>
+                        <div v-if="localize==='en'"><KhIcon :fill="darkMode?`#909090`:`#055174`" ></KhIcon></div>
+                        <div v-else><EnIcon :fill="darkMode?`#909090`:`#055174`" ></EnIcon></div>
 
 
                     </div>

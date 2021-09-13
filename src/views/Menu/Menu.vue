@@ -3,8 +3,8 @@
         <div class="pl-12 pr-5 flex justify-between items-center">
             <div class="grid grid-cols-5 gap-6">
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('home')">
-                    <div v-if="$route.name === 'home'"><HomeFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></HomeFillIcon></div>
-                    <div v-else><HomeIcon :fill="darkMode?`#909090`:`#0f3c7a`"></HomeIcon></div>
+                    <div v-if="$route.name === 'home'"><HomeFillIcon :fill="darkMode?`#ffffff`:`#055174`"></HomeFillIcon></div>
+                    <div v-else><HomeIcon :fill="darkMode?`#909090`:`#055174`"></HomeIcon></div>
                     <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'home')">
                         {{$t('1101')}}
                     </p>
@@ -13,9 +13,9 @@
                     </template>
                 </div>
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
-                    <div v-if="$route.name === 'video' || $route.name === 'video-detail'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></WatchVideoFillIcon></div>
+                    <div v-if="$route.name === 'video' || $route.name === 'video-detail'"><WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#055174`"></WatchVideoFillIcon></div>
                     <div v-else>
-                        <WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`"></WatchVideoIcon>
+                        <WatchVideoIcon :fill="darkMode?`#909090`:`#055174`"></WatchVideoIcon>
                     </div>
                     <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'video' || $route.name === 'video-detail')">
                         {{$t('2108')}}
@@ -25,8 +25,8 @@
                     </template>
                 </div>
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
-                    <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></LibraryIcon></div>
-                    <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LibraryThinIcon></div>
+                    <div v-if="$route.name === 'library'"><LibraryIcon :fill="darkMode?`#ffffff`:`#055174`"></LibraryIcon></div>
+                    <div v-else><LibraryThinIcon :fill="darkMode?`#909090`:`#055174`"></LibraryThinIcon></div>
                     <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'library')">
                         {{$t('2200')}}
                     </p>
@@ -36,8 +36,8 @@
                 </div>
                  <template v-if="token">
                     <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
-                        <div v-if="$route.name === 'partner'"><PartnershipFillIcon :fill="darkMode?`#ffffff`:`#0f3c7a`" :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon></div>
-                        <div v-else><PartnershipIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PartnershipIcon></div>
+                        <div v-if="$route.name === 'partner'"><PartnershipFillIcon :fill="darkMode?`#ffffff`:`#055174`" :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon></div>
+                        <div v-else><PartnershipIcon :fill="darkMode?`#909090`:`#055174`"></PartnershipIcon></div>
                         <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'partner')">
                             {{$t('1104')}}
                         </p>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10  relative" @click="goTo('chat')" >
                         <div>
-                            <ChatIcon :fill="darkMode?`#aaa`:`#0f3c7a`" v-if="$route.name === `chat`"></ChatIcon>
+                            <ChatIcon :fill="darkMode?`#aaa`:`#055174`" v-if="$route.name === `chat`"></ChatIcon>
                             <ChatIcon :fill="darkMode?`#909090`:`#181818`" v-else></ChatIcon>
                         </div>
 

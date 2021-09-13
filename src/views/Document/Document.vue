@@ -17,9 +17,9 @@
                 <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5">
                     <div class="rounded-xl shadow w-full p-5" :class="darkMode?`bg-secondary`:`bg-white`" v-for="(document, index) in documents" :key="index">
                         <div class="p-8 rounded-xl inline-block cursor-pointer" :class="darkMode?`bg-button`:`bg-softGray`" @click="previewFile(document)">
-                            <FolderIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 1"></FolderIcon>
-                            <PdfIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 2"></PdfIcon>
-                            <!-- <ImageIcon :size="50" :fill="darkMode?`#909090`:`#0f3c7a`" v-if="document.type === 3"></ImageIcon> -->
+                            <FolderIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 1"></FolderIcon>
+                            <PdfIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 2"></PdfIcon>
+                            <!-- <ImageIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 3"></ImageIcon> -->
                             <img :src="document.url" v-if="document.type === 3" class="h-20 rounded">
                         </div>
                         <div class="font-semibold text-lg mt-5" :class="darkMode?`text-gray-300`:`text-primary`" :title="document.name">

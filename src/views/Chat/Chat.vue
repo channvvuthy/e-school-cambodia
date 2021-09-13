@@ -1227,7 +1227,7 @@ export default {
     }
 
     .vue-audio-recorder:hover {
-        background-color: #0f3c7a !important;
+        background-color: #055174 !important;
     }
     .lds-ring, .lds-ring-dark {
         display: inline-block;
@@ -1260,10 +1260,10 @@ export default {
         width: 44px;
         height: 44px;
         margin: 8px;
-        border: 4px solid #0f3c7a;
+        border: 4px solid #055174;
         border-radius: 50%;
         animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        border-color: #0f3c7a transparent transparent transparent;
+        border-color: #055174 transparent transparent transparent;
     }
     .lds-ring div:nth-child(1), .lds-ring-dark div:nth-child(1) {
         animation-delay: -0.45s;
@@ -1304,7 +1304,7 @@ export default {
     }
 
     .vue-audio-recorder:hover {
-        background-color: #0f3c7a !important;
+        background-color: #055174 !important;
     }  
     .pulse {
         border-radius: 50%;

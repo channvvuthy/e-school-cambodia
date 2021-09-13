@@ -18,19 +18,19 @@
                         
                        <ul>
                            <li class="flex items-center h-12">
-                               <PhoneIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24"></PhoneIcon>
+                               <PhoneIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></PhoneIcon>
                                <div class="ml-3">
                                    {{ company.phone }}
                                </div>
                            </li>
                            <li class="flex items-center h-12">
-                               <MarkerIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24"></MarkerIcon>
+                               <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></MarkerIcon>
                                <div class="ml-3">
                                    {{ company.address }} <span :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer underline" @click="openLink(mapUrl)">មើលផែនទី</span>
                                </div>
                            </li>
                            <li class="flex items-center h-12 cursor-pointer" @click="openLink(company.website )">
-                               <WebIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24"></WebIcon>
+                               <WebIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></WebIcon>
                                <div class="ml-3" :class="darkMode?`text-fb`:`text-primary`">
                                    {{ company.website }}
                                </div>

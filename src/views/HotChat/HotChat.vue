@@ -884,7 +884,7 @@ export default {
     }
 
     .vue-audio-recorder:hover {
-        background-color: #0f3c7a !important;
+        background-color: #055174 !important;
     }  
     .pulse {
         border-radius: 50%;

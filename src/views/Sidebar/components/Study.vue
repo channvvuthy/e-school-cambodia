@@ -9,7 +9,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `my-course`?`bg-byline`:`bg-button`}`:`${$route.name === `my-course`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <MyCourseIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `my-course`"></MyCourseIcon>
-                            <MyCourseIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></MyCourseIcon>
+                            <MyCourseIcon :fill="darkMode?`#909090`:`#055174`" v-else></MyCourseIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -20,7 +20,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `my-library`?`bg-byline`:`bg-button`}`:`${$route.name === `my-library`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <LibraryThinIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `my-library`"></LibraryThinIcon>
-                            <LibraryThinIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></LibraryThinIcon>
+                            <LibraryThinIcon :fill="darkMode?`#909090`:`#055174`" v-else></LibraryThinIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -31,7 +31,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `favorite`?`bg-byline`:`bg-button`}`:`${$route.name === `favorite`?`bg-primary`:`bg-gray-100`} shadow-md`">
                          <div>
                              <HeartIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `favorite`"></HeartIcon>
-                             <HeartIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></HeartIcon>
+                             <HeartIcon :fill="darkMode?`#909090`:`#055174`" v-else></HeartIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -42,7 +42,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `download` || $route.name === `download-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `download` || $route.name === `download-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <DownloadIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `download` || $route.name === `download-detail`"></DownloadIcon>
-                            <DownloadIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></DownloadIcon>
+                            <DownloadIcon :fill="darkMode?`#909090`:`#055174`" v-else></DownloadIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -53,7 +53,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `network`?`bg-byline`:`bg-button`}`:`${$route.name === `network`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <NetworkIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `network`"></NetworkIcon>
-                            <NetworkIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></NetworkIcon>
+                            <NetworkIcon :fill="darkMode?`#909090`:`#055174`" v-else></NetworkIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -64,7 +64,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `document` || $route.name === `document-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `document` || $route.name === `document-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <DocumentIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `document` || $route.name === `document-detail`"></DocumentIcon>
-                            <DocumentIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></DocumentIcon>
+                            <DocumentIcon :fill="darkMode?`#909090`:`#055174`" v-else></DocumentIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -75,7 +75,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `gallery`?`bg-byline`:`bg-button`}`:`${$route.name === `gallery`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <GalleryIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `gallery`"></GalleryIcon>
-                            <GalleryIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></GalleryIcon>
+                            <GalleryIcon :fill="darkMode?`#909090`:`#055174`" v-else></GalleryIcon>
                         </div>
 
                     </div>
@@ -87,7 +87,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `certificate`?`bg-byline`:`bg-button`}`:`${$route.name === `certificate`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <CertificateIcon :fill="darkMode?`#212121`:`#FFFFFF`" :size="24" v-if="$route.name === `certificate`"></CertificateIcon>
-                            <CertificateIcon :fill="darkMode?`#909090`:`#0f3c7a`" :size="24" v-else></CertificateIcon>
+                            <CertificateIcon :fill="darkMode?`#909090`:`#055174`" :size="24" v-else></CertificateIcon>
                         </div>
 
                     </div>

@@ -11,11 +11,11 @@
                 <!-- Toolbox -->
                 <div class="flex items-center justify-between w-48 ml -8 cursor-pointer">
                     <div><input type="range" id="volumn" class="absolute invisible"/></div>
-                    <div class="transform rotate-180" @click="previousAudio"><PreviousIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`"></PreviousIcon></div>
-                    <div v-if="!showPlay" @click="playPause"><PlayIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`"></PlayIcon></div>
-                    <div  v-else @click="playPause"><PauseIcon :fill="darkMode?`#909090`:`#0f3c7a`"></PauseIcon></div>
-                    <div @click="nextAudio"><NextIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`"></NextIcon></div>
-                    <div @click="audioList" class="transform" :class="showAudioList?`rotate-180`:``"><RoundUpIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`"></RoundUpIcon></div>
+                    <div class="transform rotate-180" @click="previousAudio"><PreviousIcon :fill="darkMode?`#E5E7EB`:`#055174`"></PreviousIcon></div>
+                    <div v-if="!showPlay" @click="playPause"><PlayIcon :fill="darkMode?`#E5E7EB`:`#055174`"></PlayIcon></div>
+                    <div  v-else @click="playPause"><PauseIcon :fill="darkMode?`#909090`:`#055174`"></PauseIcon></div>
+                    <div @click="nextAudio"><NextIcon :fill="darkMode?`#E5E7EB`:`#055174`"></NextIcon></div>
+                    <div @click="audioList" class="transform" :class="showAudioList?`rotate-180`:``"><RoundUpIcon :fill="darkMode?`#E5E7EB`:`#055174`"></RoundUpIcon></div>
                 </div>
                 <div class="flex-1 w-full ml-8 relative">
                     <div class="absolute h-1 absolute left-0 z-10" :style="`width:${valueSlider}%`" :class="darkMode?`bg-gray-300`:`bg-primary`" style="top:14px;"></div>
@@ -30,12 +30,12 @@
                     <div v-if="(muted == false && defaultVolumeRange > 0)" class="cursor-pointer"
                         @mouseover="() => {this.showVolume = true}" 
                         @mouseout="() => {this.showVolume = false}">
-                        <SoundIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`"></SoundIcon>
+                        <SoundIcon :fill="darkMode?`#E5E7EB`:`#055174`"></SoundIcon>
                     </div>
                     <div v-else :size="20" class="cursor-pointer"
                         @mouseover="() => {this.showVolume = true}" 
                         @mouseout="() => {this.showVolume = false}">
-                        <MutedIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`"></MutedIcon>
+                        <MutedIcon :fill="darkMode?`#E5E7EB`:`#055174`"></MutedIcon>
                     </div>
                     <div class="w-20 h-20  absolute -left-8 flex justify-start items-center -top-20 transform -rotate-90" 
                         @mouseover="()=>{this.showVolume = true}" 
@@ -51,7 +51,7 @@
                 <div class="ml-8 cursor-pointer" v-if="is_favorite">
                     <div v-if="details.is_favorite" @click="removeFavorite(details.book._id)"><FavoriteFill :fill="darkMode?`#E5E7EB`:`#c0272d`"/></div>
                     <div @click="addFavorite(details.book._id)" v-else>
-                        <FavoriteIcon :fill="darkMode?`#E5E7EB`:`#0f3c7a`" />
+                        <FavoriteIcon :fill="darkMode?`#E5E7EB`:`#055174`" />
                     </div>
                 </div>
             </div>
@@ -423,7 +423,7 @@ export default {
         appearance: none;
         width: 15px;
         height: 15px;
-        background: #0f3c7a;
+        background: #055174;
         cursor: pointer;
         border-radius: 50%;
     }
@@ -438,7 +438,7 @@ export default {
         appearance: none;
         width: 16px;
         height: 16px;
-        background: #0f3c7a;
+        background: #055174;
         cursor: pointer;
         border-radius: 50%;
     }

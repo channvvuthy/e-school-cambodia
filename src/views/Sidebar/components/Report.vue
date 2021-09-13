@@ -10,7 +10,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `activity` || $route.name === `activity-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `activity` || $route.name === `activity-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <ActivityIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `activity` || $route.name === `activity-detail`"></ActivityIcon>
-                            <ActivityIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></ActivityIcon>
+                            <ActivityIcon :fill="darkMode?`#909090`:`#055174`" v-else></ActivityIcon>
                         </div>
 
                     </div>
@@ -22,7 +22,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-byline`:`bg-button`}`:`${$route.name === `watch-video` || $route.name === `watch-detail`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <WatchVideoIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
-                            <WatchVideoIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></WatchVideoIcon>
+                            <WatchVideoIcon :fill="darkMode?`#909090`:`#055174`" v-else></WatchVideoIcon>
                         </div>
 
                     </div>
@@ -34,7 +34,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `read-book`?`bg-byline`:`bg-button`}`:`${$route.name === `read-book`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <BookIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `read-book`"></BookIcon>
-                            <BookIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></BookIcon>
+                            <BookIcon :fill="darkMode?`#909090`:`#055174`" v-else></BookIcon>
                         </div>
 
                     </div>
@@ -46,7 +46,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `relative`?`bg-byline`:`bg-button`}`:`${$route.name === `relative`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <RelativeIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `relative`"></RelativeIcon>
-                            <RelativeIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></RelativeIcon>
+                            <RelativeIcon :fill="darkMode?`#909090`:`#055174`" v-else></RelativeIcon>
                         </div>
 
                     </div>

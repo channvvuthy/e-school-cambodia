@@ -1,7 +1,7 @@
 <template>
     <div class="p-5 mb-5 shadow" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `">
         <div class="flex">
-            <div class="mr-3"><SmileIcon :fill="darkMode?`#ffffff`:`#0f3c7a`"></SmileIcon></div>
+            <div class="mr-3"><SmileIcon :fill="darkMode?`#ffffff`:`#055174`"></SmileIcon></div>
             <div class="text-base font-medium uppercase" :class="darkMode?`text-white`:`text-primary`">{{$t('2003')}}</div>
         </div>
         <div class="flex justify-center text-lg">

@@ -27,7 +27,7 @@
             },
             fill: {
                 default: function () {
-                    return "#0f3c7a"
+                    return "#055174"
                 }
             }
         }

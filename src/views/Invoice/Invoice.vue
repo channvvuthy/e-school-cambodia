@@ -15,7 +15,7 @@
                         <div class="flex items-center px-7">
                             <div class="flex flex-1 z-40  cursor-pointer" @click="viewReceipt(receipt)">
                                 <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center" :class="darkMode?`bg-primary`:`bg-softGray`">
-                                    <InvoiceIcon size="40" :fill="darkMode?`#FFFFFF`:`#0f3c7a`"></InvoiceIcon>
+                                    <InvoiceIcon size="40" :fill="darkMode?`#FFFFFF`:`#055174`"></InvoiceIcon>
                                 </div>
                                 <div class="py-3">
                                     <div class="flex justify-between items-center">

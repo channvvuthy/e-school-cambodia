@@ -52,7 +52,7 @@
                             <div v-for="(list, key) in summary.list" :key="key" class="flex justify-start items-center py-5">
                                 <div class="w-32" :class="darkMode?``:`text-primary`">
                                     <div class="flex items-center">
-                                        <div class="mr-2"><ClockIcon :size="20" :fill="darkMode?`#909090`:`#0f3c7a`"></ClockIcon></div>
+                                        <div class="mr-2"><ClockIcon :size="20" :fill="darkMode?`#909090`:`#055174`"></ClockIcon></div>
                                         <div>{{formatTime(list.time)}}</div>
                                     </div>
                                 </div>

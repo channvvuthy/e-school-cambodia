@@ -9,7 +9,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `profile`?`bg-byline`:`bg-button`}`:`${$route.name === `profile`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <ProfileIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `profile`"></ProfileIcon>
-                            <ProfileIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></ProfileIcon>
+                            <ProfileIcon :fill="darkMode?`#909090`:`#055174`" v-else></ProfileIcon>
                         </div>
 
                     </div>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center"  @click="goTo('change-password')">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full"  :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><LockIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LockIcon></div>
+                        <div><LockIcon :fill="darkMode?`#909090`:`#055174`"></LockIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -30,7 +30,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `parent`?`bg-byline`:`bg-button`}`:`${$route.name === `parent`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <GuardianIcon :fill="darkMode?`#212121`:`#FFFFFF`"  v-if="$route.name === `parent`"></GuardianIcon>
-                            <GuardianIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></GuardianIcon>
+                            <GuardianIcon :fill="darkMode?`#909090`:`#055174`" v-else></GuardianIcon>
                         </div>
 
                     </div>
@@ -42,7 +42,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `insurance`?`bg-byline`:`bg-button`}`:`${$route.name === `insurance`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <InsuranceIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `insurance`"></InsuranceIcon>
-                            <InsuranceIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></InsuranceIcon>
+                            <InsuranceIcon :fill="darkMode?`#909090`:`#055174`" v-else></InsuranceIcon>
                         </div>
 
                     </div>
@@ -54,7 +54,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `invoice`?`bg-byline`:`bg-button`}`:`${$route.name === `invoice`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <InvoiceIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `invoice`"></InvoiceIcon>
-                            <InvoiceIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></InvoiceIcon>
+                            <InvoiceIcon :fill="darkMode?`#909090`:`#055174`" v-else></InvoiceIcon>
                         </div>
 
                     </div>
@@ -66,7 +66,7 @@
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`${$route.name === `other`|| $route.name === `other-refresh`?`bg-byline`:`bg-button`}`:`${$route.name === `other` || $route.name === `other-refresh`?`bg-primary`:`bg-gray-100`} shadow-md`">
                         <div>
                             <OtherIcon :fill="darkMode?`#212121`:`#FFFFFF`" v-if="$route.name === `other` || $route.name === `other-refresh`"></OtherIcon>
-                            <OtherIcon :fill="darkMode?`#909090`:`#0f3c7a`" v-else></OtherIcon>
+                            <OtherIcon :fill="darkMode?`#909090`:`#055174`" v-else></OtherIcon>
                         </div>
 
                     </div>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
                     <div class="flex-col rounded flex justify-center items-center h-10 cursor-pointer w-full" :class="darkMode?`bg-button`:`bg-gray-100 shadow-md `">
-                        <div><LogoutIcon :fill="darkMode?`#909090`:`#0f3c7a`"></LogoutIcon></div>
+                        <div><LogoutIcon :fill="darkMode?`#909090`:`#055174`"></LogoutIcon></div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
