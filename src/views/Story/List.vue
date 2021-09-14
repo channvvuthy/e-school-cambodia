@@ -9,7 +9,7 @@
                 <div class="h-screen pb-40 overflow-y-scroll" @scroll="onScroll">
                     <div class="grid gap-5" :class="isHide?`md:grid-cols-6 2xl:grid-cols-8`:`md:grid-cols-5 2xl:grid-cols-6`">
                         <div v-for="(st, index) in story" :key="index" class="cursor-pointer relative rounded-xl overflow-hidden" @click="getStoryDetail(st, index)">
-                            <div class="w-11 h-11 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 flex justify-center items-center bg-white"
+                            <div class="w-11 h-11 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 flex justify-center items-center bg-white cursor-pointer"
                                 :class="darkMode?`border-fb`:`border-fb`"
                                 :style="{backgroundImage:`url(${st.user.photo})`}">
                             </div>

@@ -89,7 +89,7 @@
 </template>
 <script>
     import {mapActions,mapState} from "vuex"
-    import ProfileIcon from "./../../../components/ProfileIcon"
+    import ProfileIcon from "./../../../components/ProfileIcon.vue"
     import LockIcon from "./../../../components/LockIcon"
     import GuardianIcon from "./../../../components/GuardianIcon"
     import InsuranceIcon from "./../../../components/InsuranceIcon"

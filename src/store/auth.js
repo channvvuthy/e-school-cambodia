@@ -33,10 +33,14 @@ export default {
         storyIndex: 0,
         imgUrl:"",
         addingStory:false,
+        userDetails:{},
 
     },
 
     mutations: {
+        getUserDetail(state, payload){
+            state.userDetails = payload
+        },
         getNotificationDetail(state, payload){
             state.notificationDetail = payload
         },
@@ -137,6 +141,16 @@ export default {
     },
 
     actions: {
+        getUser({commit}, payload){
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `user/detail?${helper.q(payload)}`).then((response)=>{
+                    commit("getUserDetail",response.data)
+                    resolve(response)
+                }).catch(err=>{
+                    reject(err)
+                })
+            })
+        },
         login({commit}, auth) {
             var instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];

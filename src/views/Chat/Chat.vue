@@ -205,16 +205,10 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                    <span v-if="message.content.type == 0" class="pr-1" :class="darkMode?`text-fb`:`text-primary`">
-                                                        {{ message.sender.name }}
-                                                    </span>
                                                     <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                <span v-if="message.content.type == 0" class="pr-1" :class="darkMode?`text-fb`:`text-primary`">
-                                                    {{ message.sender.name }}
-                                                </span>
                                                 <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                             </div>
                                             

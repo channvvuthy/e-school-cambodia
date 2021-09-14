@@ -66,6 +66,11 @@ const routes = [
         component: () => import('../views/Activity/Activity'),
     },
     {
+        path: '/user/:user_id',
+        name: 'user',
+        component: () => import('../views/User/User'),
+    },
+    {
         path: '/activity-detail/:type',
         name: 'activity-detail',
         component: () => import('../views/Activity/ActivityDetail'),

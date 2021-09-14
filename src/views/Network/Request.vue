@@ -4,7 +4,7 @@
             <div v-for="(friend, index) in request.list" :key="index" class="mb-3">
                 <div class="flex justify-between items-center">
                     <div class="flex justify-start items-center">
-                        <div class="h-12 w-12 rounded-full bg-cover bg-white bg-center" :style="{backgroundImage:`url(${friend.photo})`}"></div>
+                        <div class="h-12 w-12 rounded-full bg-cover bg-white bg-center cursor-pointer" :style="{backgroundImage:`url(${friend.photo})`}" @click="getUser(friend._id)"></div>
                         <div class="ml-4 text-sm">
                             <div>
                                 
@@ -66,7 +66,10 @@ export default {
         },
         cancelMyRequest(payload){
             this.cancelRequest(payload)
-        }
+        },
+        getUser(user_id){
+            this.$router.push({name:'user', params:{user_id}})
+        },
 
     }
 }
