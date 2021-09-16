@@ -86,7 +86,7 @@
                                 <div class="mt-8">
                                     <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
                                 </div>
-                                <div class="mt-2">
+                                <div class="mt-2 px-3">
                                      <span v-if="stProfile.school">
                                         {{ stProfile.school.name }}
                                     </span>

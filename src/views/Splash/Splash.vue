@@ -3,7 +3,7 @@
         <div class="h-full flex flex-col items-center justify-center">
             <img src="e-school-logo.png" class="w-56">
             <div class="font-black flex text-4xl text-center mt-5 font">
-                <div class="text-primary drop-shadow-xl" v-if="knowledge">ចំនេះ</div>
+                <div class="text-primary drop-shadow-xl" v-if="knowledge">ចំណេះ</div>
                 <div class="mx-5 text-heart" v-if="skill">ជំនាញ</div>
                 <div class="text-primary" v-if="income">ចំណូល</div>
             </div>

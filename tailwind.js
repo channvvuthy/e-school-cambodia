@@ -112,6 +112,7 @@ module.exports = {
         backgroundImage: {
             'img-primary': "url('/bg.jpg')",
             "dark":"url('/dark-mode.jpg')",
+            "light-mode":"url('/light-mode-desktop.jpg')",
             none: 'none',
             'gradient-to-t': 'linear-gradient(to top, var(--tw-gradient-stops))',
             'gradient-to-tr': 'linear-gradient(to top right, var(--tw-gradient-stops))',

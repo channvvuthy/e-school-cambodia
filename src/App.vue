@@ -47,7 +47,10 @@
                 showReceipt: false,
                 receiptDetail:{},
                 showNotificationDetail: false,
-                isSplashScreen: true
+                isSplashScreen: true,
+                window:{
+                    wwidth: null
+                }
             }
         },
 
@@ -101,9 +104,18 @@
             },
             closeNotificationDetail(){
                 this.showNotificationDetail = false
-            }
+            },
+            handleResize() {
+                this.window.width = window.innerWidth;
+            },
         },
         created(){
+            window.addEventListener('resize', this.handleResize);
+            this.handleResize();
+
+            if(this.window.width <= 1440){
+                this.$store.commit('setting/toggleSidebar', true)
+            }
             setTimeout(()=>{
                 this.isSplashScreen = false
             },4000)

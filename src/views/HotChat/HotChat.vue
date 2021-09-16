@@ -5,7 +5,7 @@
             <source src="message.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
         </audio>
-        <div :class="darkMode?`bg-youtube text-gray-300`:`bg-img-primary`" class="rounded-xl bg-repeat m-5 h-full flex flex-col">
+        <div :class="darkMode?`bg-dark text-gray-300 bg-cover`:`bg-light-mode bg-cover`" class="rounded-xl bg-repeat m-5 h-full flex flex-col">
             <div class="flex items-center px-5 py-3 rounded-t-xl e-shadow" :class="darkMode?`bg-secondary`:`bg-white`">
                 <div class="rounded-full h-16 w-16 bg-gray-300 bg-cover bg-no-repeat" 
                 style="background-image:url('e-school-logo.png');background-size:70% 70%;background-position:center center"></div>
@@ -13,7 +13,7 @@
                     <div>
                         {{$t('eschool')}}
                     </div>
-                    <div class="text-xs" :class="darkMode?``:`text-gray-400`">{{$t('official_page')}}</div>
+                    <div class="text-xs" :class="darkMode?``:`text-gray-600`">{{$t('official_page')}}</div>
                 </div>
             </div>
             <div class="px-5 flex-1 h-screen">
@@ -69,7 +69,7 @@
                                 <!-- Text message -->
                                 <template v-if="message.content.type === 1">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center mb-1">
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap uppercase">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -86,11 +86,11 @@
                                                 <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
-                                                <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                                <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-100`:`bg-white text-black`">
                                                     <MessageText :message="message" :isMind="message.is_admin == 0"></MessageText>
                                                 </div>
                                             </div>
-                                            <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                            <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-100`:`bg-white text-black`">
                                                 <MessageText :message="message" :isMind="message.is_admin == 0"></MessageText>
                                             </div>
                                         </div>
@@ -100,7 +100,7 @@
                                 <!-- Photo -->
                                 <template v-if="message.content.type === 3">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center mb-1">
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap uppercase">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
@@ -109,7 +109,7 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                           {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -118,7 +118,7 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
-                                            <div class="relative rounded-xl inline-flex flex-col items-start text-black max-w-sm">
+                                            <div class="relative rounded-xl inline-flex flex-col items-start text-gray-600 max-w-sm">
                                                 <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
@@ -129,7 +129,7 @@
                                 <!-- Pdf -->
                                 <template v-if="message.content.type === 2">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center">
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
@@ -138,7 +138,7 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -147,7 +147,7 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
-                                            <div class="relative rounded-xl inline-flex items-center text-black max-w-sm mb-1">
+                                            <div class="relative rounded-xl inline-flex items-center text-gray-600 max-w-sm mb-1">
                                                 <div :class="darkMode?`bg-button text-gray-300`:`bg-white e-shadow`"
                                                 @click="readPdf(message.content.file.url)"
                                                 class="cursor-pointer px-5 py-2 rounded-xl text-base flex items-center">
@@ -171,7 +171,7 @@
                                 <!-- Audio -->
                                 <template v-if="message.content.type === 4">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center">
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs whitespace-nowrap mb-1">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
                                             {{getDay(message.date)}}
                                         </div>
                                     </div>
@@ -180,7 +180,7 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -189,7 +189,7 @@
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
-                                            <div class="relative rounded-xl inline-flex items-center text-black max-w-sm">
+                                            <div class="relative rounded-xl inline-flex items-center text-gray-600 max-w-sm">
                                                 <audio controls class="focus:outline-none"
                                                     controlsList="nodownload">
                                                     <source :src="message.content.file.url" type="audio/wav">
@@ -211,19 +211,19 @@
                                     <div class="underline">
                                         {{replyTo(replyContact)}}
                                     </div>
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 1" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 1" >
                                         {{cutString(replyContact.content.text,40)}}
                                     </div>
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 2" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 2" >
                                         {{$t('file')}}
                                     </div>
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
                                         <img :src="replyContact.content.file.url" class="rounded w-10"/>
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-2">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-2">
                                             {{$t('image_message')}}
                                         </div>
                                     </div> 
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 4" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 4" >
                                         {{$t("voice_message")}}
                                     </div>
                                 </div>
@@ -242,19 +242,19 @@
                         <div class="underline">
                             {{replyTo(replyContact)}}
                         </div>
-                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 1" >
+                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 1" >
                             {{cutString(replyContact.content.text,40)}}
                         </div>
-                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 2" >
+                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 2" >
                             {{$t('file')}}
                         </div>
-                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
+                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
                             <img :src="replyContact.content.file.url" class="rounded w-10"/>
-                            <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs ml-2">
+                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-2">
                                 {{$t('image_message')}}
                             </div>
                         </div> 
-                        <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs" v-if="replyContact.content.type === 4" >
+                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 4" >
                             {{$t("voice_message")}}
                         </div>
                     </div>
@@ -268,7 +268,7 @@
                     <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                 </div>
                 <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
-                <textarea class="w-full h-14 border-2 text-black rounded-full focus:outline-none mx-5 py-4 px-5" 
+                <textarea class="w-full h-14 border-2 text-gray-600 rounded-full focus:outline-none mx-5 py-4 px-5" 
                 :placeholder="$t(`2112`)" 
                 v-model="message.text"
                 @keyup.enter.exact="onMessage"
@@ -300,7 +300,7 @@
         </div>
         <!-- Register if no account -->
         <div class="fixed w-full h-full top-0 left-0 z-50 flex items-center justify-center bg-black bg-opacity-90" v-if="isInfo">
-            <div class="w-96 rounded-md text-sm" :class="darkMode?`bg-secondary text-gray-400`:`bg-white e-shadow`">
+            <div class="w-96 rounded-md text-sm" :class="darkMode?`bg-secondary text-gray-600`:`bg-white e-shadow`">
                 <div class="h-14 px-4 flex items-center justify-between">
                     <div class="text-lg flext-1 text-center w-full">
                         {{$t('please_enter_your_info')}}
@@ -670,7 +670,15 @@ export default {
             if (helper.numDay(oldDate, moment().format()) === 0) {
                 return moment(oldDate).format('h:mm A')
             } else {
-                return moment(oldDate).format('DD-MM-YYYY')
+                if(moment(oldDate).format('YYYY') === moment().format('YYYY')){
+                    if(moment(oldDate).format('MMM') == moment().format('MMM')){
+                        return moment(oldDate).format('ddd h:mm A')
+                    }
+                    return moment(oldDate).format('MMM DD, h:mm A')
+                }else{
+                    return moment(oldDate).format('MMM DD YYYY')
+                }
+                
             }
         },
         senderPhoto(message){

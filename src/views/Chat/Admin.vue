@@ -71,8 +71,8 @@
                 </div>
             </div>
         </div>
-        <div :class="darkMode?`bg-youtube`:`bg-img-primary`" class="w-full">
-                <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?``:`bg-black bg-opacity-10`">
+        <div class="w-full">
+                <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?`bg-dark bg-cover`:`bg-light-mode bg-cover`">
                     <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
                         <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}">
                             <div class="loading" v-if="settingImage"></div>

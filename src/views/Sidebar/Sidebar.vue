@@ -5,8 +5,8 @@
          
          >
         <div class="sidebar relative h-screen shadow">
-            <div class="toggle bg-primary absolute rounded py-4 top-8 cursor-pointer"
-                 :class="!isHide?'pl-5 pr-2 -right-8':'pl-2 pr-6 -right-12'"
+            <div class="toggle absolute rounded py-4 top-8 cursor-pointer"
+                 :class="!isHide?`pl-5 pr-2 -right-8 ${darkMode?`bg-darkBlue`:`bg-primary`}`:`pl-2 pr-6 -right-12 ${darkMode?`bg-darkBlue`:`bg-primary`}`"
                  @click="switchSidebar">
                 <template v-if="!isHide">
                     <div class="bg-white rounded-full absolute h-3 w-3 left-0 top-5 flex justify-center items-center">
@@ -21,7 +21,7 @@
                     <img src="/icon/Menu/menu-rotate.png" class="h-5">
                 </template>
             </div>
-            <div class="profile bg-primary px-10 py-8 flex items-center text-white justify-center">
+            <div class="profile px-10 py-8 flex items-center text-white justify-center" :class="darkMode?`bg-darkBlue`:`bg-primary`">
                 <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
                     <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                          :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}" @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}" @click="() => {token?this.$refs.photo.click():``}">

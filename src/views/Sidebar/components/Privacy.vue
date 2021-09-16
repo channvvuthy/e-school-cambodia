@@ -75,8 +75,10 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
-                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('other')">
-                        <div><LogoutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></LogoutIcon></div>
+                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass('')">
+                        <div>
+                            <LogoutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></LogoutIcon>
+                        </div>
 
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
