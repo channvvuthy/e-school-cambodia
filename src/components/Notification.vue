@@ -6,7 +6,7 @@
                     {{$t('1012')}}
                 </div>
                 <div class="opacity-80 cursor-pointer" @click="closeNotification">
-                    <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                    <CloseIcon  :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                 </div>
             </div>
             <div class="body mt-5 flex-cols justify-start items-center font-khmer_os text-13px overflow-y-scroll" @scroll="onScroll" style="min-height:24rem;max-height:85vh">
@@ -25,6 +25,22 @@
                                 <div class="h-12 w-12 rounded-full bg-primary flex justify-center items-center mr-3">
                                     <div v-if="notification.type === 1">
                                         <NotificationIcon fill="#ffffff"></NotificationIcon>
+                                    </div>
+                                    <div v-if="notification.type === 2">
+                                        <CommentIcon fill="#ffffff"></CommentIcon>
+                                    </div>
+                                    <div v-if="notification.type === 3 || notification.type === 5">
+                                        <ChatIcon fill="#ffffff"></ChatIcon>
+                                    </div>
+                                    <div v-if="notification.type === 4">
+                                        <DollarIcon fill="#ffffff"></DollarIcon>
+                                    </div>
+                                    
+                                    <div v-if="notification.type === 8">
+                                        <InsuranceIcon fill="#ffffff"></InsuranceIcon>
+                                    </div>
+                                    <div v-if="notification.type === 9 || notification.type === 10">
+                                        <RequestIcon fill="#ffffff"></RequestIcon>
                                     </div>
                                 </div>
                                 <div class="flex-cols justify-start items-center flex-1">
@@ -46,6 +62,11 @@
 <script>
     import {mapActions, mapState} from "vuex"
     import CloseIcon from "./../components/CloseIcon"
+    import ChatIcon from "./../components/ChatIcon.vue"
+    import RequestIcon from "./../components/RequestIcon.vue"
+    import InsuranceIcon from "./../components/InsuranceIcon.vue"
+    import DollarIcon from "./../components/DollarIcon.vue"
+    import CommentIcon from "./../components/CommentIcon.vue"
     import helper from "./../helper/helper"
     import moment from "moment"
     import Loading from "./Loading"
@@ -72,7 +93,12 @@
         components: {
             CloseIcon,
             Loading,
-            NotificationIcon
+            NotificationIcon,
+            ChatIcon,
+            DollarIcon,
+            RequestIcon,
+            InsuranceIcon,
+            CommentIcon
         },
         computed: {
             ...mapState('auth', ['loadingNotification', 'notifications']),
@@ -97,6 +123,35 @@
                 }
             },
             readNotification(notification){
+                if(notification.type == 10){
+                    this.$store.commit("network/switchTab", "friend")
+                    this.$router.push({
+                        name:"network"
+                    }).catch(err=>{err})
+                }
+                if(notification.type == 9){
+                    this.$store.commit("network/switchTab", "friend_request")
+                    this.$router.push({
+                        name:"network"
+                    }).catch(err=>{err})
+                }
+
+                if(notification.type == 8){
+                    this.$router.push({
+                        name:"insurance"
+                    }).catch(err=>{err})
+                }
+
+                if(notification.type == 3){
+                    this.$router.push({
+                        name:"chat"
+                    }).catch(err=>{err})
+                }
+
+                if(notification.type == 9 || notification.type == 8 || notification.type == 10){
+                     this.$emit('closeNotification') 
+                }
+
                 this.readingNotification(notification._id).then(response =>{
                     this.$emit('readNotification', response.data.data)
                 })

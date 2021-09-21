@@ -3,7 +3,7 @@
         
         <div class="w-2/4 relative">
             <!-- Header -->
-            <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary">
+            <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary rounded-t">
                 <div class="cursor-pointer" @click="openFullscreen()">
                     <EnlargeIcon></EnlargeIcon>
                 </div>
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="text-center flex flex-col justify-center items-center bg-white text-white relative pt-5" @mouseover="()=>{this.showToolbar = true}" @mouseout="()=>{this.showToolbar = false}">
+            <div class="text-center flex flex-col justify-center items-center bg-white text-white relative pt-5 rounded-b" @mouseover="()=>{this.showToolbar = true}" @mouseout="()=>{this.showToolbar = false}">
                 <div class="w-full flex flex-col justify-center items-center bottom-10 left-0 px-20 z-50 absolute z-50" :class="showToolbar?`visible`:`invisible`">
                     <div class="w-full py-4 bg-primary rounded-full flex items-center justify-between px-8 shadow">
                         <div class="transform rotate-90 cursor-pointer" @click="onPrevPage()">
@@ -51,7 +51,7 @@
                     <div class="flex-1 text-left">{{mainTitle}}</div>
                 </div>
                 <!-- List -->
-                <div class="px-5 pt-5 overflow-y-scroll h-full" :class="darkMode?`bg-youtube text-gray-300`:``">
+                <div class="px-5 pt-5 overflow-y-scroll h-full pb-20" :class="darkMode?`bg-youtube text-gray-300`:``">
                     <div v-for="(detail,index) in details.list" :key="index">
                         <div class="flex items-center py-3 rounded px-2  cursor-pointer hover:bg-button my-1 hover:text-gray-300" :class="order === index?`bg-button text-gray-300`:``" @click="changeChapter(detail,index)">
                             <div v-if="canRead(detail)" class="mr-3"><CheckIcon :height="20" fill="#5aa20a"></CheckIcon></div>

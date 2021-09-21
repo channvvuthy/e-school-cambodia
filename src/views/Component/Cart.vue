@@ -3,7 +3,7 @@
         <div class="fixed w-full h-full left-0 top-0 flex justify-center items-center text-sm bg-black bg-opacity-90" style="z-index:55" v-if="showPay === false">
             <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"  class="rounded-xl shadow relative py-3 w-4/12">
                 <div @click="closeCart" class="absolute top-3 right-3 cursor-pointer" id="closeCart">
-                    <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`" :width="20"></CloseIcon>
+                    <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`"></CloseIcon>
                 </div>
                 <!-- Title -->
                 <div class="w-full text-center h-12 flex items-center justify-center text-base">
@@ -86,7 +86,7 @@
                         <div class="my-7 flex justify-center items-center flex-col ">
                             <div class="mb-5 cursor-pointer" :class="darkMode?`text-gray-300`:`text-youtube`" @click="showCouponForm" v-if="!carts.coupon">{{$t('2302')}}</div>
                             <div class="mb-5 cursor-pointer" :class="darkMode?`text-gray-300`:`text-youtube`" @click="confirmRemoveCoupon" v-else>{{$t('delete_coupon')}}</div>
-                            <button class="focus:outline-none rounded-md shadow px-32 h-10" :class="darkMode?`bg-fb text-white`:`bg-primary text-white`" @click="pay">${{totalCart}} {{$t('2303')}}</button>
+                            <button class="focus:outline-none rounded-md shadow px-32 h-12" :class="darkMode?`bg-primary text-white`:`bg-primary text-white`" @click="pay">${{totalCart}} {{$t('2303')}}</button>
                         </div>
                     </div>
                 </template>

@@ -34,10 +34,18 @@ export default {
         imgUrl:"",
         addingStory:false,
         userDetails:{},
+        notify:{
+            notifications: 0,
+            carts: 0,
+            carts: 0,
+        },
 
     },
 
     mutations: {
+        getNotify(state, payload){
+            state.notify = payload
+        },
         getUserDetail(state, payload){
             state.userDetails = payload
         },
@@ -105,22 +113,18 @@ export default {
         loging(state, payload) {
             state.loginLoading = payload
         },
-
         changingForgotPassword(state, status) {
             state.changing = status
         },
-
         studentProfile(state, stProfile) {
             state.stProfile = stProfile
         },
-
         checkingPhone(state, status) {
             state.checking = status
         },
         getPhoneNumber(state, phone) {
             state.phone = phone
         },
-
         registering(state, status) {
             state.loadingRegister = status
         },
@@ -136,8 +140,6 @@ export default {
         userChangePassword(state, status) {
             state.userChangingPassword = status
         },
-
-
     },
 
     actions: {
@@ -393,7 +395,7 @@ export default {
         readingNotification({commit}, id) {
             commit('readingNotification', true)
             return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + '/notification/read?id=' + id).then(response => {
+                axios.get(config.apiUrl + 'notification/read?id=' + id).then(response => {
                     commit('readingNotification', false)
                     commit("getNotificationDetail", response.data.data)
                     resolve(response)
@@ -415,6 +417,25 @@ export default {
                 }).catch(err => {
                     reject(err)
                     helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
+        getQr(){
+            return new Promise((resolve,reject) =>{
+                axios.get(config.apiUrl + `me/qrcode`).then(response =>{
+                    resolve(response)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
+        },
+        getNotify({commit}){
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `me/notify`).then(response =>{
+                    resolve(response)
+                    commit("getNotify", response.data.data)
+                }).catch(err =>{
+                    reject(err)
                 })
             })
         }

@@ -153,7 +153,7 @@
                 </div>
                 <div class="flex-1 h-full flex flex-col pb-36 py-5">
                     <div class="h-full flex items-center justify-center flex-col" :class="darkMode?`text-gray-400`:`text-gray-600`" v-if="!isSelectedContact">
-                        <BoubleIcon :size="100" :fill="darkMode?`#9CA3AF`:`#4B5563`"></BoubleIcon>
+                        <BoubleIcon :size="100" :fill="darkMode?`#4B5563`:`#4B5563`"></BoubleIcon>
                         <div class="text-lg">
                             {{ $t('please_select_contact_to_chat') }}
                         </div>
@@ -195,7 +195,7 @@
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -232,7 +232,7 @@
                                             </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -270,7 +270,7 @@
                                             </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                           {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -304,7 +304,7 @@
                                             </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>

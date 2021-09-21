@@ -52,9 +52,9 @@
                     <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}" id="myCart">
                         
                         <template>
-                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="itemInCart">
+                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.carts">
                                 <div style="margin-top:2px">
-                                    {{itemInCart}}
+                                    {{notify.carts}}
                                 </div>
                             </div>
                         </template>
@@ -62,13 +62,27 @@
 
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10  relative" @click="goTo('chat')" >
+                        <template>
+                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.chats">
+                                <div style="margin-top:2px">
+                                    {{notify.chats}}
+                                </div>
+                            </div>
+                        </template>
                         <div>
                             <ChatIcon :fill="darkMode?`#aaa`:`#055174`" v-if="$route.name === `chat`"></ChatIcon>
                             <ChatIcon :fill="darkMode?`#909090`:`#181818`" v-else></ChatIcon>
                         </div>
 
                     </div>
-                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 " @click="() =>{this.$emit('notification')}">
+                    <div class="flex flex-col justify-center items-center cursor-pointer ml-10 relative" @click="() =>{this.$emit('notification')}">
+                        <template>
+                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.notifications">
+                                <div style="margin-top:2px">
+                                    {{notify.notifications}}
+                                </div>
+                            </div>
+                        </template>
                         <div><NotificationIcon :fill="darkMode?`#909090`:`#181818`"></NotificationIcon></div>
 
                     </div>
@@ -109,15 +123,10 @@ export default {
         BorderBottom
         
     },
-    data(){
-        return{
-            itemInCart: 0
-        }
-    },
     computed: {
         ...mapState("setting", ["localize","darkMode"]),
         ...mapState('cart', ['carts']),
-        ...mapState('auth', ['token']),
+        ...mapState('auth', ['token','notify']),
         myCart(){
             return this.carts;
         }
@@ -125,6 +134,7 @@ export default {
     },
     methods: {
         ...mapActions('cart', ['getCart']),
+        ...mapActions('auth', ['getNotify']),
         goTo(page) {
             this.$store.commit("etalk/setActive", 0)
             this.$router.push({ name: page }).catch((err)=>{err});
@@ -141,19 +151,13 @@ export default {
     },
     created(){
         if(this.token){
-            this.getCart().then(response =>{
-                if(response.data.msg == undefined){
-                    if(response.data.data.list != undefined){
-                        this.itemInCart = response.data.data.list.length
-                    }
-                }
-            })
+            this.getNotify()
         }
         
     },
     watch:{
-        'myCart':function(carts){
-            this.itemInCart = carts.list.length
+        'myCart':function(){
+            this.getNotify();
         }
     }
 };

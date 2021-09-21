@@ -21,7 +21,7 @@
                     <img src="/icon/Menu/menu-rotate.png" class="h-5">
                 </template>
             </div>
-            <div class="profile px-10 py-8 flex items-center text-white justify-center" :class="darkMode?`bg-darkBlue`:`bg-primary`">
+            <div class="profile px-10 py-8 flex items-end text-white justify-between" :class="darkMode?`bg-darkBlue`:`bg-primary`">
                 <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
                     <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                          :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}" @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}" @click="() => {token?this.$refs.photo.click():``}">
@@ -41,7 +41,14 @@
                             {{token ? stProfile.first_name + " " + stProfile.last_name : $t('unname')}}
                         </p>
                     </div>
-
+                </div>
+                <div class="cursor-pointer" @click="getMyQr()">
+                    <div>
+                        <QRIcon></QRIcon>
+                    </div>
+                   <div class="text-sm mt-2">
+                        My QR
+                   </div>
                 </div>
             </div>
             <div class="py-3 overflow-y-scroll h-screen pb-40 flex flex-col justify-between">
@@ -67,10 +74,21 @@
                 </div>
             </div>
         </div>
+        <!-- QR -->
+        <div class="fixed w-full h-full top-0 z-50 left-0 bg-black bg-opacity-95 flex items-center justify-center" v-if="showQr" @click="()=>{this.showQr = false}">
+            <div class="absolute right-5 top-5 cursor-pointer">
+                <CloseIcon fill="#9CA3AF"></CloseIcon>
+            </div>
+            <div class="w-80">
+                <img :src="qrUrl" class="rounded max-w-full">
+            </div>
+        </div>
     </div>
 </template>
 <script>
     import BackIcon from "./../../components/BackIcon"
+    import CloseIcon from "./../../components/CloseIcon.vue"
+    import QRIcon from "./../../components/QRIcon.vue"
     import Study from "./components/Study.vue"
     import Report from "./components/Report.vue"
     import Privacy from "./components/Privacy.vue"
@@ -85,12 +103,16 @@
             Report,
             Study,
             eSchool,
-            CameraIcon
+            CameraIcon,
+            QRIcon,
+            CloseIcon
         },
         data(){
             return{
+                showQr: false,
                 isEdit: false,
-                loading: false
+                loading: false,
+                qrUrl:""
             }
         },
         computed: {
@@ -100,7 +122,7 @@
         },
 
         methods: {
-            ...mapActions('auth', ['changeProfilePhotoPhoto']),
+            ...mapActions('auth', ['changeProfilePhotoPhoto','getQr']),
             switchSidebar(){
                 if(this.isHide){
                     this.$store.commit('setting/toggleSidebar', false)
@@ -111,6 +133,13 @@
             },
             openLink(link){
                 ipcRenderer.send('openLink', link)
+            },
+            getMyQr(){
+                this.getQr().then(response=>{
+                    this.qrUrl = response.data.data.qrcode_url
+                    console.log(response.data.data.qrcode_url)
+                    this.showQr = true
+                })
             },
             onSelectedPhoto(event){
                 if (event.target.value) {

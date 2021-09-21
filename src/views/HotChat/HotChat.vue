@@ -77,7 +77,7 @@
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -108,7 +108,7 @@
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                           {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -137,7 +137,7 @@
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -179,7 +179,7 @@
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
@@ -205,7 +205,7 @@
                         </ul>
                         <!-- End message -->
                           <!-- Reply -->
-                        <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
+                        <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white  text-primary`" v-if="replyContact">
                             <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
                                 <div>
                                     <div class="underline">
@@ -236,7 +236,7 @@
                 </div>
             </div>
             <!-- Reply -->
-            <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
+            <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white text-primary`" v-if="replyContact">
                 <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
                     <div>
                         <div class="underline">
@@ -275,10 +275,9 @@
                 :class="darkMode?`bg-youtube border-transparent text-gray-300`:``"></textarea>
                 <div class="w-14 flex justify-end">
                     <div class="cursor-pointer  rounded-full ml-5 mt-2">
-                        <!-- <vue-record-audio @result="onResult" @stream="onStream"/> -->
                         <VueRecord class="record" @result="onResult">
                             <div class="w-13 h-13 rounded-full flex items-center justify-center" :class="darkMode?`bg-youtube`:`bg-primary`">
-                                <mic-icon :size="28" :fill="darkMode?`#9CA3AF`:`#FFFFFF`"></mic-icon>
+                                <mic-icon :size="28" :fill="darkMode?`#4B5563`:`#FFFFFF`"></mic-icon>
                             </div>
                             <template slot="isInitiating">
                                 Voice
@@ -657,14 +656,12 @@ export default {
              ipcRenderer.send("saveFile", this.fileUrl)
         },
         replyTo(replyContact){
-            if(replyContact.is_admin == 0){
-                return replyContact.sender.name
-            }
-            
             if(replyContact.sender && replyContact.sender._id == this.stProfile._id){
-                return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('yourself')
+                if(replyContact.is_admin != 1){
+                    return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('yourself')
+                }
+                return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('admin')
             }
-            return replyContact.sender.name
         },
         getDay(oldDate){
             if (helper.numDay(oldDate, moment().format()) === 0) {
@@ -754,20 +751,12 @@ export default {
         },
         replyName(message){
             try{
-                if(message.reply.sender._id != this.authId){
-                    return this.$i18n.t('themselves')
-                }else{
-                    if(this.authId== message.sender._id){
-                        return this.$i18n.t('yourself')
-                    }
-                    if(message.reply.sender._id == this.authId){
-                        return this.$i18n.t('you')
-                    }
-                    return this.$i18n.t('themselves')
-                    
+                if(message.reply.is_admin == 0){
+                    return this.$i18n.t('yourself')
                 }
-            }catch(err){
                 return  this.$i18n.t('admin')
+            }catch(err){
+                 return  this.$i18n.t('admin')
             }
         },
         showReply(message){

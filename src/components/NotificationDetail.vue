@@ -6,7 +6,7 @@
                     {{$t('1012')}}
                 </div>
                 <div class="opacity-80 cursor-pointer" @click="closeNotificationDetail">
-                    <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                    <CloseIcon :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                 </div>
             </div>
             <div class="body mt-5 flex-cols justify-start items-center font-siemreap overflow-y-scroll " style="min-height:24rem;max-height:85vh">
