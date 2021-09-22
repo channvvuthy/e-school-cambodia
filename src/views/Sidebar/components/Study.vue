@@ -8,8 +8,8 @@
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('my-course')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass(`my-course`)">
                         <div>
-                            <MyCourseIcon fill="#FFFFFF" :size="24"  v-if="$route.name === `my-course`"></MyCourseIcon>
-                            <MyCourseIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else></MyCourseIcon>
+                            <MyCourseIcon fill="#FFFFFF"  v-if="$route.name === `my-course`"></MyCourseIcon>
+                            <MyCourseIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></MyCourseIcon>
                         </div>
                     </div>
                     <div class="text-xs whitespace-nowrap mt-3">
@@ -101,7 +101,6 @@
 </template>
 <script>
     import {mapState} from "vuex"
-    import MyCourseIcon from "./../../../components/YoutubeIcon.vue"
     import LibraryThinIcon from "./../../../components/LibraryThinIcon.vue"
     import HeartIcon from "./../../../components/HeartIcon.vue"
     import DownloadIcon from "./../../../components/DownloadIcon.vue"
@@ -109,6 +108,7 @@
     import DocumentIcon from "./../../../components/DocumentIcon.vue"
     import GalleryIcon from "./../../../components/GalleryIcon.vue"
     import CertificateIcon from "./../../../components/CertificateIcon"
+    import MyCourseIcon from "./../../../components/WatchVideoIcon.vue"
     export default{
         components:{
             MyCourseIcon,

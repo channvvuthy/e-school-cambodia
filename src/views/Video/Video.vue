@@ -23,31 +23,31 @@
                                 <div class="text-sm font-semibold mt-3">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
                                 <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
                                     <div class="cursor-pointer" :title="$t('2108')">
-                                        <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></YoutubeIcon>
+                                        <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></YoutubeIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                             {{ video.total_video?video.total_video: 0}}
                                         </div>
                                     </div>
                                     <div class="cursor-pointer" :title="$t('pdf')">
-                                        <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></PdfIcon>
+                                        <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></PdfIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                             {{ video.total_pdf?video.total_pdf:0 }}
                                     </div>
                                     </div>
                                     <div class="cursor-pointer" :title="$t('support')">
-                                        <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="30"></ChatIcon>
+                                        <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></ChatIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_support?$t('1008'):$t('1009') }}
                                         </div>   
                                     </div>
                                     <div class="cursor-pointer" :title="$t('2111')">
-                                        <TestIcon :fill="darkMode?`#909090`:`#000000`"></TestIcon>
+                                        <TestIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></TestIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
-                                            {{ video.has_quiz?$t('1008'):$t('1009') }}
+                                            {{ video.has_quiz }}
                                         </div>
                                     </div>
                                     <div class="cursor-pointer" :title="$t('1114')">
-                                        <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon>
+                                        <CertificateIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></CertificateIcon>
                                         <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                             {{ video.has_certificate?$t('1008'):$t('1009') }}
                                         </div>

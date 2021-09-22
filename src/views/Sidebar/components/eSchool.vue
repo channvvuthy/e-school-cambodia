@@ -131,7 +131,7 @@
 </template>
 <script>
     import {mapState} from "vuex"
-    import ChatIcon from "./../../../components/ChatIcon"
+    import ChatIcon from "./../../../components/ChatIcon.vue"
     import PolicyIcon from "./../../../components/PolicyIcon"
     import HelpIcon from "./../../../components/HelpIcon"
     import AboutIcon from "./../../../components/AboutIcon.vue"

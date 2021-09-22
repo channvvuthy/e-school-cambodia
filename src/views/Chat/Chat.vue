@@ -189,7 +189,7 @@
                                         </div>
                                         <div class="flex items-center mr-5" v-if="auth === sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
-                                                {{getDay(message.date)}}
+                                                {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                             </div>
                                         </div>
                                         <div>
@@ -227,7 +227,7 @@
                                         <div>
                                             <div class="flex items-center" v-if="auth === sender(message)">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
-                                                    {{getDay(message.date)}}
+                                                    {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                                 </div>
                                             </div>
                                             <div v-if="message.reply !== undefined">
@@ -265,7 +265,7 @@
                                         <div>
                                             <div class="flex items-center mb-2" v-if="auth === sender(message)">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
-                                                    {{getDay(message.date)}}
+                                                    {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                                 </div>
                                             </div>
                                             <div v-if="message.reply !== undefined">
@@ -299,7 +299,7 @@
                                         <div>
                                             <div class="flex items-center" v-if="auth === sender(message)">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
-                                                    {{getDay(message.date)}}
+                                                    {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                                 </div>
                                             </div>
                                             <div v-if="message.reply !== undefined">
@@ -367,7 +367,7 @@
                                 </div>
                             </div>
                             <div :class="darkMode?`bg-button`:`bg-gray-300`" class="cursor-pointer rounded-full w-7 h-7 flex items-center justify-center" @click="()=> {this.replyContact = ``}">
-                                <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
+                                <CloseIcon  :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
                             </div>
                         </div>
                     </div>
@@ -426,7 +426,7 @@
                             <div class="py-4 px-5 relative">
                                 {{$t('preview')}}
                                 <div class="absolute right-3 top-3 cursor-pointer" @click="() => {this.isPreview = false}">
-                                    <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                                    <CloseIcon  :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                                 </div>
                             </div>
                             <div class="flex items-center justify-center px-3 overflow-y-scroll max-h-96">
@@ -453,13 +453,13 @@
                     </div>
                     <!-- Read pdf -->
                     <div class="flex justify-center items-center left-0 top-0 fixed bg-black bg-opacity-90 w-full h-full z-50" v-if="isRead">
-                        <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
+                        <div class="bg-white w-2/5 h-5/6 overflow-y-hidden rounded">
                             <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
                                 <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
                                     <EnlargeIcon :size="16"></EnlargeIcon>
                                 </div>
                                 <div class="cursor-pointer" @click="() => {this.isRead = false}">
-                                    <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                                    <CloseIcon fill="#ffffff"></CloseIcon>
                                 </div>
                             </div>
                             <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
@@ -515,6 +515,7 @@ const { ipcRenderer } = require('electron')
 import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./../HotChat/components/MicIcon.vue"
 import BoubleIcon from "./components/BoubleIcon.vue"
+import isRead from "./components/IsRead.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -549,7 +550,8 @@ export default {
         VoiceReply,
         AdminMember,
         VueRecord,
-        BoubleIcon
+        BoubleIcon,
+        isRead
     },
     data(){
         return{
@@ -594,6 +596,7 @@ export default {
             messageId: null,
             showAdminMember: false,
             isSelectedContact: false,
+            isTyping: false,
             message: {
                 id: "",
                 reply_id: "",
@@ -680,6 +683,12 @@ export default {
             }
 
             return message.reply.sender.name
+        },
+        isSeen(){
+            this.readMessage({
+                id: this.contact._id,
+                type: this.contact.type
+            })
         },
         enableWatch(){
             this.mentionReplaced = false
@@ -848,6 +857,7 @@ export default {
             })
         },
         selectedContact(contact, index){
+            this.isTyping = false
             this.active = index
             this.contact = contact
             this.sockets.unsubscribe(`message_${this.contact._id}`);
@@ -867,10 +877,6 @@ export default {
             }).then(() => {
                 this.scrollToBottom()
                 this.lisentMessage()
-                this.readMessage({
-                    id: this.contact._id,
-                    type: this.contact.type
-                })
             })
             
         },
@@ -1067,11 +1073,18 @@ export default {
         onStream(){
             this.audioUrl = ""
         },
+        isReadMessage(){
+            this.sockets.subscribe(`read_${this.contact._id}`, function(){
+                this.$store.commit("etalk/readMessage", 1)
+            })
+        },
         lisentMessage(){
             this.sockets.subscribe(`message_${this.contact._id}`, function(data){
                 this.$store.commit('etalk/lastMessage', data)
                 if(this.contact._id === data.room_id){
                     if(data.sender._id !== this.auth){
+                        this.isSeen()
+                        this.isReadMessage()
                         if(!this.contact.is_mute){
                             this.paySound()
                         }
@@ -1163,6 +1176,8 @@ export default {
     },
     mounted(){
         document.querySelector('.needsInitiation').click();
+        this.isReadMessage()
+        
     },
     created(){
         this.init()

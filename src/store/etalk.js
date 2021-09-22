@@ -19,6 +19,12 @@ export default {
     },
 
     mutations:{
+        readMessage(state, payload){
+            return state.messages.filter(item => {
+                item.is_read = payload
+                return item
+            })
+        },
         removeUread(state, payload){
             return state.contacts.filter(item =>{
                 if(item._id===payload){
@@ -390,6 +396,7 @@ export default {
         },
         readMessage({commit}, payload){
             return new Promise((resolve, reject) =>{
+                commit("readMessage", 1)
                 axios.get(config.apiUrl + `/etalk/message/read?${helper.q(payload)}`).then(response =>{
                     resolve(response)
                 }).catch(err =>{

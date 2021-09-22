@@ -21,8 +21,8 @@
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('watch-video')" >
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"  :class="activeClass('watch-video')">
                         <div>
-                            <WatchVideoIcon fill="#FFFFFF" :size="24" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
-                            <WatchVideoIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else></WatchVideoIcon>
+                            <WatchVideoIcon fill="#FFFFFF" v-if="$route.name === `watch-video` || $route.name === `watch-detail`"></WatchVideoIcon>
+                            <WatchVideoIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></WatchVideoIcon>
                         </div>
 
                     </div>
@@ -61,10 +61,10 @@
 <script>
     import {mapState} from "vuex"
     import ActivityIcon from "./../../../components/ActivityIcon.vue"
-    import WatchVideoIcon from "./../../../components/YoutubeIcon.vue"
     import RelativeIcon from "./../../../components/RelativeIcon.vue"
     import BookIcon from "./../../../components/BookIcon.vue"
     import QuizIcon from "./../../../components/QuizIcon.vue"
+    import WatchVideoIcon from "./../../../components/WatchVideoIcon.vue"
 
     export default{
         components:{

@@ -96,16 +96,16 @@ import { mapState, mapActions } from "vuex";
 import HomeIcon from "./../../components/HomeIcon"
 import BorderBottom from "./../../components/BorderBottom.vue"
 import HomeFillIcon from "./../../components/HomeFillIcon"
-import WatchVideoIcon from "./../../components/WatchVideoIcon"
+import WatchVideoIcon from "./../../components/WatchVideoIcon.vue"
 import WatchVideoFillIcon from "./../../components/WatchVideoFillIcon"
 import LibraryIcon from "./../../components/LibraryIcon"
 import LibraryThinIcon from "./../../components/LibraryThinIcon"
 import PartnershipIcon from "./../../components/PartnershipIcon"
 import PartnershipFillIcon from "./../../components/PartnershipFillIcon"
 import SupporterIcon from "./../../components/SupporterIcon"
-import NotificationIcon from "./../../components/NotificationIcon"
-import ChatIcon from "./../../components/ChatIcon"
-import CartIcon from "./../../components/CartIcon"
+import NotificationIcon from "./../../components/NotificationIcon.vue"
+import ChatIcon from "./components/ChatIcon.vue"
+import CartIcon from "./../../components/CartIcon.vue"
 export default {
     components:{
         HomeIcon,
