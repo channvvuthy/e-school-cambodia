@@ -107,7 +107,7 @@
         </div>
         <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-90 z-50 flex justify-center items-center"
              v-if="showDoc">
-            <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
+            <div class="bg-white w-2/5 h-5/6 overflow-y-hidden rounded">
                 <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
                     <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
                         <EnlargeIcon :size="16"></EnlargeIcon>

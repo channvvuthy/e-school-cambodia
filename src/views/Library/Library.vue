@@ -64,7 +64,8 @@
                                         </div>
                                         <div v-if="book.des" class="text-xs my-2">{{cutString(book.des,50)}}</div>
                                     </div>
-                                    <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span><span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
+                                    <div class="text-xs"><span v-if="book.price.year">{{$t('1006')}}:</span>
+                                        <span :class="darkMode?``:`text-heart`">{{book.price.year?`${book.price.year}$`:`${$t('1007')}`}}</span>
                                     </div>
                                 </div>
                                 <div class="flex flex-col justify-end flex-1 items-end">

@@ -201,7 +201,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
@@ -238,7 +238,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
@@ -276,12 +276,12 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
                                             <div class="relative rounded-xl inline-flex flex-col items-start text-black max-w-sm">
-                                                <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
+                                                <img class="max-w-xs rounded-md mb-2 cursor-pointer" :src="message.content.file.url" @click="previewImage(message.content.file.url)"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
                                             <div class="flex items-center" v-if="auth !== sender(message)">
@@ -310,7 +310,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1" ></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
@@ -357,7 +357,7 @@
                                     {{$t('file')}}
                                 </div>
                                 <div :class="darkMode?`text-gray-500`:`text-gray-400`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
-                                    <img :src="replyContact.content.file.url" class="rounded w-10"/>
+                                    <img :src="replyContact.content.file.url" class="rounded w-10" />
                                     <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-2">
                                         {{$t('image_message')}}
                                     </div>
@@ -480,6 +480,7 @@
         <BuyMsg v-if="isUnblock" @cancelModal="() => {this.isUnblock = false}" :msg="`unblock_contact`" @yes="unblock()"></BuyMsg>
         <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
         <AdminMember v-if="showAdminMember" @closeAdminMember="() => {showAdminMember = false}" @selectedChat="selectedChat($event)"></AdminMember>
+        <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
         
     </div>
 </template>
@@ -516,6 +517,7 @@ import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./../HotChat/components/MicIcon.vue"
 import BoubleIcon from "./components/BoubleIcon.vue"
 import isRead from "./components/IsRead.vue"
+import PreviewImage from "./components/PreviewImage.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -551,7 +553,8 @@ export default {
         AdminMember,
         VueRecord,
         BoubleIcon,
-        isRead
+        isRead,
+        PreviewImage
     },
     data(){
         return{
@@ -597,6 +600,8 @@ export default {
             showAdminMember: false,
             isSelectedContact: false,
             isTyping: false,
+            viewChat: false,
+            previewUrl:"",
             message: {
                 id: "",
                 reply_id: "",
@@ -640,6 +645,10 @@ export default {
                 }
                 
             }
+        },
+        previewImage(previewUrl){
+            this.viewChat = true
+            this.previewUrl = previewUrl
         },
         replyUser(message){
              if(message.sender == undefined){

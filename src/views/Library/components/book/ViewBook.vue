@@ -17,7 +17,7 @@
                     <template v-if="details.price.year">
                         <div class="mb-5">{{$t('1006')}}: <span class="text-heart font-bold">{{details.price.year}}$</span></div>
                     </template>
-                    <template>
+                    <template v-else>
                         <div class="font-bold mb-5">{{$t('1007')}}</div>
                     </template>
                     <div class="border-t border-dashed mb-5"></div>
@@ -135,6 +135,9 @@ export default {
                 this.$store.commit("library/removeFromFavorite", book._id)
             })
         },
+    },
+    mounted(){
+        console.log(this.details)
     }
 }
 </script>

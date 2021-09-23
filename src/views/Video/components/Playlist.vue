@@ -197,7 +197,7 @@ export default {
             
         },
         canWatch(free_watch){
-            if((this.$route.params.course.is_buy || free_watch)){
+            if((this.playlist.course.is_buy || free_watch)){
                 return true
             }
             return false

@@ -44,9 +44,9 @@
                 </div>
             </div>
             <!-- List -->
-            <div class="absolute h-full bg-white top-0 left-0 z-50 shadow" :class="showList?`w-full`:`w-0 overflow-hidden`">
+            <div class="absolute h-full bg-white top-0 left-0 z-50 rounded-md shadow" :class="showList?`w-full`:`w-0 overflow-hidden`">
                 <!-- Header -->
-                <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary text-sm">
+                <div class="h-14 w-full flex justify-between items-center px-5 text-gray-300 bg-primary text-sm rounded-t">
                     <div class="transform rotate-90 cursor-pointer mr-5" @click="showLesson(false)"><ChevronIcon fill="#ffffff"></ChevronIcon></div>
                     <div class="flex-1 text-left">{{mainTitle}}</div>
                 </div>

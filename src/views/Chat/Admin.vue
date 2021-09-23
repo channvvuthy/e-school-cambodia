@@ -130,7 +130,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
@@ -168,12 +168,12 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
                                             <div class="relative rounded-xl inline-flex flex-col items-start text-black max-w-sm">
-                                                <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
+                                                <img class="max-w-xs rounded-md mb-2 cursor-pointer" :src="message.content.file.url" @click="previewImage(message.content.file.url)"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
                                             <div class="flex items-center" v-if="auth !== sender(message)">
@@ -203,7 +203,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1" ></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
@@ -251,7 +251,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
@@ -263,7 +263,7 @@
                                                     element.
                                                 </audio>
                                             </div>
-                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                            <div class="flex items-center" v-if="message.is_admin == 0">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap my-1">
                                                     {{getDay(message.date)}} 
                                                 </div>
@@ -393,6 +393,7 @@
             </div>
         </div>
         <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
+        <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
      </div>
 </template>
 <script>
@@ -424,6 +425,7 @@ import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./../HotChat/components/MicIcon.vue"
 import isRead from "./components/IsRead.vue"
 import SinglePdf from "./../Component/SinglePdf.vue"
+import PreviewImage from "./components/PreviewImage.vue"
 
 
 Vue.use(new VueSocketIO({
@@ -437,6 +439,7 @@ export default {
         },
     },
     components:{
+        PreviewImage,
         SinglePdf,
         EnlargeIcon,
         isRead,
@@ -482,6 +485,8 @@ export default {
             chatPage: 1,
             searchQuery: "",
             isDelete: false,
+            viewChat: false,
+            previewUrl:"",
             contact:{
                 id:"",
                 name: "",
@@ -526,6 +531,10 @@ export default {
                     })
                 }
             }
+        },
+        previewImage(previewUrl){
+            this.viewChat = true
+            this.previewUrl = previewUrl
         },
         reply(){
             this.replyContact = this.replyId

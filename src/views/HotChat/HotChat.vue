@@ -70,7 +70,7 @@
                                 <template v-if="message.content.type === 1">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center mb-1">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap uppercase">
-                                            {{getDay(message.date)}}
+                                            {{getDay(message.date)}}  <span v-if="!message.is_admin"><isSeen :isRead="message.is_read"></isSeen></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center">
@@ -83,7 +83,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-100`:`bg-white text-black`">
@@ -101,7 +101,7 @@
                                 <template v-if="message.content.type === 3">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`" class="items-center mb-1">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap uppercase">
-                                            {{getDay(message.date)}}
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen :isRead="message.is_read"></isSeen></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center relative">
@@ -114,12 +114,12 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
                                             <div class="relative rounded-xl inline-flex flex-col items-start text-gray-600 max-w-sm">
-                                                <img class="max-w-xs rounded-md mb-2" :src="message.content.file.url"/>
+                                                <img class="max-w-xs rounded-md mb-2 cursor-pointer" :src="message.content.file.url" @click="previewImage(message.content.file.url)"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
                                 <template v-if="message.content.type === 2">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
-                                            {{getDay(message.date)}}
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen :isRead="message.is_read"></isSeen></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center relative mb-3">
@@ -143,7 +143,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1" ></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
@@ -172,7 +172,7 @@
                                 <template v-if="message.content.type === 4">
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
-                                            {{getDay(message.date)}}
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen :isRead="message.is_read"></isSeen></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"  class="items-center relative">
@@ -185,7 +185,7 @@
                                                     </div>
                                                 </div>
                                                 <TextReply :message="message" v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"></ImageReply>
+                                                <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                                             </div>
@@ -390,6 +390,7 @@
             </div>
         </div>
         <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
+        <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
     </div>
 </template>
 <script>
@@ -421,7 +422,9 @@ import SinglePdf from "./../Component/SinglePdf.vue"
 import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./components/MicIcon.vue"
 import BuyMsg from "./../Component/BuyMsg.vue"
+import PreviewImage from "./../Chat/components/PreviewImage.vue"
 const { ipcRenderer } = require('electron')
+import isSeen from "./../Chat/components/IsRead.vue"
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -447,7 +450,9 @@ export default {
         VueRecord,
         PdfIcon,
         ImageReply,
-        BuyMsg
+        BuyMsg,
+        isSeen,
+        PreviewImage
     },
     data(){
         return{
@@ -473,6 +478,8 @@ export default {
             room_id: "",
             chatText:"",
             isDelete: false,
+            viewChat: false,
+            previewUrl:"",
             message: {
                 id: "",
                 reply_id: "",
@@ -510,6 +517,10 @@ export default {
         ...mapActions('auth', ['getStudentProfile', 'getToken']),
         isNumber(evt){
             return helper.isNumber(evt)
+        },
+        previewImage(previewUrl){
+            this.viewChat = true
+            this.previewUrl = previewUrl
         },
         onStream(){
             this.audioUrl = ""
@@ -704,19 +715,33 @@ export default {
         paySound(){
             document.getElementById("message-sound").play()
         },
+        isSeen(){
+            this.readMessage({
+                id: this.contact._id,
+                type: this.contact.type
+            })
+        },
+        isReadMessage(){
+            this.sockets.subscribe(`read_${this.contact._id}`, function(){
+                this.$store.commit("etalk/readMessage", 1)
+            })
+        },
         lisentMessage(){
-            this.sockets.subscribe(`message_${this.room_id}`, (data) => {
-                if(this.room_id === data.room_id){
-                    if(data.sender._id !== this.stProfile._id){
+            this.sockets.subscribe(`message_${this.contact._id}`, function(data){
+                this.$store.commit('etalk/lastMessage', data)
+                if(this.contact._id === data.room_id){
+                    if(data.sender._id !== this.auth){
+                        this.isSeen()
+                        this.isReadMessage()
                         if(!this.contact.is_mute){
                             this.paySound()
                         }
                         this.$store.commit("etalk/broadcastMessage",data)
                         this.scrollToBottom()
                     }
+                    this.$store.commit('etalk/removeUread', this.contact._id)
                 }
-            });
-            
+            })
         },
         getExtension(filename) {
             var parts = filename.split('.');

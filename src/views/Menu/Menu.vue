@@ -70,7 +70,7 @@
                             </div>
                         </template>
                         <div>
-                            <ChatIcon :fill="darkMode?`#aaa`:`#055174`" v-if="$route.name === `chat`"></ChatIcon>
+                            <ChatIcon :fill="darkMode?`#FFF`:`#055174`" v-if="$route.name === `chat`"></ChatIcon>
                             <ChatIcon :fill="darkMode?`#909090`:`#181818`" v-else></ChatIcon>
                         </div>
 
@@ -123,13 +123,14 @@ export default {
         BorderBottom
         
     },
+    data(){
+        return{
+        }
+    },
     computed: {
         ...mapState("setting", ["localize","darkMode"]),
         ...mapState('cart', ['carts']),
         ...mapState('auth', ['token','notify']),
-        myCart(){
-            return this.carts;
-        }
 
     },
     methods: {
@@ -156,7 +157,7 @@ export default {
         
     },
     watch:{
-        'myCart':function(){
+        'carts':function(){
             this.getNotify();
         }
     }
