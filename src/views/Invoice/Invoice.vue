@@ -14,18 +14,22 @@
                     <div v-for="(receipt,key) in receipts" :key="key" :class="darkMode?`bg-secondary rounded-xl py-5`:`bg-white rounded-xl py-5 shadow-md`">
                         <div class="flex items-center px-7">
                             <div class="flex flex-1 z-40  cursor-pointer" @click="viewReceipt(receipt)">
-                                <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center" :class="darkMode?`bg-primary`:`bg-softGray`">
+                                <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center bg-pass" v-if="receipt.status == 1">
+                                    <InvoiceIcon size="40" fill="#FFFFFF"></InvoiceIcon>
+                                </div>
+                                 <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center" :class="darkMode?`bg-primary`:`bg-softGray`" v-else>
                                     <InvoiceIcon size="40" :fill="darkMode?`#FFFFFF`:`#055174`"></InvoiceIcon>
                                 </div>
+                                <div></div>
                                 <div class="py-3">
                                     <div class="flex justify-between items-center">
-                                        <div class="w-24">{{$t('invoce_no')}}</div>
+                                        <div class="w-26">{{$t('invoce_no')}}</div>
                                         <div class="w-5 text-center">:</div>
                                         <div class="flex-1 text-leff font-semibold">{{receipt._id}}</div>
                                     </div>
                                     <div class="h-3"></div>
                                     <div class="flex justify-between items-center">
-                                        <div class="w-24">{{$t('2308')}}</div>
+                                        <div class="w-28">{{$t('2308')}}</div>
                                         <div class="w-5 text-center">:</div>
                                         <div class="flex-1 text-left font-semibold">{{formatDate(receipt.date)}}</div>
                                     </div>

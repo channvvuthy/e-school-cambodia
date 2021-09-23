@@ -10,7 +10,7 @@
                         <div class="p-5">
                             <div class="flex justify-between items-center">
                                 <input type="text" id="invoice_number"  class="absolute" :value="receiptDetail.receipt" style="z-index:-10">
-                                <div>{{$t('invoce_no')}}</div>
+                                <div class="whitespace-nowrap">{{$t('invoce_no')}}</div>
                                 <div class="flex-1 text-right" :class="darkMode?`text-gray-300`:`text-heart`">​{{receiptDetail.receipt}}</div>
                                 <div class="ml-2 cursor-pointer" @click="copyText()"><CopyIcon :size="20" :fill="darkMode?`#D1D5DB`:`#000000`"></CopyIcon></div>
                             </div>
@@ -19,14 +19,17 @@
                                 <div>{{formatDate(receiptDetail.date)}}</div>
                             
                             </div>
-
+                            <div class="flex justify-between items-center mt-3">
+                                <div>{{$t('pay_method')}}</div>
+                                <div>{{receiptDetail.bank}}</div>
+                            </div>
                             <div class="course mt-3">
                                 <div class="font-black">{{$t('1102')}}</div>
                                 <ul>
                                     <li class="flex justify-between items-center my-2"
                                         v-for="(receipt, key) in receiptDetail.detail" :key="key">
                                         <div>- {{receipt.title}}</div>
-                                        <div class="text-placeholder">
+                                        <div>
                                             <span class="font-mono">${{parseFloat(receipt.amount)}}</span> {{duration(receipt.duration)}}
                                         </div>
                                     </li>

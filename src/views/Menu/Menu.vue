@@ -52,7 +52,7 @@
                     <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}" id="myCart">
                         
                         <template>
-                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.carts">
+                            <div class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.carts">
                                 <div style="margin-top:2px">
                                     {{notify.carts}}
                                 </div>
@@ -63,7 +63,7 @@
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10  relative" @click="goTo('chat')" >
                         <template>
-                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.chats">
+                            <div class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.chats">
                                 <div style="margin-top:2px">
                                     {{notify.chats}}
                                 </div>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer ml-10 relative" @click="() =>{this.$emit('notification')}">
                         <template>
-                            <div class="absolute -top-3 left-4 h-4 w-4 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.notifications">
+                            <div class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.notifications">
                                 <div style="margin-top:2px">
                                     {{notify.notifications}}
                                 </div>
