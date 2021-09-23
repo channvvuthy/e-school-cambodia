@@ -362,6 +362,8 @@
   "all_story":"All story",
   "seen":"Seen",
   "4160":"Group chat not found",
-  "pay_method":"Payment Method"
+  "pay_method":"Payment Method",
+  "4200":"Last name or first name can not contain special character",
+  "4201":"Last name or first name can not more then 50 characters"
 
 }

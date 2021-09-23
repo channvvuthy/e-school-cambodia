@@ -4,14 +4,8 @@
          <template>
             <div class="flex mt-5 px-5">
                 <div class="w-3/5 rounded-xl overflow-hidden shadow-md relative">
-                <input type="file" ref="photo" class="hidden" @change="onSelectedPhoto">
                     <div class="h-full w-full absolute top-0 left-0 flex flex-col items-center justify-center">
-                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center flex items-center justify-center relative " :style="{backgroundImage:`url(${stProfile.photo})`}"
-                         @mouseover="() =>{this.isPic = true}" @mouseleave="() => {this.isPic = false}" @click="()=>{this.$refs.photo.click()}">
-                             <div class="bg-gradient-to-t pb-2 from-black absolute w-full h-full rounded-full flex items-end justify-center" v-if="isPic">
-                                <CameraIcon fill="#FFFFFF"></CameraIcon>
-                            </div>
-                        </div>
+                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center flex items-center justify-center relative " :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                     </div>
                     <div class="w-full bg-red-100 bg-cover h-40" style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;"></div>
                     <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">

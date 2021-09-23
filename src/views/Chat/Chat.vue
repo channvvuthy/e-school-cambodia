@@ -209,7 +209,7 @@
                                                 </div>
                                             </div>
                                             <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
-                                                <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
+                                               <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                             </div>
                                             
                                         </div>

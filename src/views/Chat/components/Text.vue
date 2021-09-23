@@ -1,7 +1,17 @@
 <template>
     <div>
-        <div v-if="isAdmin" :class="isAdmin?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble" v-html="linkify(mention(message.content.text))"></div>
-        <div v-else :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble" v-html="linkify(mention(message.content.text))"></div>
+        <div v-if="isAdmin" :class="isAdmin?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
+            <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
+                {{ senderName(message) }}
+            </span>
+            <span v-html="linkify(mention(message.content.text))"></span>
+        </div>
+        <div v-else :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
+            <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
+                {{ senderName(message) }}
+            </span>
+            <span v-html="linkify(mention(message.content.text))"></span>
+        </div>
         
     </div>
 </template>
@@ -29,7 +39,8 @@ export default {
         }
     },
     computed:{
-        ...mapState('setting', ['darkMode'])
+        ...mapState('setting', ['darkMode']),
+        ...mapState('auth', ['stProfile'])
     },
     methods:{
         mention(str){
@@ -38,6 +49,12 @@ export default {
             }catch(err){
                 return str
             }
+        },
+        senderName(message){
+            if(this.stProfile._id == message.sender._id){
+                return this.$i18n.t('you')
+            }
+            return message.sender.name
         },
         linkify(inputText) {
             var replacedText, replacePattern1, replacePattern2, replacePattern3;
@@ -55,7 +72,10 @@ export default {
             replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');
 
             return replacedText
-        }
+        },
+        getUser(user_id){
+            this.$router.push({name:'user', params:{user_id}})
+        },
     }
 }
 </script>
