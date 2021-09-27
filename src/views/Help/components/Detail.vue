@@ -4,16 +4,13 @@
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div class="absolute inset-0 bg-black" @click="closeAds"  @mouseover="()=>{this.showToolbar = false}"></div>
             </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-opacity-0  overflow-hidden  transform transition-all  sm:align-middle  w-7/12"
-                 role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="flex justify-center items-center text-center py-10">
+                    <div class="p-1 w-8 h-8 opacity-60 absolute rounded-full cursor-pointer top-5 right-5 flex justify-center items-center" @click="closeAds">
+                      <CloseIcon fill="#ffffff"></CloseIcon>
+                    </div>
                     <div>
                         <div class="relative">
-                            <div class="p-1 w-8 h-8 opacity-60 absolute rounded-full cursor-pointer right-0 -top-10 flex justify-center items-center"
-                                 @click="closeAds">
-                                <CloseIcon fill="#ffffff"></CloseIcon>
-                            </div>
+                           
                             <div class="w-11/12 relative m-auto">
                                 <div class="flex justify-center items-center bg-black bg-opacity-70 rounded py-1 px-2 absolute top-5 cursor-pointer z-50" v-if="showToolbar" @click="toggleFullScreen">
                                     <div class="border border-white opacity-80 m-1">
@@ -171,7 +168,6 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </template>
 <script>

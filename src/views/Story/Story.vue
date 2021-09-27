@@ -101,8 +101,12 @@
             getStoryDetail(story,index = 0){
                 let payload = {id:story._id}
                 this.$store.commit("auth/setStoryIndex", index);
-                this.viewStory(payload).then(()=>{
-                    this.showStory = true
+                this.viewStory(payload).then(response=>{
+                    if(response.data.msg != undefined){
+                        helper.errorMessage(response.data.msg)
+                    }else{
+                        this.showStory = true
+                    }
                 });
             },
             closeStory(){

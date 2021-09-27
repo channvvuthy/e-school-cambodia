@@ -34,7 +34,7 @@
                             {{ $t('telegram') }}
                         </div>
                     </div>
-                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`"  @click="openLink(video)">
+                    <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer" :class="darkMode?`bg-button`:`bg-primary text-white`"  @click="()=>{$router.push('help')}">
                         <div class="mr-3">
                             <VideoIcon></VideoIcon>
                         </div>
