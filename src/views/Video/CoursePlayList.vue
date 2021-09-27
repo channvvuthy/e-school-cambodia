@@ -411,7 +411,12 @@
             this.loading = true
 
             this.getPlaylist({id: this.$route.params.course._id}).then(response => {
-                let freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
+                let freeVideo
+                if(response.data.data.course.is_buy){
+                    freeVideo = response.data.data.list
+                }else{
+                     freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
+                }
                 let order
                 if (this.$route.params.course.last_watch) {
                     order = this.$route.params.course.last_watch.order

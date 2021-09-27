@@ -94,7 +94,8 @@ import 'katex/dist/katex.min.css';
 Vue.use(VueKatex, {
   globalOptions: {
     displayMode: true,
-    output: 'html'
+    output: 'html',
+    strict: "ignore"
   }
 });
 
