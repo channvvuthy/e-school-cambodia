@@ -283,6 +283,9 @@ export default {
             showCart: false,
             showReceipt:false,
             receiptDetail: {},
+            window:{
+                wwidth: null
+            }
 
             
         }
@@ -341,6 +344,9 @@ export default {
             this.videoUrl = refreshVideoQuality;
             this.vid.src = this.videoUrl
             this.vid.currentTime = this.lastWatch
+        },
+        handleResize() {
+            this.window.width = window.innerWidth;
         },
         defaultVideo(){
             this.videos = this.details.list[this.order]
@@ -524,6 +530,11 @@ export default {
     },
    
     created(){
+        window.addEventListener('resize', this.handleResize);
+        this.handleResize();
+        if(this.window.width <= 1440){
+            this.$store.commit('setting/toggleSidebar', true)
+        }
         this.defaultVideo()
         this.getVideo()
     }

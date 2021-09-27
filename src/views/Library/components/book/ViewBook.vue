@@ -102,7 +102,7 @@ export default {
         },
         listenAudio(details){
             if(details.list.length){
-                if(this.details.is_buy == 1 || this.details.list[0].free_wacth == 1){
+                if(this.details.is_buy == 1 || this.details.list[0].free_watch == 1){
                     this.$emit('listenAudio', details)
                 }else{
                     this.noFree = true
@@ -135,9 +135,6 @@ export default {
                 this.$store.commit("library/removeFromFavorite", book._id)
             })
         },
-    },
-    mounted(){
-        console.log(this.details)
     }
 }
 </script>

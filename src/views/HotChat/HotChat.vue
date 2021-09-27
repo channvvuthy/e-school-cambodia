@@ -263,7 +263,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex h-24 items-center mb-36 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`" style="position:relative;z-index:10">
+            <div class="flex h-24 items-center mb-36 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`" style="position:relative;z-index:10" v-if="auth">
                 <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
                     <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
                 </div>
@@ -298,39 +298,39 @@
             </div>
         </div>
         <!-- Register if no account -->
-        <div class="fixed w-full h-full top-0 left-0 z-50 flex items-center justify-center bg-black bg-opacity-90" v-if="isInfo">
-            <div class="w-96 rounded-md text-sm" :class="darkMode?`bg-secondary text-gray-600`:`bg-white e-shadow`">
-                <div class="h-14 px-4 flex items-center justify-between">
+        <div class="fixed w-full h-full top-0 left-0 z-50 flex items-center justify-center bg-black bg-opacity-95" v-if="isInfo">
+            <div class="w-96 rounded-md text-sm" :class="darkMode?`bg-secondary text-gray-300`:`bg-gray-50 e-shadow`">
+                <div class="h-16 px-4 flex items-center justify-between">
                     <div class="text-lg flext-1 text-center w-full">
                         {{$t('please_enter_your_info')}}
                     </div>
                     <div class="cursor-pointer" @click="() => {this.isInfo = false}">
-                        <CloseIcon :width="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        <CloseIcon :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                     </div>
                 </div>
                 <div class="border-t" :class="darkMode?`border-youtube`:``"></div>
                 <div class="px-5 mt-4">
                     <div>
-                        <input type="text" class="h-12 rounded-md w-full focus:outline-none placeholder-gray-500"
+                        <input type="text" class="h-12 w-full focus:outline-none placeholder-gray-500"
                         ref="firstName"
-                         v-model="user.first_name" :class="darkMode?`bg-youtube pl-3`:``" :placeholder="$t('2013')">
+                         v-model="user.first_name" :class="darkMode?`bg-youtube pl-3 rounded-md`:`border-b border-gray-300 bg-transparent`" :placeholder="$t('2013')">
                     </div>
                     <div class="h-3"></div>
                     <div>
-                        <input type="text" class="h-12 rounded-md w-full focus:outline-none placeholder-gray-500"
+                        <input type="text" class="h-12 w-full focus:outline-none placeholder-gray-500"
                         ref="lastName"
-                         v-model="user.last_name"  :class="darkMode?`bg-youtube pl-3`:``" :placeholder="$t('2014')">
+                         v-model="user.last_name"  :class="darkMode?`bg-youtube pl-3 rounded-md`:`border-b border-gray-300 bg-transparent`" :placeholder="$t('2014')">
                     </div>
                     <div class="h-3"></div>
                     <div>
-                        <input type="text" class="h-12 rounded-md w-full focus:outline-none placeholder-gray-500"
+                        <input type="text" class="h-12 w-full focus:outline-none placeholder-gray-500"
                         @keypress="isNumber($event)" 
                         ref="phone"
-                         v-model="user.phone" :class="darkMode?`bg-youtube pl-3`:``" :placeholder="$t('2009')">
+                         v-model="user.phone" :class="darkMode?`bg-youtube pl-3 rounded-md`:`border-b border-gray-300 bg-transparent`" :placeholder="$t('2009')">
                     </div>
                     <div class="h-4"></div>
-                    <div class="flex justify-end items-center">
-                        <button class="focus:outline-none bg-primary px-14 h-12 rounded-md relative" :disabled="loading" @click="onSubmit">
+                    <div class="flex justify-end items-center" >
+                        <button class="focus:outline-none bg-primary px-14 h-11 rounded-md relative text-gray-300" :disabled="loading" @click="onSubmit">
                             <div class="absoloute" v-if="loading">
                                 <div class="loader -mt-7"></div>
                             </div>
@@ -848,6 +848,7 @@ export default {
                     this.$store.commit('auth/receivingToken', response.data.data.user.token)
                     this.$store.commit("setting/toggleSidebar", false)
                     localStorage.setItem('token', response.data.data.user.token)
+                    this.auth = response.data.data.user.token
                     this.$store.commit('etalk/getMessage',response.data.data)
                    
                 }               
@@ -866,9 +867,9 @@ export default {
         },
     },
     mounted(){
-        document.querySelector('.needsInitiation').click();
         try{
             if(this.auth){
+                document.querySelector('.needsInitiation').click();
                 this.authId = this.stProfile._id
                 let payload = {
                     p: 1,
