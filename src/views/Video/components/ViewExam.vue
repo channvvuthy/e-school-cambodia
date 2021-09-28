@@ -9,12 +9,24 @@
                     <div :class="darkMode?`bg-secondary shadow-md`:`bg-gray-50`" class="rounded-xl shadow-md p-5 my-scroll view overflow-x-scroll" :style="minHeight?{minHeight:`${minHeight}px`}:``">
                         <div class="flex mb-5 items-center">
                             <span>{{index + 1}}.</span>
-                            <katex-element :expression="toLatex(quizzes.title)"/>
+                            <div v-for="(content, index) in quizzes.content" :key="index">
+                                <template v-if="content.type === 1">
+                                    <katex-element :expression="toLatex(content.value)" />
+                                </template>
+                                <template v-else>
+                                    <img :src="content.value" class="max-w-lg">
+                                </template>
+                            </div>
                         </div>
                         <div v-for="(list,key) in quizzes.check_list" :key="key">
                             <div class="inline-flex items-center mb-5 relative" :class="correctAnswer(list._id)?`text-pass`:answer(list._id)?`delete`:``">
                                 <div class="h-5 w-5 rounded border mr-5 relative" :class="correctAnswer(list._id)?`active-checkbox border-pass`:answer(list._id)?`incorrect`:``"></div>
-                                <katex-element :expression="toLatex(list.value)"/>
+                                <template v-if="list.type === 1">
+                                    <katex-element :expression="toLatex(list.value)"/>
+                                </template>
+                                <template v-else>
+                                    <img :src="list.value" class="max-w-lg">
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -78,7 +90,10 @@ export default {
             var str = str.toString()
             return str.replace(/\[math]/g,"").replace(/\[\/math]/g,"").replace(/&nbsp;/g,"").replace("។","")
             .replace(/ℜ/g,"\\Re").replace(/\\left{/,"\\left\\{").replace(/\\right}/,"\\right\\}")
-            .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f').replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
+            .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f')
+            .replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
+            .replace(/\\pitk/g,"{\\pi}tk").replace(/&ne;/g,"\\neq").replace(/&plusmn;/g,"\\pm")
+            .replace(/&times;/g,"\\times")
 
         },
 

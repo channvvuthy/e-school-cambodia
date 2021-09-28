@@ -219,14 +219,14 @@ if (isDevelopment) {
 
 
 // Setup updater events
-autoUpdater.on('checking-for-update', () => {
-    win.webContents.send("checking-for-update")
-});
+// autoUpdater.on('checking-for-update', () => {
+//     win.webContents.send("checking-for-update")
+// });
 
-autoUpdater.on("update-downloaded", () => {
-    autoUpdater.quitAndInstall()
-});
+// autoUpdater.on("update-downloaded", () => {
+//     autoUpdater.quitAndInstall()
+// });
 
-autoUpdater.on('err', (error) => {
-    console.error(error)
-})
+// autoUpdater.on('err', (error) => {
+//     console.error(error)
+// })

@@ -23,8 +23,15 @@
                         <div v-for="(quizzes, index) in quiz.list" :key="index" :class="order != index?`hidden`:``">
                             <div :class="darkMode?`bg-secondary`:`bg-gray-50`" class="shadow rounded-md py-5 px-10 rgba flex-col overflow-y-scroll my-scroll">
                                 <math xmlns = "http://www.w3.org/1998/Math/MathML">
-                                <!-- {{}} -->
-                                    <katex-element :expression="toLatex(quizzes.title)" />
+                                <div v-for="(content, index) in quizzes.content" :key="index">
+                                   <template v-if="content.type === 1">
+                                       <katex-element :expression="toLatex(content.value)" />
+                                       <!-- {{ toLatex(content.value) }} -->
+                                   </template>
+                                   <template v-else>
+                                       <img :src="content.value" class="max-w-lg">
+                                   </template>
+                                </div>
                                 </math>
                                 <div class="mt-8">
                                     <div v-for="(list,key) in quizzes.check_list" :key="key">
@@ -34,8 +41,15 @@
                                                 <div class="h-5 w-5 rounded border mr-5 relative" :class="darkMode?`border-`:`border-gray-400`"></div>
                                             </div>
                                             <div>
-                                               <katex-element :expression="toLatex(list.value)"/>
-                                               <!-- <span class="absolute bg-red-100 z-50"> {{toLatex(list.value) }}</span> -->
+                                               <template v-if="list.type === 1">
+                                                   <katex-element :expression="toLatex(list.value)"/>
+                                                   <!-- <span class="absolute bg-red-400">
+                                                       {{ toLatex(list.value) }}
+                                                   </span> -->
+                                               </template>
+                                               <template v-else>
+                                                    <img :src="list.value" class="max-w-lg">
+                                               </template>
                                             </div>
                                         </label>
                                         
@@ -143,7 +157,10 @@ export default {
             var str = str.toString()
             return str.replace(/\[math]/g,"").replace(/\[\/math]/g,"").replace(/&nbsp;/g,"").replace("។","")
             .replace(/ℜ/g,"\\Re").replace(/\\left{/,"\\left\\{").replace(/\\right}/,"\\right\\}")
-            .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f').replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
+            .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f')
+            .replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
+            .replace(/\\pitk/g,"{\\pi}tk").replace(/&ne;/g,"\\neq").replace(/&plusmn;/g,"\\pm")
+            .replace(/&times;/,"\\times")
 
         },
         setTimer(){
