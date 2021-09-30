@@ -346,6 +346,10 @@ export default {
                 }
                 form.append("member", JSON.stringify(member));
                 this.createGroup(form).then(response => {
+                    if(response.data.msg != undefined){
+                        helper.errorMessage(response.data.msg)
+                        return;
+                    }
                     this.creatingGroup = false
                     this.$store.commit("etalk/setActive", response.data.data._id)
                     this.$router.push("chat").catch((err)=>{err})

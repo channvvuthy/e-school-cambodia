@@ -93,7 +93,7 @@ export default {
             .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f')
             .replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
             .replace(/\\pitk/g,"{\\pi}tk").replace(/&ne;/g,"\\neq").replace(/&plusmn;/g,"\\pm")
-            .replace(/&times;/g,"\\times")
+            .replace(/&times;/,"\\times").replace(/&alpha;/g,"\\alpha").replace(/&beta;/g,"\\beta")
 
         },
 

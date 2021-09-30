@@ -75,13 +75,18 @@
             </div>
         </div>
         <!-- QR -->
-        <div class="fixed w-full h-full top-0 z-50 left-0 bg-black bg-opacity-95 flex items-center justify-center" v-if="showQr" @click="()=>{this.showQr = false}">
-            <div class="absolute right-5 top-5 cursor-pointer">
+        <div class="fixed w-full h-full top-0 z-50 left-0 bg-black bg-opacity-95 flex items-center justify-center" v-if="showQr">
+            <div class="absolute right-5 top-5 cursor-pointer" @click="()=>{this.showQr = false}">
                 <CloseIcon fill="#9CA3AF"></CloseIcon>
             </div>
             <div class="w-80">
-                <img :src="qrUrl" class="rounded max-w-full">
+                <img :src="qrUrl" class="max-w-full rounded-t">
+                <input type="text" id="qrCode"  class="absolute focus:outline-none" :value="profile_url" style="z-index:-10">
+                <div class="bg-primary h-12 flex items-center justify-center px-3 rounded-b">
+                    <div class="cursor-pointer" @click="copyText">{{$t('copy_text')}}</div>
+                </div>
             </div>
+            
         </div>
     </div>
 </template>
@@ -95,6 +100,7 @@
     import CameraIcon from "./../../components/CameraIcon.vue"
     import eSchool from "./components/eSchool.vue"
     import {mapActions, mapState} from "vuex"
+    import helper from "./../../helper/helper"
     const {ipcRenderer} = require('electron')
     export default{
         components: {
@@ -112,7 +118,8 @@
                 showQr: false,
                 isEdit: false,
                 loading: false,
-                qrUrl:""
+                qrUrl:"",
+                profile_url: ""
             }
         },
         computed: {
@@ -137,9 +144,16 @@
             getMyQr(){
                 this.getQr().then(response=>{
                     this.qrUrl = response.data.data.qrcode_url
-                    console.log(response.data.data.qrcode_url)
+                    this.profile_url = response.data.data.profile_url
                     this.showQr = true
                 })
+            },
+            copyText() {
+                var copyText = document.getElementById("qrCode");
+                copyText.select();
+                copyText.setSelectionRange(0, 99999)
+                document.execCommand("copy");
+                helper.success("Copied the text: " + copyText.value)
             },
             onSelectedPhoto(event){
                 if (event.target.value) {
