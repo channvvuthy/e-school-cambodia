@@ -20,7 +20,7 @@
                         <div class="px-5 py-3 text-white relative z-50 w-full">
                             <div class="text-base">{{pk.title}}</div>
                             <div class="flex mt-1 items-center justify-between w-full">
-                                <div class="font-extralight">{{pk.total_book}} {{$t('2202')}}</div>
+                                <div class="font-extralight">{{pk.total_book}} {{$t('2202')}}{{plurals(pk.total_book)}}</div>
                                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                                 <div class="font-extralight">
                                     <template v-if="pk.is_buy === 0">
@@ -76,7 +76,7 @@ export default {
     },
     computed:{
         ...mapState('library', ['libraries', 'loading']),
-        ...mapState('setting', ['darkMode']),
+        ...mapState('setting', ['darkMode','localize']),
 
     },
     methods:{
@@ -104,6 +104,14 @@ export default {
             this.addToCart(this.pk).then(() =>{
                 this.showCart = true; 
             })
+        },
+        plurals(total){
+            if(this.localize == 'en'){
+                if(total > 1){
+                    return "s"
+                }
+            }
+            return ""
         },
         formatDate(date){
             moment.locale('en');

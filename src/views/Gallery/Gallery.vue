@@ -5,10 +5,10 @@
             <div class="md:w-96 2xl:w-100 text-gray-300 bg-secondary rounded-lg flex flex-col justify-between relative" style="height:90%;">
                 <div class="flex justify-between p-5">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center" :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                        <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center" :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>
                         <div class="flex flex-col items-center justify-start text-left text-base">
                         <div>
-                            <div>{{stProfile.first_name}}  {{stProfile.last_name}}</div>
+                            <div>{{storyDetail.user.name}}</div>
                             <vue-moments-ago prefix="" suffix="ago" :date="addedDate" lang="en" />
                         </div>
                     </div>
@@ -222,7 +222,7 @@ export default {
         this.handleResize();
         
         this.getGallery({
-            id: this.stProfile._id
+            id: this.$route.params.id
         })
     }
 

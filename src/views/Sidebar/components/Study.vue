@@ -71,7 +71,7 @@
                         {{$t('1112')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center" @click="goTo('gallery')">
+                <div class="text-center flex flex-col justify-center items-center" @click="goToGallery('gallery')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass(`gallery`)">
                         <div>
                             <GalleryIcon :size="24" fill="#FFFFFF" v-if="$route.name === `gallery`"></GalleryIcon>
@@ -86,8 +86,8 @@
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('certificate')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass(`certificate`)">
                         <div>
-                            <CertificateIcon :size="24" fill="#FFFFFF" v-if="$route.name === `certificate`"></CertificateIcon>
-                            <CertificateIcon :size="24" :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></CertificateIcon>
+                            <CertificateIcon :size="30" fill="#FFFFFF" v-if="$route.name === `certificate`"></CertificateIcon>
+                            <CertificateIcon :size="30" :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></CertificateIcon>
                         </div>
 
                     </div>
@@ -121,11 +121,15 @@
             CertificateIcon
         },
         computed: {
-            ...mapState('setting', ['darkMode'])
+            ...mapState('setting', ['darkMode']),
+            ...mapState('auth', ['stProfile'])
         },
         methods:{
             goTo(page) {
                 this.$router.push({ name: page }).catch((err)=>{err});
+            },
+            goToGallery(page) {
+                this.$router.push({ name: page,params:{id: this.stProfile._id} }).catch((err)=>{err});
             },
             activeClass(currentRoute){
                 if(this.$route.name === currentRoute){

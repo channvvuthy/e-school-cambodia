@@ -206,9 +206,14 @@ const routes = [
         component: () => import('../views/MyCourse/Quiz'),
     },
     {
-        path: '/gallery',
+        path: '/gallery/:id',
         name: 'gallery',
         component: () => import('../views/Gallery/Gallery'),
+    },
+    {
+        path: '/friend/:id',
+        name: 'friend',
+        component: () => import('../views/Network/UserOfFriend'),
     },
     {
         path: '/certificate',

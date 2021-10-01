@@ -13,9 +13,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-3 ml-5 w-full">
+                <div class="grid grid-cols-3 gap-3 ml-5 w-full">
                     <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3 " @click="()=>{this.isEdit = true}">
+                        <div class="flex items-center justify-between px-10 py-3 " >
                             <div class="text-center w-full">
                                 {{$t('name')}}
                             </div>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3"  @click="()=>{this.isEdit = true}">
+                        <div class="flex items-center justify-between px-10 py-3"  >
                             <div class="text-center w-full">
                                 {{$t('gender')}}
                             </div>
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="shadow-md rounded-xl relative " :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3"  @click="()=>{this.isEdit = true}">
+                        <div class="flex items-center justify-between px-10 py-3"  >
                             <div class="text-center w-full">
                                 {{$t('location')}}
                             </div>
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3"  @click="()=>{this.isEdit = true}">
+                        <div class="flex items-center justify-between px-10 py-3"  >
                             <div class="text-center w-full">
                                 {{$t('2123')}}
                             </div>
@@ -77,7 +77,7 @@
                                 <div class="mt-8">
                                     <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
                                 </div>
-                                <div class="mt-2 px-3">
+                                <div class="mt-2 px-3 text-center">
                                      <span v-if="stProfile.school_name" :title="stProfile.school_name">
                                         {{ stProfile.school_name}}
                                     </span>
@@ -88,6 +88,31 @@
                             </div>
                         </div>
                     </div>
+                    <div class="shadow-md rounded-xl relative cursor-pointer" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" @click="goTo('gallery')">
+                        <div class="flex items-center justify-between px-10 py-3">
+                            <div class="text-center w-full">
+                                {{$t('1113')}}
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <GalleryIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></GalleryIcon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="shadow-md rounded-xl relative cursor-pointer" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"  @click="goTo('friend')">
+                        <div class="flex items-center justify-between px-10 py-3">
+                            <div class="text-center w-full">
+                                {{$t('friend')}}
+                            </div>
+                            <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
+                                <div class="mt-8">
+                                    <NetworkIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></NetworkIcon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </template>
@@ -115,6 +140,8 @@
     import BookIcon from "./../../components/BookIcon.vue"
     import EditIcon from "./../../components/EditIcon.vue"
     import ProfileIcon from "./../../components/ProfileIcon.vue"
+    import GalleryIcon from "./../../components/GalleryIcon.vue"
+    import NetworkIcon from "./../../components/NetworkIcon.vue"
 
     export default{
         components: {
@@ -133,7 +160,9 @@
             MarkerIcon,
             QuizIcon,
             BookIcon,
-            EditIcon
+            EditIcon,
+            GalleryIcon,
+            NetworkIcon
             
         },
         data(){
@@ -188,6 +217,9 @@
             },
             cutString(text,limit){
                 return helper.cutString(text, limit)
+            },
+            goTo(page) {
+                this.$router.push({ name: page,params:{id: this.$route.params.user_id} }).catch((err)=>{err});
             },
 
             showAllProvince(){
