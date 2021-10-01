@@ -157,14 +157,15 @@ export default {
             commit("loading", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `etalk/contact?${helper.q(payload)}`).then(response => {
+                    commit("loading", false)
                     resolve(response)
                     if(payload.p === undefined || payload.p === 1){
                         commit("getContact", response.data.data)
                     }else{
                         commit("getContacts", response.data.data)
                     }
-                    commit("loading", false)
                 }).catch(err => {
+                    commit("loading", false)
                     reject(err)
                 })
             })
@@ -243,6 +244,16 @@ export default {
                 })
             })
         },
+        join({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `etalk/group/join`, payload).then(response =>{
+                    resolve(response)
+                }).catch(err => {
+                    reject(err)
+                    helper.errorMessage(err.response.data.msg)
+                })
+            })
+        },
         blockUser({}, payload){
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `etalk/contact/block`, payload).then(response =>{
@@ -257,7 +268,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.delete(config.apiUrl + `etalk/contact/mute`, {
                     headers:{},
-                    data:{
+                    data:{ 
                         id: payload._id
                     }
                 }).then(response =>{

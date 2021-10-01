@@ -43,10 +43,10 @@ const downloadFile = async (fileUrl, info) => {
         });
         await response.data.pipe(fs.createWriteStream(myInstalledDir).on('finish', () => {
             info.url = path.join(app.getAppPath(), "..", "..", "electronjs");
-            win.webContents.send("downloaded", info)
+            mainWindow.webContents.send("downloaded", info)
         }));
     } catch (err) {
-        win.webContents.send("fail", info)
+        mainWindow.webContents.send("fail", info)
         throw new Error(err);
     }
 };
@@ -63,8 +63,8 @@ protocol.registerSchemesAsPrivileged([{
     }
 }]);
 ipcMain.on("saveFile", async(event, url) => {
-    const win = BrowserWindow.getFocusedWindow();
-    await download(win, url)
+    const mainWindow = BrowserWindow.getFocusedWindow();
+    await download(mainWindow, url)
     event.reply("fileSaved", url)
     
 })
@@ -105,7 +105,7 @@ ipcMain.on("openLink", async (event, arg) => {
 
 
 
-let win
+let mainWindow
 // let appIcon = null
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
@@ -113,7 +113,7 @@ ipcMain.on("gradeFilter", async (event, arg) => {
 async function createWindow() {
 
     // Create the browser window.
-    win = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         minWidth: 1250,
         minHeight: 760,
         webPreferences: {
@@ -123,27 +123,22 @@ async function createWindow() {
         },
         icon: path.join(__static, 'icon.png')
     });
-    // win.setContentProtection(true)
-    win.setTitle("E-SCHOOL")
-    win.setMenu(null);
+    mainWindow.setContentProtection(true)
+    mainWindow.setTitle("E-SCHOOL")
+    mainWindow.setMenu(null);
     Menu.setApplicationMenu(null)
-    win.maximize();
-    win.on("close", (event) => {
-        if (app.quitting) {
-            win = null
-          } else {
-            event.preventDefault()
-            win.hide()
-          }
+    mainWindow.maximize();
+    mainWindow.on("close", (event) => {
+        app.quit()
     })
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
-        await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
-        if (!process.env.IS_loadingScreen) win.webContents.openDevTools()
+        await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+        if (!process.env.IS_loadingScreen) mainWindow.webContents.openDevTools()
     } else {
         createProtocol('app');
         // Load the index.html when not in development
-        win.loadURL('app://./index.html')
+        mainWindow.loadURL('app://./index.html')
     }
 }
 
@@ -154,9 +149,9 @@ if (!gotTheLock) {
 } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
-        if (win) {
-            if (win.isMinimized()) win.restore()
-            win.show()
+        if (mainWindow) {
+            if (mainWindow.isMinimized()) mainWindow.restore()
+            mainWindow.show()
         }
     })
 }
@@ -183,24 +178,12 @@ app.on('ready', async () => {
 });
 app.name = "E-SCHOOL"
 
-// app.whenReady().then(() => {
-//     appIcon = new Tray(path.join(__static, 'icon.ico'))
-//     const contextMenu = Menu.buildFromTemplate([
-//         {
-//             label: 'Exit', type: 'normal', click: () => {
-//             app.exit(0)
-//         }
-//         },
-//     ])
-//     appIcon.setToolTip('E-SCHOOL')
-//     appIcon.setContextMenu(contextMenu)
-
-//     appIcon.on("click", () => {
-//         win.isVisible() ? win.hide() : win.show()
-//     })
-
-// })
-
+app.on("open-url", (event, data) => {
+    event.preventDefault();
+    mainWindow.webContents.send('deeplink', {deeplink:data});
+  });
+  
+  app.setAsDefaultProtocolClient("e-school");
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
@@ -216,17 +199,3 @@ if (isDevelopment) {
         })
     }
 }
-
-
-// Setup updater events
-// autoUpdater.on('checking-for-update', () => {
-//     win.webContents.send("checking-for-update")
-// });
-
-// autoUpdater.on("update-downloaded", () => {
-//     autoUpdater.quitAndInstall()
-// });
-
-// autoUpdater.on('err', (error) => {
-//     console.error(error)
-// })

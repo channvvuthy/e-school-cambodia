@@ -570,14 +570,12 @@ export default {
             })
         }, 
         replyTo(replyContact){
-            if(replyContact.is_admin == 0){
-                return replyContact.sender.name
+            if(replyContact.is_admin === 1){
+                return this.$i18n.t('admin')
             }
-            
-            if(replyContact.sender && replyContact.sender._id == this.stProfile._id){
-                return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('yourself')
+            if(replyContact.is_admin === 0){
+                return this.$i18n.t('student')
             }
-            return replyContact.sender.name
         },
         readPdf(pdf){
             this.pdfUrl = pdf
@@ -761,24 +759,17 @@ export default {
 
         },
         senderName(message){
-            if(message.sender != undefined){
-                if(message.sender._id == this.stProfile._id){
-                    return this.$i18n.t('you')
-                }
-                return message.sender.name
+            if(message.is_admin == 1){
+               return this.$i18n.t('admin')
             }
-            return this.$i18n.t('unknown')
+           return this.$i18n.t('student')
           
         },
         replyName(message){
-            if(message.is_admin == 0){
-                return this.$i18n.t('hime_self')
-            }else{
-                if(message.sender && message.sender._id == this.stProfile._id){
-                    return this.$i18n.t('yourself')
-                }
-                return this.$i18n.t('admin')
+            if(message.reply.is_admin == 1){
+               return this.$i18n.t('admin')
             }
+            return this.$i18n.t('student')
         },
         getDay(oldDate){
             if (helper.numDay(oldDate, moment().format()) === 0) {

@@ -37,8 +37,10 @@
     import Notification from "./components/Notification.vue"
     import NotificationDetail from "./components/NotificationDetail.vue"
     import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue"
-    import {mapState} from "vuex"
+    import helper from "./helper/helper"
+    import {mapActions, mapState} from "vuex"
     import Splash from "./views/Splash/Splash.vue"
+    const { ipcRenderer } = require('electron')
     export default{
         data(){
             return {
@@ -51,6 +53,7 @@
                 window:{
                     wwidth: null
                 }
+
             }
         },
 
@@ -64,10 +67,13 @@
             Splash
         },
         computed: {
-            ...mapState('setting', ['isHide', 'darkMode'])
+            ...mapState('setting', ['isHide', 'darkMode']),
+            ...mapState('auth', ['stProfile'])
         },
 
         methods: {
+            ...mapActions('auth', ['getUser']),
+            ...mapActions('etalk', ['join','getContact']),
             hideMenu(){
                 if(this.$route.name === 'library-video' 
                 || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
@@ -109,10 +115,43 @@
                 this.window.width = window.innerWidth;
             },
         },
+        mounted(){
+            ipcRenderer.on("deeplink",(event, arg)=>{
+                if(localStorage.getItem("token") !== null){
+                    let deeplink =  arg.deeplink.split('/')
+                    if(deeplink[3] == 'profile'){
+                        this.$router.push({name:'user', params:{user_id:deeplink.pop()}})
+                    }else{
+                        let payload = {
+                            id: deeplink.pop(),
+                            user_id: JSON.stringify([this.stProfile._id])
+                        }
+                        this.join(payload).then(response =>{
+                            if(response.data.msg){
+                                helper.errorMessage(response.data.msg)
+                                return;
+                            }
+                            let room_id = response.data.data.room_id
+                            this.getContact().then(group => {
+                                let contacts = group.data.data
+                                for(let index = 0; index < contacts.length; index++){
+                                    if(contacts[index]._id == room_id ){
+                                        this.$store.commit('etalk/setActive', index)
+                                    }
+                                }
+                            })
+                            this.$router.push({name:'chat'}).catch(err=>{err})
+                        })
+                    }
+                    
+                }else{
+                    this.$router.push({name:'login'}).catch(err=>{err})
+                }
+            })
+        },
         created(){
             window.addEventListener('resize', this.handleResize);
             this.handleResize();
-
             if(this.window.width <= 1440){
                 this.$store.commit('setting/toggleSidebar', true)
             }

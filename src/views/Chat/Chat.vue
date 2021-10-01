@@ -2,6 +2,7 @@
     <div class="flex h-screen m-5 text-sm">
         <!-- Copy text  -->
         <input type="text" id="chat-text" class="absolute" v-model="chatText" style="z-index:-1"/>
+        <input type="text" id="share"  class="absolute focus:outline-none" :value="share" style="z-index:-1">
         <audio controls  id="message-sound" class="absolute" style="z-index:-1">
             <source src="message.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
@@ -108,7 +109,7 @@
                         <div class="w-1 h-1 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`"></div>
                     </div>
                     <!-- eTalk option -->
-                    <div :class="darkMode?`bg-button`:`bg-white`" class="rounded-md overflow-hidden e-shadow absolute right-5 top-20 z-50 cursor-pointer" v-if="chatOption">
+                    <div :class="darkMode?`bg-button`:`bg-white`" class="z-50 rounded-md overflow-hidden e-shadow absolute right-5 top-20 z-50 cursor-pointer" v-if="chatOption">
                         <template v-if="contact.type === 0">
                                 <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`">
                                     <span v-if="contact.is_mute" @click="deleteMuteContact">{{$t('unmute')}}</span>
@@ -148,12 +149,16 @@
                             <div class="px-8 h-12 flex items-center border-b" :class="darkMode?`border-youtube`:`border-gray-200`" @click="() => {this.isMember = true; this.chatOption = false}">
                                 {{$t('member')}}
                             </div>
+                            <div class="px-8 h-12 flex items-center border-b relative" :class="darkMode?`border-youtube`:`border-gray-200`" @click="shareLink">
+                                {{$t('copy_link')}}
+                                
+                            </div>
                         </template>
                     </div>
                 </div>
                 <div class="flex-1 h-full flex flex-col pb-36 py-5">
-                    <div class="h-full flex items-center justify-center flex-col" :class="darkMode?`text-gray-400`:`text-gray-600`" v-if="!isSelectedContact">
-                        <BoubleIcon :size="100" :fill="darkMode?`#4B5563`:`#4B5563`"></BoubleIcon>
+                    <div class="h-full flex items-center justify-center flex-col" :class="darkMode?`text-gray-400`:`text-primary`" v-if="!isSelectedContact">
+                        <BoubleIcon :size="100" :fill="darkMode?`#9CA3AF`:`#055174`"></BoubleIcon>
                         <div class="text-lg">
                             {{ $t('please_select_contact_to_chat') }}
                         </div>
@@ -344,7 +349,7 @@
                         </ul>
                     </div>
                     <!-- Reply -->
-                    <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
+                    <div class="h-24 flex items-center px-5 relative z-40" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow text-primary`" v-if="replyContact">
                         <div class="flex border-l-2 pl-1 mx-10 justify-between w-full items-center" :class="darkMode?`border-gray-400`:`border-primary`">
                             <div>
                                 <div class="underline">
@@ -372,7 +377,7 @@
                         </div>
                     </div>
                     <!-- Mention -->
-                    <div class="h-24 flex items-center px-5 relative z-50" :class="darkMode?`bg-secondary`:`bg-white ${replyContact?``:`e-shadow`}`">
+                    <div class="h-24 flex items-center px-5 relative z-40" :class="darkMode?`bg-secondary`:`bg-white ${replyContact?``:`e-shadow`}`">
                         <div class="h-48 overflow-y-scroll w-48 rounded-lg absolute bottom-28 left-0 mb-2" :class="darkMode?`bg-secondary text-gray-300`:`bg-white e-shadow`" v-if="showMention">
                             <ul>
                                 <li v-for="(mention, key) in mentions" :key="key"
@@ -602,6 +607,7 @@ export default {
             isTyping: false,
             viewChat: false,
             previewUrl:"",
+            share:"",
             message: {
                 id: "",
                 reply_id: "",
@@ -646,6 +652,14 @@ export default {
                 
             }
         },
+        shareLink() {
+            var copyText = document.getElementById("share");
+            this.chatOption = false
+            copyText.select();
+            copyText.setSelectionRange(0, 99999)
+            document.execCommand("copy");
+            helper.success("Copied the text: " + copyText.value)
+        },
         previewImage(previewUrl){
             this.viewChat = true
             this.previewUrl = previewUrl
@@ -669,29 +683,25 @@ export default {
             return replyContact.sender.name
         },
         replyName(message){
+            // Group admin
             if(this.contact.type == 0){
-                if((message.is_admin == 0 &&  message.reply.is_admin == 0)){
-                    return this.$i18n.t('yourself')
+                if(message.reply.is_admin == 1){
+                    return this.$i18n.t('admin') 
                 }
-                if((message.is_admin == 1 &&  message.reply.is_admin == 0)){
+            }
+            // Group user
+            if(message.sender._id == message.reply.sender._id){
+                if(this.auth == message.reply.sender._id){
+                    return this.$i18n.t('yourself')
+                }else{
+                    return this.$i18n.t('hime_self')
+                }
+            }else{
+                if(this.auth == message.reply.sender._id){
                     return this.$i18n.t('you')
                 }
-                if((message.is_admin == 1 &&  message.reply.is_admin == 1)){
-                    return this.$i18n.t('themselves')
-                }
-
-                return this.$i18n.t('admin')
+                return message.reply.sender.name
             }
-            
-            try{
-                if(message.sender._id === message.reply.sender._id){
-                 return this.$i18n.t('hime_self')
-                }
-            }catch(err){
-                return this.$i18n.t('unknown')
-            }
-
-            return message.reply.sender.name
         },
         isSeen(){
             this.readMessage({
@@ -703,16 +713,18 @@ export default {
             this.mentionReplaced = false
         },
         senderName(message){
+           // Group admin
             if(this.contact.type == 0){
-                if((message.is_admin == 0 && message.reply.is_admin == 0) || (message.is_admin == 0 && message.reply.is_admin == 1)){
-                   return this.$i18n.t('you')
+                if(message.sender.is_admin == 1){
+                    return this.$i18n.t('admin') 
                 }
-                return this.contact.name
             }
-            if(message.sender == undefined){
-                return this.$i18n.t('unknown')
+            // Group user
+            if(message.sender._id == this.auth){
+                return this.$i18n.t('you')
+            }else{
+                return message.sender.name
             }
-            return message.sender.name
         },
         sender(message){
             if(this.contact.type == 0){
@@ -883,7 +895,10 @@ export default {
                 p: 1,
                 id: this.contact._id,
                 type: this.contact.type
-            }).then(() => {
+            }).then((response) => {
+                if(response.data.data.room.share){
+                    this.share = response.data.data.room.share
+                }
                 this.scrollToBottom()
                 this.lisentMessage()
             })
@@ -1199,6 +1214,17 @@ export default {
         
     },
     watch: {
+        'contactActive':function(value){
+           if(value){
+            this.getMessage({
+                p: 1,
+                id: this.contacts[value]._id,
+                type: this.contacts[value].type
+            }).then(() => {
+                this.selectedContact(this.contacts[value], value)
+            })
+        }
+        },
         'message.text': function (value) {
             if (this.mentionReplaced) {
                 return

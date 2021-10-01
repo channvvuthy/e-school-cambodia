@@ -9,13 +9,19 @@ module.exports = {
             builderOptions: {
                 "appId": "com.e-school-cambodia.com",
                 "productName": "E-SCHOOL",
+                "protocols": {
+                    "name": "e-school-protocol",
+                    "schemes": [
+                      "e-school"
+                    ]
+                },
                 "copyright":"Copyright ©2021 E-School Cambodia",
                 "publish":{
                     "provider":"github",
                     "owner":"channvuthy271",
                     "host":"github.com",
                     "protocol":"https",
-                   "releaseType":"release",
+                    "releaseType":"release",
                 },
                 "mac":{
                     "target":["pkg"]

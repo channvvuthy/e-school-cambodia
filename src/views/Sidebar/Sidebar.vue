@@ -83,7 +83,7 @@
                 <img :src="qrUrl" class="max-w-full rounded-t">
                 <input type="text" id="qrCode"  class="absolute focus:outline-none" :value="profile_url" style="z-index:-10">
                 <div class="bg-primary h-12 flex items-center justify-center px-3 rounded-b">
-                    <div class="cursor-pointer" @click="copyText">{{$t('copy_text')}}</div>
+                    <div class="cursor-pointer text-white" @click="copyText">{{$t('copy_text')}}</div>
                 </div>
             </div>
             
@@ -143,6 +143,10 @@
             },
             getMyQr(){
                 this.getQr().then(response=>{
+                    if(response.data.msg){
+                        helper.errorMessage(response.data.msg)
+                        return;
+                    }
                     this.qrUrl = response.data.data.qrcode_url
                     this.profile_url = response.data.data.profile_url
                     this.showQr = true
