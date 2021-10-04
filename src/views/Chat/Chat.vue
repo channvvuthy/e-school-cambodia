@@ -186,12 +186,14 @@
                                         @reply="reply()">
                                     </Reply>
                                 </div>
-                                <!--  ${message.content.type == 0?`bg-opacity-20`:``}sage -->
+                                <!--  Message text -->
                                 <template v-if="(message.content.type === 1 || message.content.type === 0)">
-                                    <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center relative">
-                                        <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)">
-                                            <div class="h-13 w-13"></div>
-                                        </div>
+                                    <div :class="auth === sender(message)?`flex ${message.content.type?`justify-end` :`justify-center`}`:`flex ${message.content.type?`justify-start` :`justify-center`}`" class="items-center relative">
+                                        <template v-if="message.content.type">
+                                            <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)">
+                                                <div class="h-13 w-13"></div>
+                                            </div>
+                                        </template>
                                         <div class="flex items-center mr-5" v-if="auth === sender(message)">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap" v-if="message.content.type">
                                                 {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
@@ -209,11 +211,11 @@
                                                 <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
-                                                <div class="relative py-3  inline-flex items-center px-3 text-black mb-5 max-w-md" :class="darkMode?`bg-button text-gray-300 rounded-xl `:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl `:`rounded-xl e-shadow`}`">
+                                                <div class="relative py-2  inline-flex items-center px-3 text-black mb-5 max-w-md" :class="darkMode?`bg-button text-gray-300 ${message.content.type == 0?`bg-opacity-40 rounded-3xl `:`rounded-xl e-shadow`}`:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl `:`rounded-xl e-shadow`}`">
                                                     <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                                 </div>
                                             </div>
-                                            <div v-else class="relative py-3 inline-flex items-center px-3 text-black mb-5 max-w-md" :class="darkMode?`bg-button text-gray-300 rounded-xl`:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl`:`rounded-xl e-shadow`}`">
+                                            <div v-else class="relative py-2 inline-flex items-center px-3 text-black mb-5 max-w-md" :class="darkMode?`bg-button text-gray-300 ${message.content.type == 0?`bg-opacity-40 rounded-3xl `:`rounded-xl e-shadow`}`:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl`:`rounded-xl e-shadow`}`">
                                                <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                             </div>
                                             

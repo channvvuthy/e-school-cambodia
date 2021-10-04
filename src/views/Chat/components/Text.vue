@@ -14,7 +14,7 @@
                 <span v-html="linkify(mention(message.content.text))"></span>
             </div>
         </template>
-        <template>
+        <template v-else>
             <div>
                 <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
                     {{ senderName(message) }}

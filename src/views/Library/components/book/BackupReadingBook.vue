@@ -8,7 +8,7 @@
                     <EnlargeIcon></EnlargeIcon>
                 </div>
                 <div>
-                    <div class="relative -top-6" v-if="loading">
+                    <div class="relative -top-6" v-if="loadingPdf">
                         <div class="loader"></div>
                     </div>
                    <div v-else>
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <!-- Body -->
-            <div class="text-center items-center bg-white text-white relative pt-5 rounded-b" @mouseover="()=>{this.showToolbar = true}" @mouseout="()=>{this.showToolbar = false}">
+            <div class="text-center flex flex-col justify-center items-center bg-white text-white relative pt-5 rounded-b" @mouseover="()=>{this.showToolbar = true}" @mouseout="()=>{this.showToolbar = false}">
                 <div class="w-full flex flex-col justify-center items-center bottom-10 left-0 px-20 z-50 absolute z-50" :class="showToolbar?`visible`:`invisible`">
                     <div class="w-full py-4 bg-primary rounded-full flex items-center justify-between px-8 shadow">
                         <div class="transform rotate-90 cursor-pointer" @click="onPrevPage()">
@@ -39,10 +39,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-85 overflow-y-scroll rounded-b" id="fullScreen" @scroll="onScroll">                    
-                    <template v-if="pdfUrl">
-                        <pdf :src="pdfFile" :key="i" v-for="i in numPages" :page="i" style="width: 100%"></pdf>
-                    </template>
+                <div class="h-85 overflow-y-scroll flex items-center justify-center" id="fullScreen" @scroll="onScroll">                    
+                    <!-- <div id="pdf-viewer"></div> -->
+                    <div v-if="pdfUrl" class="bg-red-400">
+                        <MultiPagePdf :pdfUrl="pdfUrl"></MultiPagePdf>
+                    </div>
                 </div>
             </div>
             <!-- List -->
@@ -74,7 +75,13 @@ import EnlargeIcon from "./../../../../components/EnlargeIcon"
 import ReadingBookIcon from "./../../../../components/ReadingBookIcon"
 import CheckIcon from "./../../../../components/CheckIcon"
 import XIcon from "./../../../../components/XIcon"
-import pdf from 'vue-pdf'
+import MultiPagePdf from "./../../../Component/MultiPagePdf.vue"
+
+import pdfjsLib from "pdfjs-dist/build/pdf";
+import "pdfjs-dist/web/pdf_viewer.css";
+
+pdfjsLib['GlobalWorkerOptions']['workerSrc'] =
+  "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.0.943/build/pdf.worker.min.js";
 export default {
     components:{
         EnlargeIcon,
@@ -83,7 +90,7 @@ export default {
         ReadingBookIcon,
         CheckIcon,
         XIcon,
-        pdf
+        MultiPagePdf
     },
     data(){
         return{
@@ -102,11 +109,7 @@ export default {
             loadingPdf: true,
             totalPage: null,
             page: 1,
-            loading: false,
-            currentPage: 0,
-            pageCount: 0,
-            pdfFile: "",
-            numPages: undefined,
+            pdfUrl:""
         }
     },
     computed:{
@@ -118,9 +121,6 @@ export default {
         closeReading(){
             this.$emit("closeReading")
             this.stopReading()
-        },
-        PdfLoaded(){
-            this.loadingPdf = false
         },
         renderPage(pageNumber, canvas) {
             this.pdfDoc.getPage(pageNumber).then(page=> {
@@ -185,15 +185,15 @@ export default {
             return false
         },
         changeChapter(book,index){
+
             this.stopReading()
-            this.pdfFile = " "
+            
             if(this.canRead(book)){
                 this.pdfUrl = book.filename
                 this.title = book.title
                 this.showLesson(false)
                 this.order = index
-                this.getPdfUrl()
-                
+                this.initialPdf()
             }
         },
         loadPdf(){
@@ -212,29 +212,33 @@ export default {
             })
             this.pdfUrl = defaultPdf.filename
             this.title = defaultPdf.title
-            this.getPdfUrl()
         },
-        getPdfUrl(){
-            this.loading = true
-            if(this.pdfUrl){
-                this.pdfFile = pdf.createLoadingTask(this.pdfUrl);
-                this.pdfFile.promise.then(pdf => {
-                    this.numPages = pdf.numPages;
-                    this.loading = false
-                })
-            }
+        initialPdf(page = 1){
+            this.loadingPdf = true
+            pdfjsLib.getDocument(this.pdfUrl).promise.then(pdfDoc=> {
+                this.pdfDoc = pdfDoc
+                let viewer = document.getElementById('pdf-viewer');
+                this.totalPage  = pdfDoc.numPages 
+                // for(let page = 1; page <= pdfDoc.numPages; page++) {
+                let canvas = document.createElement("canvas");    
+                canvas.className = 'pdf-page-canvas';         
+                viewer.appendChild(canvas);            
+                this.renderPage(page, canvas);
+                // }
+                this.loadingPdf = false
+            });
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= (scrollHeight - 1)) {
                 if(this.page < this.totalPage){
                     this.page ++
-                    this.getPdfUrl(this.page)
+                    this.initialPdf(this.page)
                 }
             }
         },
     },
     mounted(){
-        // this.initialPdf(this.page)
+        this.initialPdf(this.page)
         window.addEventListener('keydown', (e) => {
             
             if(e.key === `ArrowRight`){

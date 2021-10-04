@@ -83,7 +83,7 @@
                 <img :src="qrUrl" class="max-w-full rounded-t">
                 <input type="text" id="qrCode"  class="absolute focus:outline-none" :value="profile_url" style="z-index:-10">
                 <div class="bg-primary h-12 flex items-center justify-center px-3 rounded-b">
-                    <div class="cursor-pointer text-white" @click="copyText">{{$t('copy_text')}}</div>
+                    <div class="cursor-pointer text-white" @click="copyText">{{$t('copy_link')}}</div>
                 </div>
             </div>
             
