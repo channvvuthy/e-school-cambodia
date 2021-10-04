@@ -94,6 +94,7 @@ export default {
             .replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
             .replace(/\\pitk/g,"{\\pi}tk").replace(/&ne;/g,"\\neq").replace(/&plusmn;/g,"\\pm")
             .replace(/&times;/,"\\times").replace(/&alpha;/g,"\\alpha").replace(/&beta;/g,"\\beta")
+            .replace(/&theta;/g,"\\theta").replace(/&divide;/g,"\\divide").replace(/&pi;/g,"\\pi ")
 
         },
 

@@ -1,6 +1,9 @@
 <template>
     <div>
-        <div class="absolute left-0 top-0 w-full h-full z-50 pt-10 " :class="darkMode?`bg-youtube text-gray-300`:`bg-white text-black`">
+        <div class="absolute left-0 top-0  h-full z-50 pt-10 e-shadow" :class="darkMode?`bg-youtube text-gray-300`:`bg-white text-black`" style="width:99%;">
+            <div class="absolute right-3 top-3 cursor-pointer w-7 h-7 rounded-full flex items-center justify-center" :class="darkMode?`bg-button`:`bg-gray-400`" @click="closeExam">
+                <CloseIcon fill="#FFF" :width="20"></CloseIcon>
+            </div>
             <div class="text-center bg-transparent overflow-y-scroll h-85 pb-40">
                 <div class="text-base max-w-xl m-auto">
                     <div class="mb-5">
@@ -38,7 +41,7 @@
                                         <label class="flex items-center relative">
                                             <div class="relative">
                                                 <input type="checkbox" class="mr-5 hidden" @change="selectAnswer($event,quizzes,list)">
-                                                <div class="h-5 w-5 rounded border mr-5 relative" :class="darkMode?`border-`:`border-gray-400`"></div>
+                                                <div class="h-5 w-5 rounded border mr-5 relative" :class="darkMode?`border-`:`border-gray-400`" :id="list._id"></div>
                                             </div>
                                             <div>
                                                <template v-if="list.type === 1">
@@ -97,6 +100,7 @@
 import {mapState, mapActions} from "vuex"
 import LoadingTimeIcon from "./../../../components/LoadingTimeIcon.vue"
 import ChevronIcon from "./../../../components/ChevronIcon.vue"
+import CloseIcon from "./../../../components/CloseIcon.vue"
 import toHHMMSS from "./../../../helper/toHHMMSS"
 import helper from "./../../../helper/helper"
 import FailExam from "./FailExam.vue"
@@ -119,7 +123,8 @@ export default {
         ChevronIcon,
         FailExam,
         PassExam,
-        ViewExam
+        ViewExam,
+        CloseIcon
     },
     data(){
         return{
@@ -143,7 +148,7 @@ export default {
                 id: "",
                 duration: 0,
                 quiz: []
-            }
+            },
         }
     },
 
@@ -160,7 +165,8 @@ export default {
             .replace(/lorx/,'lor x').replace(/intx/,'int x').replace('timesf','times f')
             .replace(/{\\begin{matrix}/,"(\\begin{matrix}").replace(/\\end{matrix}\\right/g,"\\end{matrix}\\right)")
             .replace(/\\pitk/g,"{\\pi}tk").replace(/&ne;/g,"\\neq").replace(/&plusmn;/g,"\\pm")
-            .replace(/&times;/,"\\times").replace(/&alpha;/g,"\\alpha").replace(/&beta;/g,"\\beta")
+            .replace(/&times;/,"\\times ").replace(/&alpha;/g,"\\alpha").replace(/&beta;/g,"\\beta")
+            .replace(/&theta;/g,"\\theta").replace(/&divide;/g,"\\divide ").replace(/&pi;/g,"\\pi ")
 
         },
         setTimer(){
@@ -195,7 +201,6 @@ export default {
             }
         },
         selectAnswer(event,quizzes,list){
-           
             var id = document.getElementById("video").value
             this.quizzes.id = id
             this.quizzes.duration = this.duration / 60
@@ -204,8 +209,13 @@ export default {
                 answer: list._id
             }
             if(event.target.checked){
+                this.selectedQuiz = this.selectedQuiz.filter(item => item.id != quizzes._id)
                 this.selectedQuiz.push(quiz)
                 event.target.nextSibling.className+= " active-checkbox"
+                let esc = quizzes.check_list.filter(item => item._id != list._id)
+                for(let i = 0; i < esc.length; i ++){
+                    document.getElementById(`${esc[i]._id}`).classList.remove("active-checkbox");
+                }
 
             }else{
                 this.selectedQuiz = this.selectedQuiz.filter(item => item.answer !== quiz.answer)
@@ -238,6 +248,9 @@ export default {
         },
         checkResult(){
             this.showResult = true
+        },
+        closeExam(){
+           this.exit() 
         }
     },
     mounted(){

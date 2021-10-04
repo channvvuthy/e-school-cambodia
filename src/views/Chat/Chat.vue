@@ -186,14 +186,14 @@
                                         @reply="reply()">
                                     </Reply>
                                 </div>
-                                <!-- Text message -->
+                                <!--  ${message.content.type == 0?`bg-opacity-20`:``}sage -->
                                 <template v-if="(message.content.type === 1 || message.content.type === 0)">
                                     <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`" class="items-center relative">
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)">
                                             <div class="h-13 w-13"></div>
                                         </div>
                                         <div class="flex items-center mr-5" v-if="auth === sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap" v-if="message.content.type">
                                                 {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                             </div>
                                         </div>
@@ -209,17 +209,17 @@
                                                 <ImageReply :message="message" v-if="message.reply.type === 3" @previewImage="previewImage($event)"></ImageReply>
                                                 <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                                                 <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
-                                                <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                                <div class="relative py-3  inline-flex items-center px-3 text-black mb-5 max-w-md" :class="darkMode?`bg-button text-gray-300 rounded-xl `:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl `:`rounded-xl e-shadow`}`">
                                                     <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                                 </div>
                                             </div>
-                                            <div v-else class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 text-black mb-5 max-w-sm" :class="darkMode?`bg-button text-gray-300`:`bg-white`">
+                                            <div v-else class="relative py-3 inline-flex items-center px-3 text-black mb-5 max-w-md" :class="darkMode?`bg-button text-gray-300 rounded-xl`:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl`:`rounded-xl e-shadow`}`">
                                                <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                                             </div>
                                             
                                         </div>
                                         <div class="flex items-center ml-5" v-if="auth !== sender(message)">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap" v-if="message.content.type">
                                                 {{getDay(message.date)}}
                                             </div>
                                         </div>
@@ -621,7 +621,7 @@ export default {
         }
     },
     computed:{
-        ...mapState('setting', ['darkMode']),
+        ...mapState('setting', ['darkMode', 'localize']),
         ...mapState('auth', ['stProfile']),
         ...mapState('etalk', ['loading','contacts','messages','sending','mentions']),
         contactActive:{

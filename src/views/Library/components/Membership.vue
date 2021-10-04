@@ -19,12 +19,20 @@
                         <div class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer" @click="showConfirm(pk)"></div>
                         <div class="px-5 py-3 text-white relative z-50 w-full">
                             <div class="text-base">{{pk.title}}</div>
-                            <div class="flex mt-1 items-center justify-between w-full">
-                                <div class="font-extralight">{{pk.total_book}} {{$t('2202')}}{{plurals(pk.total_book)}}</div>
+                            <div class="flex mt-1 items-center justify-between w-full">1007
+                                <div class="font-extralight">
+                                    <span>{{pk.total_book}} {{$t('2202')}}{{plurals(pk.total_book)}}</span>
+                                </div>
                                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                                 <div class="font-extralight">
                                     <template v-if="pk.is_buy === 0">
-                                        {{$t('1006')}}: <span class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">{{pk.price.year}}$</span>
+                                        <span v-if="pk.price.year">
+                                            {{$t('1006')}}: <span class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">
+                                            {{pk.price.year}}$</span>
+                                        </span>
+                                        <span v-else class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">
+                                            {{ $t('1007') }}
+                                        </span>
                                     </template>
                                     <div class="text-xs" v-else>{{$t('date_expired')}} : <span>{{formatDate(pk.deadline)}}</span></div>
                                 </div>

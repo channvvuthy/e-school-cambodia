@@ -1,22 +1,35 @@
 <template>
     <div>
-        <div v-if="isAdmin" :class="isAdmin?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
-            <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
-                {{ senderName(message) }}
-            </span>
-            <span v-html="linkify(mention(message.content.text))"></span>
-        </div>
-        <div v-else :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
-            <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
-                {{ senderName(message) }}
-            </span>
-            <span v-html="linkify(mention(message.content.text))"></span>
-        </div>
+        <template v-if="message.content.type">
+            <div v-if="isAdmin" :class="isAdmin?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
+                <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
+                    {{ senderName(message) }}
+                </span>
+                <span v-html="linkify(mention(message.content.text))"></span>
+            </div>
+            <div v-else :class="isMind?`${darkMode?`chat-bubble-right-dark`:`chat-bubble--right`}`:`${darkMode?`bubble bubble--left-dark`:`bubble--left`}`" class="relative chat-bubble">
+                <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
+                    {{ senderName(message) }}
+                </span>
+                <span v-html="linkify(mention(message.content.text))"></span>
+            </div>
+        </template>
+        <template>
+            <div>
+                <span v-if="message.content.type == 0" :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer" @click="getUser(message.sender._id)">
+                    {{ senderName(message) }}
+                </span>
+                <span v-html="linkify(mention(message.content.text))"></span>
+                <span> {{getDay(message.date)}}</span>
+            </div>
+        </template>
         
     </div>
 </template>
 <script>
 import {mapState} from "vuex"
+import moment from "moment"
+import helper from "./../../../helper/helper"
 export default {
 
     props:{
@@ -48,6 +61,21 @@ export default {
                  return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
             }catch(err){
                 return str
+            }
+        },
+        getDay(oldDate){
+            if (helper.numDay(oldDate, moment().format()) === 0) {
+                return moment(oldDate).format('h:mm A')
+            } else {
+                if(moment(oldDate).format('YYYY') === moment().format('YYYY')){
+                    if(moment(oldDate).format('MMM') == moment().format('MMM')){
+                        return moment(oldDate).format('ddd h:mm A')
+                    }
+                    return moment(oldDate).format('MMM DD, h:mm A')
+                }else{
+                    return moment(oldDate).format('MMM DD YYYY')
+                }
+                
             }
         },
         senderName(message){
