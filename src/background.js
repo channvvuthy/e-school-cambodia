@@ -3,6 +3,7 @@ import path from 'path'
 const fs = require("fs");
 const {autoUpdater} = require('electron-updater')
 const {download} = require('electron-dl');
+// const log = require('electron-log');
 
 import {
     app,
@@ -10,8 +11,7 @@ import {
     BrowserWindow,
     ipcMain,
     shell,
-    Tray,
-    Menu
+    Menu,
 } from 'electron'
 
 import {
@@ -97,15 +97,19 @@ ipcMain.on("removeDownload", (event, arg) => {
     })
 })
 
-
 ipcMain.on("openLink", async (event, arg) => {
     shell.openExternal(arg)
+})
+
+ipcMain.on("deeplink", (event, arg) =>{
+    event.reply("deeplink",{deeplink})
 })
 
 
 
 
 let mainWindow
+let deeplink;
 // let appIcon = null
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
@@ -131,6 +135,11 @@ async function createWindow() {
     mainWindow.on("close", (event) => {
         app.quit()
     })
+
+    if (process.platform == 'win32') {
+        deeplink = process.argv.slice(1)[0]
+    }
+
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -149,6 +158,10 @@ if (!gotTheLock) {
 } else {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
+        let lastElement = commandLine[commandLine.length - 1];
+        if(lastElement.indexOf('e-school'))
+            deeplink = lastElement
+
         if (mainWindow) {
             if (mainWindow.isMinimized()) mainWindow.restore()
             mainWindow.show()
@@ -176,14 +189,16 @@ app.on('activate', () => {
 app.on('ready', async () => {
     createWindow()
 });
+
 app.name = "E-SCHOOL"
 
+// Trigger event 'open-url' on mac OS
 app.on("open-url", (event, data) => {
     event.preventDefault();
     mainWindow.webContents.send('deeplink', {deeplink:data});
-  });
+});
   
-  app.setAsDefaultProtocolClient("e-school");
+app.setAsDefaultProtocolClient("e-school");
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

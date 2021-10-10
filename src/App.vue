@@ -116,6 +116,7 @@
             },
         },
         mounted(){
+            ipcRenderer.send("deeplink")
             ipcRenderer.on("deeplink",(event, arg)=>{
                 if(localStorage.getItem("token") !== null){
                     let deeplink =  arg.deeplink.split('/')
