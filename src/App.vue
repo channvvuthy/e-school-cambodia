@@ -118,36 +118,40 @@
         mounted(){
             ipcRenderer.send("deeplink")
             ipcRenderer.on("deeplink",(event, arg)=>{
-                if(localStorage.getItem("token") !== null){
-                    let deeplink =  arg.deeplink.split('/')
-                    if(deeplink[3] == 'profile'){
-                        this.$router.push({name:'user', params:{user_id:deeplink.pop()}})
-                    }else{
-                        let payload = {
-                            id: deeplink.pop(),
-                            user_id: JSON.stringify([this.stProfile._id])
-                        }
-                        this.join(payload).then(response =>{
-                            if(response.data.msg){
-                                helper.errorMessage(response.data.msg)
-                                return;
+               try{
+                    if(localStorage.getItem("token") !== null){
+                        let deeplink =  arg.deeplink.split('/')
+                        if(deeplink[3] == 'profile'){
+                            this.$router.push({name:'user', params:{user_id:deeplink.pop()}})
+                        }else{
+                            let payload = {
+                                id: deeplink.pop(),
+                                user_id: JSON.stringify([this.stProfile._id])
                             }
-                            let room_id = response.data.data.room_id
-                            this.getContact().then(group => {
-                                let contacts = group.data.data
-                                for(let index = 0; index < contacts.length; index++){
-                                    if(contacts[index]._id == room_id ){
-                                        this.$store.commit('etalk/setActive', index)
-                                    }
+                            this.join(payload).then(response =>{
+                                if(response.data.msg){
+                                    helper.errorMessage(response.data.msg)
+                                    return;
                                 }
+                                let room_id = response.data.data.room_id
+                                this.getContact().then(group => {
+                                    let contacts = group.data.data
+                                    for(let index = 0; index < contacts.length; index++){
+                                        if(contacts[index]._id == room_id ){
+                                            this.$store.commit('etalk/setActive', index)
+                                        }
+                                    }
+                                })
+                                this.$router.push({name:'chat'}).catch(err=>{err})
                             })
-                            this.$router.push({name:'chat'}).catch(err=>{err})
-                        })
+                        }
+                        
+                    }else{
+                        this.$router.push({name:'login'}).catch(err=>{err})
                     }
-                    
-                }else{
-                    this.$router.push({name:'login'}).catch(err=>{err})
-                }
+               }catch(err){
+                   return err;
+               }
             })
         },
         created(){

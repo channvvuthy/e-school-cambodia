@@ -100,7 +100,12 @@
                             {{contact.name?contact.name:$t('unknown')}}
                         </div>
                         <div class="text-xs text-gray-500">
-                            {{$t('online')}}
+                            <template v-if="lastSeen">
+                                {{$t('last_seen')}} <timeago :datetime="lastSeen" locale="en" :auto-update="60"></timeago>
+                            </template>
+                            <template v-else>
+                                {{$t('online')}}
+                            </template>
                         </div>
                     </div>
                     <div class="flex-1 flex flex-col items-end cursor-pointer" @click="() => {this.chatOption = true;}" v-if="contact.type">
@@ -495,6 +500,7 @@
 import {mapState, mapActions} from "vuex"
 import Vue from "vue"
 import SearchIcon from "./../../components/SearchIcon.vue"
+import VueTimeago from 'vue-timeago'
 import SendMessageIcon from "./../../components/SendMessageIcon.vue"
 import EnlargeIcon from "./../../components/EnlargeIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
@@ -529,6 +535,14 @@ Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
 
+Vue.use(VueTimeago, {
+  name: 'Timeago', // Component name, `Timeago` by default
+  locale: 'en', // Default locale,
+  locales: {
+    'en': require('date-fns/locale/en')
+  }
+})
+
 
 export default {
     sockets: {
@@ -561,7 +575,7 @@ export default {
         VueRecord,
         BoubleIcon,
         isRead,
-        PreviewImage
+        PreviewImage,
     },
     data(){
         return{
@@ -610,6 +624,7 @@ export default {
             viewChat: false,
             previewUrl:"",
             share:"",
+            lastSeen:"",
             message: {
                 id: "",
                 reply_id: "",
@@ -898,6 +913,9 @@ export default {
                 id: this.contact._id,
                 type: this.contact.type
             }).then((response) => {
+                if(response.data.data.room.last){
+                    this.lastSeen = response.data.data.room.last.date
+                }
                 if(response.data.data.room.share){
                     this.share = response.data.data.room.share
                 }
