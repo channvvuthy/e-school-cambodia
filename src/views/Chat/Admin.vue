@@ -83,7 +83,12 @@
                                 {{contact.name}}
                             </div>
                             <div class="text-xs text-gray-500">
-                                {{$t('online')}}
+                                <template v-if="lastSeen">
+                                    {{$t('last_seen')}} <timeago :datetime="lastSeen" locale="en" :auto-update="60"></timeago>
+                                </template>
+                                <template v-else>
+                                    {{$t('online')}}
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -426,7 +431,14 @@ import MicIcon from "./../HotChat/components/MicIcon.vue"
 import isRead from "./components/IsRead.vue"
 import SinglePdf from "./../Component/SinglePdf.vue"
 import PreviewImage from "./components/PreviewImage.vue"
-
+import VueTimeago from 'vue-timeago'
+Vue.use(VueTimeago, {
+  name: 'Timeago', // Component name, `Timeago` by default
+  locale: 'en', // Default locale,
+  locales: {
+    'en': require('date-fns/locale/en')
+  }
+})
 
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
@@ -504,6 +516,7 @@ export default {
                 duration: ""
             },
             sending: false,
+            lastSeen:"",
             
         }
     },
@@ -787,7 +800,10 @@ export default {
                 p: 1,
                 id: this.contact._id,
                 type: 10
-            }).then(() => {
+            }).then((response) => {
+                if(response.data.data.room.last){
+                    this.lastSeen = response.data.data.room.last.date
+                }
                 this.scrollToBottom()
                 this.lisentMessage()
                 this.readMessage({

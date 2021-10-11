@@ -13,7 +13,14 @@
                     <div>
                         {{$t('eschool')}}
                     </div>
-                    <div class="text-xs" :class="darkMode?``:`text-gray-600`">{{$t('official_page')}}</div>
+                    <div class="text-xs" :class="darkMode?``:`text-gray-600`">
+                        <template v-if="lastSeen">
+                            {{$t('last_seen')}} <timeago :datetime="lastSeen" locale="en" :auto-update="60"></timeago>
+                        </template>
+                        <template v-else>
+                            {{$t('official_page')}}
+                        </template>
+                    </div>
                 </div>
             </div>
             <div class="px-5 flex-1 h-screen">
@@ -425,6 +432,15 @@ import BuyMsg from "./../Component/BuyMsg.vue"
 import PreviewImage from "./../Chat/components/PreviewImage.vue"
 const { ipcRenderer } = require('electron')
 import isSeen from "./../Chat/components/IsRead.vue"
+import VueTimeago from 'vue-timeago'
+Vue.use(VueTimeago, {
+  name: 'Timeago', // Component name, `Timeago` by default
+  locale: 'en', // Default locale,
+  locales: {
+    'en': require('date-fns/locale/en')
+  }
+})
+
 Vue.use(new VueSocketIO({
     connection: config.urlSocket
 }));
@@ -505,6 +521,7 @@ export default {
                 type: ""
 
             },
+            lastSeen:"",
         }
     },
     computed:{
@@ -703,6 +720,7 @@ export default {
                 payload.type = 10
                 
                 this.getMessage(payload).then((response) =>{
+
                    if(response.data.data.length){
                        this.scrollToTop()
                    }
@@ -877,6 +895,9 @@ export default {
                     type: 0
                 }
                 this.getMessage(payload).then((response)=>{
+                    if(response.data.data.room.last){
+                        this.lastSeen = response.data.data.room.last.date
+                    }
                     this.room_id = response.data.data.room._id
                     this.lisentMessage()
                     this.scrollToBottom()
