@@ -122,15 +122,15 @@
                                             <div class="h-13 w-13"></div>
                                         </div>
                                         <div class="flex items-center mr-5" v-if="auth === 0">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}} 
                                             </div>
                                         </div>
                                         <div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
-                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
+                                                    <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#374151`"></ReplyIcon></div>
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -148,7 +148,7 @@
                                             
                                         </div>
                                         <div class="flex items-center ml-5" v-if="message.is_admin == 1">
-                                            <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
+                                            <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                             </div>
                                         </div>
@@ -161,14 +161,14 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0"></div>
                                         <div>
                                             <div class="flex items-center mb-2" v-if="message.is_admin == 1">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                                 </div>
                                             </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs ml-1">
                                                           {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -182,7 +182,7 @@
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
                                             <div class="flex items-center" v-if="auth !== sender(message)">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
@@ -196,14 +196,14 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0"></div>
                                         <div>
                                             <div class="flex items-center" v-if="message.is_admin == 1">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap mb-1">
                                                     {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                                 </div>
                                             </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs ml-1">
                                                         {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -230,7 +230,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center" v-if="message.is_admin == 0">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap my-1">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap my-1">
                                                     {{getDay(message.date)}}
                                                 </div>
                                             </div>
@@ -244,14 +244,14 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0"></div>
                                         <div>
                                             <div class="flex items-center" v-if="message.is_admin == 1">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap mb-1">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap mb-1">
                                                     {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                                 </div>
                                             </div>
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div><ReplyIcon :size="16" :fill="darkMode?`#6B7280`:`#9CA3AF`"></ReplyIcon></div>
-                                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-1">
+                                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs ml-1">
                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
@@ -269,7 +269,7 @@
                                                 </audio>
                                             </div>
                                             <div class="flex items-center" v-if="message.is_admin == 0">
-                                                <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs whitespace-nowrap my-1">
+                                                <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap my-1">
                                                     {{getDay(message.date)}} 
                                                 </div>
                                             </div>
@@ -287,19 +287,19 @@
                                     <div class="underline">
                                         {{replyTo(replyContact)}}
                                     </div>
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 1" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs" v-if="replyContact.content.type === 1" >
                                         {{cutString(replyContact.content.text,40)}}
                                     </div>
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 2" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs" v-if="replyContact.content.type === 2" >
                                         {{$t('file')}}
                                     </div>
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs mt-1 flex items-center" v-if="replyContact.content.type === 3" >
                                         <img :src="replyContact.content.file.url" class="rounded w-10"/>
-                                        <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs ml-2">
+                                        <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs ml-2">
                                             {{$t('image_message')}}
                                         </div>
                                     </div> 
-                                    <div :class="darkMode?`text-gray-500`:`text-gray-600`" class="text-xs" v-if="replyContact.content.type === 4" >
+                                    <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs" v-if="replyContact.content.type === 4" >
                                         {{$t("voice_message")}}
                                     </div>
                                 </div>
