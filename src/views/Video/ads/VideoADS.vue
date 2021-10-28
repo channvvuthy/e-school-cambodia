@@ -184,7 +184,8 @@ import PauseIcon from "./../../MyCourse/components/media/PauseIcon.vue";
 import SettingIcon from "./../../MyCourse/components/media/SettingIcon.vue";
 import SoundIcon from "./../../MyCourse/components/media/SoundIcon.vue";
 import MutedIcon from "./../../MyCourse/components/media/MutedIcon.vue";
-import { mapState } from "vuex";
+import helper from "./../../../helper/helper"
+import { mapActions, mapState } from "vuex";
 export default {
   components: {
     CloseIcon,
@@ -196,6 +197,13 @@ export default {
     SoundIcon,
     ChevronIcon,
     MutedIcon
+  },
+  props:{
+    _id:{
+      default:()=>{
+        return ""
+      }
+    }
   },
   data() {
     return {
@@ -220,13 +228,28 @@ export default {
       showSound: false,
       oldVolume: 0,
       showToolbar: false,
-      defaultQuality: 720
+      defaultQuality: 720,
+      deviceInfo:{
+        deviceId:"",
+        deviceName:"", 
+        deviceOs:"",
+        osVersion:"",
+        appVersion:"",
+        networkCode:"",
+        internetSignal:"",
+        lat:"",
+        long:"",
+        url:"",
+        msg:"video_interrupting",
+        _id:"",
+      }
     };
   },
   computed: {
     ...mapState("playVideo", ["videoUrl", "defaultVolumeRange", "lastWatched"])
   },
   methods: {
+    ...mapActions('video',['getWarning']),
     showQualityModal() {
       this.showQuality = true;
       this.showSetting = false;
@@ -263,10 +286,22 @@ export default {
         this.showPlay = true;
       }
     },
+    addDeviceInfo(){
+      this.deviceInfo.deviceId = helper.deviceId()
+      this.deviceInfo.deviceName = helper.deviceName()
+      this.deviceInfo.deviceOs = helper.deviceOs()
+      this.deviceInfo.osVersion = helper.osVersion()
+      this.deviceInfo.appVersion = process.env.VUE_APP_VERSION
+      var networkInformation = navigator.connection
+      this.deviceInfo.internetSignal = networkInformation.effectiveType
+      this.deviceInfo.url = this.url
+      this.deviceInfo._id = this._id
+    },
     pause() {
       this.showPlay = true;
       this.lastWatchVideo();
     },
+
     lastWatchVideo() {
       let last_watch = {
         mark: this.vid.currentTime,
@@ -324,6 +359,17 @@ export default {
         if (document.getElementById("eVideo") !== null) {
           clearInterval(interval);
           this.vid = document.getElementById("eVideo");
+
+          setTimeout(()=>{
+            if(this.vid.readyState != 4){
+              this.addDeviceInfo()
+              this.getWarning(this.deviceInfo).then(()=>{
+                alert(this.$i18n.t('video_interrupting'))
+              })
+              
+            }
+          },3000)
+          
           this.vid.currentTime = this.lastWatched;
           this.currentTime = document.getElementById("currentTime");
           this.currentDuration = document.getElementById("currentDuration");

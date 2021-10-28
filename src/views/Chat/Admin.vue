@@ -73,22 +73,36 @@
         </div>
         <div class="w-full">
                 <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?`bg-dark bg-cover`:`bg-light-mode bg-cover`">
-                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative">
-                        <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}">
+                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative justify-between">
+                        <div class="flex text-sm items-center shadow">
+                            <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}">
                             <div class="loading" v-if="settingImage"></div>
-                        </div>
-                        <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
-                        <div>
-                            <div class="font-semibold">
-                                {{contact.name}}
                             </div>
-                            <div class="text-xs text-gray-500">
-                                <template v-if="lastSeen">
-                                    {{$t('last_seen')}} <timeago :datetime="lastSeen" locale="en" :auto-update="60"></timeago>
-                                </template>
-                                <template v-else>
-                                    {{$t('online')}}
-                                </template>
+                            <input type="file" ref="contactPhoto" class="hidden" @change="changeContactPhoto">
+                            <div>
+                                <div class="font-semibold">
+                                    {{contact.name}}
+                                </div>
+                                <div class="text-xs text-gray-500">
+                                    <template v-if="lastSeen">
+                                        {{$t('last_seen')}} <timeago :datetime="lastSeen" locale="en" :auto-update="60"></timeago>
+                                    </template>
+                                    <template v-else>
+                                        {{$t('online')}}
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-5">
+                            <div>
+                                <div class="bg-gray-200 h-10 w-10 rounded-full flex items-center justify-center">
+                                    <UserIcon :fill="darkMode?`#909090`:`#181818`"></UserIcon>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="bg-gray-200 h-10 w-10 rounded-full flex items-center justify-center">
+                                    <ChatIcon :fill="darkMode?`#909090`:`#181818`" :size="20"></ChatIcon>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +135,7 @@
                                         <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10" :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="message.is_admin == 0">
                                             <div class="h-13 w-13"></div>
                                         </div>
-                                        <div class="flex items-center mr-5" v-if="auth === 0">
+                                        <div class="flex items-center mr-5" v-if="message.is_admin == 1">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}} 
                                             </div>
@@ -147,7 +161,7 @@
                                             </div>
                                             
                                         </div>
-                                        <div class="flex items-center ml-5" v-if="message.is_admin == 1">
+                                        <div class="flex items-center ml-5" v-if="message.is_admin == 0">
                                             <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                 {{getDay(message.date)}} <isRead :isRead="message.is_read"></isRead>
                                             </div>
@@ -181,7 +195,7 @@
                                                 <img class="max-w-xs rounded-md mb-2 cursor-pointer" :src="message.content.file.url" @click="previewImage(message.content.file.url)"/>
                                                 <div :class="darkMode?`text-gray-300`:`text-black`" class="text-semibold" v-if="message.content.text">{{message.content.text}}</div>
                                             </div>
-                                            <div class="flex items-center" v-if="auth !== sender(message)">
+                                            <div class="flex items-center" v-if="message.is_admin == 0">
                                                 <div :class="darkMode?`text-gray-500`:`text-gray-700`" class="text-xs whitespace-nowrap">
                                                     {{getDay(message.date)}}
                                                 </div>
@@ -424,6 +438,8 @@ import EnlargeIcon from "./../../components/EnlargeIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import SendMessageIcon from "./../../components/SendMessageIcon.vue"
 import DocumentIcon from "./../../components/DocumentIcon.vue"
+import UserIcon from "./../../components/UserIcon.vue"
+import ChatIcon from "./../Menu/components/ChatIcon.vue"
 import VueSocketIO from 'vue-socket.io'
 import BuyMsg from "./../Component/BuyMsg.vue"
 import VueRecord from "@loquiry/vue-record-audio"
@@ -451,6 +467,8 @@ export default {
         },
     },
     components:{
+        UserIcon,
+        ChatIcon,
         PreviewImage,
         SinglePdf,
         EnlargeIcon,

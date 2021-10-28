@@ -367,6 +367,7 @@
   "4201":"Last name or first name can not more then 50 characters",
   "copy_link":"Copy link",
   "no_friend":"No friend",
-  "last_seen":"Last seen"
+  "last_seen":"Last seen",
+  "video_interrupting":"Video interrupting"
 
 }

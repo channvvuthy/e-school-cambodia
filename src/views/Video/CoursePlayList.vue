@@ -15,7 +15,7 @@
                 </div>
                 <div class="rounded-b-md shadow pb-2 flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `"
                      v-else>
-                    <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)"></VideoPlaylist>
+                    <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)" :_id="video._id"></VideoPlaylist>
                     <div class="mx-5 mt-6">
                         <div class="font-semibold text-sm" :class="darkMode?`text-white`:`text-primary`">
                             {{ video.order }}. {{ video.title }}

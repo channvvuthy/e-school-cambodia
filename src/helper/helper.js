@@ -41,11 +41,11 @@ const deviceId = () => {
 // Get os of platform
 const deviceOs = () => {
     if(process.platform === `darwin`){
-        return 'mac'
+        return 'MacOS'
     }else if(process.platform === `win32`){
-        return 'window'
+        return 'Windows'
     }else{
-        return 'linux'
+        return 'Linux'
     }
 }
 
@@ -53,6 +53,11 @@ const deviceOs = () => {
 
 const deviceName = () =>{
     return os.hostname()
+}
+
+// Os version 
+const osVersion = () =>{
+    return os.release()
 }
 // Calculate price in duration
 const durationCalculate = (duration, pricePerMonth, pricePerYear) => {
@@ -118,5 +123,6 @@ export default{
     q,
     deviceName,
     success,
+    osVersion
     
 }

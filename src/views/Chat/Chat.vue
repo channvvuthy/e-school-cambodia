@@ -705,6 +705,7 @@ export default {
                 if(message.reply.is_admin == 1){
                     return this.$i18n.t('admin') 
                 }
+               return this.$i18n.t('student') 
             }
             // Group user
             if(message.sender._id == message.reply.sender._id){

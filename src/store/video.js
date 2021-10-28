@@ -132,6 +132,35 @@ export default {
             })
         })
        },
+       getWarning({commit}, payload){
+           return new Promise((resolve, reject) =>{
+                const headers = {
+                    'device-id': payload.deviceId,
+                    'device-name': payload.deviceName,
+                    'device-os': payload.deviceOs,
+                    'os-version': payload.osVersion,
+                    'app-version': payload.appVersion,
+                    'network-code': payload.networkCode,
+                    'internet-signal': payload.internetSignal,
+                    'lat': payload.lat,
+                    'lng': payload.long
+                }
+                let data = {
+                    msg:payload.msg,
+                    err:{
+                        url:payload.url
+                    },
+                    _id: payload._id
+                }
+                axios.post(config.apiUrl + `warning`, data,{
+                    headers: headers
+                }).then(response =>{
+                    resolve(response)
+                }).catch(err=>{
+                    reject(err)
+                })
+           })
+       },
        getPlaylistWithPagination({commit},payload){
         let qs = Object.keys(payload)
         .map(key => `${key}=${payload[key]}`)
