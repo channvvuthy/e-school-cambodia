@@ -217,7 +217,7 @@ export default {
       oldVolume: 0,
       showToolbar: false,
       defaultQuality: 720,
-        deviceInfo:{
+      deviceInfo:{
         deviceId:"",
         deviceName:"", 
         deviceOs:"",

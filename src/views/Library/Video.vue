@@ -239,6 +239,13 @@ export default {
         ReceiptInfo,
         LockIcon
     },
+    props:{
+        _id:{
+        default:()=>{
+            return ""
+        }
+        }
+    },
     computed:{
         ...mapState('library', ['details']),
         ...mapState('setting', ['darkMode']),
@@ -285,6 +292,20 @@ export default {
             receiptDetail: {},
             window:{
                 wwidth: null
+            },
+            deviceInfo:{
+                deviceId:"",
+                deviceName:"", 
+                deviceOs:"",
+                osVersion:"",
+                appVersion:"",
+                networkCode:"",
+                internetSignal:"",
+                lat:"",
+                long:"",
+                url:"",
+                msg:"video_interrupting",
+                _id:"",
             }
 
             
@@ -294,6 +315,7 @@ export default {
     methods:{
         ...mapActions('library', ['stopWatch']),
         ...mapActions('cart', ['addCart', 'getCart']),
+        ...mapActions('video', ['getWarning']),
         kFormatter(num){
             return helper.kFormatter(num)
         },
@@ -388,12 +410,24 @@ export default {
                 this.course = videos.course
                 return;
             }
+           
             this.videos =  videos
             this.videoUrl = this.videos.video.filter(items => items.quality == `${this.defaultQuality}p`)[0]['url']
             this.order = index
             this.vid.src = this.videoUrl
             
                 
+        },
+        addDeviceInfo(){
+            this.deviceInfo.deviceId = helper.deviceId()
+            this.deviceInfo.deviceName = helper.deviceName()
+            this.deviceInfo.deviceOs = helper.deviceOs()
+            this.deviceInfo.osVersion = helper.osVersion()
+            this.deviceInfo.appVersion = process.env.VUE_APP_VERSION
+            var networkInformation = navigator.connection
+            this.deviceInfo.internetSignal = networkInformation.effectiveType
+            this.deviceInfo.url = this.videoUrl
+            this.deviceInfo._id = this.videos._id
         },
         playPause() {
             this.showSetting = false;
@@ -459,6 +493,16 @@ export default {
                 if(this.lastWatch){
                     this.vid.currentTime = this.lastWatch
                 }
+
+                setTimeout(()=>{
+                    if(this.vid.readyState != 4){
+                    this.addDeviceInfo()
+                    this.getWarning(this.deviceInfo).then(()=>{
+                        alert(this.$i18n.t('video_interrupting'))
+                    })
+                    
+                    }
+                },3000)
 
                 this.currentTime = document.getElementById("currentTime");
                 this.currentDuration = document.getElementById("currentDuration");
