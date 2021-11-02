@@ -27,9 +27,8 @@
                             <div :class="darkMode?`bg-secondary`:`bg-gray-50`" class="shadow rounded-md py-5 px-10 rgba flex-col overflow-y-scroll my-scroll">
                                 <math xmlns = "http://www.w3.org/1998/Math/MathML">
                                 <div v-for="(content, index) in quizzes.content" :key="index">
-                                   <template v-if="content.type === 1">
+                                   <template v-if="content.type == 1">
                                        <katex-element :expression="toLatex(content.value)" />
-                                       <!-- {{ toLatex(content.value) }} -->
                                    </template>
                                    <template v-else>
                                        <img :src="content.value" class="max-w-lg">
@@ -44,14 +43,14 @@
                                                 <div class="h-5 w-5 rounded border mr-5 relative" :class="darkMode?`border-`:`border-gray-400`" :id="list._id"></div>
                                             </div>
                                             <div>
-                                               <template v-if="list.type === 1">
+                                               <template v-if="list.type == 1">
                                                    <katex-element :expression="toLatex(list.value)"/>
                                                    <!-- <span class="absolute bg-red-400">
-                                                       {{ toLatex(list.value) }}
+                                                       {{ (list.value) }}
                                                    </span> -->
                                                </template>
                                                <template v-else>
-                                                    <img :src="list.value" class="max-w-lg">
+                                                    <img :s១១១១១១rc="list.value" class="max-w-lg">
                                                </template>
                                             </div>
                                         </label>

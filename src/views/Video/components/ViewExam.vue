@@ -10,7 +10,7 @@
                         <div class="flex mb-5 items-center">
                             <span>{{index + 1}}.</span>
                             <div v-for="(content, index) in quizzes.content" :key="index">
-                                <template v-if="content.type === 1">
+                                <template v-if="content.type == 1">
                                     <katex-element :expression="toLatex(content.value)" />
                                 </template>
                                 <template v-else>
@@ -21,7 +21,7 @@
                         <div v-for="(list,key) in quizzes.check_list" :key="key">
                             <div class="inline-flex items-center mb-5 relative" :class="correctAnswer(list._id)?`text-pass`:answer(list._id)?`delete`:``">
                                 <div class="h-5 w-5 rounded border mr-5 relative" :class="correctAnswer(list._id)?`active-checkbox border-pass`:answer(list._id)?`incorrect`:``"></div>
-                                <template v-if="list.type === 1">
+                                <template v-if="list.type == 1">
                                     <katex-element :expression="toLatex(list.value)"/>
                                 </template>
                                 <template v-else>
