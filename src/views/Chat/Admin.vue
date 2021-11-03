@@ -73,8 +73,8 @@
         </div>
         <div class="w-full">
                 <div class="flex-1 w-full ml-2 h-screen flex flex-col" :class="darkMode?`bg-dark bg-cover`:`bg-light-mode bg-cover`">
-                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center shadow relative justify-between">
-                        <div class="flex text-sm items-center shadow">
+                    <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="px-4 py-3 flex text-sm items-center relative justify-between">
+                        <div class="flex text-sm items-center">
                             <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center" :style="{backgroundImage:`url(${contact.photo})`}">
                             <div class="loading" v-if="settingImage"></div>
                             </div>
@@ -93,15 +93,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-5">
+                        <div class="grid grid-cols-2 gap-3">
                             <div>
-                                <div class="bg-gray-200 h-10 w-10 rounded-full flex items-center justify-center">
-                                    <UserIcon :fill="darkMode?`#909090`:`#181818`"></UserIcon>
+                                <div class="bg-gray-200 h-10 w-10 rounded-full flex items-center justify-center cursor-pointer" @click="userProfile">
+                                    <UserIcon :fill="darkMode?`#055174`:`#055174`" :size="22"></UserIcon>
                                 </div>
                             </div>
                             <div>
-                                <div class="bg-gray-200 h-10 w-10 rounded-full flex items-center justify-center">
-                                    <ChatIcon :fill="darkMode?`#909090`:`#181818`" :size="20"></ChatIcon>
+                                <div class="bg-gray-200 h-10 w-10 rounded-full flex items-center justify-center cursor-pointer" @click="quickChat">
+                                    <ChatIcon :fill="darkMode?`#055174`:`#055174`" :size="22"></ChatIcon>
                                 </div>
                             </div>
                         </div>
@@ -413,6 +413,7 @@
         </div>
         <BuyMsg v-if="isDelete" :msg="`remove_message`"  @cancelModal="() => {this.isDelete = false}" @yes="confirmDelete"></BuyMsg>
         <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
+        <QuickChat v-if="isQuickChat" @closeQuickReply="()=>{this.isQuickChat = false}" @quickTextReply="quickTextReply($event)"></QuickChat>
      </div>
 </template>
 <script>
@@ -446,6 +447,7 @@ import VueRecord from "@loquiry/vue-record-audio"
 import MicIcon from "./../HotChat/components/MicIcon.vue"
 import isRead from "./components/IsRead.vue"
 import SinglePdf from "./../Component/SinglePdf.vue"
+import QuickChat from "./components/QuickChat.vue"
 import PreviewImage from "./components/PreviewImage.vue"
 import VueTimeago from 'vue-timeago'
 Vue.use(VueTimeago, {
@@ -467,6 +469,7 @@ export default {
         },
     },
     components:{
+        QuickChat,
         UserIcon,
         ChatIcon,
         PreviewImage,
@@ -493,6 +496,7 @@ export default {
     },
     data(){
         return{
+            isQuickChat: false,
             loading: false,
             page: 1,
             active: 0,
@@ -548,6 +552,7 @@ export default {
     methods:{
         ...mapActions('etalk', ['getAdminContact','getMessage',
         'sendMessage','deleteMessage','readMessage']),
+        ...mapActions('chat', ['getQuickChat']),
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= (scrollHeight - 1)) {
                 this.page ++ 
@@ -562,6 +567,15 @@ export default {
                     })
                 }
             }
+        },
+        quickTextReply(text){
+            this.message.text = text
+            this.isQuickChat = false
+        },
+        quickChat(){
+            this.getQuickChat().then(()=>{
+                this.isQuickChat = true
+            })
         },
         previewImage(previewUrl){
             this.viewChat = true
@@ -866,6 +880,12 @@ export default {
             this.sockets.subscribe(`read_${this.contact._id}`, function(){
                 this.$store.commit("etalk/readMessage", 1)
             })
+        },
+        userProfile(){
+           this.$router.push({
+               name:"user",
+               params:{user_id: this.contact._id}
+           })
         },
         lisentMessage(){
             this.sockets.subscribe(`message_${this.contact._id}`, function(data){

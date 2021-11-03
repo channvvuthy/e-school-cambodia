@@ -14,9 +14,13 @@ export default {
         loadAddingChat: false,
         mentions: [],
         loadingMention: false,
+        quickChat:[],
 
     },
     mutations: {
+        getQuickChat(state, quickChat){
+            state.quickChat = quickChat
+        },
         loadingMention(state, status){
             state.loadingMention = status
         },
@@ -170,6 +174,16 @@ export default {
         },
         addingLocalChat({commit}, params){
             commit("addingLocalCat", params)
+        },
+        getQuickChat({commit}){
+            return new Promise((resolve, reject) =>{
+                axios.get(config.apiUrl + `/etalk/template-message`).then(response =>{
+                    resolve(response)
+                    commit("getQuickChat", response.data)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
         },
         getMention({commit}, params){
             commit("loadingMention", true)
