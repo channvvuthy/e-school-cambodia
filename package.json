@@ -20,17 +20,17 @@
   },
   "main": "background.js",
   "mac": {
-      "target": [
-          "mas"
-        ]
+    "target": [
+      "mas"
+    ]
   },
   "mas": {
-      "hardenedRuntime": false,
-      "provisioningProfile": "build/embedded.provisionprofile",
-      "entitlements": "build/entitlements.mas.plist",
-      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "gatekeeperAssess": false,
-      "asarUnpack": []
+    "hardenedRuntime": false,
+    "provisioningProfile": "build/embedded.provisionprofile",
+    "entitlements": "build/entitlements.mas.plist",
+    "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+    "gatekeeperAssess": false,
+    "asarUnpack": []
   },
   "dependencies": {
     "@loquiry/vue-record-audio": "^0.4.0",

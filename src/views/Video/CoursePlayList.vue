@@ -316,12 +316,20 @@
                 return false
             },
             nextVideo(event){
+                
                 if (event.order === this.video.order) {
                     return
                 }
 
                 if (event.last_watch) {
-                    this.$store.commit("playVideo/setLastWatched", event.last_watch.mark)
+                    if(event.last_watch.duration){
+                        if(event.last_watch.duration == event.last_watch.mark){
+                           this.$store.commit("playVideo/setLastWatched", 0)
+                        }
+                    }else{
+                        this.$store.commit("playVideo/setLastWatched", event.last_watch.mark)
+                    }
+                    
                 } else {
                     this.$store.commit("playVideo/setLastWatched", 0)
                 }

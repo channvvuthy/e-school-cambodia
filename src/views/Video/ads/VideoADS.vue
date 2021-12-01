@@ -368,7 +368,7 @@ export default {
               })
               
             }
-          },3000)
+          },5000)
           
           this.vid.currentTime = this.lastWatched;
           this.currentTime = document.getElementById("currentTime");

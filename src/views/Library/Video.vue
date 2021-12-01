@@ -502,7 +502,7 @@ export default {
                     })
                     
                     }
-                },3000)
+                },5000)
 
                 this.currentTime = document.getElementById("currentTime");
                 this.currentDuration = document.getElementById("currentDuration");

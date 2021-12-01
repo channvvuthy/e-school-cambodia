@@ -361,10 +361,11 @@ export default {
               })
               
             }
-          },3000)
-
-
-          this.vid.currentTime = this.lastWatched;
+          },5000)
+          
+          if(this.vid.duration != this.lastWatched){
+            this.vid.currentTime = this.lastWatched;
+          }
           this.currentTime = document.getElementById("currentTime");
           this.currentDuration = document.getElementById("currentDuration");
           this.seekSlider = document.getElementById("seekSlider");
