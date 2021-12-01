@@ -1,5 +1,5 @@
 <template>
-    <div class="m-5 flex flex-col" :class="list.length <=0?'h-full':''">
+    <div class="m-5 flex flex-col relative" :class="list.length <=0?'h-full':''">
         <div v-if="homeLoading">
             <Loading></Loading>
         </div>
@@ -98,11 +98,17 @@
             <VideoADS :videoUrl="videoUrl" @closeAds="closeAds" @lastWatchVideo="lastWatchVideo($event)" :_id="id"></VideoADS>
         </div>
         <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
+        <div class="fixed right-0 bottom-0 w-full z-50 flex justify-end pr-5 pb-5" v-if="showScrollTop" @click="goToTop">
+            <div class="cursor-pointer rounded-full w-12 h-12 flex items-center justify-center bg-primary">
+              <ScrollTopIcon fill="#FFF" :size="24"></ScrollTopIcon>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 // import HeartIcon from "./../../components/HeartIcon.vue";
 import FavoriteIcon from "./../../components/FavoriteIcon.vue";
+import ScrollTopIcon from "./../../components/ScrollTopIcon.vue"
 import FavoriteFill from "./../../components/FavoriteFill.vue";
 import Loading from "./../../components/Loading";
 import Empty from "./../Component/Empty.vue";
@@ -119,7 +125,15 @@ export default {
     VideoADS,
     FavoriteIcon,
     FavoriteFill,
-    BuyMsg
+    BuyMsg,
+    ScrollTopIcon
+  },
+  props:{
+    showScrollTop:{
+      default:()=>{
+        return false;
+      }
+    }
   },
   data() {
     return {
@@ -129,7 +143,7 @@ export default {
       id: "",
       showMsg: false,
       loading: false,
-      msg: "2006"
+      msg: "2006",
     };
   },
   computed: {
@@ -218,6 +232,9 @@ export default {
         return video[len]["url"];
       }
       return false;
+    },
+    goToTop(){
+      this.$emit("goToTop");
     },
     viewAds(video) {
       if(video.ads.banner.type ===1){

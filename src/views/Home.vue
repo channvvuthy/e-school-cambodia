@@ -7,7 +7,7 @@
             <Signin></Signin>
         </template>
         <FilterList @filterSearch="filterSearch"></FilterList>
-        <VideoList @loadMore="loadMore"></VideoList>
+        <VideoList @loadMore="loadMore" :showScrollTop="showScrollTop" @goToTop="goToTop"></VideoList>
     </div>
 </template>
 
@@ -25,7 +25,8 @@
         name: 'Home',
         data(){
             return {
-                enableScroll: true
+                enableScroll: true,
+                showScrollTop: false,
             }
         },
         components: {
@@ -54,8 +55,20 @@
                 })
                 
             },
+            goToTop(){
+                this.$refs.feed.scrollTop = 0;
+            },
             onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+                if(!scrollTop){
+                    this.showScrollTop = false
+                }
+
+                if(scrollTop > 300){
+                    this.showScrollTop = true
+                }
+
                 if (scrollTop + clientHeight >= scrollHeight) {
+                    
                     if(this.enableScroll){
                         this.$store.commit('setting/setPagination', this.page + 1)
                         this.getListPagination({

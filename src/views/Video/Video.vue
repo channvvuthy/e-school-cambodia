@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-3 overflow-y-scroll h-screen pb-40" @scroll="onScroll">
+    <div class="mt-3 overflow-y-scroll h-screen pb-40" @scroll="onScroll" ref="feed">
         <BoxFilter @enableUserScroll="enableUserScroll($event)"></BoxFilter>
         <div class="mt-10 px-5">
             <div v-if="loading">
@@ -81,12 +81,18 @@
                 </div>
              </template>
             <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
+            <div class="fixed right-0 bottom-0 w-full z-50 flex justify-end pr-5 pb-5" v-if="showScrollTop" @click="goToTop">
+                <div class="cursor-pointer rounded-full w-12 h-12 flex items-center justify-center bg-primary">
+                <ScrollTopIcon fill="#FFF" :size="24"></ScrollTopIcon>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import BoxFilter from "./components/Filter.vue"
+import ScrollTopIcon from "./../../components/ScrollTopIcon.vue"
 import Loading from "./../../components/Loading.vue"
 import CertificateIcon from "./../../components/CertificateIcon.vue"
 import TestIcon from "./../../components/TestIcon.vue"
@@ -114,7 +120,8 @@ export default {
         CartIcon,
         NewIcon,
         Empty,
-        BuyMsg
+        BuyMsg,
+        ScrollTopIcon
     },
     data(){
         return{
@@ -122,7 +129,8 @@ export default {
             enableScroll: true,
             minHeight: 0,
             showMsg: false,
-            msg: "2006"
+            msg: "2006",
+            showScrollTop: false
         }
     },
     computed:{
@@ -175,7 +183,18 @@ export default {
         yes(){
             this.$router.push('login');
         },
+        goToTop(){
+            this.$refs.feed.scrollTop = 0;
+        },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
+            if(!scrollTop){
+                    this.showScrollTop = false
+                }
+
+            if(scrollTop > 300){
+                this.showScrollTop = true
+            }
+            
             if (scrollTop + clientHeight >= scrollHeight) {
                 this.page ++ 
 
