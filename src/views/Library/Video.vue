@@ -493,17 +493,7 @@ export default {
                 if(this.lastWatch){
                     this.vid.currentTime = this.lastWatch
                 }
-
-                setTimeout(()=>{
-                    if(this.vid.readyState != 4){
-                    this.addDeviceInfo()
-                    this.getWarning(this.deviceInfo).then(()=>{
-                        alert(this.$i18n.t('video_interrupting'))
-                    })
-                    
-                    }
-                },5000)
-
+                
                 this.currentTime = document.getElementById("currentTime");
                 this.currentDuration = document.getElementById("currentDuration");
                 this.seekSlider = document.getElementById("seekSlider");

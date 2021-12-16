@@ -228,7 +228,6 @@ export default {
         lat:"",
         long:"",
         url:"",
-        msg:"video_interrupting",
         _id:"",
       }
     };
@@ -353,16 +352,6 @@ export default {
           clearInterval(interval);
           this.vid = document.getElementById("eVideo");
 
-          setTimeout(()=>{
-            if(this.vid.readyState != 4){
-              this.addDeviceInfo()
-              this.getWarning(this.deviceInfo).then(()=>{
-                alert(this.$i18n.t('video_interrupting'))
-              })
-              
-            }
-          },5000)
-          
           if(this.vid.duration != this.lastWatched){
             this.vid.currentTime = this.lastWatched;
           }
