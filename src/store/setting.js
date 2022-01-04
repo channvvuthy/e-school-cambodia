@@ -87,6 +87,15 @@ export  default {
                     reject(err)
                 })
             })
+        },
+        checkForUpdate({commit}){
+            return new Promise((resolve, reject)=>{
+                axios.get(config.checkingVersionUrl + `update`).then(res =>{
+                    resolve(res)
+                }).catch(err =>{
+                    reject(err)
+                })
+            })
         }
     }
 }

@@ -13,8 +13,6 @@ import i18n from './i18n'
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 Vue.use(VueSweetalert2);
-
-
 axios.interceptors.request.use(
     (config) => {
         let token = localStorage.getItem('token');
@@ -35,6 +33,11 @@ axios.interceptors.request.use(
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['app-version'] = config.appVersion;
+axios.defaults.headers.common['device-os'] = helper.deviceOs();
+axios.defaults.headers.common['device-id'] = helper.deviceId();
+axios.defaults.headers.common['device-name'] = helper.deviceName();
+
+
 
 axios.defaults.headers.common['Authorization'] = config.auth;
 

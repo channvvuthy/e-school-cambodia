@@ -1,9 +1,13 @@
 'use strict';
 import path from 'path'
-const fs = require("fs");
+let fs = require("fs");
 const {autoUpdater} = require('electron-updater')
 const {download} = require('electron-dl');
-// const log = require('electron-log');
+var crypto = require('crypto');
+let ENC_KEY = "bf3c199c2470cb477d907b1e0917c17b"; // set random encryption key
+let IV = "5183666c72eec9e4"; // set random initialisation vector
+let cipher = crypto.createCipheriv('aes-256-cbc', ENC_KEY, IV);
+let decipheriv = crypto.createDecipheriv('aes-256-cbc', ENC_KEY, IV);
 
 import {
     app,
@@ -40,11 +44,21 @@ const downloadFile = async (fileUrl, info) => {
             method: "GET",
             url: fileUrl,
             responseType: "stream",
-        });
+        })
         await response.data.pipe(fs.createWriteStream(myInstalledDir).on('finish', () => {
-            info.url = path.join(app.getAppPath(), "..", "..", "electronjs");
-            mainWindow.webContents.send("downloaded", info)
-        }));
+            var input = fs.createReadStream(myInstalledDir);
+            var output = fs.createWriteStream(`${myInstalledDir}.enc`);
+            input.pipe(cipher).pipe(output);
+
+            output.on("finish", ()=>{
+                fs.unlink(myInstalledDir,(err)=>{
+                    if(err) throw err
+                })
+                info.url = path.join(app.getAppPath(), "..", "..", "electronjs")
+                mainWindow.webContents.send("downloaded", info)
+                output.close()
+            })
+        }))
     } catch (err) {
         mainWindow.webContents.send("fail", info)
         throw new Error(err);
@@ -62,6 +76,22 @@ protocol.registerSchemesAsPrivileged([{
         standard: true
     }
 }]);
+ipcMain.on("update", async(event, arg)=>{
+    shell.openExternal(arg)
+});
+
+ipcMain.on("decypt", async(event, arg)=>{
+    const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", arg);
+    var input = fs.createReadStream(`${myInstalledDir}.enc`);
+    var output = fs.createWriteStream(myInstalledDir);
+    input.pipe(decipheriv).pipe(output);
+
+    output.on('finish',()=> {
+       console.log("File has been decipher")
+       event.reply("decypted", true)
+       output.close()
+    })
+});
 ipcMain.on("saveFile", async(event, url) => {
     const mainWindow = BrowserWindow.getFocusedWindow();
     await download(mainWindow, url)

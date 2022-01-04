@@ -541,19 +541,26 @@ export default {
     },
     created(){
         ipcRenderer.send("downloadLocation")
-        this.getVideo()
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
         if(this.window.width <= 1315){
             this.$store.commit('setting/toggleSidebar', true)
         }
         let videos = JSON.parse(localStorage.getItem('videos'))
+
         videos = videos.filter(item => item.course._id == this.$route.params.course.course._id)
         this.video = videos[0]
         this.videos = videos
+        ipcRenderer.send("decypt",this.video._id)
         this.getPdf({id: this.video._id}).then(response =>{
             this.pdfUrl = response.data.data.url
         })
+        ipcRenderer.on("decypted",(event, arg)=>{
+            this.getVideo()
+            ipcRenderer.removeAllListeners();
+        })
+        
+
     }
 }
 </script>

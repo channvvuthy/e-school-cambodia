@@ -5,7 +5,8 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
-
+import axios from "axios"
+import config from "./../config"
 Vue.use(VueRouter);
 
 const routes = [
@@ -276,6 +277,8 @@ const routes = [
 
 
 ];
+
+
 
 const router = new VueRouter({
     mode: process.env.IS_ELECTRON ? 'hash' : 'history',

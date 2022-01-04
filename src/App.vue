@@ -28,6 +28,29 @@
                 <router-view></router-view>
             </div>
         </div>
+        <!-- If update available -->
+        <div class="fixed w-full h-full left-0 top-0 z-50 flex justify-center items-center bg-black" v-if="isUpdate">
+            
+            <div class="bg-white shadow-lg rounded-xl p-5 relative">
+                <div class="absolute rounded-full flex items-center justify-center w-7 h-7 right-2 top-2 cursor-pointer" @click="()=>{this.isUpdate = false}">
+                    <CloseIcon :width="50"></CloseIcon>
+                </div>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="update w-16 h-16 flex items-center justify-center rounded-full">
+                            <UpdateIcon></UpdateIcon>
+                        </div>
+                    </div>
+                    <div class="w-full ml-5">
+                        <div class="font-black text-2xl">Updates Available</div>
+                        <div>Please update to the latest version of the e-school app</div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center">
+                    <button class="update text-white px-4 py-2 rounded-full mt-5 outline-none font-semibold" @click="update">Update Now</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -36,6 +59,8 @@
     import Cart from "./views/Component/Cart.vue"
     import Notification from "./components/Notification.vue"
     import NotificationDetail from "./components/NotificationDetail.vue"
+    import CloseIcon from "./components/CloseIcon.vue"
+    import UpdateIcon from "./components/UpdateIcon.vue"
     import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue"
     import helper from "./helper/helper"
     import {mapActions, mapState} from "vuex"
@@ -50,6 +75,7 @@
                 receiptDetail:{},
                 showNotificationDetail: false,
                 isSplashScreen: true,
+                isUpdate: false,
                 window:{
                     wwidth: null
                 }
@@ -64,7 +90,9 @@
             Notification,
             ReceiptInfo,
             NotificationDetail,
-            Splash
+            Splash,
+            UpdateIcon,
+            CloseIcon
         },
         computed: {
             ...mapState('setting', ['isHide', 'darkMode']),
@@ -74,6 +102,7 @@
         methods: {
             ...mapActions('auth', ['getUser']),
             ...mapActions('etalk', ['join','getContact']),
+            ...mapActions('setting', ['checkForUpdate']),
             hideMenu(){
                 if(this.$route.name === 'library-video' 
                 || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
@@ -114,12 +143,28 @@
             handleResize() {
                 this.window.width = window.innerWidth;
             },
+            update(){
+                this.checkUpdate();
+                ipcRenderer.send("update","https://e-schoolcambodia.com/download")
+            },
+            checkUpdate(){
+                this.checkForUpdate().then(res =>{
+                    if(res.data.status == 1){
+                        this.isUpdate = true
+                    }
+                }).catch(err =>{
+                    console.log(err.response.data);
+                })
+            }
         },
+
+
         mounted(){
+            this.checkUpdate();
             ipcRenderer.send("deeplink")
             ipcRenderer.on("deeplink",(event, arg)=>{
                try{
-                    if(localStorage.getItem("token") !== null){
+                    if(localStorage.getItem("token") != null){
                         let deeplink =  arg.deeplink.split('/')
                         if(deeplink[3] == 'profile'){
                             this.$router.push({name:'user', params:{user_id:deeplink.pop()}})
@@ -166,3 +211,8 @@
         }
     }
 </script>
+<style>
+    .update{
+        background-image: linear-gradient(150deg, #000046 0%, #055174, 33%, #1cb5e0 100%);
+    }
+</style>

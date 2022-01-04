@@ -41,11 +41,11 @@ const deviceId = () => {
 // Get os of platform
 const deviceOs = () => {
     if(process.platform === `darwin`){
-        return 'MacOS'
+        return 'macos'
     }else if(process.platform === `win32`){
-        return 'Windows'
+        return 'windows'
     }else{
-        return 'Linux'
+        return 'linux'
     }
 }
 
@@ -75,6 +75,7 @@ const gender = () => {
     }
     return "F"
 }
+
 const numDay = (oldDate, currentDate) => {
     let date1 = new Date(oldDate);
     let date2 = new Date(currentDate);
