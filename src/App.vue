@@ -144,7 +144,6 @@
                 this.window.width = window.innerWidth;
             },
             update(){
-                this.checkUpdate();
                 ipcRenderer.send("update","https://e-schoolcambodia.com/download")
             },
             checkUpdate(){
