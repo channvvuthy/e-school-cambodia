@@ -281,8 +281,8 @@ export default {
 
         async logout({commit}) {
             delete axios.defaults.headers.common['xtoken'];
+            localStorage.clear();
             await axios.get(config.apiUrl + 'me/logout').then(() => {
-
                 localStorage.removeItem('token');
                 localStorage.removeItem('stProfile');
                 localStorage.removeItem('provinces');
