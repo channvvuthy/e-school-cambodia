@@ -157,7 +157,7 @@ async function createWindow() {
         },
         icon: path.join(__static, 'icon.png')
     });
-    mainWindow.setContentProtection(true)
+    // mainWindow.setContentProtection(true)
     mainWindow.setTitle("E-SCHOOL")
     mainWindow.setMenu(null);
     Menu.setApplicationMenu(null)

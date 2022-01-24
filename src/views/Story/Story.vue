@@ -1,5 +1,5 @@
 <template>
-    <div :class="darkMode?'bg-secondary text-textSecondary border-t border-b border-button':'bg-white shadow'">
+    <div :class="darkMode?'bg-secondary text-textSecondary border-t border-b border-button':'bg-white border-b story-shadow'">
         <div class="px-5 py-5">
             <div class="flex text-primary  text-md gap-4">
                 <div>
@@ -152,8 +152,11 @@
         }
     }
 </script>
-<style scoped>
+<style>
     .box-list-story::-webkit-scrollbar {
         display: none;
+    }
+    .story-shadow{
+        box-shadow: 0px 0px 8px -4px #000000;
     }
 </style>
