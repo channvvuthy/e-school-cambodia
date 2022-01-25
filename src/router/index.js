@@ -5,8 +5,6 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
-import axios from "axios"
-import config from "./../config"
 Vue.use(VueRouter);
 
 const routes = [
@@ -273,6 +271,11 @@ const routes = [
         path: '/add-member/:contact',
         name: 'add-member',
         component: () => import('../views/Chat/AddMember'),
+    },
+    {
+        path: '/packages/pkg',
+        name: 'packages',
+        component: () => import('../views/Video/Pkgs'),
     },
 
 

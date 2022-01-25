@@ -64,6 +64,9 @@ export default {
             state.ads = payload.menu_ads
             state.list = payload.list
             state.filter = payload.filter
+        },
+        getFilter(state, payload) {
+            state.filter = payload.filter
         }
     },
     actions: {

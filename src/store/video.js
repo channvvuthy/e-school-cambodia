@@ -8,11 +8,20 @@ export default {
         loading:false,
         loadingMore:false,
         playlist: [],
-        order: 1
+        order: 1,
+        packages:[]
 
     },
 
     mutations: {
+        getPackagesPagination(state, payload){
+            for(let i =0; i < payload.length; i++){
+                state.packages.list.push(payload[i]);
+            }
+        },
+        getPackages(state, payload){
+            state.packages = payload
+        },
         addToCart(state, payload){
             state.videos.list = state.videos.list.filter(item => {
                 if(item._id === payload){
@@ -165,10 +174,8 @@ export default {
         let qs = Object.keys(payload)
         .map(key => `${key}=${payload[key]}`)
         .join('&');
-        // commit("gettingVideo", true);
         return new Promise((resolve, reject) =>{
             axios.get(config.apiUrl + `video/detail?${qs}`).then(response =>{
-                // commit("gettingVideo", false);
                 commit("gettingMorePlaylist", response.data.data.list);
                 resolve(response)
             }).catch(err =>{
@@ -176,5 +183,25 @@ export default {
             })
         })
        },
+       getPackagesPagination({commit}, payload){
+        return new Promise((resolve, reject)=>{
+            axios.get(config.apiUrl + `video/package?${helper.q(payload)}`).then(res =>{
+                resolve(res.data)
+                commit("getPackagesPagination",res.data.data)
+            }).catch(err =>{
+                reject(err)
+            })
+        })
+       },
+       getPackages({commit}, payload){
+           return new Promise((resolve, reject)=>{
+               axios.get(config.apiUrl + `video/package?${helper.q(payload)}`).then(res =>{
+                   resolve(res.data)
+                   commit("getPackages",res.data.data)
+               }).catch(err =>{
+                   reject(err)
+               })
+           })
+       }
     }
 }

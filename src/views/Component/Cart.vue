@@ -52,7 +52,7 @@
                                             {{cart.title}}
                                         </div>
                                         <div class="text-xs" :class="darkMode?`text-gray-500`:``">
-                                            {{cart.teacher.name}}
+                                            {{cart.teacher?cart.teacher.name:""}}
                                         </div>
                                     </div>
                                     <!-- Price -->
