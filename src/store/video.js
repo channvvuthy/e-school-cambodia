@@ -123,7 +123,7 @@ export default {
         .join('&');
         commit("gettingVideo", true);
         return new Promise((resolve, reject) =>{
-            axios.get(config.apiUrl + `video/playlist?${qs}`).then(response =>{
+            axios.get(config.apiUrl + `video/detail?${qs}`).then(response =>{
                 commit("gettingVideo", false);
                 commit("gettingPlaylist", response.data.data);
                 resolve(response)
@@ -167,7 +167,7 @@ export default {
         .join('&');
         // commit("gettingVideo", true);
         return new Promise((resolve, reject) =>{
-            axios.get(config.apiUrl + `video/playlist?${qs}`).then(response =>{
+            axios.get(config.apiUrl + `video/detail?${qs}`).then(response =>{
                 // commit("gettingVideo", false);
                 commit("gettingMorePlaylist", response.data.data.list);
                 resolve(response)

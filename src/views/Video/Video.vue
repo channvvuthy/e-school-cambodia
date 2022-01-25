@@ -16,12 +16,18 @@
                                     <span>&#10003;</span>
                                 </div>
                             </div>
-                            <img :src="video.thumbnail" @click="gotToPlayList(video)" onerror="this.onerror=null; this.src='/poster.png'" class="m-auto"/>
+                            <div class="relative">
+                                <img :src="video.thumbnail" onerror="this.onerror=null; this.src='/poster.png'" class="m-auto"/>
+                                <div class="absolute w-full h-full bg-gradient-to-t top-0 from-black cursor-pointer" @click="gotToPlayList(video)"></div>
+                            </div>
                             <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1" :style="{width:`${video.last_watch.percentage}%`}"></div>
                             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
-                            <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
-                                <div class="w-14 h-14  bg-gray-300 bg-cover" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
-                                <div class="text-sm font-semibold mt-3">{{video.teacher.name}} ({{ cutString(video.title,30) }})</div>
+                            <div @click="gotToPlayList(video)" class="flex flex-col relative w-full">
+                                <div class="flex items-center">
+                                    <div class="w-14 h-14  bg-gray-300 bg-cover rounded border-2 border-white shadow bg-center" :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
+                                    <div class="ml-5 text-white pb-2">{{video.teacher.name}}</div>
+                                </div>
+                                <div class="text-sm font-semibold mt-3 text-center">{{ cutString(video.title,30) }}</div>
                                 <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
                                     <div class="cursor-pointer" :title="$t('2108')">
                                         <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></YoutubeIcon>
@@ -55,12 +61,12 @@
                                     </div>
                                 </div>
                             </div>
-                               <div class="flex w-full justify-between items-center relative top-5 mt-5 text-xs">
+                               <div class="flex w-full justify-between items-center relative top-5 mt-5 text-base">
                                    <template v-if="video.price.year">
-                                        <div  :class="darkMode?`text-gray-300`:``">{{$t('1006')}} : <del>{{video.price.highlight}} USD</del>&nbsp; <span :class="darkMode?`text-gray-300`:`text-red-700`">{{video.price.year}} USD</span></div>
+                                        <div  :class="darkMode?`text-gray-300`:``"><del class="font-black text-xl">${{video.price.highlight}}</del>&nbsp; <span :class="darkMode?`text-gray-300`:`text-red-700`">{{video.price.year}} USD</span></div>
                                         <div @click="addToCart(video)">
-                                            <div v-if="!video.is_in_cart">
-                                                <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
+                                            <div v-if="!video.is_in_cart" style="background-color:rgba(5,81,116,0.24)" class="rounded-full w-10 h-10 flex items-center justify-center">
+                                                <CartIcon :fill="darkMode?`#909090`:`#055174`"></CartIcon>
                                             </div>
                                         </div>
                                    </template>

@@ -13,7 +13,7 @@
                         <source src=""/>
                     </video>
                 </div>
-                <div class="rounded-b-md shadow pb-2 flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `"
+                <div class="shadow pb-2 flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `"
                      v-else>
                     <VideoPlaylist @endedVideo="endedVideo" @lastWatchVideo="lastWatchVideo($event)" :_id="video._id"></VideoPlaylist>
                     <div class="mx-5 mt-6">

@@ -13,7 +13,7 @@
                                     {{ $t('1006') }}: <span class="text-red-500 text-lg">{{pkg.price.year}}$</span>
                                 </div>
                                 <div class="flex-1 flex justify-end">
-                                    <span class="cursor-pointer" :id="pkg._id">
+                                    <span class="cursor-pointer" :id="pkg._id" @click="addToCart(pkg)">
                                         <CartIcon fill="#FFFFFF" v-if="!pkg.is_in_cart"></CartIcon>
                                     </span>
                                 </div>
@@ -28,6 +28,7 @@
 import moment from "moment"
 import VueHorizontal from 'vue-horizontal';
 import CartIcon from "./../../../components/CartIcon.vue"
+import {mapState,mapActions} from "vuex"
 export default {
     components:{
          VueHorizontal,
@@ -42,9 +43,18 @@ export default {
         }
     },
     methods:{
+        ...mapActions('cart', ['addCart', 'getCart']),
         formatDate(date){
             moment.locale('en');
             return moment(date).format('ll');
+        },
+        async addToCart(pk){
+            let payload = {}
+
+            payload.id = pk._id
+            await this.addCart(payload).then(() =>{
+                this.getCart()
+            })
         },
     },
     created(){
