@@ -1,8 +1,8 @@
 <template>
-    <div class="p-5 border-b border-dashed">
+    <div class="p-5 border-b-2 border-dashed">
         <vue-horizontal :button="false">
                 <section v-for="(pkg, index) in packages" :key="index" class="mr-5">
-                    <div class="flex items-end h-44 w-80 bg-cover relative" :style="{backgroundImage:`url(${pkg.thumbnail})`}">
+                    <div class="flex items-end h-56 w-96 bg-cover relative" :style="{backgroundImage:`url(${pkg.thumbnail})`}">
                         <div class="absolute w-full h-full bg-gradient-to-t from-black cursor-pointer" @click="pkgDetail(pkg)"></div>
                         <div class="px-5 py-3 text-white relative z-50 w-full">
                             <div class="text-base">{{pkg.title}}</div>
