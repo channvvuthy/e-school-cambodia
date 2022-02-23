@@ -83,7 +83,7 @@ export default {
                     state.playlist.list.push(payload[i]);
                 }
            }
-            
+
         }
     },
 
@@ -96,7 +96,7 @@ export default {
            return new Promise((resolve, reject) =>{
                axios.get(config.apiUrl + `video?${qs}`).then(response =>{
                 commit("gettingVideo", false);
-                if(response.data.msg !=undefined){
+                if(response.data.msg != undefined){
                     helper.errorMessage(response.data.msg)
                 }else{
                     commit("receivingVideo", response.data.data);
@@ -141,7 +141,8 @@ export default {
             })
         })
        },
-       getWarning({commit}, payload){
+        // eslint-disable-next-line no-empty-pattern
+       getWarning({}, payload){
            return new Promise((resolve, reject) =>{
                 const headers = {
                     'device-id': payload.deviceId,

@@ -13,7 +13,7 @@
     src: url('./../../../public/font/Mukta.ttf')
 }
 @font-face {
-    font-family: 'Nokora';
-    src: url('./../../../public/font/Nokora.ttf')
+    font-family: 'Kantumruy-Regular';
+    src: url('./../../../public/font/Kantumruy-Regular.ttf')
 }
 @tailwind utilities;

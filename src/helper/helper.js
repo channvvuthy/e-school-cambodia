@@ -1,16 +1,18 @@
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
+
 Vue.use(VueToast);
 import i18n from "./../i18n"
 import {machineIdSync} from 'node-machine-id'
+
 const os = require('os')
 
 
 // Validate only number
 const isNumber = (evt) => {
     evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    let charCode = (evt.which) ? evt.which : evt.keyCode;
 
     if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
         evt.preventDefault();
@@ -20,12 +22,9 @@ const isNumber = (evt) => {
 };
 // Cut string with dot
 const cutString = function (text, limit) {
-    if (text.length > limit)
-        for (let i = limit; i > 0; i--) {
-            return text.substring(0, i) + '...';
-        }
-    else
-        return text;
+    if (text.length > limit) for (let i = limit; i > 0; i--) {
+        return text.substring(0, i) + '...';
+    } else return text;
 };
 // Format display view like Facebook (1k)
 const kFormatter = (num) => {
@@ -40,23 +39,23 @@ const deviceId = () => {
 }
 // Get os of platform
 const deviceOs = () => {
-    if(process.platform === `darwin`){
+    if (process.platform === `darwin`) {
         return 'macos'
-    }else if(process.platform === `win32`){
+    } else if (process.platform === `win32`) {
         return 'windows'
-    }else{
+    } else {
         return 'linux'
     }
 }
 
-// Get device name 
+// Get device name
 
-const deviceName = () =>{
+const deviceName = () => {
     return os.hostname()
 }
 
-// Os version 
-const osVersion = () =>{
+// Os version
+const osVersion = () => {
     return os.release()
 }
 // Calculate price in duration
@@ -110,7 +109,22 @@ const q = (payload) => {
         .map(key => `${key}=${payload[key]}`)
         .join('&');
 }
-export default{
+
+const khmerNumber = (str) => {
+    let string = str.toString()
+    return string.replace(/1/g, "១")
+        .replace(/2/g, "២")
+        .replace(/3/g, "៣")
+        .replace(/4/g, "៤")
+        .replace(/5/g, "៥")
+        .replace(/6/g, "៦")
+        .replace(/7/g, "៧")
+        .replace(/8/g, "៨")
+        .replace(/9/g, "៩")
+        .replace(/0/g, "០")
+}
+
+export default {
     isNumber,
     cutString,
     kFormatter,
@@ -124,6 +138,7 @@ export default{
     q,
     deviceName,
     success,
-    osVersion
-    
+    osVersion,
+    khmerNumber
+
 }

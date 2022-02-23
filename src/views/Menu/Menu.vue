@@ -50,7 +50,7 @@
             <div class="flex justify-end" v-if="token">
                 <div class="flex justify-between items-end flex-1">
                     <div class="flex flex-col justify-center items-center cursor-pointer relative " @click="() =>{this.$emit('showItemIncart')}" id="myCart">
-                        
+
                         <template>
                             <div class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs" :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.carts">
                                 <div style="margin-top:2px">
@@ -102,7 +102,6 @@ import LibraryIcon from "./../../components/LibraryIcon"
 import LibraryThinIcon from "./../../components/LibraryThinIcon"
 import PartnershipIcon from "./../../components/PartnershipIcon"
 import PartnershipFillIcon from "./../../components/PartnershipFillIcon"
-import SupporterIcon from "./../../components/SupporterIcon"
 import NotificationIcon from "./../../components/NotificationIcon.vue"
 import ChatIcon from "./components/ChatIcon.vue"
 import CartIcon from "./../../components/CartIcon.vue"
@@ -116,12 +115,11 @@ export default {
         PartnershipIcon,
         LibraryThinIcon,
         PartnershipFillIcon,
-        SupporterIcon,
         NotificationIcon,
         ChatIcon,
         CartIcon,
         BorderBottom
-        
+
     },
     data(){
         return{
@@ -147,14 +145,14 @@ export default {
             if(!darkMode && active){
                 return 'text-primary'
             }
-            
+
         },
     },
     created(){
         if(this.token){
             this.getNotify()
         }
-        
+
     },
     watch:{
         'carts':function(){

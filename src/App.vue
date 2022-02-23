@@ -3,7 +3,7 @@
         <div v-if="isSplashScreen" class="fixed top-0 left-0  w-full h-full" style="z-index: 100;">
             <Splash></Splash>
         </div>
-        <div class="font-khmer_siemreab" :class="darkMode?`bg-youtube`:``">
+        <div class="font-khmer_os" :class="darkMode?`bg-youtube`:``">
             <!-- Cart -->
             <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
             <!-- Receipt info -->
@@ -30,7 +30,7 @@
         </div>
         <!-- If update available -->
         <div class="fixed w-full h-full left-0 top-0 z-50 flex justify-center items-center bg-black" v-if="isUpdate">
-            
+
             <div class="bg-white shadow-lg rounded-xl p-5 relative">
                 <div class="absolute rounded-full flex items-center justify-center w-7 h-7 right-2 top-2 cursor-pointer" @click="()=>{this.isUpdate = false}">
                     <CloseIcon :width="50"></CloseIcon>
@@ -104,8 +104,8 @@
             ...mapActions('etalk', ['join','getContact']),
             ...mapActions('setting', ['checkForUpdate']),
             hideMenu(){
-                if(this.$route.name === 'library-video' 
-                || this.$route.name === 'course-quiz' || this.$route.name === 'story-list' 
+                if(this.$route.name === 'library-video'
+                || this.$route.name === 'course-quiz' || this.$route.name === 'story-list'
                 || this.$route.name === 'document-detail'
                 || this.$route.name === 'download-detail'
                 || this.$route.name === 'activity-detail' || this.$route.name === 'attendant'
@@ -189,7 +189,7 @@
                                 this.$router.push({name:'chat'}).catch(err=>{err})
                             })
                         }
-                        
+
                     }else{
                         this.$router.push({name:'login'}).catch(err=>{err})
                     }

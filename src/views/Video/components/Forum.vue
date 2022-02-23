@@ -35,7 +35,7 @@
                                  :style="{backgroundImage:`url(${forum.user.photo})`}"></div>
                             <div class="ml-4 flex-1 w-full">
                                 <div>
-                                    <div class="text-base font-semibold" :class="darkMode?`text-byline`:`text-primary`">{{forum.user.name}}</div>
+                                    <div class="text-base font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">{{forum.user.name}}</div>
                                     <div class="text-gray-500">
                                         <vue-moments-ago prefix="" suffix="ago" :date="forum.date" lang="en"/>
                                     </div>
@@ -43,8 +43,8 @@
                                 <div v-if="forum.content.photo">
                                     <img :src="forum.content.photo.name" class="max-h-40 rounded my-2">
                                 </div>
-                                <div v-if="forum.content.text" :class="darkMode?`text-byline`:``">{{cutString(forum.content.text, 100)}}</div>
-                            
+                                <div v-if="forum.content.text" :class="darkMode?`text-gray-300`:``">{{cutString(forum.content.text, 100)}}</div>
+
 
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                 }
                 this.text = ""
                 this.$refs.feed.scrollTop = this.$refs.feed.scrollHeight - this.$refs.feed.clientHeight
-                
+
             },
             UserReplyComment(event, forum){
                 let text = event.target.value
@@ -142,7 +142,7 @@
                 if (event.target.value) {
                     this.$emit("noReply", false)
                     this.$emit("openModal", event)
-                    
+
                 }
             },
             choosePhoto(){
@@ -150,7 +150,7 @@
             },
             onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
                 if (scrollTop + clientHeight >= scrollHeight) {
-                    this.page ++ 
+                    this.page ++
                     let payload = {}
                     let id = document.getElementById("video").value
                     payload.id = id
@@ -165,7 +165,7 @@
             this.getForum(
                 {id: this.id, p: this.page}
             )
-            
+
         }
     }
 </script>
