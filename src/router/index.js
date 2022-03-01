@@ -277,6 +277,11 @@ const routes = [
         name: 'packages',
         component: () => import('../views/Video/Pkgs'),
     },
+    {
+        path: '/tv',
+        name: 'tv',
+        component: () => import('../views/Tv/Tv'),
+    },
 
 
 ];
