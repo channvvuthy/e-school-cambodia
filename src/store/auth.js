@@ -31,37 +31,36 @@ export default {
         loadingStory: false,
         storyDetail: "",
         storyIndex: 0,
-        imgUrl:"",
-        addingStory:false,
-        userDetails:{},
-        notify:{
+        imgUrl: "",
+        addingStory: false,
+        userDetails: {},
+        notify: {
             notifications: 0,
-            carts: 0,
             carts: 0,
         },
 
     },
 
     mutations: {
-        getNotify(state, payload){
+        getNotify(state, payload) {
             state.notify = payload
         },
-        getUserDetail(state, payload){
+        getUserDetail(state, payload) {
             state.userDetails = payload
         },
-        getNotificationDetail(state, payload){
+        getNotificationDetail(state, payload) {
             state.notificationDetail = payload
         },
-        addedStory(){
-           
+        addedStory() {
+
         },
-        addingStory(state, payload){
+        addingStory(state, payload) {
             state.addingStory = payload
         },
-        setImgUrl(state, payload){
+        setImgUrl(state, payload) {
             state.imgUrl = payload
         },
-        setStoryIndex(state, payload){
+        setStoryIndex(state, payload) {
             state.storyIndex = payload
         },
         loadingStory(state, status) {
@@ -77,16 +76,16 @@ export default {
                 }
             }
         },
-        receivingMoreStoryDetail(state, payload){
-            for(let i = 0; i < payload.viewer.length; i ++){
+        receivingMoreStoryDetail(state, payload) {
+            for (let i = 0; i < payload.viewer.length; i++) {
                 state.storyDetail.viewer.push(payload.viewer[i])
             }
 
         },
-        gettingStoryDetail(state, payload){
+        gettingStoryDetail(state, payload) {
             state.loadingStory = payload
         },
-        receivingStoryDetail(state, payload){
+        receivingStoryDetail(state, payload) {
             state.storyDetail = payload
         },
         receivingToken(state, token) {
@@ -143,18 +142,18 @@ export default {
     },
 
     actions: {
-        getUser({commit}, payload){
-            return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + `user/detail?${helper.q(payload)}`).then((response)=>{
-                    commit("getUserDetail",response.data)
+        getUser({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `user/detail?${helper.q(payload)}`).then((response) => {
+                    commit("getUserDetail", response.data)
                     resolve(response)
-                }).catch(err=>{
+                }).catch(err => {
                     reject(err)
                 })
             })
         },
         login({commit}, auth) {
-            var instance = axios.create();
+            let instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];
             commit("loging", true);
             return new Promise((resolve, reject) => {
@@ -199,9 +198,9 @@ export default {
                 axios.get(config.apiUrl + `story/view?${qs}`).then(response => {
                     resolve(response)
                     commit("gettingStoryDetail", false);
-                    if(payload.p > 1){
+                    if (payload.p > 1) {
                         commit("receivingMoreStoryDetail", response.data.data)
-                    }else{
+                    } else {
                         commit("receivingStoryDetail", response.data.data)
                     }
                 }).catch(err => {
@@ -210,22 +209,22 @@ export default {
                 })
             })
         },
-        addMyStory({commit}, payload){
+        addMyStory({commit}, payload) {
             commit("addingStory", true)
-            return new Promise((resolve, reject) =>{
-                axios.post(config.apiUrl + "story",payload).then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + "story", payload).then(response => {
                     resolve(response)
-                    commit("addingStory",false)
-                    commit("addedStory",response.data.data)
-                }).catch(err =>{
-                    commit("addingStory",false)
+                    commit("addingStory", false)
+                    commit("addedStory", response.data.data)
+                }).catch(err => {
+                    commit("addingStory", false)
                     reject(err)
                 })
             });
 
         },
         checkPhoneExist({commit}, payload) {
-            var instance = axios.create();
+            let instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
@@ -239,7 +238,7 @@ export default {
             })
         },
         changeForgotPassword({commit}, params) {
-            var instance = axios.create();
+            let instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];
             instance.defaults.headers.common['xtoken'] = params.xtoken;
             commit("changingForgotPassword", true)
@@ -263,8 +262,8 @@ export default {
         },
 
         register({
-            commit
-        }, params) {
+                     commit
+                 }, params) {
             commit("registering", true)
             return new Promise((resolve, reject) => {
                 delete axios.defaults.headers.common["xtoken"];
@@ -278,20 +277,22 @@ export default {
                 })
             })
         },
-
-        async logout({commit}) {
-            delete axios.defaults.headers.common['xtoken'];
-            localStorage.clear();
-            await axios.get(config.apiUrl + 'me/logout').then(() => {
-                localStorage.removeItem('token');
-                localStorage.removeItem('stProfile');
-                localStorage.removeItem('provinces');
-                commit('receivingToken', "");
-                commit('userLogout', true);
+        clearLogout({commit}) {
+            localStorage.clear()
+            commit('receivingToken', "")
+            commit('userLogout', true)
+        },
+        logout({}) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + 'me/logout').then(res => {
+                    resolve(res)
+                }).catch(err => {
+                    reject(err)
+                })
             })
         },
 
-        changeProfilePhotoPhoto({commit }, formData) {
+        changeProfilePhotoPhoto({commit}, formData) {
             commit('changingProfile', true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'me/update-photo',
@@ -394,7 +395,7 @@ export default {
 
         readingNotification({commit}, id) {
             commit('readingNotification', true)
-            return new Promise((resolve, reject) =>{
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'notification/read?id=' + id).then(response => {
                     commit('readingNotification', false)
                     commit("getNotificationDetail", response.data.data)
@@ -404,13 +405,13 @@ export default {
                     commit('readingNotification', false)
                 })
             })
-            
+
         },
 
         getToken({commit}, token) {
             commit("receivingToken", token)
         },
-        getRelative(){
+        getRelative() {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `me/relative`).then(response => {
                     resolve(response)
@@ -420,21 +421,21 @@ export default {
                 })
             })
         },
-        getQr(){
-            return new Promise((resolve,reject) =>{
-                axios.get(config.apiUrl + `me/qrcode`).then(response =>{
+        getQr() {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `me/qrcode`).then(response => {
                     resolve(response)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                 })
             })
         },
-        getNotify({commit}){
-            return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + `me/notify`).then(response =>{
+        getNotify({commit}) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `me/notify`).then(response => {
                     resolve(response)
                     commit("getNotify", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                 })
             })
