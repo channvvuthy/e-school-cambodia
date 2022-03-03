@@ -23,6 +23,7 @@ module.exports = {
             darkBlue: "#02141C",
             act: "#EAF3FF",
             dadada: "#dadada",
+            forum: "#eaeaea",
             borderGray: "#c9c9c9",
             secondary: "#212121",
             live: "#055174",

@@ -60,7 +60,7 @@
       <div class="flex-1">
         <div v-if="showMenu"
              class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center text-sm font-medium"
-             :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white`"
+             :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white border border-b-0`"
         >
           <div @click="switchMenu('video')"
                class="flex flex-col flex-1 justify-center cursor-pointer h-full"
@@ -98,7 +98,7 @@
         </div>
         <div v-if="!showMenu"
              class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center "
-             :class="darkMode?`bg-youtube text-gray-300`:`bg-img-primary bt-shadow`">
+             :class="darkMode?`bg-youtube text-gray-300`:`bg-white bt-shadow`">
           <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer"
                @click="backMenu">
             <BackIcon :width="20" :height="20" :fill="darkMode?`#afb0b4`:`#000000`"></BackIcon>
@@ -263,7 +263,7 @@ export default {
       return helper.kFormatter(num)
     },
     openFullscreen() {
-      var elem = document.getElementById("fullScreen");
+      let elem = document.getElementById("fullScreen");
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
       } else if (elem.webkitRequestFullscreen) { /* Safari */
@@ -320,11 +320,8 @@ export default {
       }
     },
     canWatch(free_watch) {
-      console.log(this.$route.params.course)
-      if ((this.$route.params.course.is_buy || free_watch)) {
-        return true
-      }
-      return false
+      return !!(this.$route.params.course.is_buy || free_watch);
+
     },
     nextVideo(event) {
 

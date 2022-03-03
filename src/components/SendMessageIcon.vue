@@ -1,33 +1,32 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-         :width="size" :height="size"
-         viewBox="0 0 172 172"
-         style=" fill:#000000;">
-        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
-           stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
-           font-size="none" text-anchor="none" style="mix-blend-mode: normal">
-            <path d="M0,172v-172h172v172z" fill="none"></path>
-            <g :fill="fill">
-                <path d="M16.60517,74.046l28.53767,28.53767c2.82367,2.82367 7.32433,3.03867 10.39883,0.50167l76.3465,-62.96633l-62.96633,76.33933c-2.537,3.0745 -2.322,7.58233 0.50167,10.39883l28.53767,28.53767c4.00617,4.00617 10.8145,2.494 12.7495,-2.83083l46.483,-127.83183c2.24317,-6.17767 -3.741,-12.169 -9.91867,-9.91867l-127.839,46.483c-5.32483,1.935 -6.837,8.74333 -2.83083,12.7495z"></path>
-            </g>
-        </g>
-    </svg>
+  <svg  xmlns="http://www.w3.org/2000/svg" :width="size" :height="size"
+       viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
+    <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" :fill="fill" stroke="none">
+      <path d="M405 5052 c-139 -42 -241 -113 -309 -217 -78 -117 -111 -268 -87
+-397 7 -37 146 -397 339 -880 l327 -818 2222 0 2223 0 -10 25 c-30 80 -98 168
+-172 224 -53 39 -4087 1999 -4218 2049 -88 33 -229 40 -315 14z"/>
+      <path d="M348 1563 c-180 -450 -331 -842 -337 -871 -34 -164 26 -359 148 -481
+110 -110 226 -156 391 -155 88 0 116 5 170 26 50 20 3322 1600 4050 1956 89
+44 165 88 196 116 55 48 114 129 139 189 l15 37 -2223 0 -2223 0 -326 -817z"/>
+    </g>
+  </svg>
+
 </template>
 <script>
-    export default{
-        name: "SendMessageIcon",
-        props: {
-            size: {
-                type: Number,
-                default: () => {
-                    return 35;
-                }
-            },
-            fill:{
-                default: () =>{
-                    return "#3498db"
-                }
-            }
-        }
+export default {
+  name: "SendMessageIcon",
+  props: {
+    size: {
+      type: Number,
+      default: () => {
+        return 35;
+      }
+    },
+    fill: {
+      default: () => {
+        return "#3498db"
+      }
     }
+  }
+}
 </script>

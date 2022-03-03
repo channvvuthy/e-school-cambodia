@@ -1,12 +1,13 @@
 <template>
   <div class="ml-5 pt-4 h-screen overflow-y-scroll pb-60 font-khmer_os bg-cover text-sm" @scroll="onScroll"
-       :class="darkMode?``:`bg-img-primary pl-4 border-t`">
+       :class="darkMode?``:`bg-white pl-4 border`">
     <div v-for="(list,index) in playlist.list" :key="index">
-      <div class="flex justify-between items-center p-4 mb-3 e-shadow mr-4"
-           :class="list.order === order?darkMode?`bg-white`:`bg-act`:darkMode?`bg-button text-textSecondary`:`bg-white`"
+      <div class="flex justify-between items-center p-4 mb-3 rounded-lg mr-4"
+           :class="list.order === order?darkMode?`bg-white`:`bg-act`:darkMode?`bg-button text-textSecondary`:`bg-white border`"
            :style="canWatch(list.free_watch)?{}:{opacity:`1`}">
         <div class="relative w-2/5 mr-3">
           <img :src="list.thumbnail" onerror="this.onerror=null; this.src='/poster.png'"
+               class="rounded-md"
                @click="nextVideo(list)"
                :title="list.title"
                :class="canWatch(list.free_watch)?`cursor-pointer`:`cursor-default`"/>

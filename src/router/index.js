@@ -5,6 +5,7 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -282,10 +283,14 @@ const routes = [
         name: 'tv',
         component: () => import('../views/Tv/Tv'),
     },
+    {
+        path: '/overview',
+        name: 'overview',
+        component: () => import('../views/Video/Overview'),
+    },
 
 
 ];
-
 
 
 const router = new VueRouter({

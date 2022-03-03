@@ -1,6 +1,8 @@
 <template>
-<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-     :height="height" viewBox="0 0 511.992 511.992" style="enable-background:new 0 0 511.992 511.992;" xml:space="preserve">
+  <svg id="Capa_1" xmlns="http://www.w3.org/2000/svg" x="0px"
+       y="0px"
+       :height="height" viewBox="0 0 511.992 511.992" style="enable-background:new 0 0 511.992 511.992;"
+       xml:space="preserve">
 <g :fill="fill">
 	<g>
 		<path d="M510.096,249.937c-4.032-5.867-100.928-143.275-254.101-143.275C124.56,106.662,7.44,243.281,2.512,249.105
@@ -10,7 +12,7 @@
 			C463.013,282.065,362.256,383.996,255.995,383.996z"/>
 	</g>
 </g>
-<g>
+    <g>
 	<g :fill="fill">
 		<path d="M255.995,170.662c-47.061,0-85.333,38.272-85.333,85.333s38.272,85.333,85.333,85.333s85.333-38.272,85.333-85.333
 			S303.056,170.662,255.995,170.662z M255.995,319.996c-35.285,0-64-28.715-64-64s28.715-64,64-64s64,28.715,64,64
@@ -22,19 +24,19 @@
 </template>
 
 <script>
-    export default{
-        name: "Eye",
-        props:{
-            height:{
-                default:()=>{
-                    return 24
-                }
-            },
-			fill:{
-				default:()=>{
-					return "#4A4A4A"
-				}
-			}
-        }
+export default {
+  name: "Eye",
+  props: {
+    height: {
+      default: () => {
+        return 24
+      }
+    },
+    fill: {
+      default: () => {
+        return "#4A4A4A"
+      }
     }
+  }
+}
 </script>

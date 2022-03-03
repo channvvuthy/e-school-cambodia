@@ -22,7 +22,7 @@
               </div>
             </div>
             <div class="relative">
-              <img :src="video.thumbnail" onerror="this.onerror=null; this.src='/poster.png'" class="m-auto"
+              <img :src="video.thumbnail" class="m-auto"
                    style="min-height:12rem;"/>
               <div class="absolute w-full h-full bg-gradient-to-t top-0 from-black cursor-pointer"
                    @click="gotToPlayList(video)"></div>
@@ -99,7 +99,7 @@
     </div>
     <div class="h-24 z-50 fixed right bottom-0 e-shadow px-10 flex items-center justify-center"
          :class="darkMode ? `bg-secondary`: `bg-white`"
-         v-if="packages.package.is_buy == 0"
+         v-if="packages.package != undefined && packages.package.is_buy == 0"
          :style="{width: `${buyNowWidth}px`}">
       <button
           @click="addToCart(packages.package)"
@@ -183,7 +183,7 @@ export default {
         this.showMsg = true
         return;
       }
-      this.$router.push({name: 'video-detail', params: {course: videoCourse}})
+      this.$router.push({name: 'overview', params: {course: videoCourse}})
     },
     listPackages() {
       this.loading = true
