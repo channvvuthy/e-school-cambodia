@@ -37,7 +37,6 @@ export default {
         notify:{
             notifications: 0,
             carts: 0,
-            carts: 0,
         },
 
     },
@@ -154,7 +153,7 @@ export default {
             })
         },
         login({commit}, auth) {
-            var instance = axios.create();
+            let instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];
             commit("loging", true);
             return new Promise((resolve, reject) => {
@@ -225,7 +224,7 @@ export default {
 
         },
         checkPhoneExist({commit}, payload) {
-            var instance = axios.create();
+            let instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];
             commit("checkingPhone", true)
             return new Promise((resolve, reject) => {
@@ -239,7 +238,7 @@ export default {
             })
         },
         changeForgotPassword({commit}, params) {
-            var instance = axios.create();
+            let instance = axios.create();
             delete instance.defaults.headers.common['xtoken'];
             instance.defaults.headers.common['xtoken'] = params.xtoken;
             commit("changingForgotPassword", true)
@@ -279,15 +278,13 @@ export default {
             })
         },
 
-        async logout({commit}) {
-            delete axios.defaults.headers.common['xtoken'];
-            localStorage.clear();
-            await axios.get(config.apiUrl + 'me/logout').then(() => {
-                localStorage.removeItem('token');
-                localStorage.removeItem('stProfile');
-                localStorage.removeItem('provinces');
-                commit('receivingToken', "");
-                commit('userLogout', true);
+        logout({}) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + 'me/logout').then(res => {
+                    resolve(res)
+                }).catch(err => {
+                    reject(err)
+                })
             })
         },
 
