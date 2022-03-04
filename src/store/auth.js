@@ -287,6 +287,9 @@ export default {
                 })
             })
         },
+        clearLogout(){
+          localStorage.clear()
+        },
 
         changeProfilePhotoPhoto({commit }, formData) {
             commit('changingProfile', true)

@@ -59,7 +59,7 @@
       </div>
       <div class="flex-1">
         <div v-if="showMenu"
-             class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center text-sm font-medium"
+             class="h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center text-lg font-medium"
              :class="darkMode?`bg-secondary border-b border-button text-gray-300`:`bg-white border border-b-0`"
         >
           <div @click="switchMenu('video')"
@@ -97,9 +97,9 @@
 
         </div>
         <div v-if="!showMenu"
-             class="px-5 h-14 w-full leading-14 flex-1 ml-5 flex justify-between text-center items-center "
-             :class="darkMode?`bg-youtube text-gray-300`:`bg-white bt-shadow`">
-          <div class="shadow rounded-md flex justify-center items-center h-8 px-3 mr-4 cursor-pointer"
+             class="px-5 h-14 w-full leading-14 text-lg flex-1 ml-5 flex justify-between text-center items-center "
+             :class="darkMode?`bg-secondary text-gray-300`:`bg-white border`">
+          <div class="shadow rounded-md flex justify-center items-center h-8 px-2 mr-4 cursor-pointer"
                @click="backMenu">
             <BackIcon :width="20" :height="20" :fill="darkMode?`#afb0b4`:`#000000`"></BackIcon>
           </div>
@@ -120,11 +120,13 @@
     <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-90 z-50 flex justify-center items-center"
          v-if="showDoc">
       <div class="bg-white w-2/5 h-5/6 overflow-y-hidden rounded">
-        <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
+        <div class="flex justify-between items-center p-4" :class="darkMode?`bg-secondary`:`bg-primary`">
           <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
             <EnlargeIcon :size="16"></EnlargeIcon>
           </div>
-          <div class="text-white text-sm">{{ video.title }}</div>
+          <div class="text-white text-lg" :title="video.title">
+            {{cutString( video.title, 50)}}
+          </div>
           <div class="cursor-pointer" @click="closeDock">
             <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
           </div>
@@ -384,8 +386,8 @@ export default {
       }
       this.addComment(formData)
     },
-    replyTextComment(event) {
-      this.replyComment(event).then(response => {
+    replyTextComment(data) {
+      this.replyComment(data).then(response => {
         this.comments.comment.push(response.data.data)
       })
     },

@@ -6,7 +6,7 @@ import playVideo from "./playVideo"
 import quiz from "./quiz"
 import home from "./home"
 import payment from "./payment"
-import  setting from "./setting"
+import setting from "./setting"
 import guardian from "./guardian"
 import insurance from "./insurance"
 import receipt from "./receipt"
@@ -22,16 +22,19 @@ import library from "./library"
 import document from "./document"
 import gallery from "./gallery"
 import certificate from "./certificate"
-import network  from "./network"
+import network from "./network"
 import help from "./help"
 import attendant from "./attendant"
 import summary from "./summary"
 import etalk from "./etalk"
 import Vue from 'vue'
 import Vuex from 'vuex'
+import sticker from "./sticker"
+
 Vue.use(Vuex);
-export default  new Vuex.Store({
+export default new Vuex.Store({
     modules: {
+        sticker,
         video,
         auth,
         course,

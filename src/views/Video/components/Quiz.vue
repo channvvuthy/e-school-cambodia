@@ -1,13 +1,15 @@
 <template>
-    <div class="ml-5 h-screen flex pb-40 items-center justify-center" :class="darkMode?`bg-secondary text-gray-300`:`bg-img-primary border-t`">
+    <div class="ml-5 h-screen flex pb-40 items-center justify-center"
+         :class="darkMode?`bg-secondary text-gray-300`:`bg-white border`">
         <div v-if="loading">
-            <div class="flex justify-center items-center"></div>
+          <div class="flex justify-center items-center"></div>
         </div>
         <div v-else>
             <div v-if="err" class="">{{$t(err)}}</div>
             <!-- Box note -->
-            <div class="rounded-2xl px-10 py-5" :class="darkMode?`bg-button shadow`:`bg-white shadow-md border-t border-gray-100`" v-else>
-                <div class="text-base font-semibold mb-7">{{$t('2116')}}</div>
+            <div class="rounded-xl px-10 py-5"
+                 :class="darkMode?`bg-button shadow`:`bg-white shadow-md border`" v-else>
+                <div class="text-lg font-semibold mb-7">{{$t('2116')}}</div>
                 <div class="mb-5 text-sm flex justify-between items-center">
                     <div>{{$t('2118')}} {{$t('colon')}}</div>
                     <div>{{quiz.total}} {{$t('2115')}}</div>
