@@ -170,11 +170,12 @@ export default {
       return helper.cutString(text, limit)
     },
     gotToPlayList(videoCourse) {
+      videoCourse.package_id = ""
       if (localStorage.getItem('token') === null) {
         this.showMsg = true
         return;
       }
-      this.$router.push({name: 'video-detail', params: {course: videoCourse}})
+      this.$router.push({name: 'overview', params: {course: videoCourse}})
     },
     enableUserScroll() {
       this.enableScroll = true
