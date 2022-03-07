@@ -22,9 +22,9 @@
                  @click="showConfirm(pk)"></div>
             <div class="px-5 py-3 text-white relative z-50 w-full">
               <div class="text-base">{{ pk.title }}</div>
-              <div class="flex mt-1 items-center justify-between w-full">1007
+              <div class="flex mt-1 items-center justify-between w-full">
                 <div class="font-extralight">
-                  <span>{{ pk.total_book }} {{ $t('2202') }}{{ plurals(pk.total_book) }}</span>
+                  <span> {{ pk.total_book }} {{ $t('2202') }}{{ plurals(pk.total_book) }}</span>
                 </div>
                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                 <div class="font-extralight">

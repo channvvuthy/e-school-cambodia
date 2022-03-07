@@ -8,29 +8,58 @@
         <div class="relative" :class="darkMode ? ``: `bg-gradient-to-t from-gray-100`">
           <img :src="details.book.thumbnail" class="m-auto max-w-sm">
           <div class="w-full absolute left-0 -bottom-5 flex justify-center">
-            <button
-                @click="readingBook"
-                v-if="type === 'pdf'"
-                class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
-              <ReadingBookIcon fill="#fff" :size="35"></ReadingBookIcon>
-              <span class="ml-3">{{ $t('read_book') }}</span>
-            </button>
+            <template v-if="type === 'pdf'">
+              <button
+                  @click="readingBook"
+                  v-if="(details.is_buy || !details.price.highlight)"
+                  class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
+                <ReadingBookIcon fill="#fff" :size="35"></ReadingBookIcon>
+                <span class="ml-3">{{ $t('read_book') }}</span>
+              </button>
 
-            <button
-                @click="listenAudio"
-                v-if="type === 'sound'"
-                class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
-              <HeadphoneIcon fill="#fff" :size="35"></HeadphoneIcon>
-              <span class="ml-3">{{ $t('2208') }}</span>
-            </button>
+              <button
+                  v-else
+                  @click="shopNow"
+                  class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
+                <CartIcon fill="#fff" :size="35"></CartIcon>
+                <span class="ml-3">{{ $t('2206') }}</span>
+              </button>
+            </template>
 
-            <button
-                @click="listVideo"
-                v-if="type === 'video'"
-                class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
-              <VideoCameraIcon fill="#fff" :size="35"></VideoCameraIcon>
-              <span class="ml-3">{{ $t('1117') }}</span>
-            </button>
+            <template v-if="type === 'sound'">
+              <button
+                  v-if="(details.is_buy || !details.price.highlight)"
+                  @click="listenAudio"
+                  class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
+                <HeadphoneIcon fill="#fff" :size="35"></HeadphoneIcon>
+                <span class="ml-3">{{ $t('2208') }}</span>
+              </button>
+              <button
+                  v-else
+                  @click="shopNow"
+                  class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
+                <CartIcon fill="#fff" :size="35"></CartIcon>
+                <span class="ml-3">{{ $t('2206') }}</span>
+              </button>
+            </template>
+
+            <template v-if="type === 'video'">
+              <button
+                  @click="listVideo"
+                  v-if="(details.is_buy || !details.price.highlight)"
+                  class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
+                <VideoCameraIcon fill="#fff" :size="35"></VideoCameraIcon>
+                <span class="ml-3">{{ $t('1117') }}</span>
+              </button>
+              <button
+                  v-else
+                  @click="shopNow"
+                  class="flex items-center justify-center bg-primary text-white w-7/12 py-2 outline-none rounded-full shadow text-xl">
+                <CartIcon fill="#fff" :size="35"></CartIcon>
+                <span class="ml-3">{{ $t('2206') }}</span>
+              </button>
+            </template>
+
           </div>
         </div>
         <div class="my-10 px-5 border-b" :class="darkMode ? `border-secondary` : ``">
@@ -113,6 +142,7 @@ import VideoCameraIcon from "@/views/Video/components/VideoCameraIcon";
 import ViewBook from "@/views/Library/components/book/ViewBook";
 import ReadingBook from "@/views/Library/components/book/ReadingBook";
 import LibraryAudio from "@/views/Library/Audio"
+import CartIcon from "@/components/CartIcon";
 
 export default {
   components: {
@@ -125,7 +155,8 @@ export default {
     FavoriteFill,
     LibraryAudio,
     ReadingBook,
-    ViewBook
+    ViewBook,
+    CartIcon
   },
   data() {
     return {
@@ -146,6 +177,7 @@ export default {
   },
   methods: {
     ...mapActions('favorite', ['add']),
+    ...mapActions('cart', ['addCart', 'getCart']),
     shopNow() {
       this.preview = false
       let payload = {}
@@ -156,6 +188,18 @@ export default {
         let myCart = document.getElementById("myCart")
         myCart.click()
       })
+    },
+    addToCart(book) {
+      if (localStorage.getItem('token') === null) {
+        this.showMsg = true
+        return;
+      }
+      let payload = {}
+      payload.id = book._id
+      this.addCart(payload).then(() => {
+        this.getCart()
+      })
+      this.$store.commit("library/addToCart", book._id)
     },
     listenAudio() {
       this.showAudio = false
@@ -172,9 +216,12 @@ export default {
       this.preview = false
     },
     readingBook() {
-      this.reading = true
-      this.showAudio = false
-      this.close()
+      if (this.details.is_buy || !this.details.price.highlight) {
+        this.reading = true
+        this.showAudio = false
+        this.close()
+      }
+
     },
     closeReading() {
       this.reading = false
