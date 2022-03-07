@@ -16,10 +16,15 @@
         <div class="font-bold text-2xl">{{ detail.teacher.name }} ({{ detail.title }})</div>
         <div class="flex justify-between items-center my-5">
           <div class="text-lg">
-            {{ $t('1006') }}:
-            <span v-if="detail.price.highlight" class="mr-3">$ <del>
+            <template v-if="detail.price.highlight">
+              {{ $t('1006') }}:
+              <span class="mr-3">$ <del>
                         {{ khmerNumber(detail.price.highlight) }}</del></span>
-            <span class="text-red-600 font-semibold">$ {{ khmerNumber(detail.price.year) }}</span>
+              <span class="text-red-600 font-semibold">$ {{ khmerNumber(detail.price.year) }}</span>
+            </template>
+            <template v-else>
+              <span>{{ $t('1007') }}</span>
+            </template>
           </div>
 
           <div class="flex items-center">

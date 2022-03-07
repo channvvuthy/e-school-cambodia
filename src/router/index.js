@@ -288,6 +288,11 @@ const routes = [
         name: 'overview',
         component: () => import('../views/Video/Overview'),
     },
+    {
+        path: '/book-overview',
+        name: 'book-overview',
+        component: () => import('../views/Library/components/book/OverView'),
+    },
 
 
 ];

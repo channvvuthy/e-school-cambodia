@@ -153,6 +153,7 @@ async function createWindow() {
         webPreferences: {
             devTools: true,
             webSecurity: false,
+            plugins: true,
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
         },
         icon: path.join(__static, 'icon.png')
@@ -213,6 +214,31 @@ app.on('activate', () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
 });
+
+
+app.getPath('pepperFlashSystemPlugin')
+
+let pluginName
+switch (process.platform) {
+    case 'win32':
+        pluginName = 'pepflashplayer.dll'
+        break
+    case 'darwin':
+        pluginName = 'PepperFlashPlayer.plugin'
+        break
+    case 'linux':
+        pluginName = 'libpepflashplayer.so'
+        break
+}
+app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName))
+
+// Optional: Specify flash version, for example, v17.0.0.169
+app.commandLine.appendSwitch('ppapi-flash-version', '17.0.0.169')
+
+
+
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
