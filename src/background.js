@@ -117,6 +117,12 @@ ipcMain.on("nextDownload", (event, arg) => {
     event.reply('nextDownload', arg)
 })
 
+ipcMain.on("logout", (event, arg) => {
+   app.quit()
+})
+
+
+
 ipcMain.on("removeDownload", (event, arg) => {
     let dir = path.join(app.getAppPath(), "..", "..", "electronjs", arg)
     fs.unlink(dir, (err) => {
@@ -214,29 +220,6 @@ app.on('activate', () => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
 });
-
-
-app.getPath('pepperFlashSystemPlugin')
-
-let pluginName
-switch (process.platform) {
-    case 'win32':
-        pluginName = 'pepflashplayer.dll'
-        break
-    case 'darwin':
-        pluginName = 'PepperFlashPlayer.plugin'
-        break
-    case 'linux':
-        pluginName = 'libpepflashplayer.so'
-        break
-}
-app.commandLine.appendSwitch('ppapi-flash-path', path.join(__dirname, pluginName))
-
-// Optional: Specify flash version, for example, v17.0.0.169
-app.commandLine.appendSwitch('ppapi-flash-version', '17.0.0.169')
-
-
-
 
 
 // This method will be called when Electron has finished

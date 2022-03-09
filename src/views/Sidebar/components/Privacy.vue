@@ -107,6 +107,7 @@ import InsuranceIcon from "./../../../components/InsuranceIcon"
 import InvoiceIcon from "./../../../components/BillInvoiceIcon.vue"
 import LogoutIcon from "./../../../components/LogoutIcon"
 import OtherIcon from "./../../../components/OtherIcon.vue"
+const {ipcRenderer} = require('electron')
 
 export default {
   components: {
@@ -128,6 +129,7 @@ export default {
         this.$forceUpdate()
         this.$store.dispatch("auth/clearLogout")
         this.$router.push('/').catch(err => err)
+        ipcRenderer.send("logout", true)
       }).catch(() => {
         this.$store.dispatch("auth/clearLogout")
         this.$router.push('/').catch(err => err)

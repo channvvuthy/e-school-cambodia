@@ -2,7 +2,7 @@
   <div :style="{height: `${screenHeight}px`}">
     <div v-if="!isLive"
          :style="{height: `${videoOptions.height}px`}"
-         :class="darkMode ? `` : `bg-white`"
+         :class="darkMode ? `bg-black` : `bg-white`"
          class="flex items-center justify-center h-full">
       <div class="relative cursor-pointer" @click="()=>{this.isLive = true}">
         <TVIcon :size="250" :fill="darkMode ? `#909090`: `#055174`">

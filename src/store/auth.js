@@ -289,7 +289,6 @@ export default {
         },
         clearLogout() {
             localStorage.clear()
-            window.location.href = "/"
         },
 
         changeProfilePhotoPhoto({commit}, formData) {
