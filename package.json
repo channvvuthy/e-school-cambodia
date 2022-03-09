@@ -1,6 +1,6 @@
 {
   "name": "e-school",
-  "version": "4.0.3",
+  "version": "5.1",
   "private": true,
   "description": " E-SCHOOL CAMBODIA. ជាគេហទំព័រសម្រាប់ រៀនគួរត្រៀមប្រលងបាក់ឌុប តាម Online",
   "author": {
@@ -19,11 +19,6 @@
     "release": "electron-builder build --publish always"
   },
   "main": "background.js",
-  "mac": {
-    "target": [
-      "mas"
-    ]
-  },
   "mas": {
     "hardenedRuntime": false,
     "provisioningProfile": "build/embedded.provisionprofile",

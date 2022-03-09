@@ -12,19 +12,28 @@ module.exports = {
                 "protocols": {
                     "name": "e-school-protocol",
                     "schemes": [
-                      "e-school"
+                        "e-school"
                     ]
                 },
-                "copyright":"Copyright ©2021 E-School Cambodia",
-                "publish":{
-                    "provider":"github",
-                    "owner":"channvuthy271",
-                    "host":"github.com",
-                    "protocol":"https",
-                    "releaseType":"release",
+                "copyright": "Copyright ©2021 E-School Cambodia",
+                "publish": {
+                    "provider": "github",
+                    "owner": "channvuthy271",
+                    "host": "github.com",
+                    "protocol": "https",
+                    "releaseType": "release",
                 },
-                "mac":{
-                    "target":["pkg"]
+                "mac": {
+                    "target": ["pkg"]
+                },
+                "mas": {
+                    "hardenedRuntime": false,
+                    "provisioningProfile": "build/embedded.provisionprofile",
+                    "entitlements": "build/entitlements.mas.plist",
+                    "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+                    "gatekeeperAssess": false,
+                    "asarUnpack": [],
+                    "type": "distribution"
                 },
                 "win": {
                     "target": [
@@ -36,7 +45,7 @@ module.exports = {
                             ]
                         }
                     ],
-                    "icon":"build/icons/icon.ico"
+                    "icon": "build/icons/icon.ico"
                 },
             }
         }
