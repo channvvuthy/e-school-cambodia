@@ -24,16 +24,9 @@ module.exports = {
                     "releaseType": "release",
                 },
                 "mac": {
-                    "target": ["pkg"]
-                },
-                "mas": {
-                    "hardenedRuntime": false,
-                    "provisioningProfile": "build/embedded.provisionprofile",
-                    "entitlements": "build/entitlements.mas.plist",
-                    "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-                    "gatekeeperAssess": false,
-                    "asarUnpack": [],
-                    "type": "distribution"
+                    "category": "public.app-category.education",
+                    "target": ["pkg", "dmg"],
+                    "icon": "build/icons/icon.icns",
                 },
                 "win": {
                     "target": [

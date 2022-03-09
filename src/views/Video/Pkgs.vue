@@ -18,7 +18,7 @@
             <div class="absolute top-3 left-3 z-50" v-if="video.is_buy">
               <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
                    :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
-                <span>&#10003;</span>
+                <span>✓</span>
               </div>
             </div>
             <div class="relative">

@@ -1,10 +1,11 @@
 <template>
-  <div class="p-5 border-b-2 border-dashed" :class="darkMode ? `border-left` : ``">
+  <div class="border-b-2 border-dashed pb-5" :class="darkMode ? `border-left` : ``">
     <vue-horizontal :button="false">
       <section v-for="(pkg, index) in packages" :key="index" class="mr-5">
-        <div class="flex items-end h-56 w-96 bg-cover relative" :style="{backgroundImage:`url(${pkg.thumbnail})`}">
+        <div class="flex items-end h-56 w-96 bg-cover relative"
+             :style="{backgroundImage:`url(${pkg.thumbnail})`}">
 
-          <div class="absolute top-3 left-3" v-if="pkg.is_buy">
+          <div class="absolute top-3 left-3">
             <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-lg"
                  :class="darkMode?`bg-primary`:`bg-primary`">
               <span>✓</span>
@@ -15,14 +16,14 @@
           <div class="px-5 py-3 text-white relative z-50 w-full">
             <div class="text-lg">{{ khmerNumber(pkg.title) }}</div>
             <div class="flex mt-1 items-center justify-between w-full text-sm">
-              <div class="font-semibold">{{ $i18n.locale == 'en' ? pkg.total_item : khmerNumber(pkg.total_item) }}
+              <div class="font-semibold">{{ $i18n.locale === 'en' ? pkg.total_item : khmerNumber(pkg.total_item) }}
                 {{ $t('1102') }}{{ plural(pkg.total_item) }}
               </div>
               <div class="h-3 w-0 border-l border-white mx-4"></div>
               <div class="font-semibold">
-                {{ $t('1006') }}: <span class="text-red-500 text-lg">{{
-                  $i18n.locale == 'en' ? pkg.price.year : khmerNumber(pkg.price.year)
-                }}$</span>
+                <span> {{ $t('date_expired') }}:</span>
+                <span class="pl-3"></span>
+                <span>{{formatDate(pkg.deadline)}}</span>
               </div>
               <div class="flex-1 flex justify-end">
                   <span class="cursor-pointer" :id="pkg._id" @click="addToCart(pkg)">
@@ -39,7 +40,7 @@
 <script>
 import moment from "moment"
 import VueHorizontal from 'vue-horizontal';
-import CartIcon from "./../../../components/CartIcon.vue"
+import CartIcon from "@/components/CartIcon";
 import {mapActions, mapState} from "vuex"
 import helper from "@/helper/helper";
 
@@ -62,7 +63,7 @@ export default {
   methods: {
     ...mapActions('cart', ['addCart', 'getCart']),
     plural(number) {
-      if (this.$i18n.locale == 'en') {
+      if (this.$i18n.locale === 'en') {
         if (number > 1) {
           return 's'
         }
@@ -70,7 +71,7 @@ export default {
       return ''
     },
     khmerNumber(str) {
-      if (this.$i18n.locale == 'kh') {
+      if (this.$i18n.locale === 'kh') {
         return helper.khmerNumber(str)
       }
       return str

@@ -29,22 +29,22 @@
                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                 <div class="font-extralight">
                   <template v-if="pk.is_buy === 0">
-                                        <span v-if="pk.price.year">
-                                            {{ $t('1006') }}: <span
-                                            class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">
-                                            {{ pk.price.year }}$</span>
-                                        </span>
+                    <span v-if="pk.price.year">
+                        {{ $t('1006') }}: <span
+                        class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">
+                        {{ pk.price.year }}$</span>
+                    </span>
                     <span v-else class="text-base font-bold text-heart ml-2 text-lg font-mono shadow">
-                                            {{ $t('1007') }}
-                                        </span>
+                        {{ $t('1007') }}
+                    </span>
                   </template>
                   <div class="text-xs" v-else>{{ $t('date_expired') }} : <span>{{ formatDate(pk.deadline) }}</span>
                   </div>
                 </div>
                 <div class="flex-1 flex justify-end">
-                                    <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id">
-                                        <CartIcon fill="#FFFFFF"></CartIcon>
-                                    </span>
+                  <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id">
+                      <CartIcon fill="#FFFFFF"></CartIcon>
+                  </span>
                 </div>
               </div>
             </div>
