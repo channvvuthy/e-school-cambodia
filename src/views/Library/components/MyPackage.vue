@@ -18,6 +18,12 @@
           <div class="flex items-end rounded-xl h-44 w-80 bg-cover relative"
                :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"
                :style="{backgroundImage:`url(${pk.thumbnail})`}">
+            <div class="absolute top-3 left-3 z-50">
+              <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base"
+                   :class="darkMode?`bg-primary`:`bg-primary`">
+                <span>✓</span>
+              </div>
+            </div>
             <div class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer"
                  @click="showConfirm(pk)"></div>
             <div class="px-5 py-3 text-white relative z-50 w-full">
@@ -29,9 +35,9 @@
                   <div class="text-sm">{{ $t('date_expired') }} : <span>{{ formatDate(pk.deadline) }}</span></div>
                 </div>
                 <div class="flex-1 flex justify-end">
-                                    <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id">
-                                        <CartIcon fill="#FFFFFF" v-if="!pk.is_in_cart"></CartIcon>
-                                    </span>
+                  <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id">
+                      <CartIcon fill="#FFFFFF" v-if="!pk.is_in_cart"></CartIcon>
+                  </span>
                 </div>
               </div>
             </div>
@@ -99,10 +105,10 @@ export default {
       return moment(date).format('ll');
     },
     showConfirm(pk) {
-      //    if(pk.is_buy == 0){
-      //     this.showMsg = true
-      //     this.pk = pk
-      //    }
+      if (pk.is_buy == 0) {
+        this.showMsg = true
+        this.pk = pk
+      }
       this.getDetail(pk)
     },
     getDetail(pk) {

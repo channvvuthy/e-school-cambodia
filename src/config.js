@@ -7,6 +7,7 @@ const urlSocket = process.env.VUE_APP_URL_SOCKET;
 const auth = process.env.VUE_APP_BASIC_AUTH_TOKEN;
 const appVersion = process.env.VUE_APP_VERSION;
 const checkingVersionUrl = process.env.VUE_APP_CHECKING_URL;
+const liveStreamUrl = process.env.VUE_APP_LIVE_STREAM
 
 export default {
     apiUrl,
@@ -17,5 +18,6 @@ export default {
     auth,
     urlSocket,
     webViewUrl,
-    checkingVersionUrl
+    checkingVersionUrl,
+    liveStreamUrl
 }

@@ -4,7 +4,7 @@
          :style="{height: `${videoOptions.height}px`}"
          :class="darkMode ? `bg-black` : `bg-white`"
          class="flex items-center justify-center h-full">
-      <div class="relative cursor-pointer" @click="()=>{this.isLive = true}">
+      <div class="relative cursor-pointer" @click="checkLive">
         <TVIcon :size="250" :fill="darkMode ? `#909090`: `#055174`">
         </TVIcon>
         <div class="absolute w-full flex items-center justify-center left-0 top-0 h-full">
@@ -13,8 +13,12 @@
       </div>
     </div>
     <div v-else>
-      <video-player :options="videoOptions"></video-player>
+      <video-player
+          :options="videoOptions" @player-state-changed="playerStateChanged"></video-player>
     </div>
+    <template v-if="isMessage">
+      <Message :message="$t('5102')" @closeMessage="closeMessage"></Message>
+    </template>
   </div>
 </template>
 <script>
@@ -22,26 +26,30 @@ import Vue from 'vue'
 import VideoPlayer from 'vue-vjs-hls'
 import {mapState} from "vuex";
 import TVIcon from "@/components/TVFillIcon";
+import config from "@/config";
+import Message from "@/components/Message";
+import axios  from "axios";
 
 VideoPlayer.config({
-  hls: true       // default true
+  hls: true
 })
 
-// use
 Vue.use(VideoPlayer)
 export default {
   components: {
-    TVIcon
+    TVIcon,
+    Message
   },
   data() {
     return {
+      isMessage: false,
       isLive: false,
       screenHeight: 0,
       videoOptions: {
         height: 500,
         source: {
           type: 'application/x-mpegURL',
-          src: 'http://stream.et-l.ink/hls/Ap6UwsAjKFgZA8ueacC4mAm2ScSrZk.m3u8',
+          src: config.liveStreamUrl,
           withCredentials: false
         },
         live: true
@@ -50,6 +58,22 @@ export default {
   },
   computed: {
     ...mapState('setting', ['darkMode'])
+  },
+  methods: {
+    closeMessage() {
+      this.isMessage = false
+    },
+    playerStateChanged(state) {
+
+    },
+    checkLive() {
+      axios.get(config.liveStreamUrl).then(()=>{
+        this.isLive = true
+      }).catch(()=>{
+        this.isMessage = true
+        this.isLive = false
+      })
+    }
   },
   created() {
     this.screenHeight = screen.height

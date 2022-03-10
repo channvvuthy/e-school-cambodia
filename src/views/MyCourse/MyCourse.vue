@@ -11,7 +11,7 @@
           <Empty></Empty>
         </div>
       </div>
-      <div class="mb-5">
+      <div class="mb-5" v-if="myCourses.package && myCourses.package.length">
         <Pkg :packages="myCourses.package"></Pkg>
       </div>
       <div class="grid gap-4" :class="isHide?`md:grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-4`">

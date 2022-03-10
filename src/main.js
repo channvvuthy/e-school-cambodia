@@ -55,8 +55,6 @@ router.beforeEach((to, from, next) => {
     i18n.locale = language
     next()
 });
-
-
 new Vue({
     router,
     store,

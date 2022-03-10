@@ -110,7 +110,9 @@
               </div>
               <div class="absolute w-full top-0 h-full flex flex-col justify-end items-center">
                 <div class="text-xl">
-                  {{ $t('1117') }}
+                  <span v-if="type === 'pdf'">{{ $t('read_book') }}</span>
+                  <span v-if="type === 'sound'">{{ $t('2208') }}</span>
+                  <span v-if="type === 'video'">{{ $t('1117') }}</span>
                 </div>
                 <div class="font-bold text-3xl mt-2">
                   {{ report('watch') }}/{{ report('total') }}

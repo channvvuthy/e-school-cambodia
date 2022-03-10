@@ -53,7 +53,13 @@
         </div>
         <div class="grid gap-6"
              :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-3 2xl:grid-cols-6`">
-          <div v-for="(book, index) in libraries.list" :key="index">
+          <div v-for="(book, index) in libraries.list" :key="index" class="relative">
+            <div class="absolute top-3 left-3 z-50">
+              <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base"
+                   :class="darkMode?`bg-primary`:`bg-primary`">
+                <span>✓</span>
+              </div>
+            </div>
             <template v-if="type != 'sound'">
               <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                 <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
@@ -81,14 +87,6 @@
             <template v-else>
               <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"
                    class="rounded-xl overflow-hidden shadow-md pb-3 relative">
-                <div class="absolute top-2 left-2" v-if="book.is_new">
-                  <NewIcon></NewIcon>
-                </div>
-                <div class="absolute top-2 left-2" v-if="book.is_buy">
-                  <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base"
-                       :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;
-                  </div>
-                </div>
                 <div class="cursor-pointer" @click="getDetail(book)">
                   <img :src="book.thumbnail" class="view  m-auto" :style="minHeight?{height:`${minHeight}px`}:{}">
                 </div>
@@ -106,9 +104,6 @@
                         </div>
                       </div>
                     </template>
-                    <!-- <template v-else>
-                        <div>{{$t('1007')}}</div>
-                    </template> -->
                   </div>
                 </div>
               </div>
@@ -199,6 +194,7 @@ export default {
 
     changeType(type) {
       this.showAudio = false
+      this.$store.commit("library/setType", type)
       this.type = type
       let filter = {
         type: this.type
@@ -234,8 +230,17 @@ export default {
       }
     },
     getDetail(library) {
-      this.getLibraryDetail({id: library._id}).then(() => {
-        this.preview = true
+
+      let payload = {
+        id: library._id
+      }
+      if (this.packageId !== null) {
+        payload.package_id = this.packageId
+      }
+      this.getLibraryDetail(payload).then(() => {
+        this.$router.push({
+          name: 'book-overview'
+        })
       })
     },
     close() {
@@ -321,6 +326,8 @@ export default {
   created() {
     this.getMyLibrary({
       type: 'pdf'
+    }).then(() => {
+      this.$store.commit("library/setType", 'pdf')
     })
   },
   watch: {
