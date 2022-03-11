@@ -8,7 +8,6 @@
     <template v-else>
       <Signin></Signin>
     </template>
-    <FilterList @filterSearch="filterSearch"></FilterList>
     <VideoList @loadMore="loadMore" :showScrollTop="showScrollTop" @goToTop="goToTop"></VideoList>
   </div>
 </template>

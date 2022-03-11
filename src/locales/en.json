@@ -370,9 +370,12 @@
   "last_seen": "Last seen",
   "video_interrupting": "Video interrupting",
   "quick_reply": "Quick Reply",
-  "say_something": "Your comment here...",
+  "say_something": "Say something ...",
   "buy_now": "Buy Now",
   "tv": "TV",
   "more_reply": "View more reply",
-  "5102": "This chanel has been offline will live back next hour"
+  "5102": "This chanel has been offline will live back next hour",
+  "create_post": "Create post",
+  "post": "Post",
+  "category": "Category"
 }
