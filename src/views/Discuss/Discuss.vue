@@ -308,7 +308,7 @@
             },
             mention(str)
             {
-                return str.replace(/[@]\[/g, "<span class='text-blue-500'>").replace(/\]/g, "</span>")
+                return str.replace(/[@]\[/g, "<span class='text-blue-500'>").replace(/]/g, "</span>")
             },
             onScroll({target: {scrollTop}})
             {
@@ -331,9 +331,6 @@
                 setTimeout(() => {
                     this.$refs.feed.scrollTop = 10
                 }, 50)
-            },
-            mention(str) {
-                return str.replace(/[@]\[/g, "<span class='text-fb'>").replace(/\]/g, "</span>")
             },
             scrollToBottom()
             {
@@ -431,11 +428,7 @@
                             group_id: this.message.group_id,
                             name: this.getSecondPart(value)
                         }).then((response) => {
-                            if (response && response.length) {
-                                this.showMention = true
-                            } else {
-                                this.showMention = false
-                            }
+                            this.showMention = !!(response && response.length);
                         })
                     } else {
                         this.showMention = false
@@ -446,7 +439,7 @@
 </script>
 <style>
     ul li:last-child {
-        border: 0px !important;
+        border: 0 !important;
     }
 
     .vue-audio-recorder {

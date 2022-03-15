@@ -30,6 +30,8 @@ import etalk from "./etalk"
 import Vue from 'vue'
 import Vuex from 'vuex'
 import sticker from "./sticker"
+import social from "./social"
+import upload from "./upload";
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -63,6 +65,8 @@ export default new Vuex.Store({
         network,
         attendant,
         summary,
-        etalk
+        etalk,
+        social,
+        upload
     }
 });
