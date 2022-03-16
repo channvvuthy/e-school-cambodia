@@ -44,12 +44,12 @@
                             <span class="pr-1">{{$t('1004')}}</span>
                             <span><ChevronIcon fill="#ffffff" :size="18"></ChevronIcon></span>
                         </template>
-                        
+
                     </div>
                 </div>
                 <!-- List viewer -->
                 <div :class="darkMode?'bg-secondary text-textSecondary':'bg-white'" class="absolute z-50 left-0 w-full h-full overflow-y-scroll  rounded-xl shadow-md" @scroll="onScroll" v-if="showViewer">
-                    <div class="md:w-96 2xl:w-100 top-0 sticky relative flex justify-between px-3 py-9" :class="darkMode?`bg-secondary`:`text-black bg-white`"> 
+                    <div class="md:w-96 2xl:w-100 top-0 sticky relative flex justify-between px-3 py-9" :class="darkMode?`bg-secondary`:`text-black bg-white`">
                         <div class="flex ml-5 text-xs font-semibold items-center">
                             <span><Eye :fill="darkMode?'#ffffff':'#000000'"></Eye></span>
                             <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{storyDetail.view}}</span>
@@ -65,7 +65,7 @@
                                 <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center" :style="{backgroundImage:`url(${viewer.photo})`}"></div>
                                 <div :class="darkMode?'text-textSecondary':''">{{viewer.name}}</div>
                             </div>
-                                
+
                         </div>
                     </div>
                 </div>
@@ -92,12 +92,12 @@
                 </div>
                 <div :class="window.width <= 1315?`container-4`:`container-5`">
                     <div v-for="(gallery, index) in galleries" :key="index" class="cursor-pointer" @click="viewImg(gallery,index)">
-                        <img :src="gallery.photo.name">
+                        <img :src="gallery.photo.url">
                     </div>
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -149,11 +149,11 @@ export default {
                 this.showViewer = true
                 this.id = gallery._id;
              }
-            
+
         },
         getMoreGallery({target: {scrollTop, clientHeight, scrollHeight}}) {
              if (scrollTop + clientHeight >= scrollHeight - 1) {
-                this.page ++ 
+                this.page ++
                 let payload = {
                     p:this.page
                 }
@@ -163,7 +163,7 @@ export default {
         },
         onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
             if (scrollTop + clientHeight >= scrollHeight - 1 ) {
-                this.page ++ 
+                this.page ++
                 let payload = {
                     id:this.id,
                     p:this.page
@@ -173,7 +173,7 @@ export default {
             }
         },
         previousStory(){
-            this.order -- 
+            this.order --
             if(this.order <= 0){
                 this.previous = false
             }
@@ -201,7 +201,7 @@ export default {
         viewImg(gallery,index){
             this.order = index
             this.id = gallery._id
-            this.imgUrl = gallery.photo.name
+            this.imgUrl = gallery.photo.url
             this.previewStory = true
             this.addedDate = gallery.date
             this.viewStory({
@@ -217,16 +217,16 @@ export default {
         window.removeEventListener('resize', this.handleResize);
     },
     created(){
-       
+
         window.addEventListener('resize', this.handleResize);
         this.handleResize();
-        
+
         this.getGallery({
             id: this.$route.params.id
         })
     }
 
-    
+
 }
 </script>
 <style lang="scss">
@@ -246,5 +246,5 @@ export default {
             border-radius: 1rem;
         }
     }
-    
+
 </style>

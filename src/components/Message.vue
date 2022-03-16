@@ -9,7 +9,7 @@
           class="flex items-center justify-center absolute -top-4 -right-2 shadow z-50 rounded-full cursor-pointer">
         <CloseIcon :fill="darkMode ? `#909090`: `#000000`"></CloseIcon>
       </div>
-      <div class="text-center">
+      <div class="text-center text-lg">
         {{ message }}
       </div>
     </div>

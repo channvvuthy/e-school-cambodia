@@ -378,5 +378,6 @@
   "create_post": "Create post",
   "post": "Post",
   "category": "Category",
-  "take_photo": "Take Photo"
+  "take_photo": "Take Photo",
+  "limit_photo": "The image should be no more than 10."
 }

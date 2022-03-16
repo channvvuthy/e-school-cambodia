@@ -27,8 +27,8 @@
               <div class="h-full w-full bg-cover bg-center rounded-lg"
                    :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
               <div
-                  class="w-7 h-7 rounded-full flex justify-center items-center absolute -right-2 -bottom-1 cursor-pointer"
-                  :class="darkMode?`bg-fb`:`bg-primary`">
+                  class="w-7 h-7 rounded-full flex justify-center items-center absolute right-1 bottom-1 cursor-pointer"
+                  :class="darkMode?`bg-secondary`:`bg-primary`">
                 <AddIcon :size="16"/>
               </div>
             </div>
