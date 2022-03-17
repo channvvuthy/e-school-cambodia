@@ -14,6 +14,9 @@ export default {
         },
         getSocial(state, payload) {
             state.social = payload
+        },
+        newPost(state, payload){
+            state.social.push(payload)
         }
     },
     actions: {

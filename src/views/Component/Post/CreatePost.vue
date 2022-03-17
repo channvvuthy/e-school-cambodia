@@ -552,7 +552,7 @@ figure {
   > img {
     grid-row: 1 / -1;
     grid-column: 1;
-    margin-bottom: 4px;
+    margin: 0px auto 4px;
   }
 }
 
