@@ -35,7 +35,8 @@
             @closeCreate="closeCreate"></CreatePost>
       </template>
     </div>
-    <div class="flex flex-wrap p-5">
+    <div class="flex p-5">
+      <!-- New feed -->
       <div class="w-9/13">
         <div v-for="(post, index) in social" :key="index">
           <div class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
@@ -127,7 +128,7 @@
               <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
               <textarea
                   placeholder="Add comment"
-                        class="outline-none w-full pt-7" style="resize: none"></textarea>
+                  class="outline-none w-full pt-7" style="resize: none"></textarea>
               <div class="whitespace-nowrap">
                 20 Comments
               </div>
@@ -135,6 +136,14 @@
           </div>
         </div>
       </div>
+      <!-- End New feed -->
+      <!-- Ads -->
+      <div class="w-3/13">
+        <div>
+          {{ads}}
+        </div>
+      </div>
+      <!-- End ads -->
     </div>
   </div>
 </template>
@@ -156,7 +165,7 @@ export default {
   computed: {
     ...mapState('auth', ['stProfile']),
     ...mapState('setting', ['darkMode']),
-    ...mapState('social', ['social'])
+    ...mapState('social', ['social', 'ads'])
   },
   components: {
     Eye,

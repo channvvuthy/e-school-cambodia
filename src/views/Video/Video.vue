@@ -23,7 +23,7 @@
                 </div>
               </div>
               <div class="relative">
-                <img :src="video.thumbnail" onerror="this.onerror=null; this.src='/poster.png'" class="m-auto"
+                <img :src="video.thumbnail" class="m-auto"
                      style="min-height:12rem;"/>
                 <div class="absolute w-full h-full bg-gradient-to-t top-0 from-black cursor-pointer"
                      @click="gotToPlayList(video)"></div>
@@ -98,7 +98,7 @@
       <div v-if="loadingMore">
         <Loading></Loading>
       </div>
-      <template v-if="videos.list == undefined || videos.list.length <= 0">
+      <template v-if="videos.list === undefined || videos.list.length <= 0">
         <div class="h-65 flex items-center justify-center">
           <Empty></Empty>
         </div>
