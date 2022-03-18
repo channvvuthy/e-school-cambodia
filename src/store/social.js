@@ -16,7 +16,6 @@ export default {
         getSocial(state, payload) {
             state.social = payload.filter(item => item.type !== 51 && item.type !== 52)
             state.ads = payload.filter(item => item.type === 51 || item.type === 52)
-            console.log(state.ads)
         },
         newPost(state, payload) {
             state.social.push(payload)

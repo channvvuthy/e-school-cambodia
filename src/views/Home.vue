@@ -71,32 +71,11 @@ export default {
       }
 
       if (scrollTop + clientHeight >= scrollHeight) {
-
         if (this.enableScroll) {
-          this.$store.commit('setting/setPagination', this.page + 1)
-          this.getListPagination({
-            filter_id: this.filter_id,
-            s: this.s,
-            p: this.page
-          }).then(response => {
-            try {
-              if (response.data.data.list.length === 0) {
-                this.enableScroll = false
-                this.$store.commit('setting/setPagination', 1)
-              }
-              // eslint-disable-next-line no-empty
-            } catch (err) {
 
-            }
-          })
         }
       }
     }
-  },
-  created() {
-    this.getList({
-      filter_id: this.filter_id
-    })
   }
 }
 </script>

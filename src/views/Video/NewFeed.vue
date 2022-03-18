@@ -37,7 +37,7 @@
     </div>
     <div class="flex p-5">
       <!-- New feed -->
-      <div class="w-9/13">
+      <div class="w-65">
         <div v-for="(post, index) in social" :key="index">
           <div class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
             <div class="p-5">
@@ -78,7 +78,7 @@
               <div></div>
               <!-- Tool -->
               <div class="flex items-center px-5 mt-4 justify-between"
-                   :class="darkMode ? `` : `text-primary`">
+                   :class="darkMode ? `text-textSecondary` : `text-primary`">
                 <div class="flex items-center space-x-16">
                   <div class="flex items-center space-x-2">
                     <div>
@@ -99,36 +99,22 @@
                 </div>
                 <div class="flex items-center justify-end">
                   <div
-                      class="rounded-full h-11 w-11 bg-red-50 relative z-50 bg-cover bg-center border-2 border-white"
-                      style="right: -4rem;"
-                      :style="{backgroundImage:`url('https://i.wifegeek.com/200426/d8bcb6a7.jpg')`}"
-                  ></div>
-                  <div class="rounded-full h-11 w-11 bg-red-100 relative z-40 bg-cover bg-center border-2 border-white"
-                       :style="{backgroundImage:`url('https://i.wifegeek.com/200426/d74d9040.jpg')`}"
-
-                       style="right: -3rem;"
-                  ></div>
-                  <div class="rounded-full h-11 w-11 bg-red-200 relative z-30 bg-cover bg-center border-2 border-white"
-                       :style="{backgroundImage:`url('https://i.wifegeek.com/200426/663181fe.jpg')`}"
-                       style="right: -2rem;">
-
-                  </div>
-                  <div class="rounded-full h-11 w-11 bg-red-400 relative z-20 bg-cover bg-center border-2 border-white"
-                       :style="{backgroundImage:`url('https://i.wifegeek.com/200426/d17ce9a0.jpg')`}"
-                       style="right: -1rem;"
-                  ></div>
-                  <div class="rounded-full h-11 w-11 bg-red-500 relative z-10 bg-cover bg-center border-2 border-white"
-                       :style="{backgroundImage:`url('https://i.wifegeek.com/200426/f9459c52.jpg')`}"
+                      v-for="(i, index) in 5"
+                      :class="`circle-${index} ${likerClass()}`"
+                      :key="index"
+                      class="rounded-full h-11 w-11 bg-red-500 relative bg-cover bg-center border-2"
+                      :style="{backgroundImage:`url('https://i.wifegeek.com/200426/f9459c52.jpg')`}"
                   ></div>
                 </div>
               </div>
             </div>
             <!--Comment -->
-            <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5">
+            <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5"
+                 :class="darkMode ? `border-button text-textSecondary` : ``">
               <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
               <textarea
                   placeholder="Add comment"
-                  class="outline-none w-full pt-7" style="resize: none"></textarea>
+                  class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
               <div class="whitespace-nowrap">
                 20 Comments
               </div>
@@ -138,9 +124,64 @@
       </div>
       <!-- End New feed -->
       <!-- Ads -->
-      <div class="w-3/13">
+      <div class="w-35 pl-5">
         <div>
-          {{ads}}
+          <div v-for="(ad, index) in ads" :key="index" class="mb-4">
+            <div class="border rounded p-3" :class="darkMode ? `border-button text-lightGray` : ``">
+              <div class="flex justify-between">
+                <div class="flex space-x-4">
+                  <Avatar :avatar-url="ad.user.photo" :size="14"></Avatar>
+                  <div>
+                    <div class="font-semibold text-lg">{{ ad.user.name }}</div>
+                    <div class="capitalize text-primary text-sm">
+                      {{ $t('sponsored') }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-lg mt-4 font-light"
+                   v-if="ad.caption"
+                   :class="darkMode ? `text-textSecondary` : ``">
+                {{ ad.caption }}
+              </div>
+
+              <!-- Photo -->
+              <div v-if="ad.photo && ad.photo.length" class="mt-4">
+                <PhotoGrid @itemClick="itemClickHandler" :photos="ad.photo"/>
+              </div>
+
+              <!--Video-->
+              <div v-if="ad.video" class="mt-4">
+                <video class="m-auto">
+                  <source src="file:///Users/mac/Downloads/6131c75d37762735197a71a41647503412596.mp4">
+                </video>
+              </div>
+
+              <!-- Tool -->
+              <div class="flex items-center px-3 mt-4 justify-between"
+                   :class="darkMode ? `text-textSecondary` : `text-primary`">
+                <div class="flex items-center space-x-16">
+                  <div class="flex items-center space-x-2">
+                    <div>
+                      <LikeIcon :size="20"></LikeIcon>
+                    </div>
+                    <div>
+                      1.2k
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <div>
+                      <Eye :size="28"></Eye>
+                    </div>
+                    <div>
+                      1.6k
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <!-- End ads -->
@@ -190,6 +231,13 @@ export default {
   },
   methods: {
     ...mapActions('social', ['getSocial', 'postSocial']),
+    likerClass() {
+      if (this.darkMode) {
+        return "border-secondary"
+      } else {
+        return "border-white"
+      }
+    },
     itemClickHandler() {
 
     },
@@ -240,3 +288,24 @@ export default {
 
 }
 </script>
+<style>
+.circle-0 {
+  right: -4rem;
+  z-index: 4;
+}
+
+.circle-1 {
+  right: -3rem;
+  z-index: 3;
+}
+
+.circle-2 {
+  right: -2rem;
+  z-index: 2;
+}
+
+.circle-3 {
+  right: -1rem;
+  z-index: 1;
+}
+</style>

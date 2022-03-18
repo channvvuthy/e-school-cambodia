@@ -18,14 +18,19 @@
           </div>
         </div>
         <button @click="post" :disabled="loading" class="outline-none bg-transparent flex items-center">
-          <div v-if="loading" class="relative top-1">
-            <LoadingWhite></LoadingWhite>
+
+          <div v-if="loading" class="relative">
+            {{ progress }}%
           </div>
           <div class="cursor-pointer" :class="darkMode? `` : `text-primary`" v-else>
             {{ $t('post') }}
           </div>
         </button>
+      </div>
 
+      <div class="bg-primary h-2"
+           v-if="loading"
+           :style="{width:`${progress}%`}">
       </div>
 
       <!-- Body -->
@@ -464,9 +469,9 @@ export default {
       }
 
       if (this.videoPreview) {
+        this.payload.type = 3
         this.videoUpload(payload).then(res => {
-          this.payload['thumbnail'] = res.data.thumbnail
-          this.payload['video'] = res.data.video
+          this.payload['video'] = {url: res.data.url}
           this.postSocial(this.payload).then(() => {
             this.loading = false
             this.resetCaption()
@@ -520,6 +525,7 @@ export default {
   },
   computed: {
     ...mapState('setting', ['darkMode']),
+    ...mapState('upload', ['progress']),
     ...mapState('auth', ['stProfile']),
     ...mapState('background', ['background', 'loadingBackground'])
   },
@@ -552,7 +558,7 @@ figure {
   > img {
     grid-row: 1 / -1;
     grid-column: 1;
-    margin: 0px auto 4px;
+    margin: 0 auto 4px;
   }
 }
 
