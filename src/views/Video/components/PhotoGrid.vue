@@ -37,21 +37,24 @@ export default {
       const item = Object.assign({}, data);
       alert(`itemId=${item.id}, column=${column}`);
     },
+    updateGrid() {
+      if (this.photos.length === 1 || this.photos.length === 2) {
+        this.collage.height = ["calc(50vh - 0em)", "calc(0vh - 0em)"]
+      } else {
+        this.collage.height = ["calc(50vh - 0em)", "calc(25vh - 0em)"]
+      }
+      if (this.photos.length === 3) {
+        this.collage.layout = [1, 2]
+      }
+      for (let i = 0; i < this.photos.length; i++) {
+        this.collage.photos.push({
+          source: this.photos[i].url
+        })
+      }
+    }
   },
   created() {
-    if (this.photos.length === 1 || this.photos.length === 2) {
-      this.collage.height = ["calc(50vh - 2em)", "calc(0vh - 1em)"]
-    } else {
-      this.collage.height = ["calc(50vh - 2em)", "calc(50vh - 1em)"]
-    }
-    if (this.photos.length === 3) {
-      this.collage.layout = [1, 2]
-    }
-    for (let i = 0; i < this.photos.length; i++) {
-      this.collage.photos.push({
-        source: this.photos[i].url
-      })
-    }
+    this.updateGrid()
   }
 }
 </script>

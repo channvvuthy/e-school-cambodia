@@ -28,7 +28,8 @@
         </button>
       </div>
 
-      <div class="bg-primary h-2"
+      <div class="h-2"
+           :class="darkMode ? `bg-green-600`: `bg-primary`"
            v-if="loading"
            :style="{width:`${progress}%`}">
       </div>
@@ -348,7 +349,7 @@ export default {
             .then(color => {
               this.backgroundColor = color.rgba
               this.color = color.isDark ? '#fff' : '#000';
-            }).catch(error => null);
+            }).catch(error => error);
         this.$refs.content.focus()
         if (this.payload.caption) {
           this.$refs.content.innerText = this.payload.caption
@@ -425,6 +426,7 @@ export default {
       this.$emit("closeCreate")
     },
     post() {
+      this.$store.commit('upload/progress', 0)
       if (!this.canPost) {
         return
       }
@@ -432,16 +434,15 @@ export default {
       if (this.singlePhotoPreview) {
         this.singleUpload(payload).then(res => {
           this.singlePhotoPreview = null
-          if (res.data && res.data.url) {
+          if (res.data && res.data.length) {
             let photo = {
-              url: res.data.url,
-              width: res.data.width,
-              height: res.data.height
+              url: res.data[0].url,
+              width: res.data[0].width,
+              height: res.data[0].height
             }
             payload.delete("photo")
             this.payload.photo = photo
-
-            this.postSocial(this.payload).then(() => {
+            this.postSocial(this.payload).finally(() => {
               this.loading = false
               this.resetCaption()
               this.closeCreate()
@@ -459,8 +460,7 @@ export default {
         this.multiUpload(payload).then(res => {
           this.payload.type = 2
           this.payload.photo = res.data
-          this.postSocial(this.payload).then(res => {
-            console.log(res)
+          this.postSocial(this.payload).then(() => {
             this.loading = false
             this.resetCaption()
             this.closeCreate()

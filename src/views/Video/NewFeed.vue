@@ -38,119 +38,144 @@
     <div class="flex p-5">
       <!-- New feed -->
       <div class="w-65">
-        <div v-for="(post, index) in social" :key="index">
-          <div class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
-            <div class="p-5">
-              <div class="flex justify-between">
-                <div class="flex space-x-4">
-                  <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
-                  <div>
-                    <div class="font-semibold text-lg">{{ post.user.name }}</div>
-                    <div
-                        class="text-sm"
-                        :class="darkMode ? `text-gray-400` : `text-gray-500`">
-                      {{ formatDate(post.date) }}
+        <template v-if="loadingNewFeed">
+          <div
+              v-for="key in 6" :key="key"
+              class="border mb-5 rounded-md p-5"
+              :class="darkMode ? `border-button text-lightGray` : ``">
+            <Loading :grid="true" :number-of-columns="1"></Loading>
+          </div>
+        </template>
+        <template v-else>
+          <div v-for="(post, index) in social" :key="index">
+            <div class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
+              <div class="p-5">
+                <div class="flex justify-between">
+                  <div class="flex space-x-4">
+                    <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
+                    <div>
+                      <div class="font-semibold text-lg">{{ post.user.name }}</div>
+                      <div
+                          class="text-sm"
+                          :class="darkMode ? `text-gray-400` : `text-gray-500`">
+                        {{ formatDate(post.date) }}
+                      </div>
                     </div>
                   </div>
+                  <div class="flex flex-col space-y-1 cursor-pointer">
+                    <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
+                    <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
+                    <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
+                  </div>
                 </div>
-                <div class="flex flex-col space-y-1 cursor-pointer">
-                  <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
-                  <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
-                  <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
-                </div>
-              </div>
-              <div class="text-lg mt-4 font-light"
-                   v-if="post.caption"
-                   :class="darkMode ? `text-textSecondary` : ``">
-                <div v-if="post.caption.length > 200">
+                <div class="text-lg mt-4 font-light"
+                     v-if="post.caption"
+                     :class="darkMode ? `text-textSecondary` : ``">
+                  <div v-if="post.caption.length > 200">
                   <span class="less"
                         @click="seeMore"
                   >{{ cutString(post.caption, 200) }} <span
                       class="capitalize cursor-pointer"
-                      :class="darkMode ? ``: `text-primary`">{{ $t('see_more') }}</span>
+                      :class="darkMode ? `text-gray-300`: `text-primary`">{{ $t('see_more') }}</span>
                   </span>
-                  <span class="more hidden">
+                    <span class="more hidden">
                     {{ post.caption }}
                   </span>
-                </div>
-                <div v-else>
-                  {{ post.caption }}
-                </div>
+                  </div>
+                  <div v-else>
+                    {{ post.caption }}
+                  </div>
 
-              </div>
-              <!-- Photo -->
-              <div v-if="post.photo && post.photo.length" class="mt-4">
-                <PhotoGrid @itemClick="itemClickHandler" :photos="post.photo"/>
-              </div>
-              <!--Video-->
-              <div v-if="post.video" class="mt-4 relative">
-                <div class="absolute w-full h-full flex items-center justify-center z-10">
-                  <div
-                      class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
-                      style="background-color: rgba(5,81,116,0.5)">
-                    <div class="pl-1">
-                      <Next fill="#FFF"></Next>
+                </div>
+                <!-- Photo -->
+                <div v-if="post.photo && post.photo.length" class="mt-4">
+                  <PhotoGrid @itemClick="itemClickHandler" :photos="post.photo"/>
+                </div>
+                <!--Video-->
+                <div v-if="post.video" class="mt-4 relative">
+                  <div class="absolute w-full h-full flex items-center justify-center z-10">
+                    <div
+                        class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
+                        style="background-color: rgba(5,81,116,0.5)">
+                      <div class="pl-1">
+                        <Next fill="#FFF"></Next>
+                      </div>
                     </div>
                   </div>
+                  <video class="m-auto">
+                    <source :src="post.video.url">
+                  </video>
                 </div>
-                <video class="m-auto">
-                  <source :src="post.video.url">
-                </video>
-              </div>
-              <!-- Background -->
-              <div></div>
-              <!-- Tool -->
-              <div class="flex items-center px-5 mt-4 justify-between"
-                   :class="darkMode ? `text-textSecondary` : `text-primary`">
-                <div class="flex items-center space-x-16">
-                  <div class="flex items-center space-x-2">
-                    <div>
-                      <LikeIcon :size="22"></LikeIcon>
+                <!-- Background -->
+                <div></div>
+                <!-- Tool -->
+                <div class="flex items-center px-5 mt-4 justify-between"
+                     :class="darkMode ? `text-textSecondary` : `text-primary`">
+                  <div class="flex items-center space-x-16">
+                    <div class="flex items-center space-x-2">
+                      <div>
+                        <LikeIcon :size="22"></LikeIcon>
+                      </div>
+                      <div>
+                        1.2k
+                      </div>
                     </div>
-                    <div>
-                      1.2k
+                    <div class="flex items-center space-x-2">
+                      <div>
+                        <Eye :size="30"></Eye>
+                      </div>
+                      <div>
+                        1.6k
+                      </div>
                     </div>
                   </div>
-                  <div class="flex items-center space-x-2">
-                    <div>
-                      <Eye :size="30"></Eye>
-                    </div>
-                    <div>
-                      1.6k
-                    </div>
+                  <div class="flex items-center justify-end">
+                    <!--                  <div-->
+                    <!--                      v-for="(i, index) in 5"-->
+                    <!--                      :class="`circle-${index} ${likerClass()}`"-->
+                    <!--                      :key="index"-->
+                    <!--                      class="rounded-full h-11 w-11 bg-red-500 relative bg-cover bg-center border-2"-->
+                    <!--                      :style="{backgroundImage:`url('https://i.wifegeek.com/200426/f9459c52.jpg')`}"-->
+                    <!--                  ></div>-->
                   </div>
                 </div>
-                <div class="flex items-center justify-end">
-                  <div
-                      v-for="(i, index) in 5"
-                      :class="`circle-${index} ${likerClass()}`"
-                      :key="index"
-                      class="rounded-full h-11 w-11 bg-red-500 relative bg-cover bg-center border-2"
-                      :style="{backgroundImage:`url('https://i.wifegeek.com/200426/f9459c52.jpg')`}"
-                  ></div>
-                </div>
               </div>
-            </div>
-            <!--Comment -->
-            <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5"
-                 :class="darkMode ? `border-button text-textSecondary` : ``">
-              <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
-              <textarea
-                  placeholder="Add comment"
-                  class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
-              <div class="whitespace-nowrap">
-                20 Comments
+              <!--Comment -->
+              <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5"
+                   :class="darkMode ? `border-button text-textSecondary` : ``">
+                <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
+                <textarea
+                    placeholder="Add comment"
+                    class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
+                <div class="whitespace-nowrap">
+                  20 Comments
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </template>
+        <template v-if="loadingMore">
+          <div
+              v-for="i in 2" :key="i"
+              class="border mb-5 rounded-md p-5"
+              :class="darkMode ? `border-button text-lightGray` : ``">
+            <Loading :grid="true" :number-of-columns="1"></Loading>
+          </div>
+        </template>
       </div>
       <!-- End New feed -->
 
 
       <!-- Ads -->
       <div class="w-35 pl-5">
-        <div>
+        <div
+            v-for="index in 6" :key="index"
+            v-if="loadingNewFeed"
+            class="border rounded py-3 px-4 mb-4"
+            :class="darkMode ? `border-button text-lightGray` : ``">
+          <Loading :grid="true" :number-of-columns="1"></Loading>
+        </div>
+        <div v-else>
           <div v-for="(ad, index) in ads" :key="index" class="mb-4">
             <div class="border rounded" :class="darkMode ? `border-button text-lightGray` : ``">
               <div class="py-3 px-4">
@@ -224,8 +249,6 @@
                     placeholder="Add comment"
                     class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
               </div>
-
-
             </div>
           </div>
         </div>
@@ -248,15 +271,16 @@ import LikeIcon from "@/components/LikeIcon";
 import Eye from "@/components/Eye";
 import Next from "@/views/Component/Post/Next";
 import helper from "@/helper/helper";
-
+import Loading from "@/components/Loading";
 
 export default {
   computed: {
     ...mapState('auth', ['stProfile']),
     ...mapState('setting', ['darkMode']),
-    ...mapState('social', ['social', 'ads'])
+    ...mapState('social', ['social', 'ads', 'loadingMore'])
   },
   components: {
+    Loading,
     Next,
     Eye,
     LikeIcon,
@@ -269,6 +293,7 @@ export default {
   mixins: [mode],
   data() {
     return {
+      loadingNewFeed: false,
       loading: false,
       isPost: false,
       payload: {
@@ -325,21 +350,25 @@ export default {
     },
     closeCreate() {
       this.isPost = false
-      this.$router.push({
-        name: "refresh-post"
-      })
+      this.getPost()
     },
     createPost() {
       this.isPost = true
+    },
+    getPost() {
+      this.loadingNewFeed = true
+      this.getSocial(
+          this.payload
+      ).then(() => {
+        this.loadingNewFeed = false
+      })
     }
   },
   mounted() {
     this.mode()
   },
   created() {
-    this.getSocial(
-        this.payload
-    )
+    this.getPost()
   }
 
 }

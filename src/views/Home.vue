@@ -9,10 +9,9 @@
       <Signin></Signin>
     </template>
     <NewFeed
-        @loadMore="loadMore"
         :showScrollTop="showScrollTop"
         @goToTop="goToTop"></NewFeed>
-    <div class="h-40" ></div>
+    <div class="h-40"></div>
   </div>
 </template>
 
@@ -23,13 +22,13 @@ import NewFeed from "./Video/NewFeed.vue"
 import Story from "./Story/Story.vue"
 import {mapActions, mapState} from "vuex"
 import Signin from "./Component/Signin.vue"
-import helper from "./../helper/helper"
 
 export default {
   data() {
     return {
       enableScroll: true,
       showScrollTop: false,
+      page: 1,
     }
   },
   components: {
@@ -39,25 +38,11 @@ export default {
     Signin
   },
   computed: {
-    ...mapState('home', ['filter_id', 's']),
-    ...mapState('setting', ['page', 'darkMode']),
+    ...mapState('setting', ['darkMode']),
     ...mapState('auth', ['token'])
   },
   methods: {
-    ...mapActions('home', ['getList', 'getListPagination']),
-    loadMore() {
-      this.$store.commit('setting/setPagination', this.page + 1)
-      this.getListPagination({
-        filter_id: this.filter_id,
-        s: this.s,
-        p: this.page
-      }).then(response => {
-        if (response.data.data.list !== undefined && response.data.data.list.length <= 0) {
-          helper.success('no_more_result')
-        }
-      })
-
-    },
+    ...mapActions('social', ['getMoreSocial']),
     goToTop() {
       this.$refs.feed.scrollTop = 0;
     },
@@ -71,9 +56,18 @@ export default {
       }
 
       if (scrollTop + clientHeight >= scrollHeight) {
+        this.page++
         if (this.enableScroll) {
-
+          this.getMoreSocial({
+            p: this.page
+          }).then(res => {
+            console.log(res)
+            if (res.data.length <= 0) {
+              this.enableScroll = false
+            }
+          })
         }
+
       }
     }
   }

@@ -5,7 +5,6 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
-import Refresh from "@/views/Video/Refresh";
 
 Vue.use(VueRouter);
 
@@ -45,11 +44,6 @@ const routes = [
         path: '/',
         name: 'home',
         component: Home,
-    },
-    {
-        path: '/refresh-post',
-        name: 'refresh-post',
-        component: Refresh,
     },
     {
         path: '/my-course',

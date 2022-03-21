@@ -17,9 +17,15 @@ export default {
     },
     actions: {
         singleUpload({commit}, payload) {
+            const conf = {
+                onUploadProgress: function (progressEvent) {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    commit("progress", percentCompleted)
+                }
+            }
             commit("loading", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.microserviceUrl + `upload/photo`, payload).then(res => {
+                axios.post(config.microserviceUrl + `upload/photo`, payload, conf).then(res => {
                     commit("loading", false)
                     resolve(res.data)
                 }).catch(err => {
@@ -30,8 +36,14 @@ export default {
         },
         multiUpload({commit}, payload) {
             commit("loading", true)
+            const conf = {
+                onUploadProgress: function (progressEvent) {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    commit("progress", percentCompleted)
+                }
+            }
             return new Promise((resolve, reject) => {
-                axios.post(config.microserviceUrl + `upload/multiple-photo`, payload).then(res => {
+                axios.post(config.microserviceUrl + `upload/multiple-photo`, payload, conf).then(res => {
                     commit("loading", false)
                     resolve(res.data)
                 }).catch(err => {
