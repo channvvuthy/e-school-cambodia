@@ -380,5 +380,6 @@
   "category": "Category",
   "take_photo": "Take Photo",
   "limit_photo": "The image should be no more than 10.",
-  "sponsored": "Sponsored"
+  "sponsored": "Sponsored",
+  "see_more": "See more"
 }

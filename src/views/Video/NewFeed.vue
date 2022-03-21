@@ -62,16 +62,39 @@
               <div class="text-lg mt-4 font-light"
                    v-if="post.caption"
                    :class="darkMode ? `text-textSecondary` : ``">
-                {{ post.caption }}
+                <div v-if="post.caption.length > 200">
+                  <span class="less"
+                        @click="seeMore"
+                  >{{ cutString(post.caption, 200) }} <span
+                      class="capitalize cursor-pointer"
+                      :class="darkMode ? ``: `text-primary`">{{ $t('see_more') }}</span>
+                  </span>
+                  <span class="more hidden">
+                    {{ post.caption }}
+                  </span>
+                </div>
+                <div v-else>
+                  {{ post.caption }}
+                </div>
+
               </div>
               <!-- Photo -->
               <div v-if="post.photo && post.photo.length" class="mt-4">
                 <PhotoGrid @itemClick="itemClickHandler" :photos="post.photo"/>
               </div>
               <!--Video-->
-              <div v-if="post.video" class="mt-4">
+              <div v-if="post.video" class="mt-4 relative">
+                <div class="absolute w-full h-full flex items-center justify-center z-10">
+                  <div
+                      class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
+                      style="background-color: rgba(5,81,116,0.5)">
+                    <div class="pl-1">
+                      <Next fill="#FFF"></Next>
+                    </div>
+                  </div>
+                </div>
                 <video class="m-auto">
-                  <source src="file:///Users/mac/Downloads/6131c75d37762735197a71a41647503412596.mp4">
+                  <source :src="post.video.url">
                 </video>
               </div>
               <!-- Background -->
@@ -123,63 +146,86 @@
         </div>
       </div>
       <!-- End New feed -->
+
+
       <!-- Ads -->
       <div class="w-35 pl-5">
         <div>
           <div v-for="(ad, index) in ads" :key="index" class="mb-4">
-            <div class="border rounded p-3" :class="darkMode ? `border-button text-lightGray` : ``">
-              <div class="flex justify-between">
-                <div class="flex space-x-4">
-                  <Avatar :avatar-url="ad.user.photo" :size="14"></Avatar>
-                  <div>
-                    <div class="font-semibold text-lg">{{ ad.user.name }}</div>
-                    <div class="capitalize text-primary text-sm">
-                      {{ $t('sponsored') }}
+            <div class="border rounded" :class="darkMode ? `border-button text-lightGray` : ``">
+              <div class="py-3 px-4">
+                <div class="flex justify-between">
+                  <div class="flex space-x-4">
+                    <Avatar :avatar-url="ad.user.photo" :size="14"></Avatar>
+                    <div>
+                      <div class="font-semibold text-lg">{{ ad.user.name }}</div>
+                      <div class="capitalize text-primary text-sm">
+                        {{ $t('sponsored') }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-lg mt-4 font-light"
+                     v-if="ad.caption"
+                     :class="darkMode ? `text-textSecondary` : ``">
+                  {{ ad.caption }}
+                </div>
+
+                <!-- Photo -->
+                <div v-if="ad.photo && ad.photo.length" class="mt-4">
+                  <PhotoGrid @itemClick="itemClickHandler" :photos="ad.photo"/>
+                </div>
+
+                <!--Video-->
+                <div v-if="ad.video" class="mt-4">
+                  <div class="absolute w-full h-full flex items-center justify-center z-10">
+                    <div
+                        class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
+                        style="background-color: rgba(5,81,116,0.5)">
+                      <div class="pl-1">
+                        <Next fill="#FFF"></Next>
+                      </div>
+                    </div>
+                  </div>
+                  <video class="m-auto">
+                    <source :src="ad.video.url">
+                  </video>
+                </div>
+
+                <!-- Tool -->
+                <div class="flex items-center px-3 mt-4 justify-between"
+                     :class="darkMode ? `text-textSecondary` : `text-primary`">
+                  <div class="flex items-center space-x-16">
+                    <div class="flex items-center space-x-2">
+                      <div>
+                        <LikeIcon :size="20"></LikeIcon>
+                      </div>
+                      <div>
+                        1.2k
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <div>
+                        <Eye :size="28"></Eye>
+                      </div>
+                      <div>
+                        1.6k
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div class="text-lg mt-4 font-light"
-                   v-if="ad.caption"
-                   :class="darkMode ? `text-textSecondary` : ``">
-                {{ ad.caption }}
+              <!--Comment -->
+              <div class="flex h-16 border-t flex items-center w-full mt-4 space-x-5 px-3"
+                   :class="darkMode ? `border-button text-textSecondary` : ``">
+                <Avatar :avatar-url="stProfile.photo" :size="8"></Avatar>
+                <textarea
+                    placeholder="Add comment"
+                    class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
               </div>
 
-              <!-- Photo -->
-              <div v-if="ad.photo && ad.photo.length" class="mt-4">
-                <PhotoGrid @itemClick="itemClickHandler" :photos="ad.photo"/>
-              </div>
 
-              <!--Video-->
-              <div v-if="ad.video" class="mt-4">
-                <video class="m-auto">
-                  <source src="file:///Users/mac/Downloads/6131c75d37762735197a71a41647503412596.mp4">
-                </video>
-              </div>
-
-              <!-- Tool -->
-              <div class="flex items-center px-3 mt-4 justify-between"
-                   :class="darkMode ? `text-textSecondary` : `text-primary`">
-                <div class="flex items-center space-x-16">
-                  <div class="flex items-center space-x-2">
-                    <div>
-                      <LikeIcon :size="20"></LikeIcon>
-                    </div>
-                    <div>
-                      1.2k
-                    </div>
-                  </div>
-                  <div class="flex items-center space-x-2">
-                    <div>
-                      <Eye :size="28"></Eye>
-                    </div>
-                    <div>
-                      1.6k
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -200,6 +246,8 @@ import moment from "moment";
 import PhotoGrid from "@/views/Video/components/PhotoGrid";
 import LikeIcon from "@/components/LikeIcon";
 import Eye from "@/components/Eye";
+import Next from "@/views/Component/Post/Next";
+import helper from "@/helper/helper";
 
 
 export default {
@@ -209,6 +257,7 @@ export default {
     ...mapState('social', ['social', 'ads'])
   },
   components: {
+    Next,
     Eye,
     LikeIcon,
     PhotoGrid,
@@ -231,6 +280,13 @@ export default {
   },
   methods: {
     ...mapActions('social', ['getSocial', 'postSocial']),
+    seeMore(e) {
+      e.currentTarget.style.display = "none";
+      e.currentTarget.nextSibling.classList.toggle("hidden")
+    },
+    cutString(text, limit) {
+      return helper.cutString(text, limit)
+    },
     likerClass() {
       if (this.darkMode) {
         return "border-secondary"
@@ -288,24 +344,3 @@ export default {
 
 }
 </script>
-<style>
-.circle-0 {
-  right: -4rem;
-  z-index: 4;
-}
-
-.circle-1 {
-  right: -3rem;
-  z-index: 3;
-}
-
-.circle-2 {
-  right: -2rem;
-  z-index: 2;
-}
-
-.circle-3 {
-  right: -1rem;
-  z-index: 1;
-}
-</style>

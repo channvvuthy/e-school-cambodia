@@ -6,9 +6,7 @@
 export default {
   name: "Refresh",
   created() {
-    this.$router.push({
-      name: "home"
-    })
+    this.$router.go(-1)
   }
 }
 </script>

@@ -23,7 +23,7 @@ export default {
         getBackground({commit}, payload) {
             commit("loading", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `background?${helper.q(payload)}`).then(res => {
+                axios.get(config.apiUrl + `social/background?${helper.q(payload)}`).then(res => {
                     commit("loading", false)
                     commit("getBackground", res.data.data)
                     resolve(res.data)

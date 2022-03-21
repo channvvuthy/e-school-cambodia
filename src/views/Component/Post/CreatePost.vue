@@ -459,7 +459,8 @@ export default {
         this.multiUpload(payload).then(res => {
           this.payload.type = 2
           this.payload.photo = res.data
-          this.postSocial(this.payload).then(() => {
+          this.postSocial(this.payload).then(res => {
+            console.log(res)
             this.loading = false
             this.resetCaption()
             this.closeCreate()
