@@ -39,9 +39,9 @@ export default {
     },
     updateGrid() {
       if (this.photos.length === 1 || this.photos.length === 2) {
-        this.collage.height = ["calc(50vh - 0em)", "calc(0vh - 0em)"]
+        this.collage.height = ["calc(50vh - 0em)", "calc(0vh - 20em)"]
       } else {
-        this.collage.height = ["calc(50vh - 0em)", "calc(25vh - 0em)"]
+        this.collage.height = ["calc(50vh - 0em)", "calc(35vh - 0em)"]
       }
       if (this.photos.length === 3) {
         this.collage.layout = [1, 2]

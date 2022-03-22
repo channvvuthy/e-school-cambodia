@@ -2,18 +2,32 @@
 @tailwind components;
 @font-face {
     font-family: 'khmer os';
-    src: url('./../../../public/font/battambang.ttf')
+    src: url('./../../../public/font/battambang.ttf');
 }
+
 @font-face {
     font-family: 'siemreap';
-    src: url('./../../../public/font/siemreap.ttf')
+    src: url('./../../../public/font/siemreap.ttf');
 }
+
 @font-face {
     font-family: 'Mukta';
-    src: url('./../../../public/font/Mukta.ttf')
+    src: url('./../../../public/font/Mukta.ttf');
 }
+
 @font-face {
     font-family: 'Kantumruy-Regular';
-    src: url('./../../../public/font/Kantumruy-Regular.ttf')
+    src: url('./../../../public/font/Kantumruy-Regular.ttf');
 }
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../../../public/font/Poppins/Poppins-ExtraLight.ttf');
+}
+
+@font-face {
+    font-family: 'Poppins-Medium';
+    src: url('./../../../public/font/Poppins/Poppins-Medium.ttf');
+}
+
 @tailwind utilities;

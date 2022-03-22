@@ -8,7 +8,7 @@
             <SmileIcon :fill="darkMode?`#ffffff`:`#055174`"></SmileIcon>
           </div>
         </div>
-        <div class="text-base font-medium" :class="darkMode?'text-white':''"><span
+        <div class="text-base font-PoppinsMedium" :class="darkMode?'text-white':''"><span
             class="uppercase">{{ $t('2003') }}</span> <span>
                     {{ token ? stProfile.first_name + " " + stProfile.last_name : $t('1127') }}
                 </span></div>

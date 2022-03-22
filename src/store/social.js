@@ -1,6 +1,7 @@
 import axios from "axios"
 import config from "./../config"
 import helper from "@/helper/helper";
+import auth from "@/store/auth";
 
 export default {
     namespaced: true,
@@ -11,6 +12,29 @@ export default {
         loadingMore: false,
     },
     mutations: {
+        liker(state, payload) {
+            let user = {
+                _id: auth.state.stProfile._id,
+                name: auth.state.stProfile.first_name + ' ' + auth.state.stProfile.last_name,
+                photo: auth.state.stProfile.photo
+            }
+            state.social = state.social.filter(item => {
+                if (item._id == payload.id) {
+                    item.liker.push(user)
+                    item.total.like = parseInt(item.total.like) + 1
+                }
+                return item
+            })
+        },
+        removeLike(state, payload) {
+            state.social = state.social.filter(item => {
+                if (item._id == payload.id) {
+                    item.liker = payload.liker
+                    item.total.like = parseInt(item.total.like) - 1
+                }
+                return item
+            })
+        },
         loadingMore(state, payload) {
             state.loadingMore = payload
         },
@@ -72,6 +96,40 @@ export default {
                     resolve(res.data.data)
                 }).catch(err => {
                     commit("postingSocial", false)
+                    reject(err)
+                })
+            })
+        },
+        like({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `social/like`, payload).then(res => {
+                    commit("liker", payload)
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        deleteLike({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `social/like`, {
+                    headers: {},
+                    data: {
+                        id: payload.id,
+                        type: payload.type
+                    }
+                }).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        comment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `social/comment`, payload).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
                     reject(err)
                 })
             })

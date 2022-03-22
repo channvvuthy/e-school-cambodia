@@ -45,7 +45,7 @@
             </div>
             <div>
               <div
-                  style="border-radius: 4px;"
+                  style="border-radius: 3px;"
                   :class="darkMode ? `border-button` : `border-roundBorder` "
                   class="flex items-center border px-2 mt-1 text-sm py-1 justify-between cursor-pointer space-x-2">
                 <span class="capitalize">{{ $t('category') }}</span>
@@ -80,6 +80,7 @@
           </div>
           <div class="px-5" v-else>
           <textarea
+              id="caption"
               ref="caption"
               v-model="payload.caption"
               :placeholder="$t('say_something')"
@@ -409,6 +410,7 @@ export default {
       }
 
       for (let i = 0; i < e.target.files.length; i++) {
+
         let file = e.target.files[i]
         this.multiPhotoPreview.push(file.path)
         this.selectedFiles.push(file)
@@ -549,7 +551,6 @@ export default {
 [contentEditable=true]:empty:not(:focus)::before {
   content: attr(data-ph);
 }
-
 
 figure {
   display: grid;

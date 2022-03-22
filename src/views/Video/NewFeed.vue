@@ -7,8 +7,9 @@
           :size="16"></Avatar>
       <textarea
           :class="mode()"
+          readonly
+          @click="()=>{this.isPost = true}"
           v-model="payload.caption"
-          @keyup.enter.exact="post"
           class="outline-none h-full w-full ml-4 text-sm pt-10 border-none bg-transparent"
           style="resize: none"
           :placeholder="$t('say_something')"></textarea>
@@ -47,16 +48,16 @@
           </div>
         </template>
         <template v-else>
-          <div v-for="(post, index) in social" :key="index">
+          <div v-for="post in social" :key="post._id">
             <div class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
               <div class="p-5">
                 <div class="flex justify-between">
                   <div class="flex space-x-4">
                     <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
                     <div>
-                      <div class="font-semibold text-lg">{{ post.user.name }}</div>
+                      <div class="font-PoppinsMedium text-lg">{{ post.user.name }}</div>
                       <div
-                          class="text-sm"
+                          class="text-base"
                           :class="darkMode ? `text-gray-400` : `text-gray-500`">
                         {{ formatDate(post.date) }}
                       </div>
@@ -109,34 +110,44 @@
                 <!-- Background -->
                 <div></div>
                 <!-- Tool -->
-                <div class="flex items-center px-5 mt-4 justify-between"
+                <div class="flex items-center pl-5 mt-4 justify-between"
                      :class="darkMode ? `text-textSecondary` : `text-primary`">
                   <div class="flex items-center space-x-16">
                     <div class="flex items-center space-x-2">
-                      <div>
-                        <LikeIcon :size="22"></LikeIcon>
+                      <div class="cursor-pointer">
+                        <div v-if="isLike(post.liker)" @click="disLikePost(post)">
+                          <LikeFillIcon :size="22" :fill="darkMode ? `#909090`: `#055174`"></LikeFillIcon>
+                        </div>
+                        <div @click="likePost(post)" v-else>
+                          <LikeIcon :size="22" :fill="darkMode ? `#909090`: `#4A4A4A`"></LikeIcon>
+                        </div>
+
                       </div>
-                      <div>
-                        1.2k
+                      <div v-if="post.total && post.total.like">
+                        {{ kFormatter(post.total.like) }}
                       </div>
                     </div>
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2" v-if="post.total && post.total.seen">
                       <div>
-                        <Eye :size="30"></Eye>
+                        <Eye :size="30" :fill="darkMode ? `#909090`: `#4A4A4A`"></Eye>
                       </div>
                       <div>
-                        1.6k
+                        {{ kFormatter(post.total.seen) }}
                       </div>
                     </div>
                   </div>
-                  <div class="flex items-center justify-end">
-                    <!--                  <div-->
-                    <!--                      v-for="(i, index) in 5"-->
-                    <!--                      :class="`circle-${index} ${likerClass()}`"-->
-                    <!--                      :key="index"-->
-                    <!--                      class="rounded-full h-11 w-11 bg-red-500 relative bg-cover bg-center border-2"-->
-                    <!--                      :style="{backgroundImage:`url('https://i.wifegeek.com/200426/f9459c52.jpg')`}"-->
-                    <!--                  ></div>-->
+                  <div
+                      :class="`liker-${post.liker.length}`"
+                      class="flex items-center justify-end" v-if="post.liker && post.liker.length">
+                    <div
+                        v-if="index < 6"
+                        :title="liker.name"
+                        v-for="(liker, index) in post.liker"
+                        :class="`circle-${index} ${likerClass()}`"
+                        :key="index"
+                        class="rounded-full h-11 w-11 relative bg-cover bg-center border-2 cursor-pointer"
+                        :style="{backgroundImage:`url(${liker.photo})`}"
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -145,10 +156,10 @@
                    :class="darkMode ? `border-button text-textSecondary` : ``">
                 <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
                 <textarea
-                    placeholder="Add comment"
+                    :placeholder="$t('2113')"
                     class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
-                <div class="whitespace-nowrap">
-                  20 Comments
+                <div class="whitespace-nowrap" v-if="post.total && post.total.comment">
+                  {{ post.total.comment }} {{ commentText(post.total.comment) }}
                 </div>
               </div>
             </div>
@@ -156,7 +167,7 @@
         </template>
         <template v-if="loadingMore">
           <div
-              v-for="i in 2" :key="i"
+              v-for="i in 2" :key="i++"
               class="border mb-5 rounded-md p-5"
               :class="darkMode ? `border-button text-lightGray` : ``">
             <Loading :grid="true" :number-of-columns="1"></Loading>
@@ -175,8 +186,9 @@
             :class="darkMode ? `border-button text-lightGray` : ``">
           <Loading :grid="true" :number-of-columns="1"></Loading>
         </div>
-        <div v-else>
+        <div v-if="!loadingNewFeed">
           <div v-for="(ad, index) in ads" :key="index" class="mb-4">
+
             <div class="border rounded" :class="darkMode ? `border-button text-lightGray` : ``">
               <div class="py-3 px-4">
                 <div class="flex justify-between">
@@ -199,7 +211,14 @@
 
                 <!-- Photo -->
                 <div v-if="ad.photo && ad.photo.length" class="mt-4">
-                  <PhotoGrid @itemClick="itemClickHandler" :photos="ad.photo"/>
+                  <hooper
+                      :autoPlay="true"
+                      :touchDrag="false"
+                      :mouseDrag="false">
+                    <slide v-for="(photo, k) in ad.photo" :key="k">
+                      <img :src="photo.url" :alt="k">
+                    </slide>
+                  </hooper>
                 </div>
 
                 <!--Video-->
@@ -226,16 +245,16 @@
                       <div>
                         <LikeIcon :size="20"></LikeIcon>
                       </div>
-                      <div>
-                        1.2k
+                      <div v-if="post.total && post.total.like">
+                        {{ kFormatter(post.total.like) }}
                       </div>
                     </div>
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2" v-if="post.total && post.total.seen">
                       <div>
                         <Eye :size="28"></Eye>
                       </div>
                       <div>
-                        1.6k
+                        {{ kFormatter(post.total.seen) }}
                       </div>
                     </div>
                   </div>
@@ -250,6 +269,7 @@
                     class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -272,6 +292,8 @@ import Eye from "@/components/Eye";
 import Next from "@/views/Component/Post/Next";
 import helper from "@/helper/helper";
 import Loading from "@/components/Loading";
+import {Hooper, Slide} from 'hooper';
+import LikeFillIcon from "@/components/LikeFillIcon";
 
 export default {
   computed: {
@@ -280,6 +302,9 @@ export default {
     ...mapState('social', ['social', 'ads', 'loadingMore'])
   },
   components: {
+    LikeFillIcon,
+    Hooper,
+    Slide,
     Loading,
     Next,
     Eye,
@@ -304,7 +329,51 @@ export default {
     }
   },
   methods: {
-    ...mapActions('social', ['getSocial', 'postSocial']),
+    ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'comment']),
+    postComment() {
+
+    },
+    commentText(comment) {
+      let text = this.$i18n.t('2114')
+
+      if (this.$i18n.locale === 'en') {
+        if (comment > 1) {
+          text = this.$i18n.t('2114') + 's'
+        }
+      }
+      return text
+    },
+    disLikePost(post) {
+      let payload = {
+        id: post._id,
+        type: post.type
+      }
+      this.deleteLike(payload).then(() => {
+        payload.liker = post.liker.filter(item => item._id != this.stProfile._id)
+        this.$store.commit('social/removeLike', payload)
+      })
+
+    },
+    isLike(liker) {
+      if (liker && liker.length) {
+        for (let i = 0; i < liker.length; i++) {
+          if (liker[i]._id == this.stProfile._id) {
+            return true
+          }
+        }
+      }
+      return false
+    },
+    likePost(post) {
+      let payload = {
+        id: post._id,
+        type: post.type
+      }
+      this.like(payload)
+    },
+    kFormatter(num) {
+      return helper.kFormatter(num)
+    },
     seeMore(e) {
       e.currentTarget.style.display = "none";
       e.currentTarget.nextSibling.classList.toggle("hidden")
@@ -370,6 +439,14 @@ export default {
   created() {
     this.getPost()
   }
-
 }
 </script>
+<style>
+.hooper-liveregion.hooper-sr-only {
+  display: none;
+}
+
+* {
+  outline: none !important;
+}
+</style>

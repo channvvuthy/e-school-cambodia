@@ -1,7 +1,7 @@
 <template>
   <div class="overflow-y-scroll h-screen"
        :class="darkMode ? `bg-secondary`: `bg-white`"
-       @scroll="onScroll" ref="feed" id="feed">
+       @scroll="onScroll" ref="feed">
     <template v-if="token">
       <Story></Story>
     </template>
