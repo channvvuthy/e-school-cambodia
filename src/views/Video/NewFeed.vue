@@ -339,7 +339,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'comment']),
+    ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike']),
     showCommentDetail(id) {
       this.commentDetailId = id
     },

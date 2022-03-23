@@ -69,6 +69,9 @@
              @selectSticker="selectSticker($event)"
              :is-parent-class="true"
              default-position="border w-96 h-1/2 z-50 rounded-xl shadow-lg flex flex-col justify-between"></Sticker>
+
+    <!-- Photo -->
+    <PhotoView></PhotoView>
   </div>
 </template>
 
@@ -86,10 +89,12 @@ import Sticker from "@/views/Video/components/Sticker";
 import mode from "@/mixins/mode";
 import CloseIcon from "@/components/CloseIcon";
 import StickerView from "@/views/Video/components/StickerView";
+import PhotoView from "@/views/Video/components/PhotoView";
 
 export default {
   name: "CommentDetail",
   components: {
+    PhotoView,
     StickerView,
     CloseIcon,
     VueMomentsAgo,
