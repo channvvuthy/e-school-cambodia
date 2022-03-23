@@ -41,7 +41,7 @@
       <div class="w-65">
         <template v-if="loadingNewFeed">
           <div
-              v-for="key in 6" :key="key"
+              v-for="key in 6" :key="key + Math.random()"
               class="border mb-5 rounded-md p-5"
               :class="darkMode ? `border-button text-lightGray` : ``">
             <Loading :grid="true" :number-of-columns="1"></Loading>
@@ -144,7 +144,7 @@
                         :title="liker.name"
                         v-for="(liker, index) in post.liker"
                         :class="`circle-${index} ${likerClass()}`"
-                        :key="index"
+                        :key="index + Math.random()"
                         class="rounded-full h-11 w-11 relative bg-cover bg-center border-2 cursor-pointer"
                         :style="{backgroundImage:`url(${liker.photo})`}"
                     ></div>
@@ -153,21 +153,28 @@
               </div>
               <!--Comment -->
               <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5"
+                   v-if="commentDetailId !== post._id"
+                   @click="showCommentDetail(post._id)"
                    :class="darkMode ? `border-button text-textSecondary` : ``">
                 <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
                 <textarea
+                    disabled
+                    readonly
                     :placeholder="$t('2113')"
-                    class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
+                    class="outline-none w-full pt-6 bg-transparent cursor-pointer" style="resize: none"></textarea>
                 <div class="whitespace-nowrap" v-if="post.total && post.total.comment">
                   {{ post.total.comment }} {{ commentText(post.total.comment) }}
                 </div>
+              </div>
+              <div v-if="commentDetailId === post._id">
+                <CommentDetail :id="commentDetailId"></CommentDetail>
               </div>
             </div>
           </div>
         </template>
         <template v-if="loadingMore">
           <div
-              v-for="i in 2" :key="i++"
+              v-for="i in 2" :key="i + Math.random()"
               class="border mb-5 rounded-md p-5"
               :class="darkMode ? `border-button text-lightGray` : ``">
             <Loading :grid="true" :number-of-columns="1"></Loading>
@@ -180,7 +187,7 @@
       <!-- Ads -->
       <div class="w-35 pl-5">
         <div
-            v-for="index in 6" :key="index"
+            v-for="index in 6" :key="index + Math.random()"
             v-if="loadingNewFeed"
             class="border rounded py-3 px-4 mb-4"
             :class="darkMode ? `border-button text-lightGray` : ``">
@@ -215,7 +222,7 @@
                       :autoPlay="true"
                       :touchDrag="false"
                       :mouseDrag="false">
-                    <slide v-for="(photo, k) in ad.photo" :key="k">
+                    <slide v-for="(photo, k) in ad.photo" :key="k + Math.random()">
                       <img :src="photo.url" :alt="k">
                     </slide>
                   </hooper>
@@ -294,6 +301,7 @@ import helper from "@/helper/helper";
 import Loading from "@/components/Loading";
 import {Hooper, Slide} from 'hooper';
 import LikeFillIcon from "@/components/LikeFillIcon";
+import CommentDetail from "@/views/Video/components/CommentDetail";
 
 export default {
   computed: {
@@ -302,6 +310,7 @@ export default {
     ...mapState('social', ['social', 'ads', 'loadingMore'])
   },
   components: {
+    CommentDetail,
     LikeFillIcon,
     Hooper,
     Slide,
@@ -318,6 +327,7 @@ export default {
   mixins: [mode],
   data() {
     return {
+      commentDetailId: null,
       loadingNewFeed: false,
       loading: false,
       isPost: false,
@@ -330,6 +340,9 @@ export default {
   },
   methods: {
     ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'comment']),
+    showCommentDetail(id) {
+      this.commentDetailId = id
+    },
     postComment() {
 
     },

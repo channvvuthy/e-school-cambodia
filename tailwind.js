@@ -15,6 +15,7 @@ module.exports = {
             iconColor: "#4A4A4A",
             current: 'currentColor',
             primary: '#055174',
+            loading:"#1977f2",
             darkBlue: "#02141C",
             act: "#EAF3FF",
             dadada: "#dadada",

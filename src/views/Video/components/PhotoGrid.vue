@@ -1,12 +1,22 @@
 <template>
-  <photo-collage-wrapper
-      @itemClick="itemClickHandler"
-      v-bind="collage"/>
+  <div class="grid gap-1" :class="grid()">
+    <div
+        class="relative cursor-pointer"
+        v-if="key < 4"
+        :class="column(key)"
+        v-for="(photo, key) in photos" :key="key">
+      <img :src="photo.url" class="object-cover w-full h-full">
+      <div v-if="key === 3 && photos.length > 4"
+           class="absolute z-50 top-0 left-0 h-full w-full flex justify-center items-center bg-black bg-opacity-60 hover:bg-opacity-70 text-white">
+              <span class="font-PoppinsMedium text-3xl">
+                +{{ photos.length - 4 }}
+              </span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import {PhotoCollageWrapper} from "vue-photo-collage";
-
 export default {
   name: "PhotoGrid",
   props: {
@@ -14,47 +24,30 @@ export default {
       default: () => {
         return []
       }
-    },
-    collage: {
-      default: () => {
-        return {
-          gapSize: "4px",
-          borderRadius: "0",
-          width: "auto",
-          height: [],
-          layout: [2, 3],
-          photos: [],
-          showNumOfRemainingPhotos: true,
+    }
+  },
+  methods: {
+    column(index) {
+      if (this.photos.length === 1) {
+        return 'col-span-2'
+      }
+      if (this.photos.length === 3) {
+        if (index === 0) {
+          return 'col-span-2'
+        }
+      }
+      if (this.photos.length >= 4) {
+        if (index === 0) {
+          return 'col-span-3'
         }
       }
     },
-  },
-  components: {
-    PhotoCollageWrapper
-  },
-  methods: {
-    itemClickHandler(data, column) {
-      const item = Object.assign({}, data);
-      alert(`itemId=${item.id}, column=${column}`);
+    grid() {
+      if (this.photos.length > 3) {
+        return 'grid-cols-3'
+      }
+      return 'grid-cols-2'
     },
-    updateGrid() {
-      if (this.photos.length === 1 || this.photos.length === 2) {
-        this.collage.height = ["calc(50vh - 0em)", "calc(0vh - 20em)"]
-      } else {
-        this.collage.height = ["calc(50vh - 0em)", "calc(35vh - 0em)"]
-      }
-      if (this.photos.length === 3) {
-        this.collage.layout = [1, 2]
-      }
-      for (let i = 0; i < this.photos.length; i++) {
-        this.collage.photos.push({
-          source: this.photos[i].url
-        })
-      }
-    }
-  },
-  created() {
-    this.updateGrid()
   }
 }
 </script>

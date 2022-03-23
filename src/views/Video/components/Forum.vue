@@ -14,7 +14,7 @@
             </div>
           </div>
 
-          <div class="w-full ml-4">
+          <div class="ml-4">
             <div class="w-full rounded-xl py-4 px-3" :class="darkMode ? `bg-youtube`: `bg-forum`">
               <div>
                 <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">

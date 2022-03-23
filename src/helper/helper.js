@@ -22,7 +22,7 @@ const isNumber = (evt) => {
 };
 // Cut string with dot
 const cutString = function (text, limit) {
-    if (text.length > limit) for (let i = limit; i > 0; i--) {
+    if (text && text.length > limit) for (let i = limit; i > 0; i--) {
         return text.substring(0, i) + '...';
     } else return text;
 };

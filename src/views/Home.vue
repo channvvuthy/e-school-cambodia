@@ -61,7 +61,6 @@ export default {
           this.getMoreSocial({
             p: this.page
           }).then(res => {
-            console.log(res)
             if (res.data.length <= 0) {
               this.enableScroll = false
             }

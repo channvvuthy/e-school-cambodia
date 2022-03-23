@@ -20,7 +20,12 @@
         <button @click="post" :disabled="loading" class="outline-none bg-transparent flex items-center">
 
           <div v-if="loading" class="relative">
-            {{ progress }}%
+            <span v-if="progress < 100">
+              {{ progress }}%
+            </span>
+            <span v-else>
+              <LoadingWhite></LoadingWhite>
+            </span>
           </div>
           <div class="cursor-pointer" :class="darkMode? `` : `text-primary`" v-else>
             {{ $t('post') }}
@@ -28,8 +33,8 @@
         </button>
       </div>
 
-      <div class="h-2"
-           :class="darkMode ? `bg-green-600`: `bg-primary`"
+      <div class="h-1"
+           :class="darkMode ? `bg-green-600`: `bg-loading`"
            v-if="loading"
            :style="{width:`${progress}%`}">
       </div>
@@ -62,17 +67,15 @@
             <div class="h-full w-full absolute left-0 top-0 pb-5">
               <div class="h-full w-full flex items-center justify-center bg-cover bg-center overflow-y-scroll p-5"
                    :style="{backgroundImage: `url(${backgroundPhoto})`}"
-                   @click="()=>{this.$refs.content.focus()}"
-
               >
                 <img :src="backgroundPhoto" id="image" class="hidden">
-                <div contenteditable="true" :data-ph="$t('say_something')"
-
-                     @keyup="onKeyup"
-                     ref="content"
-                     :style="{color:`${color}`}"
-                     class="outline-none text-lg">
-                </div>
+                <textarea
+                    :style="{color:`${color}`}"
+                    ref="caption"
+                    v-model="payload.caption"
+                    :placeholder="$t('say_something')"
+                    @input="resize($event)"
+                    class="w-full outline-none bg-transparent text-center" style="resize: none"></textarea>
 
               </div>
             </div>
@@ -80,7 +83,6 @@
           </div>
           <div class="px-5" v-else>
           <textarea
-              id="caption"
               ref="caption"
               v-model="payload.caption"
               :placeholder="$t('say_something')"
@@ -159,7 +161,7 @@
             >
               <div
                   @click="selectedBackground(index)"
-                  :class="(backgroundActive === index) ? `border-primary border-4`: ``"
+                  :class="(backgroundActive === index) ? `border-loading border-4`: ``"
                   class="bg-cover bg-center cursor-pointer flex items-center justify-center h-16 w-16 rounded-full"
                   :style="{backgroundImage:`url(${bg.photo})`}"
               >
@@ -351,7 +353,6 @@ export default {
               this.backgroundColor = color.rgba
               this.color = color.isDark ? '#fff' : '#000';
             }).catch(error => error);
-        this.$refs.content.focus()
         if (this.payload.caption) {
           this.$refs.content.innerText = this.payload.caption
         }

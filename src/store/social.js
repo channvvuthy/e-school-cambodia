@@ -10,8 +10,19 @@ export default {
         social: [],
         ads: [],
         loadingMore: false,
+        loadingComment: false,
+        comments: []
     },
     mutations: {
+        addComment(state, payload) {
+            state.comments.comments.unshift(payload)
+        },
+        loadingComment(state, payload) {
+            state.loadingComment = payload
+        },
+        getComment(state, payload) {
+            state.comments = payload
+        },
         liker(state, payload) {
             let user = {
                 _id: auth.state.stProfile._id,
@@ -125,11 +136,25 @@ export default {
                 })
             })
         },
-        comment({commit}, payload) {
+        addComment({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `social/comment`, payload).then(res => {
+                    commit("addComment", res.data.data)
                     resolve(res.data)
                 }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        getComment({commit}, payload) {
+            commit("loadingComment", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/comment?${helper.q(payload)}`).then(res => {
+                    commit("getComment", res.data.data)
+                    commit("loadingComment", false)
+                    resolve(res.data.data)
+                }).catch(err => {
+                    commit("loadingComment", false)
                     reject(err)
                 })
             })

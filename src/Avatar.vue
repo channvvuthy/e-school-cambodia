@@ -4,8 +4,7 @@
            accept="image/*"
            @change="onSelectFile">
     <div :class="`w-${size} h-${size}`"
-         @click="()=>{this.$refs.avatar.click()}"
-         class="rounded-full bg-gray-50 bg-cover bg-center cursor-pointer"
+         class="rounded-full bg-gray-100 bg-cover bg-center cursor-pointer"
          :style="{backgroundImage:`url(${defaultAvatarUrl})`}"
     ></div>
   </div>
