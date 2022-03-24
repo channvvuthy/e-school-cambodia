@@ -90,7 +90,9 @@
                 </div>
                 <!-- Photo -->
                 <div v-if="post.photo && post.photo.length" class="mt-4">
-                  <PhotoGrid @itemClick="itemClickHandler" :photos="post.photo"/>
+                  <PhotoGrid @itemClick="itemClickHandler"
+                             :post="post"
+                             :photos="post.photo"/>
                 </div>
                 <!--Video-->
                 <div v-if="post.video" class="mt-4 relative">
@@ -281,6 +283,12 @@
         </div>
       </div>
       <!-- End ads -->
+
+      <!-- Post detail -->
+      <PostDetail
+          @dismiss="()=>{this.isPostDetail = false}"
+          :post="postDetail"
+          v-if="isPostDetail"></PostDetail>
     </div>
   </div>
 </template>
@@ -302,6 +310,7 @@ import Loading from "@/components/Loading";
 import {Hooper, Slide} from 'hooper';
 import LikeFillIcon from "@/components/LikeFillIcon";
 import CommentDetail from "@/views/Video/components/CommentDetail";
+import PostDetail from "@/views/Video/components/PostDetail";
 
 export default {
   computed: {
@@ -310,6 +319,7 @@ export default {
     ...mapState('social', ['social', 'ads', 'loadingMore'])
   },
   components: {
+    PostDetail,
     CommentDetail,
     LikeFillIcon,
     Hooper,
@@ -327,6 +337,8 @@ export default {
   mixins: [mode],
   data() {
     return {
+      isPostDetail: false,
+      postDetail: {},
       commentDetailId: null,
       loadingNewFeed: false,
       loading: false,
@@ -401,8 +413,9 @@ export default {
         return "border-white"
       }
     },
-    itemClickHandler() {
-
+    itemClickHandler(data) {
+      this.postDetail = data
+      this.isPostDetail = true
     },
     post() {
       if (this.loading) {

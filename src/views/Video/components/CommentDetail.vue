@@ -38,11 +38,11 @@
           <Comment :comment="comment" @reply="reply($event)"></Comment>
           <div v-if="comment.reply_comment" class="pl-20">
             <div v-if="replies.comment && replies.comment._id === comment._id">
-              <div v-for="(reply, index) in replies.list">
+              <div v-for="(list, index) in replies.list">
                 <Comment
                     :avata-size="12"
                     :parent-comment-id="comment._id"
-                    :comment="reply" @reply="reply($event)"></Comment>
+                    :comment="list" @reply="reply($event)"></Comment>
               </div>
             </div>
             <div v-else>
@@ -51,11 +51,15 @@
                   :parent-comment-id="comment._id"
                   :comment="comment.reply_comment" @reply="reply($event)"></Comment>
 
-              <div class="ml-17 mt-3 text-lg capitalize cursor-pointer"
-                   @click="getReplyComment(comment._id)"
-                   :class="darkMode ?`text-textSecondary`: `text-primary`">
-                {{ $t('more_reply') }}...
-              </div>
+              <button class="ml-17 mt-3 text-lg capitalize outline-none"
+                      :disabled="loadingReply"
+                      @click="getReplyComment(comment._id)"
+                      :class="darkMode ?`text-textSecondary`: `text-primary`">
+                <template v-if="loadingReply">
+                  <LoadingWhite></LoadingWhite>
+                </template>
+                <template v-else>{{ $t('more_reply') }}...</template>
+              </button>
             </div>
 
           </div>
@@ -100,6 +104,7 @@ import StickerView from "@/views/Video/components/StickerView";
 import PhotoView from "@/views/Video/components/PhotoView";
 import ReplyComment from "@/views/Video/components/ReplyComment";
 import Comment from "@/views/Video/components/Comment";
+import LoadingWhite from "@/components/LoadingWhite";
 
 export default {
   name: "CommentDetail",
@@ -116,7 +121,8 @@ export default {
     SmileEmoji,
     ImageIcon,
     ReplyIcon,
-    Sticker
+    Sticker,
+    LoadingWhite
   },
   mixins: [mode],
   computed: {
@@ -127,6 +133,7 @@ export default {
   props: ['id'],
   data() {
     return {
+      loadingReply: false,
       commentId: null,
       stickerUrl: null,
       isSticker: false,
@@ -155,8 +162,9 @@ export default {
       let payload = {
         id
       }
+      this.loadingReply = true
       this.$store.dispatch('social/getReply', payload).then(res => {
-        console.log(res)
+        this.loadingReply = false
       })
     },
     selectPhoto(e) {

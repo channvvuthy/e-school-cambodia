@@ -1,6 +1,7 @@
 <template>
   <div class="grid gap-1" :class="grid()">
     <div
+        @click="itemClick"
         class="relative cursor-pointer"
         v-if="key < 4"
         :class="column(key)"
@@ -20,6 +21,11 @@
 export default {
   name: "PhotoGrid",
   props: {
+    post: {
+      default: () => {
+        return {}
+      }
+    },
     photos: {
       default: () => {
         return []
@@ -27,6 +33,9 @@ export default {
     }
   },
   methods: {
+    itemClick() {
+      this.$emit("itemClick", this.post)
+    },
     column(index) {
       if (this.photos.length === 1) {
         return 'col-span-2'

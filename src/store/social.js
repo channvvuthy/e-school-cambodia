@@ -19,6 +19,9 @@ export default {
             state.replies = payload
         },
         replyComment(state, payload) {
+            if (state.replies.list) {
+                state.replies.list.push(payload)
+            }
             state.comments.comments = state.comments.comments.filter(item => {
                 if (item._id === payload.comment_id) {
                     item.reply_comment = payload
