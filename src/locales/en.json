@@ -381,5 +381,8 @@
   "take_photo": "Take Photo",
   "limit_photo": "The image should be no more than 10.",
   "sponsored": "Sponsored",
-  "see_more": "See more"
+  "see_more": "See more",
+  "4180": "Caption is required",
+  "4181": "Photo is required",
+  "4182": "Video is required"
 }

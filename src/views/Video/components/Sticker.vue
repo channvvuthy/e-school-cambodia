@@ -34,7 +34,7 @@
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-5 gap-4" v-else>
+        <div class="grid gap-4" :class="`grid-cols-${stickerGrid}`" v-else>
           <div v-for="(sticker, index) in stickers.list" :key="index">
             <div class="cursor-pointer" @click="selectSticker(sticker)">
               <img :src="sticker.sticker.name" :alt="sticker._id">
@@ -52,6 +52,9 @@ import {mapActions, mapState} from "vuex";
 export default {
   name: "Sticker",
   props: {
+    stickerGrid: {
+      default: () => 5
+    },
     isParentClass: {
       default: () => false
     },

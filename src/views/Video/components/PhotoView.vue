@@ -1,12 +1,12 @@
 <template>
   <div :class="className">
-    <div class="shadow rounded-xl w-2/5"
+    <div class="shadow rounded-xl w-96"
          :class="darkMode ? `bg-secondary`: `bg-white`">
       <div
           :class="darkMode ?`border-b border-facebook`: `border-b`"
           class="h-14 flex items-center justify-between px-5 text-lg">
 
-        <div class="cursor-pointer" @click="()=>{this.$emit('dismissPost')}">
+        <div class="cursor-pointer" @click="()=>{this.$emit('closePhoto')}">
           <CloseIcon :fill="darkMode ? `#909090` : `#000000`"></CloseIcon>
         </div>
         <div class="w-full text-center">
@@ -29,11 +29,13 @@
           </div>
         </button>
       </div>
-      <div class="m-5">
+      <div class="m-5 overflow-y-scroll" style="max-height: 34rem;">
         <textarea
+            v-model="comment.text"
             :placeholder="$t('2113')"
             @input="resize($event)"
             class="w-full outline-none bg-transparent" style="resize: none"></textarea>
+        <img :src="photo.photoUrl" alt="" class="rounded">
       </div>
     </div>
   </div>
@@ -41,7 +43,7 @@
 
 <script>
 import mode from "@/mixins/mode";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import LoadingWhite from "@/components/LoadingWhite";
 import CloseIcon from "@/components/CloseIcon";
 
@@ -52,26 +54,64 @@ export default {
     LoadingWhite,
     CloseIcon
   },
+  props: {
+    isReply: {
+      default: () => false
+    },
+    id: {
+      default: () => null,
+    },
+    photo: {
+      default: () => {
+        return {
+          photoUrl: null,
+          file: null,
+        }
+      }
+    },
+  },
   computed: {
     ...mapState('setting', ['darkMode']),
     ...mapState('upload', ['progress'])
   },
   data() {
     return {
-      loading: false
+      loading: false,
+      comment: {
+        id: "",
+        type: 1,
+        text: '',
+        photo: {},
+      }
     }
   },
+  created() {
+    this.comment.id = this.id
+  },
   methods: {
+    ...mapActions('upload', ['multiUpload']),
+    ...mapActions('social', ['addComment', 'replyComment']),
     resize(e) {
       e.target.style.height = 'auto'
       e.target.style.height = `${e.target.scrollHeight}px`
-      if (this.payload.caption) {
-        this.canPost = true
-      }
     },
     post() {
-
-    }
+      const payload = new FormData()
+      payload.append("photo", this.photo.file)
+      this.loading = true
+      this.multiUpload(payload).then(res => {
+        this.comment.photo = res.data[0]
+        this.loading = false
+        if (this.isReply) {
+          this.replyComment(this.comment).then(() => {
+            this.$emit('closePhoto')
+          })
+        } else
+          this.addComment(this.comment).then(() => {
+            this.$emit('closePhoto')
+          })
+      })
+    },
   }
 }
 </script>

@@ -12,7 +12,9 @@
         <SmileEmoji :size="30" :fill="darkMode ?`#909090`: `#979797`"></SmileEmoji>
       </div>
       <div style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
-        <div class="rounded-full h-9 w-9 flex items-center justify-center">
+        <input type="file" ref="commentPhoto" @change="selectPhoto" accept="image/*" class="hidden">
+        <div class="rounded-full h-9 w-9 flex items-center justify-center"
+             @click="()=>{this.$refs.commentPhoto.click()}">
           <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
         </div>
       </div>
@@ -32,38 +34,40 @@
       <div class="border-t px-5 pb-5"
            v-if="comments.comments && comments.comments.length"
            :class="darkMode ? `border-button text-textSecondary` : ``">
-        <div v-for="(comment, index) in comments.comments" :key="index" class="mt-4 flex space-x-5">
-          <Avatar :avatar-url="comment.user.photo" :size="14"></Avatar>
-          <div class="rounded-xl py-4 px-3" :class="darkMode ? `bg-youtube`: `bg-forum`">
-            <div>
-              <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
-                {{ comment.user.name }}
+        <div v-for="(comment, index) in comments.comments" :key="index">
+          <Comment :comment="comment" @reply="reply($event)"></Comment>
+          <div v-if="comment.reply_comment" class="pl-20">
+            <div v-if="replies.comment && replies.comment._id === comment._id">
+              <div v-for="(reply, index) in replies.list">
+                <Comment
+                    :avata-size="12"
+                    :parent-comment-id="comment._id"
+                    :comment="reply" @reply="reply($event)"></Comment>
               </div>
             </div>
-            <div v-if="comment.content.photo">
-              <img :src="comment.content.photo.name" class="max-h-40 rounded my-2">
-            </div>
-            <div v-if="comment.content.sticker">
-              <img :src="comment.content.sticker.url" class="max-h-40 rounded my-2">
-            </div>
-            <div v-if="comment.content.text" :class="darkMode?`text-gray-300`:``">
-              {{ cutString(comment.content.text, 100) }}
+            <div v-else>
+              <Comment
+                  :avata-size="12"
+                  :parent-comment-id="comment._id"
+                  :comment="comment.reply_comment" @reply="reply($event)"></Comment>
+
+              <div class="ml-17 mt-3 text-lg capitalize cursor-pointer"
+                   @click="getReplyComment(comment._id)"
+                   :class="darkMode ?`text-textSecondary`: `text-primary`">
+                {{ $t('more_reply') }}...
+              </div>
             </div>
 
-            <div class="flex items-center justify-between">
-              <div class="text-gray-500 text-sm">
-                <vue-moments-ago prefix="" suffix="ago" :date="comment.date" lang="en"/>
-              </div>
-              <div class="cursor-pointer">
-                <ReplyIcon></ReplyIcon>
-              </div>
-            </div>
+          </div>
+          <div class="pl-20 mt-3" v-if="commentId === comment._id">
+            <ReplyComment :id="commentId"></ReplyComment>
           </div>
         </div>
       </div>
     </div>
     <!-- Sticker -->
     <Sticker v-if="isSticker"
+             :sticker-grid="4"
              :parent-class="className"
              @closeSticker="()=>{this.isSticker = false}"
              @selectSticker="selectSticker($event)"
@@ -71,7 +75,11 @@
              default-position="border w-96 h-1/2 z-50 rounded-xl shadow-lg flex flex-col justify-between"></Sticker>
 
     <!-- Photo -->
-    <PhotoView></PhotoView>
+    <PhotoView
+        :id="id"
+        @closePhoto="()=>{this.isPhoto = false}"
+        :photo="photo"
+        v-if="isPhoto"></PhotoView>
   </div>
 </template>
 
@@ -90,10 +98,14 @@ import mode from "@/mixins/mode";
 import CloseIcon from "@/components/CloseIcon";
 import StickerView from "@/views/Video/components/StickerView";
 import PhotoView from "@/views/Video/components/PhotoView";
+import ReplyComment from "@/views/Video/components/ReplyComment";
+import Comment from "@/views/Video/components/Comment";
 
 export default {
   name: "CommentDetail",
   components: {
+    Comment,
+    ReplyComment,
     PhotoView,
     StickerView,
     CloseIcon,
@@ -110,13 +122,19 @@ export default {
   computed: {
     ...mapState('auth', ['stProfile']),
     ...mapState('setting', ['darkMode']),
-    ...mapState('social', ['loadingComment', 'comments'])
+    ...mapState('social', ['loadingComment', 'comments', 'replies'])
   },
   props: ['id'],
   data() {
     return {
+      commentId: null,
       stickerUrl: null,
       isSticker: false,
+      isPhoto: null,
+      photo: {
+        photoUrl: null,
+        file: null
+      },
       payload: {
         p: 1,
         id: null,
@@ -130,6 +148,24 @@ export default {
   },
   methods: {
     ...mapActions('social', ['getComment', 'addComment']),
+    reply(comment) {
+      this.commentId = comment._id
+    },
+    getReplyComment(id) {
+      let payload = {
+        id
+      }
+      this.$store.dispatch('social/getReply', payload).then(res => {
+        console.log(res)
+      })
+    },
+    selectPhoto(e) {
+      if (e.target.files && e.target.files.length) {
+        this.photo.file = e.target.files[0]
+        this.photo.photoUrl = URL.createObjectURL(e.target.files[0])
+        this.isPhoto = true
+      }
+    },
     removeSticker() {
       this.stickerUrl = null
       this.$delete(this.comment, 'sticker')

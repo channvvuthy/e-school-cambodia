@@ -11,9 +11,21 @@ export default {
         ads: [],
         loadingMore: false,
         loadingComment: false,
-        comments: []
+        comments: [],
+        replies: []
     },
     mutations: {
+        getReply(state, payload) {
+            state.replies = payload
+        },
+        replyComment(state, payload) {
+            state.comments.comments = state.comments.comments.filter(item => {
+                if (item._id === payload.comment_id) {
+                    item.reply_comment = payload
+                }
+                return item
+            })
+        },
         addComment(state, payload) {
             state.comments.comments.unshift(payload)
         },
@@ -146,6 +158,16 @@ export default {
                 })
             })
         },
+        replyComment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `social/comment/reply`, payload).then(res => {
+                    commit("replyComment", res.data.data)
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
         getComment({commit}, payload) {
             commit("loadingComment", true)
             return new Promise((resolve, reject) => {
@@ -158,7 +180,18 @@ export default {
                     reject(err)
                 })
             })
-        }
+        },
+        getReply({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/comment/reply?${helper.q(payload)}`).then(res => {
+                    commit("getReply", res.data.data)
+                    resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+
     }
 
 }
