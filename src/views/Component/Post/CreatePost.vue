@@ -254,6 +254,7 @@ import Pause from "@/views/Component/Post/Pause";
 import FastAverageColor from "fast-average-color";
 import Message from "@/components/Message";
 import PreviewPhoto from "@/components/PreviewPhoto";
+import helper from "@/helper/helper";
 
 const fac = new FastAverageColor();
 
@@ -461,6 +462,11 @@ export default {
           payload.append("photo", this.selectedFiles[i])
         }
         this.multiUpload(payload).then(res => {
+          if (res.status != undefined && res.status == 1) {
+            helper.errorMessage(res.msg)
+            this.loading = false
+            return
+          }
           this.payload.type = 2
           this.payload.photo = res.data
           this.postSocial(this.payload).then(() => {

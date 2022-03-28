@@ -374,7 +374,6 @@
   "buy_now": "Buy Now",
   "tv": "TV",
   "more_reply": "View more reply",
-  "5102": "This chanel has been offline will live back next hour",
   "create_post": "Create post",
   "post": "Post",
   "category": "Category",
@@ -384,5 +383,8 @@
   "see_more": "See more",
   "4180": "Caption is required",
   "4181": "Photo is required",
-  "4182": "Video is required"
+  "4182": "Video is required",
+  "5101": "Your file is contain pornography",
+  "5102": "This chanel has been offline will live back next hour",
+  "5103": "Too many violence uploaded. You will be availble upload in next 24 hour."
 }

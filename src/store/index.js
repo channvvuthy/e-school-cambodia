@@ -13,7 +13,6 @@ import receipt from "./receipt"
 import test from "./test"
 import view from "./view"
 import forum from "./forum"
-import online from "./online"
 import other from "./other"
 import cart from "./cart"
 import partner from "./partner"
@@ -54,7 +53,6 @@ export default new Vuex.Store({
         guardian,
         insurance,
         receipt,
-        online,
         forum,
         home,
         partner,

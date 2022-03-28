@@ -117,7 +117,7 @@
                   <div class="flex items-center space-x-16">
                     <div class="flex items-center space-x-2">
                       <div class="cursor-pointer">
-                        <div v-if="isLike(post.liker)" @click="disLikePost(post)">
+                        <div v-if="post.is_like" @click="disLikePost(post)">
                           <LikeFillIcon :size="22" :fill="darkMode ? `#909090`: `#055174`"></LikeFillIcon>
                         </div>
                         <div @click="likePost(post)" v-else>
@@ -378,16 +378,6 @@ export default {
         this.$store.commit('social/removeLike', payload)
       })
 
-    },
-    isLike(liker) {
-      if (liker && liker.length) {
-        for (let i = 0; i < liker.length; i++) {
-          if (liker[i]._id == this.stProfile._id) {
-            return true
-          }
-        }
-      }
-      return false
     },
     likePost(post) {
       let payload = {

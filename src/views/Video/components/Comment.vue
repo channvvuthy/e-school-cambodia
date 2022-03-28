@@ -14,7 +14,7 @@
         <img :src="comment.content.sticker.url" class="max-h-40 rounded my-2 m-auto">
       </div>
       <div v-if="comment.content.text" :class="darkMode?`text-gray-300`:``">
-        {{ cutString(comment.content.text, 100) }}
+        {{comment.content.text}}
       </div>
 
       <div class="flex items-center justify-between">
@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import helper from "@/helper/helper";
 import ReplyIcon from "@/views/Chat/components/ReplyIcon";
 import VueMomentsAgo from "vue-moments-ago";
 import Avatar from "@/Avatar";
@@ -64,10 +63,7 @@ export default {
         comment._id = this.parentCommentId
       }
       this.$emit("reply", comment)
-    },
-    cutString(text, limit) {
-      return helper.cutString(text, limit)
-    },
+    }
   }
 }
 </script>

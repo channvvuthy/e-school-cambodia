@@ -2,13 +2,6 @@
 import path from 'path'
 let fs = require("fs");
 const {autoUpdater} = require('electron-updater')
-const {download} = require('electron-dl');
-var crypto = require('crypto');
-let ENC_KEY = "bf3c199c2470cb477d907b1e0917c17b"; // set random encryption key
-let IV = "5183666c72eec9e4"; // set random initialisation vector
-let cipher = crypto.createCipheriv('aes-256-cbc', ENC_KEY, IV);
-let decipheriv = crypto.createDecipheriv('aes-256-cbc', ENC_KEY, IV);
-
 import {
     app,
     protocol,

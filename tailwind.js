@@ -26,6 +26,7 @@ module.exports = {
             textSecondary: "#909090",
             lightGray: "#e4e6eb",
             lightBlue: "#eaf3ff",
+            comment:"#f3f3f3",
             softGray: "#E7E7E7",
             heart: "#c0272d",
             pass: "#5aa20a",

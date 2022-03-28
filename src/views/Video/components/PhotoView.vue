@@ -46,6 +46,7 @@ import mode from "@/mixins/mode";
 import {mapActions, mapState} from "vuex";
 import LoadingWhite from "@/components/LoadingWhite";
 import CloseIcon from "@/components/CloseIcon";
+import helper from "@/helper/helper";
 
 export default {
   name: "PhotoView",
@@ -100,6 +101,11 @@ export default {
       payload.append("photo", this.photo.file)
       this.loading = true
       this.multiUpload(payload).then(res => {
+        if (res.status != undefined && res.status == 1) {
+          helper.errorMessage(res.msg)
+          this.loading = false
+          return
+        }
         this.comment.photo = res.data[0]
         this.loading = false
         if (this.isReply) {
