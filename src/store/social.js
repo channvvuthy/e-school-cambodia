@@ -15,6 +15,9 @@ export default {
         replies: []
     },
     mutations: {
+        deleteSocial(state, payload) {
+            state.social = state.social.filter(item => item._id != payload)
+        },
         getReply(state, payload) {
             state.replies = payload
         },
@@ -153,6 +156,21 @@ export default {
                 })
             })
         },
+        deleteSocial({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `social`, {
+                    headers: {},
+                    data: {
+                        id: payload.id,
+                    }
+                }).then(res => {
+                    resolve(res.data)
+                    commit("deleteSocial", payload.id)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
         addComment({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `social/comment`, payload).then(res => {
@@ -190,6 +208,15 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social/comment/reply?${helper.q(payload)}`).then(res => {
                     commit("getReply", res.data.data)
+                    resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        countView({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/view?${helper.q(payload)}`).then(res => {
                     resolve(res.data.data)
                 }).catch(err => {
                     reject(err)

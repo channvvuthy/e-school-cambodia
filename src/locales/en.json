@@ -386,5 +386,13 @@
   "4182": "Video is required",
   "5101": "Your file is contain pornography",
   "5102": "This chanel has been offline will live back next hour",
-  "5103": "Too many violence uploaded. You will be availble upload in next 24 hour."
+  "5103": "Too many violence uploaded. You will be availble upload in next 24 hour.",
+  "actions": {
+    "delete": "Delete",
+    "edit": "Edit",
+    "add_to_favorite": "Add to favorite",
+    "copy_link": "Copy link",
+    "share": "Share",
+    "report": "Report"
+  }
 }

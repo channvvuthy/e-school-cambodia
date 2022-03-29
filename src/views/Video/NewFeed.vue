@@ -1,5 +1,6 @@
 <template>
-  <div :class="darkMode ? `bg-secondary`: `bg-white`">
+  <div
+      :class="darkMode ? `bg-secondary`: `bg-white`">
     <div class="px-5 flex items-center h-24"
          :class="mode(darkMode ?`border-b border-button` : ``)">
       <Avatar
@@ -49,8 +50,12 @@
         </template>
         <template v-else>
           <div v-for="post in social" :key="post._id">
-            <div class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
-              <div class="p-5">
+            <div
+                v-observe-visibility="visibilityChanged"
+                :id="post._id"
+                :data-type="post.type"
+                class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
+              <div class="px-5 pt-5">
                 <div class="flex justify-between">
                   <div class="flex space-x-4">
                     <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
@@ -63,10 +68,23 @@
                       </div>
                     </div>
                   </div>
-                  <div class="flex flex-col space-y-1 cursor-pointer">
-                    <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
-                    <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
-                    <div class="h-1 w-1 rounded-full" :class="darkMode ? `bg-textSecondary`: `bg-black`"></div>
+                  <!-- Action -->
+                  <div class="relative">
+                    <div
+                        @click="closeAction"
+                        class="w-full h-full fixed top-0 left-0 z-40"
+                        v-if="actionId === post._id"></div>
+                    <div @click="showAction(post)">
+                      <Action></Action>
+                    </div>
+                    <div
+                        v-if="actionId === post._id"
+                        :class="darkMode ? `bg-youtube text-textSecondary`: `bg-white border-t`"
+                        class="absolute w-60 py-5 right-0 top-10 z-50 rounded-xl shadow-md">
+                      <ActionList
+                          @selectedAction="selectedAction($event)"
+                          :post="post"></ActionList>
+                    </div>
                   </div>
                 </div>
                 <div class="text-lg mt-4 font-light"
@@ -98,16 +116,23 @@
                 <div v-if="post.video" class="mt-4 relative">
                   <div class="absolute w-full h-full flex items-center justify-center z-10">
                     <div
+                        :class="videoPlaying === post._id ? `hidden` : ``"
                         class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
                         style="background-color: rgba(5,81,116,0.5)">
                       <div class="pl-1">
                         <Next fill="#FFF"></Next>
                       </div>
                     </div>
+                    <div
+                        v-if="videoPlaying === post._id"
+                        class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
+                        style="background-color: rgba(5,81,116,0.5)">
+                      <div>
+                        <Pause fill="#FFF"></Pause>
+                      </div>
+                    </div>
                   </div>
-                  <video class="m-auto">
-                    <source :src="post.video.url">
-                  </video>
+                  <img :src="post.thumbnail.url" class="m-auto">
                 </div>
                 <!-- Background -->
                 <div></div>
@@ -154,7 +179,7 @@
                 </div>
               </div>
               <!--Comment -->
-              <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5"
+              <div class="flex h-17 border-t flex items-center w-full mt-4 px-5 space-x-5"
                    v-if="commentDetailId !== post._id"
                    @click="showCommentDetail(post._id)"
                    :class="darkMode ? `border-button text-textSecondary` : ``">
@@ -220,19 +245,24 @@
 
                 <!-- Photo -->
                 <div v-if="ad.photo && ad.photo.length" class="mt-4">
-                  <hooper
-                      :autoPlay="true"
-                      :touchDrag="false"
-                      :mouseDrag="false">
-                    <slide v-for="(photo, k) in ad.photo" :key="k + Math.random()">
-                      <img :src="photo.url" :alt="k">
-                    </slide>
-                  </hooper>
+                  <div id="carouselExampleSlidesOnly" class="carousel slide relative" data-bs-ride="carousel">
+                    <div class="carousel-inner relative w-full overflow-hidden">
+                      <div
+                          v-for="(photo, key) in ad.photo" :key="key"
+                          :class="key == 0 ? `active` : ``"
+                          class="carousel-item relative float-left w-full">
+                        <img
+                            :src="photo.url"
+                            class="block w-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <!--Video-->
-                <div v-if="ad.video" class="mt-4">
-                  <div class="absolute w-full h-full flex items-center justify-center z-10">
+                <div v-if="ad.video" class="mt-4 relative">
+                  <div class="absolute w-full h-full flex items-center justify-center z-10 bg-black">
                     <div
                         class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
                         style="background-color: rgba(5,81,116,0.5)">
@@ -241,9 +271,7 @@
                       </div>
                     </div>
                   </div>
-                  <video class="m-auto">
-                    <source :src="ad.video.url">
-                  </video>
+                  <img :src="ad.thumbnail.url">
                 </div>
 
                 <!-- Tool -->
@@ -307,10 +335,16 @@ import Eye from "@/components/Eye";
 import Next from "@/views/Component/Post/Next";
 import helper from "@/helper/helper";
 import Loading from "@/components/Loading";
-import {Hooper, Slide} from 'hooper';
 import LikeFillIcon from "@/components/LikeFillIcon";
 import CommentDetail from "@/views/Video/components/CommentDetail";
 import PostDetail from "@/views/Video/components/PostDetail";
+import Action from "@/views/Video/components/Action";
+import ActionList from "@/views/Video/components/ActionList";
+import Pause from "@/views/Component/Post/Pause";
+import Vue from 'vue'
+import VueObserveVisibility from 'vue-observe-visibility'
+
+Vue.use(VueObserveVisibility)
 
 export default {
   computed: {
@@ -319,11 +353,12 @@ export default {
     ...mapState('social', ['social', 'ads', 'loadingMore'])
   },
   components: {
+    Pause,
+    ActionList,
+    Action,
     PostDetail,
     CommentDetail,
     LikeFillIcon,
-    Hooper,
-    Slide,
     Loading,
     Next,
     Eye,
@@ -337,6 +372,8 @@ export default {
   mixins: [mode],
   data() {
     return {
+      videoPlaying: null,
+      actionId: null,
       isPostDetail: false,
       postDetail: {},
       commentDetailId: null,
@@ -351,7 +388,43 @@ export default {
     }
   },
   methods: {
-    ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike']),
+    ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'deleteSocial']),
+    visibilityChanged(isVisible, entry) {
+      if (isVisible) {
+        let payload = {
+          id: entry.target.id,
+          type: entry.target.getAttribute('data-type')
+        }
+        this.$store.dispatch('social/countView', payload)
+      }
+
+
+    },
+    stopVideo(post) {
+      this.videoPlaying = null;
+      let vd = document.getElementById(`${post._id}`)
+      vd.pause()
+    },
+    playVideo(post) {
+      this.videoPlaying = post._id
+      let vd = document.getElementById(`${post._id}`)
+      vd.play()
+    },
+    selectedAction(data) {
+      let payload = {}
+      if (data.action.label === 'actions.delete') {
+        payload.id = data.post._id
+        this.deleteSocial(payload).then(() => {
+          this.actionId = null
+        })
+      }
+    },
+    closeAction() {
+      this.actionId = null
+    },
+    showAction(post) {
+      this.actionId = post._id
+    },
     showCommentDetail(id) {
       this.commentDetailId = id
     },

@@ -1,7 +1,6 @@
 'use strict';
 import path from 'path'
 let fs = require("fs");
-const {autoUpdater} = require('electron-updater')
 import {
     app,
     protocol,
@@ -19,8 +18,8 @@ import {
 import axios from "axios"
 
 // Setup logger
-autoUpdater.logger = require('electron-log')
-autoUpdater.logger.transports.file.level = 'info'
+// autoUpdater.logger = require('electron-log')
+// autoUpdater.logger.transports.file.level = 'info'
 
 const downloadFile = async (fileUrl, info) => {
     // Get the file name

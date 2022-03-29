@@ -6,7 +6,9 @@
         v-if="key < 4"
         :class="column(key)"
         v-for="(photo, key) in photos" :key="key">
-      <img :src="photo.url" class="object-cover w-full h-full">
+      <img :src="photo.url"
+           :class="matchHeight(photos.length, key)"
+           class="object-cover w-full">
       <div v-if="key === 3 && photos.length > 4"
            class="absolute z-50 top-0 left-0 h-full w-full flex justify-center items-center bg-black bg-opacity-60 hover:bg-opacity-70 text-white">
               <span class="font-PoppinsMedium text-3xl">
@@ -33,6 +35,13 @@ export default {
     }
   },
   methods: {
+    matchHeight(length, index) {
+      if (length > 1 && index > 0) {
+        return 'h-full'
+      } else if (length == 2) {
+        return 'h-full'
+      }
+    },
     itemClick() {
       this.$emit("itemClick", this.post)
     },

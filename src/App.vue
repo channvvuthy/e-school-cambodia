@@ -221,12 +221,14 @@ export default {
 .update {
   background-image: linear-gradient(150deg, #000046 0%, #055174, 33%, #1cb5e0 100%);
 }
+
 .liker-2 {
   .circle-0 {
     right: -1rem;
     z-index: 10;
   }
 }
+
 .liker-3 {
   .circle-1 {
     right: -1rem;
@@ -238,33 +240,40 @@ export default {
     z-index: 20;
   }
 }
+
 .liker-4 {
   .circle-2 {
     right: -1rem;
     z-index: 10;
   }
+
   .circle-1 {
     right: -2rem;
     z-index: 20;
   }
+
   .circle-0 {
     right: -3rem;
     z-index: 30;
   }
 }
+
 .liker-5 {
   .circle-3 {
     right: -1rem;
     z-index: 10;
   }
+
   .circle-2 {
     right: -2rem;
     z-index: 20;
   }
+
   .circle-1 {
     right: -3rem;
     z-index: 30;
   }
+
   .circle-0 {
     right: -4rem;
     z-index: 40;
