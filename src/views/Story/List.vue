@@ -11,7 +11,7 @@
             <div v-for="(st, index) in story" :key="index" class="cursor-pointer relative rounded-xl overflow-hidden"
                  @click="getStoryDetail(st, index)">
               <div
-                  class="w-11 h-11 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 flex justify-center items-center bg-white cursor-pointer"
+                  class="bg-cover bg-center w-11 h-11 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 flex justify-center items-center bg-white cursor-pointer"
                   :class="darkMode?`border-fb`:`border-fb`"
                   :style="{backgroundImage:`url(${st.user.photo})`}">
               </div>

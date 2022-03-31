@@ -123,7 +123,9 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `social`, payload).then(res => {
                     commit("postingSocial", false)
-                    commit("newPost", res.data.data)
+                    if (res.data && res.data.data) {
+                        commit("newPost", res.data.data)
+                    }
                     resolve(res.data.data)
                 }).catch(err => {
                     commit("postingSocial", false)

@@ -123,7 +123,7 @@ export default {
           this.$emit('listenAudio', details)
         } else {
           this.noFree = true
-          return;
+
         }
 
       } else {

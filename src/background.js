@@ -120,7 +120,7 @@ ipcMain.on("removeDownload", (event, arg) => {
     fs.unlink(dir, (err) => {
         if (err) {
             console.error(err)
-            return
+
         }
     })
 })

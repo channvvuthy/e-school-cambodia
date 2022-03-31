@@ -48,11 +48,11 @@
             <Loading :grid="true" :number-of-columns="1"></Loading>
           </div>
         </template>
-        <template v-else>
+        <div id="new-feed" v-else>
           <div v-for="post in social" :key="post._id">
             <div
                 v-observe-visibility="visibilityChanged"
-                :id="post._id"
+                :data-id="post._id"
                 :data-type="post.type"
                 class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
               <div class="px-5 pt-5">
@@ -87,8 +87,18 @@
                     </div>
                   </div>
                 </div>
-                <div class="text-lg mt-4 font-light"
-                     v-if="post.caption"
+                <div v-if="post.thumbnail" class="relative">
+                  <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
+                    <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
+                      {{post.caption}}
+                    </div>
+                  </div>
+                  <img :src="post.thumbnail.url" alt="" class="mt-4" :id="post._id">
+                  {{setParentColor(post._id)}}
+                </div>
+                <!-- Caption -->
+                <div class="text-lg font-light mt-4"
+                     v-if="post.caption && post.thumbnail == undefined"
                      :class="darkMode ? `text-textSecondary` : ``">
                   <div v-if="post.caption.length > 200">
                   <span class="less"
@@ -104,12 +114,12 @@
                   <div v-else>
                     {{ post.caption }}
                   </div>
-
                 </div>
                 <!-- Photo -->
                 <div v-if="post.photo && post.photo.length" class="mt-4">
                   <PhotoGrid @itemClick="itemClickHandler"
                              :post="post"
+                             :parent-width="newFeedWidth"
                              :photos="post.photo"/>
                 </div>
                 <!--Video-->
@@ -198,7 +208,7 @@
               </div>
             </div>
           </div>
-        </template>
+        </div>
         <template v-if="loadingMore">
           <div
               v-for="i in 2" :key="i + Math.random()"
@@ -262,7 +272,7 @@
 
                 <!--Video-->
                 <div v-if="ad.video" class="mt-4 relative">
-                  <div class="absolute w-full h-full flex items-center justify-center z-10 bg-black">
+                  <div class="absolute w-full h-full flex items-center justify-center z-10">
                     <div
                         class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
                         style="background-color: rgba(5,81,116,0.5)">
@@ -341,6 +351,9 @@ import PostDetail from "@/views/Video/components/PostDetail";
 import Action from "@/views/Video/components/Action";
 import ActionList from "@/views/Video/components/ActionList";
 import Pause from "@/views/Component/Post/Pause";
+import FastAverageColor from "fast-average-color";
+
+const fac = new FastAverageColor();
 import Vue from 'vue'
 import VueObserveVisibility from 'vue-observe-visibility'
 
@@ -372,6 +385,7 @@ export default {
   mixins: [mode],
   data() {
     return {
+      newFeedWidth: null,
       videoPlaying: null,
       actionId: null,
       isPostDetail: false,
@@ -389,10 +403,23 @@ export default {
   },
   methods: {
     ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'deleteSocial']),
+    setParentColor(postIndex) {
+      let interval = setInterval(() => {
+        if (document.getElementById(postIndex) != null) {
+          fac.getColorAsync(document.getElementById(postIndex))
+              .then(color => {
+                if (color.isDark) {
+                  document.getElementById(postIndex).parentElement.style.color = 'white'
+                }
+              }).catch(error => error);
+          clearInterval(interval)
+        }
+      }, 100)
+    },
     visibilityChanged(isVisible, entry) {
       if (isVisible) {
         let payload = {
-          id: entry.target.id,
+          id: entry.target.getAttribute('data-id'),
           type: entry.target.getAttribute('data-type')
         }
         this.$store.dispatch('social/countView', payload)

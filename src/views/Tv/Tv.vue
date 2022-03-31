@@ -5,10 +5,8 @@
          :class="darkMode ? `bg-black` : `bg-white`"
          class="flex items-center justify-center h-full">
       <div class="relative cursor-pointer" @click="checkLive">
-        <TVIcon :size="250" :fill="darkMode ? `#909090`: `#055174`">
-        </TVIcon>
-        <div class="absolute w-full flex items-center justify-center left-0 top-0 h-full">
-          <img src="/eschool-cambodia.png" alt="logo" class="w-36 mt-6 mr-9">
+        <div>
+          <img src="/tv.png" alt="logo" class="mt-6 mr-9">
         </div>
       </div>
     </div>

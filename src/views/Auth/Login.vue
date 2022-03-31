@@ -186,7 +186,7 @@
                 if (!this.auth.password) {
                     helper.errorMessage('please_enter_password')
                     this.$refs.password.focus()
-                    return;
+
                 }
             }
         },

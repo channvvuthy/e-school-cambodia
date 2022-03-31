@@ -14,8 +14,8 @@ export default {
             state.background = payload
         },
         getMoreBackground(state, payload) {
-            for (let i = 0; i < payload.list; i++) {
-                state.background.list.push(payload[i])
+            for (let i = 0; i < payload.length; i++) {
+                state.background.push(payload[i])
             }
         }
     },
@@ -34,11 +34,14 @@ export default {
             })
         },
         getMoreBackground({commit}, payload) {
+            commit("loading", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `background?${helper.q(payload)}`).then(res => {
+                axios.get(config.apiUrl + `social/background?${helper.q(payload)}`).then(res => {
+                    commit("loading", false)
                     commit("getMoreBackground", res.data.data)
                     resolve(res.data)
                 }).catch(err => {
+                    commit("loading", false)
                     reject(err)
                 })
             })

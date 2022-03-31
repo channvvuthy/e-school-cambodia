@@ -856,7 +856,7 @@ export default {
                         this.$router.push('/login')
                     }else{
                         helper.errorMessage(response.data.msg)
-                        return;
+
                     }
                 }else{
                     this.isInfo = false

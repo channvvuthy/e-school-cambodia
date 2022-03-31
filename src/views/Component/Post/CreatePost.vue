@@ -65,17 +65,19 @@
         <div class="overflow-y-scroll preview relative pb-5" style="height: 26rem;">
           <div v-if="isBackground">
             <div class="h-full w-full absolute left-0 top-0 pb-5">
-              <div class="h-full w-full flex items-center justify-center bg-cover bg-center overflow-y-scroll p-5"
+              <div class="h-full w-full flex items-center justify-center bg-center overflow-y-scroll p-5"
                    :style="{backgroundImage: `url(${backgroundPhoto})`}"
               >
                 <img :src="backgroundPhoto" id="image" class="hidden">
                 <textarea
+                    id="background"
                     :style="{color:`${color}`}"
                     ref="caption"
                     v-model="payload.caption"
                     :placeholder="$t('say_something')"
                     @input="resize($event)"
-                    class="w-full outline-none bg-transparent text-center" style="resize: none"></textarea>
+                    class="w-full outline-none bg-transparent text-center overflow-hidden"
+                    style="resize: none"></textarea>
 
               </div>
             </div>
@@ -106,8 +108,8 @@
                 <div class="container" @mouseleave="()=> {this.currentHoverPhoto = null}">
                   <figure v-for="(picture, index) in multiPhotoPreview"
                           @mouseover="activeRemove(index)"
-                          class="relative cursor-pointer"
-                          :class="((index === 0 && multiPhotoPreview.length === 1) || (index === 0 && multiPhotoPreview.length > 2)) ? `span-2` : ``">
+                          class="relative cursor-pointer figure"
+                          :class="((index === 0 && multiPhotoPreview.length === 1) || (index === 0 && multiPhotoPreview.length > 2)) ? `span-2` : `matched`">
                     <img :src="`file://${picture}`" :alt="index" @click="previewPhoto(picture)"/>
                     <div
                         v-if="currentHoverPhoto === index"
@@ -168,9 +170,11 @@
 
               </div>
             </div>
-            <div class="h-16 w-16">
+            <div class="h-16 w-16" @click="moreBackground">
               <div class="cursor-pointer flex items-center justify-center h-16 w-16 rounded-full"
-                   :class="darkMode ? `bg-primary text-gray-300` : `bg-more`">More
+                   :class="darkMode ? `bg-primary text-gray-300` : `bg-more`">
+                <LoadingWhite v-if="loadingBackground"></LoadingWhite>
+                <span v-else>{{ $t('more') }}</span>
               </div>
             </div>
 
@@ -254,7 +258,6 @@ import Pause from "@/views/Component/Post/Pause";
 import FastAverageColor from "fast-average-color";
 import Message from "@/components/Message";
 import PreviewPhoto from "@/components/PreviewPhoto";
-import helper from "@/helper/helper";
 
 const fac = new FastAverageColor();
 
@@ -312,6 +315,13 @@ export default {
     ...mapActions('upload', ['singleUpload', 'multiUpload', 'videoUpload']),
     ...mapActions('social', ['postSocial']),
     ...mapActions('background', ['getBackground', 'getMoreBackground']),
+    moreBackground() {
+      this.p++
+      let payload = {
+        p: this.p
+      }
+      this.getMoreBackground(payload)
+    },
     resize(e) {
       e.target.style.height = 'auto'
       e.target.style.height = `${e.target.scrollHeight}px`
@@ -353,10 +363,15 @@ export default {
             .then(color => {
               this.backgroundColor = color.rgba
               this.color = color.isDark ? '#fff' : '#000';
+              let element = document.getElementById("background")
+              if (color.isDark) {
+                element.classList.remove("placeholder-black")
+                element.classList.add('placeholder-white')
+              } else {
+                element.classList.remove("placeholder-white")
+                element.classList.add('placeholder-black')
+              }
             }).catch(error => error);
-        if (this.payload.caption) {
-          this.$refs.content.innerText = this.payload.caption
-        }
       }, 100)
     },
     showBackground() {
@@ -463,7 +478,6 @@ export default {
         }
         this.multiUpload(payload).then(res => {
           if (res.status != undefined && res.status == 1) {
-            helper.errorMessage(res.msg)
             this.loading = false
             return
           }
