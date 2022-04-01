@@ -6,9 +6,14 @@
         radius="none">
       <div class="flex justify-between" style="height: 40rem;">
         <div class="w-3/5 p-5 relative">
-          <img
-              v-for="(photo, index) in post.photo" v-if="index === currentSlide"
-              :src="photo.url" class="w-full object-cover h-full">
+          <div
+              class="w-full h-full"
+              v-for="(photo, index) in post.photo" v-if="index === currentSlide">
+            {{setParentColor(`postDetail${index}`)}}
+            <img
+                :id="`postDetail${index}`"
+                :src="photo.url" class="w-full object-contain h-full">
+          </div>
           <div
               v-if="post.photo && post.photo.length > 1"
               class="flex items-center justify-between h-full w-full absolute left-0 object-cover top-0 px-10">
@@ -214,7 +219,9 @@ import mode from "@/mixins/mode";
 import PhotoView from "@/views/Video/components/PhotoView";
 import ReplyComment from "@/views/Video/components/ReplyComment";
 import StickerView from "@/views/Video/components/StickerView";
+import FastAverageColor from "fast-average-color";
 
+const fac = new FastAverageColor();
 export default {
   name: "PostDetail",
   props: {
@@ -270,6 +277,17 @@ export default {
   },
   methods: {
     ...mapActions('social', ['deleteLike', 'like', 'addComment']),
+    setParentColor(postIndex) {
+      let interval = setInterval(() => {
+        if (document.getElementById(postIndex) != null) {
+          fac.getColorAsync(document.getElementById(postIndex))
+              .then(color => {
+                // document.getElementById(postIndex).parentElement.style.backgroundColor = color.rgb
+              }).catch(error => error);
+          clearInterval(interval)
+        }
+      }, 50)
+    },
     removeSticker() {
       this.stickerUrl = null
       this.$delete(this.comment, 'sticker')
@@ -329,12 +347,12 @@ export default {
     cutString(text, limit) {
       return helper.cutString(text, limit)
     },
-    next() {
+    next(postIndex) {
       if (this.currentSlide < (this.post.photo.length - 1)) {
         this.currentSlide++
       }
     },
-    previous() {
+    previous(postIndex) {
       if (this.currentSlide > 0) {
         this.currentSlide--
       }

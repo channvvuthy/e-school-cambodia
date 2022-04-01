@@ -27,7 +27,7 @@
           <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"></ImageIcon>
         </div>
         <div class="w-10 h-10 rounded-full flex items-center justify-center  text-sm fot-semibold cursor-pointer"
-             :class="darkMode ? `bg-button text-textSecondary `: `bg-softGray text-primary`">
+             :class="darkMode ? `bg-button text-lightGray `: `bg-softGray text-primary`">
           Live
         </div>
       </div>
@@ -79,7 +79,7 @@
                     </div>
                     <div
                         v-if="actionId === post._id"
-                        :class="darkMode ? `bg-youtube text-textSecondary`: `bg-white border-t`"
+                        :class="darkMode ? `bg-youtube text-lightGray`: `bg-white border-t`"
                         class="absolute w-60 py-5 right-0 top-10 z-50 rounded-xl shadow-md">
                       <ActionList
                           @selectedAction="selectedAction($event)"
@@ -87,19 +87,31 @@
                     </div>
                   </div>
                 </div>
-                <div v-if="post.thumbnail" class="relative">
+                <div v-if="post.thumbnail && post.type === 1" class="relative">
                   <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                     <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
-                      {{post.caption}}
+                      <div v-if="post.caption.length > 200">
+                  <span class="less"
+                        @click="seeMore"
+                  >{{ cutString(post.caption, 200) }} <span
+                      class="capitalize cursor-pointer font-bold">{{ $t('see_more') }}</span>
+                  </span>
+                        <span class="more hidden">
+                    {{ post.caption }}
+                  </span>
+                      </div>
+                      <div v-else>
+                        {{ post.caption }}
+                      </div>
                     </div>
                   </div>
                   <img :src="post.thumbnail.url" alt="" class="mt-4" :id="post._id">
-                  {{setParentColor(post._id)}}
+                  {{ setParentColor(post._id) }}
                 </div>
                 <!-- Caption -->
-                <div class="text-lg font-light mt-4"
-                     v-if="post.caption && post.thumbnail == undefined"
-                     :class="darkMode ? `text-textSecondary` : ``">
+                <div class="font-light mt-4"
+                     v-else-if="post.caption"
+                     :class="darkMode ? `text-lightGray` : ``">
                   <div v-if="post.caption.length > 200">
                   <span class="less"
                         @click="seeMore"
@@ -119,36 +131,17 @@
                 <div v-if="post.photo && post.photo.length" class="mt-4">
                   <PhotoGrid @itemClick="itemClickHandler"
                              :post="post"
-                             :parent-width="newFeedWidth"
                              :photos="post.photo"/>
                 </div>
                 <!--Video-->
-                <div v-if="post.video" class="mt-4 relative">
-                  <div class="absolute w-full h-full flex items-center justify-center z-10">
-                    <div
-                        :class="videoPlaying === post._id ? `hidden` : ``"
-                        class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
-                        style="background-color: rgba(5,81,116,0.5)">
-                      <div class="pl-1">
-                        <Next fill="#FFF"></Next>
-                      </div>
-                    </div>
-                    <div
-                        v-if="videoPlaying === post._id"
-                        class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
-                        style="background-color: rgba(5,81,116,0.5)">
-                      <div>
-                        <Pause fill="#FFF"></Pause>
-                      </div>
-                    </div>
-                  </div>
-                  <img :src="post.thumbnail.url" class="m-auto">
+                <div v-if="post.video" class="mt-4 overflow-hidden">
+                  <MediaPlayer :video-url="post.video.url" :poster="post.thumbnail.url"></MediaPlayer>
                 </div>
                 <!-- Background -->
                 <div></div>
                 <!-- Tool -->
                 <div class="flex items-center pl-5 mt-4 justify-between"
-                     :class="darkMode ? `text-textSecondary` : `text-primary`">
+                     :class="darkMode ? `text-lightGray` : `text-primary`">
                   <div class="flex items-center space-x-16">
                     <div class="flex items-center space-x-2">
                       <div class="cursor-pointer">
@@ -192,7 +185,7 @@
               <div class="flex h-17 border-t flex items-center w-full mt-4 px-5 space-x-5"
                    v-if="commentDetailId !== post._id"
                    @click="showCommentDetail(post._id)"
-                   :class="darkMode ? `border-button text-textSecondary` : ``">
+                   :class="darkMode ? `border-button text-lightGray` : ``">
                 <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
                 <textarea
                     disabled
@@ -249,7 +242,7 @@
 
                 <div class="text-lg mt-4 font-light"
                      v-if="ad.caption"
-                     :class="darkMode ? `text-textSecondary` : ``">
+                     :class="darkMode ? `text-lightGray` : ``">
                   {{ ad.caption }}
                 </div>
 
@@ -286,7 +279,7 @@
 
                 <!-- Tool -->
                 <div class="flex items-center px-3 mt-4 justify-between"
-                     :class="darkMode ? `text-textSecondary` : `text-primary`">
+                     :class="darkMode ? `text-lightGray` : `text-primary`">
                   <div class="flex items-center space-x-16">
                     <div class="flex items-center space-x-2">
                       <div>
@@ -309,7 +302,7 @@
               </div>
               <!--Comment -->
               <div class="flex h-16 border-t flex items-center w-full mt-4 space-x-5 px-3"
-                   :class="darkMode ? `border-button text-textSecondary` : ``">
+                   :class="darkMode ? `border-button text-lightGray` : ``">
                 <Avatar :avatar-url="stProfile.photo" :size="8"></Avatar>
                 <textarea
                     placeholder="Add comment"
@@ -356,16 +349,20 @@ import FastAverageColor from "fast-average-color";
 const fac = new FastAverageColor();
 import Vue from 'vue'
 import VueObserveVisibility from 'vue-observe-visibility'
+import Video from "@/views/Video/Video";
+import MediaPlayer from "@/views/Video/components/MediaPlayer";
 
 Vue.use(VueObserveVisibility)
 
 export default {
   computed: {
     ...mapState('auth', ['stProfile']),
-    ...mapState('setting', ['darkMode']),
-    ...mapState('social', ['social', 'ads', 'loadingMore'])
+    ...mapState('setting', ['darkMode', 'isHide']),
+    ...mapState('social', ['social', 'ads', 'loadingMore']),
   },
   components: {
+    MediaPlayer,
+    Video,
     Pause,
     ActionList,
     Action,
@@ -385,7 +382,6 @@ export default {
   mixins: [mode],
   data() {
     return {
-      newFeedWidth: null,
       videoPlaying: null,
       actionId: null,
       isPostDetail: false,
@@ -402,6 +398,7 @@ export default {
     }
   },
   methods: {
+
     ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'deleteSocial']),
     setParentColor(postIndex) {
       let interval = setInterval(() => {
@@ -434,8 +431,6 @@ export default {
     },
     playVideo(post) {
       this.videoPlaying = post._id
-      let vd = document.getElementById(`${post._id}`)
-      vd.play()
     },
     selectedAction(data) {
       let payload = {}
@@ -554,7 +549,7 @@ export default {
   },
   created() {
     this.getPost()
-  }
+  },
 }
 </script>
 <style>

@@ -10,7 +10,7 @@
       <img :src="photo.url"
            :id="`${post._id}${key}`"
            :class="matchHeight(photos.length, key)"
-           class="object-contain w-full">
+           class="object-over w-full">
       <div v-if="key === 3 && photos.length > 4"
            class="absolute z-50 top-0 left-0 h-full w-full flex justify-center items-center bg-black bg-opacity-60 hover:bg-opacity-70 text-white">
               <span class="font-PoppinsMedium text-3xl">

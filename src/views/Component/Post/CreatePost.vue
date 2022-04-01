@@ -62,26 +62,26 @@
           </div>
         </div>
 
-        <div class="overflow-y-scroll preview relative pb-5" style="height: 26rem;">
-          <div v-if="isBackground">
-            <div class="h-full w-full absolute left-0 top-0 pb-5">
-              <div class="h-full w-full flex items-center justify-center bg-center overflow-y-scroll p-5"
-                   :style="{backgroundImage: `url(${backgroundPhoto})`}"
-              >
-                <img :src="backgroundPhoto" id="image" class="hidden">
+        <div class="preview pb-5"
+             :class="isBackground ? ``: `overflow-y-scroll relative`"
+             style="height: 26rem;">
+          <div v-if="isBackground" class="relative">
+            <div class="absolute flex items-center h-full w-full justify-center top-0 left-0 p-5">
+              <div class="m-auto overflow-y-scroll whitespace-pre-wrap text-center max-h-full">
                 <textarea
+                    cols="100"
                     id="background"
                     :style="{color:`${color}`}"
                     ref="caption"
                     v-model="payload.caption"
                     :placeholder="$t('say_something')"
                     @input="resize($event)"
-                    class="w-full outline-none bg-transparent text-center overflow-hidden"
+                    class="outline-none bg-transparent text-center w-full"
                     style="resize: none"></textarea>
-
               </div>
             </div>
-            <div class="h-5"></div>
+            <img :src="backgroundPhoto" alt="" id="image">
+            <!--            {{ setParentColor(post._id) }}-->
           </div>
           <div class="px-5" v-else>
           <textarea

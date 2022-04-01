@@ -388,6 +388,7 @@
   "5102": "This chanel has been offline will live back next hour",
   "5103": "Too many violence uploaded. You will be availble upload in next 24 hour.",
   "5104": "Your post is contain bad word/durse words",
+  "5105": "Your post is contain adult URL.",
   "more": "More",
   "actions": {
     "delete": "Delete",
