@@ -135,7 +135,9 @@
                 </div>
                 <!--Video-->
                 <div v-if="post.video" class="mt-4 overflow-hidden">
-                  <MediaPlayer :video-url="post.video.url" :poster="post.thumbnail.url"></MediaPlayer>
+                  <MediaPlayer
+                      @fullScreen="fullScreen($event)"
+                      :video-url="post.video.url" :post="post"></MediaPlayer>
                 </div>
                 <!-- Background -->
                 <div></div>
@@ -400,6 +402,9 @@ export default {
   methods: {
 
     ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'deleteSocial']),
+    fullScreen(data) {
+      console.log(data)
+    },
     setParentColor(postIndex) {
       let interval = setInterval(() => {
         if (document.getElementById(postIndex) != null) {

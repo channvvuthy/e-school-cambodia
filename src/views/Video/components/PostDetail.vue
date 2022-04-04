@@ -9,10 +9,10 @@
           <div
               class="w-full h-full"
               v-for="(photo, index) in post.photo" v-if="index === currentSlide">
-            {{setParentColor(`postDetail${index}`)}}
+            {{ setParentColor(`postDetail${index}`) }}
             <img
                 :id="`postDetail${index}`"
-                :src="photo.url" class="w-full object-contain h-full">
+                :src="photo.url" class="w-full object-cover h-full">
           </div>
           <div
               v-if="post.photo && post.photo.length > 1"
@@ -21,13 +21,13 @@
                 :class="currentSlide > 0 ? `visible` : `invisible`"
                 @click="previous"
                 class="transform rotate-90 cursor-pointer">
-              <ChevronIcon :size="40" fill="#000"></ChevronIcon>
+              <ChevronIcon :size="40" :fill="color"></ChevronIcon>
             </div>
             <div
                 v-if="currentSlide < (post.photo.length - 1)"
                 @click="next"
                 class="transform -rotate-90 cursor-pointer">
-              <ChevronIcon :size="40" fill="#000"></ChevronIcon>
+              <ChevronIcon :size="40" :fill="color"></ChevronIcon>
             </div>
           </div>
         </div>
@@ -263,6 +263,7 @@ export default {
       stickerUrl: null,
       currentSlide: 0,
       payload: {},
+      color: "#000",
       loading: false,
       photo: {
         photoUrl: null,
@@ -282,7 +283,8 @@ export default {
         if (document.getElementById(postIndex) != null) {
           fac.getColorAsync(document.getElementById(postIndex))
               .then(color => {
-                // document.getElementById(postIndex).parentElement.style.backgroundColor = color.rgb
+                document.getElementById(postIndex).parentElement.style.backgroundColor = color.rgb
+                color.isDark ? this.color = "#FFFFFF" : this.color = "#000000"
               }).catch(error => error);
           clearInterval(interval)
         }

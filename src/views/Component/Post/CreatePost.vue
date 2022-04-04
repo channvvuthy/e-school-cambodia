@@ -125,8 +125,8 @@
 
               <!-- Preview video -->
               <template v-if="videoPreview">
-                <div class="relative" @mouseenter="()=>{this.isVideo = true}" @mouseleave="()=>{this.isVideo = false}">
-                  <video id="video">
+                <div class="relative w-full" @mouseenter="()=>{this.isVideo = true}" @mouseleave="()=>{this.isVideo = false}">
+                  <video id="video" class="w-full object-cover">
                     <source :src="`file://${videoPreview}`">
                   </video>
                   <div class="w-full h-full flex items-center justify-center absolute z-40 top-0 left-0" v-if="isVideo">
@@ -258,6 +258,7 @@ import Pause from "@/views/Component/Post/Pause";
 import FastAverageColor from "fast-average-color";
 import Message from "@/components/Message";
 import PreviewPhoto from "@/components/PreviewPhoto";
+import helper from "@/helper/helper";
 
 const fac = new FastAverageColor();
 
@@ -416,10 +417,11 @@ export default {
 
     },
     selectFiles(e) {
-      if (e.target.files.length)
+      if (e.target.files.length) {
         this.clearData()
-      this.resetVideo()
-      this.canPost = true
+        this.resetVideo()
+        this.canPost = true
+      }
 
       if (e.target.files.length > 10) {
         this.isMessage = true
@@ -427,10 +429,13 @@ export default {
       }
 
       for (let i = 0; i < e.target.files.length; i++) {
-
         let file = e.target.files[i]
-        this.multiPhotoPreview.push(file.path)
-        this.selectedFiles.push(file)
+        if (file.size >= 10240) {
+          this.multiPhotoPreview.push(file.path)
+          this.selectedFiles.push(file)
+        } else {
+          helper.errorMessage(file.name + ' ' + this.$i18n.t('9890'))
+        }
       }
     },
     dataURLtoBlob(dataurl) {

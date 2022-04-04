@@ -390,6 +390,7 @@
   "5104": "Your post is contain bad word/durse words",
   "5105": "Your post is contain adult URL.",
   "more": "More",
+  "9890": "is too small. To continue, choose a file that's 1KB or more",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",
