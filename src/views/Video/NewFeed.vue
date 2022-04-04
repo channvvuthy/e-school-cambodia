@@ -322,6 +322,12 @@
           @dismiss="()=>{this.isPostDetail = false}"
           :post="postDetail"
           v-if="isPostDetail"></PostDetail>
+      <!-- Video detail -->
+      <VideoDetail
+          @dismiss="()=>{this.isVideo = false}"
+          :post="postDetail"
+          v-if="isVideo"
+      ></VideoDetail>
     </div>
   </div>
 </template>
@@ -353,6 +359,7 @@ import Vue from 'vue'
 import VueObserveVisibility from 'vue-observe-visibility'
 import Video from "@/views/Video/Video";
 import MediaPlayer from "@/views/Video/components/MediaPlayer";
+import VideoDetail from "@/views/Video/components/VideoDetail";
 
 Vue.use(VueObserveVisibility)
 
@@ -363,6 +370,7 @@ export default {
     ...mapState('social', ['social', 'ads', 'loadingMore']),
   },
   components: {
+    VideoDetail,
     MediaPlayer,
     Video,
     Pause,
@@ -384,6 +392,7 @@ export default {
   mixins: [mode],
   data() {
     return {
+      isVideo: false,
       videoPlaying: null,
       actionId: null,
       isPostDetail: false,
@@ -403,7 +412,8 @@ export default {
 
     ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'deleteSocial']),
     fullScreen(data) {
-      console.log(data)
+      this.postDetail = data
+      this.isVideo = true
     },
     setParentColor(postIndex) {
       let interval = setInterval(() => {

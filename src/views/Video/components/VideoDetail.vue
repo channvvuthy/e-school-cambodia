@@ -6,40 +6,32 @@
         radius="none">
       <div class="flex justify-between" style="height: 40rem;">
         <div class="w-3/5 p-5 relative">
-          <div
-              class="w-full h-full"
-              v-for="(photo, index) in post.photo" v-if="index === currentSlide">
-            {{ setParentColor(`postDetail${index}`) }}
-            <img
-                :id="`postDetail${index}`"
-                :src="photo.url" class="w-full object-cover h-full">
+          <div v-if="loadingNext">
+            <div class="
+            bg-gradient-to-r
+            from-gray-100
+            via-gray-200
+            to-gray-100
+            background-animate
+            w-full" style="height: 37.5rem;"></div>
           </div>
-          <div
-              v-if="post.photo && post.photo.length > 1"
-              class="flex items-center justify-between h-full w-full absolute left-0 object-cover top-0 px-10">
-            <div
-                :class="currentSlide > 0 ? `visible` : `invisible`"
-                @click="previous"
-                class="transform rotate-90 cursor-pointer">
-              <ChevronIcon :size="40" :fill="color"></ChevronIcon>
-            </div>
-            <div
-                v-if="currentSlide < (post.photo.length - 1)"
-                @click="next"
-                class="transform -rotate-90 cursor-pointer">
-              <ChevronIcon :size="40" :fill="color"></ChevronIcon>
-            </div>
-          </div>
+          <MediaPlayer
+              v-else
+              @ended="ended($event)"
+              default-aspect-ratio="5:4"
+              :is-auto-play="true"
+              :isFullScreen="false"
+              :video-url="feed.video.url" :post="feed"></MediaPlayer>
         </div>
         <div class="w-2/5 pt-5">
           <div class="border h-full border-b-0 border-r-0 flex flex-col justify-between"
                :class="darkMode ? `border-button`: ``">
             <div class="overflow-y-scroll h-full">
               <div class="p-5 flex space-x-3">
-                <Avatar :avatar-url="post.user.photo" :size="14"></Avatar>
+                <Avatar :avatar-url="feed.user.photo" :size="14"></Avatar>
                 <div>
                   <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
-                    {{ post.user.name }}
+                    {{ feed.user.name }}
                   </div>
                   <div :class="darkMode ? `border-button` : `border-roundBorder` ">
                     Public
@@ -50,21 +42,21 @@
               <!-- Caption -->
               <div class="px-5">
                 <div class="text-lg font-light mb-4"
-                     v-if="post.caption"
+                     v-if="feed.caption"
                      :class="darkMode ? `text-textSecondary` : ``">
-                  <div v-if="post.caption.length > 100">
+                  <div v-if="feed.caption.length > 100">
                   <span class="less"
                         @click="seeMore"
-                  >{{ cutString(post.caption, 100) }} <span
+                  >{{ cutString(feed.caption, 100) }} <span
                       class="capitalize cursor-pointer"
                       :class="darkMode ? `text-gray-300`: `text-primary`">{{ $t('see_more') }}</span>
                   </span>
                     <span class="more hidden">
-                    {{ post.caption }}
+                    {{ feed.caption }}
                   </span>
                   </div>
                   <div v-else>
-                    {{ post.caption }}
+                    {{ feed.caption }}
                   </div>
 
                 </div>
@@ -75,24 +67,24 @@
                 <div class="flex items-center space-x-16">
                   <div class="flex items-center space-x-2">
                     <div class="cursor-pointer">
-                      <div v-if="post.is_like" @click="disLikePost(post)">
+                      <div v-if="feed.is_like" @click="disLikePost(feed)">
                         <LikeFillIcon :size="22" :fill="darkMode ? `#909090`: `#055174`"></LikeFillIcon>
                       </div>
-                      <div @click="likePost(post)" v-else>
+                      <div @click="likePost(feed)" v-else>
                         <LikeIcon :size="22" :fill="darkMode ? `#909090`: `#4A4A4A`"></LikeIcon>
                       </div>
 
                     </div>
-                    <div v-if="post.total && post.total.like">
-                      {{ kFormatter(post.total.like) }}
+                    <div v-if="feed.total && feed.total.like">
+                      {{ kFormatter(feed.total.like) }}
                     </div>
                   </div>
-                  <div class="flex items-center space-x-2" v-if="post.total && post.total.seen">
+                  <div class="flex items-center space-x-2" v-if="feed.total && feed.total.seen">
                     <div>
                       <Eye :size="30" :fill="darkMode ? `#909090`: `#4A4A4A`"></Eye>
                     </div>
                     <div>
-                      {{ kFormatter(post.total.seen) }}
+                      {{ kFormatter(feed.total.seen) }}
                     </div>
                   </div>
                 </div>
@@ -192,7 +184,7 @@
 
     <!-- Photo -->
     <PhotoView
-        :id="post._id"
+        :id="feed._id"
         @closePhoto="()=>{this.isPhoto = false}"
         :photo="photo"
         v-if="isPhoto"></PhotoView>
@@ -220,6 +212,7 @@ import PhotoView from "@/views/Video/components/PhotoView";
 import ReplyComment from "@/views/Video/components/ReplyComment";
 import StickerView from "@/views/Video/components/StickerView";
 import FastAverageColor from "fast-average-color";
+import MediaPlayer from "@/views/Video/components/MediaPlayer";
 
 const fac = new FastAverageColor();
 export default {
@@ -233,6 +226,7 @@ export default {
   },
   mixins: [mode],
   components: {
+    MediaPlayer,
     StickerView,
     ReplyComment,
     Sticker,
@@ -257,14 +251,18 @@ export default {
   },
   data() {
     return {
+      feed: this.post,
       isPhoto: false,
       loadingReply: false,
       isSticker: false,
       stickerUrl: null,
       currentSlide: 0,
-      payload: {},
+      payload: {
+        p: 1
+      },
       color: "#000",
       loading: false,
+      loadingNext: false,
       photo: {
         photoUrl: null,
         file: null
@@ -277,7 +275,17 @@ export default {
     }
   },
   methods: {
-    ...mapActions('social', ['deleteLike', 'like', 'addComment']),
+    ...mapActions('social', ['deleteLike', 'like', 'addComment', 'viewVideo']),
+    ended(data) {
+      this.loadingNext = true
+      this.payload.p++
+      this.payload.id = data._id
+      this.viewVideo(this.payload).then(res => {
+        this.feed = res.next_video
+        this.loadingNext = false
+        this.getComment()
+      })
+    },
     setParentColor(postIndex) {
       let interval = setInterval(() => {
         if (document.getElementById(postIndex) != null) {
@@ -312,7 +320,7 @@ export default {
       this.commentId = comment._id
     },
     postComment() {
-      this.comment.id = this.replyId ? this.commentId : this.post._id
+      this.comment.id = this.replyId ? this.commentId : this.feed._id
       let isComment = false
       this.comment.text = this.comment.text.trim()
 
@@ -385,7 +393,7 @@ export default {
     },
     getComment() {
       this.loading = true
-      this.$store.dispatch('social/getComment', {id: this.post._id}).then(res => {
+      this.$store.dispatch('social/getComment', {id: this.feed._id}).then(res => {
         this.loading = false
       })
     }
@@ -395,7 +403,19 @@ export default {
   }
 }
 </script>
+<style>
+.background-animate {
+  background-size: 400%;
+  animation: AnimationName 1s ease infinite;
+}
 
-<style scoped>
-
+@keyframes AnimationName {
+  0%,
+  100% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
 </style>

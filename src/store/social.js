@@ -225,6 +225,15 @@ export default {
                 })
             })
         },
+        viewVideo({commit}, payload){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/view/video?${helper.q(payload)}`).then(res => {
+                    resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        }
 
     }
 

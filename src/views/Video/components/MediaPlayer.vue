@@ -1,11 +1,12 @@
 <template>
   <div class="relative">
     <div
+        v-if="isFullScreen"
         @click="fullScreen"
         class="absolute z-40 right-4 top-4 w-6 h-6 flex items-center justify-center cursor-pointer fullscreen"
         style="background-color: rgba(43, 51, 63, 0.7)">
     </div>
-    <video ref="videoPlayer" class="video-js"></video>
+    <video ref="videoPlayer" class="video-js" @ended="ended"></video>
   </div>
 </template>
 
@@ -20,6 +21,15 @@ export default {
     FullScreenIcon
   },
   props: {
+    defaultAspectRatio: {
+      default: () => '16:9'
+    },
+    isAutoPlay: {
+      default: () => false
+    },
+    isFullScreen: {
+      default: () => true
+    },
     videoUrl: {
       default: () => null
     },
@@ -56,7 +66,11 @@ export default {
     }
   },
   methods: {
+    ended() {
+      this.$emit("ended", this.post)
+    },
     fullScreen() {
+      this.player.pause()
       this.$emit("fullScreen", this.post)
     }
   },
@@ -68,6 +82,8 @@ export default {
   created() {
     this.options.sources[0].src = this.videoUrl
     this.options.poster = this.post.thumbnail.url
+    this.options.autoplay = this.isAutoPlay
+    this.options.aspectRatio = this.defaultAspectRatio
   },
   beforeDestroy() {
     if (this.player) {

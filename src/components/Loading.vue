@@ -1,12 +1,14 @@
 <template>
   <div>
-    <div class="grid gap-4" :class="gridName()">
-      <div v-for="i in numberOfColumns" class="cursor-pointer h-32 w-full box-loading" :key="i">
-        <div class="flex flex-col justify-between">
-          <div class="line-1"></div>
-          <div class="line-2 mt-3"></div>
-          <div class="line-3 mt-3"></div>
-          <div class="line-4 mt-3"></div>
+    <div v-if="!isVideo">
+      <div class="grid gap-4" :class="gridName()">
+        <div v-for="i in numberOfColumns" class="cursor-pointer h-32 w-full box-loading" :key="i">
+          <div class="flex flex-col justify-between">
+            <div class="line-1"></div>
+            <div class="line-2 mt-3"></div>
+            <div class="line-3 mt-3"></div>
+            <div class="line-4 mt-3"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -22,6 +24,9 @@ export default {
     }
   },
   props: {
+    isVideo: {
+      default: () => false
+    },
     grid: {
       default: () => false
     },
