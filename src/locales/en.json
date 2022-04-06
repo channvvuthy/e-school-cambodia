@@ -375,6 +375,7 @@
   "tv": "TV",
   "more_reply": "View more reply",
   "create_post": "Create post",
+  "edit_post": "Edit post",
   "post": "Post",
   "category": "Category",
   "take_photo": "Take Photo",
@@ -391,10 +392,13 @@
   "5105": "Your post is contain adult URL.",
   "more": "More",
   "9890": "is too small. To continue, choose a file that's 1KB or more",
+  "4009": "Invalid parameter",
+  "update": "Update",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",
     "add_to_favorite": "Add to favorite",
+    "remove_favorite": "Remove favorite",
     "copy_link": "Copy link",
     "share": "Share",
     "report": "Report"

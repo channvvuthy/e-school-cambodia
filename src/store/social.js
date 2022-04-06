@@ -15,6 +15,22 @@ export default {
         replies: []
     },
     mutations: {
+        addFavorite(state, payload) {
+            state.social = state.social.filter(item => {
+                if (item._id == payload.id) {
+                    item.is_favorite = 1
+                }
+                return item
+            })
+        },
+        deleteFavorite(state, payload) {
+            state.social = state.social.filter(item => {
+                if (item._id == payload.id) {
+                    item.is_favorite = 0
+                }
+                return item
+            })
+        },
         deleteSocial(state, payload) {
             state.social = state.social.filter(item => item._id != payload)
         },
@@ -133,6 +149,16 @@ export default {
                 })
             })
         },
+        editSocial({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.put(config.apiUrl + `social`, payload).then(res => {
+                    resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+
         like({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `social/like`, payload).then(res => {
@@ -225,7 +251,7 @@ export default {
                 })
             })
         },
-        viewVideo({commit}, payload){
+        viewVideo({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social/view/video?${helper.q(payload)}`).then(res => {
                     resolve(res.data.data)
@@ -233,7 +259,41 @@ export default {
                     reject(err)
                 })
             })
-        }
+        },
+        getFavorite({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `favorite/social?${helper.q(payload)}`).then(res => {
+                    resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        addFavorite({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `favorite/social`, payload).then(res => {
+                    resolve(res.data.data)
+                    commit("addFavorite", payload)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        deleteFavorite({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `favorite/social`, {
+                    headers: {},
+                    data: {
+                        id: payload.id,
+                    }
+                }).then(res => {
+                    resolve(res.data)
+                    commit("deleteFavorite", payload)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
 
     }
 

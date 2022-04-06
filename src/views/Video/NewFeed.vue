@@ -43,7 +43,7 @@
         <template v-if="loadingNewFeed">
           <div
               v-for="key in 6" :key="key + Math.random()"
-              class="border mb-5 rounded-md p-5"
+              class="border mb-5 p-5"
               :class="darkMode ? `border-button text-lightGray` : ``">
             <Loading :grid="true" :number-of-columns="1"></Loading>
           </div>
@@ -54,7 +54,7 @@
                 v-observe-visibility="visibilityChanged"
                 :data-id="post._id"
                 :data-type="post.type"
-                class="border mb-5 rounded-md" :class="darkMode ? `border-button text-lightGray` : ``">
+                class="border mb-5" :class="darkMode ? `border-button text-lightGray` : ``">
               <div class="px-5 pt-5">
                 <div class="flex justify-between">
                   <div class="flex space-x-4">
@@ -109,7 +109,7 @@
                   {{ setParentColor(post._id) }}
                 </div>
                 <!-- Caption -->
-                <div class="font-light mt-4"
+                <div class="font-light mt-4 whitespace-pre-wrap"
                      v-else-if="post.caption"
                      :class="darkMode ? `text-lightGray` : ``">
                   <div v-if="post.caption.length > 200">
@@ -207,7 +207,7 @@
         <template v-if="loadingMore">
           <div
               v-for="i in 2" :key="i + Math.random()"
-              class="border mb-5 rounded-md p-5"
+              class="border mb-5 p-5"
               :class="darkMode ? `border-button text-lightGray` : ``">
             <Loading :grid="true" :number-of-columns="1"></Loading>
           </div>
@@ -221,14 +221,14 @@
         <div
             v-for="index in 6" :key="index + Math.random()"
             v-if="loadingNewFeed"
-            class="border rounded py-3 px-4 mb-4"
+            class="border py-3 px-4 mb-4"
             :class="darkMode ? `border-button text-lightGray` : ``">
           <Loading :grid="true" :number-of-columns="1"></Loading>
         </div>
         <div v-if="!loadingNewFeed">
           <div v-for="(ad, index) in ads" :key="index" class="mb-4">
 
-            <div class="border rounded" :class="darkMode ? `border-button text-lightGray` : ``">
+            <div class="border" :class="darkMode ? `border-button text-lightGray` : ``">
               <div class="py-3 px-4">
                 <div class="flex justify-between">
                   <div class="flex space-x-4">
@@ -242,7 +242,7 @@
                   </div>
                 </div>
 
-                <div class="text-lg mt-4 font-light"
+                <div class="text-lg mt-4 font-light whitespace-pre-wrap"
                      v-if="ad.caption"
                      :class="darkMode ? `text-lightGray` : ``">
                   {{ ad.caption }}
@@ -328,6 +328,14 @@
           :post="postDetail"
           v-if="isVideo"
       ></VideoDetail>
+      <!-- Edit post -->
+      <template v-if="isEdit">
+        <CreatePost
+            :edit-detail="postDetail"
+            :is-edit="true"
+            @dismissPost="()=>{this.isEdit = false}"
+            @closeCreate="closeCreate"></CreatePost>
+      </template>
     </div>
   </div>
 </template>
@@ -401,6 +409,7 @@ export default {
       loadingNewFeed: false,
       loading: false,
       isPost: false,
+      isEdit: false,
       payload: {
         p: 1,
         caption: null,
@@ -410,7 +419,8 @@ export default {
   },
   methods: {
 
-    ...mapActions('social', ['getSocial', 'postSocial', 'like', 'deleteLike', 'deleteSocial']),
+    ...mapActions('social', ['getSocial', 'postSocial', 'like',
+      'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite']),
     fullScreen(data) {
       this.postDetail = data
       this.isVideo = true
@@ -449,11 +459,29 @@ export default {
     },
     selectedAction(data) {
       let payload = {}
+      payload.id = data.post._id
+
       if (data.action.label === 'actions.delete') {
-        payload.id = data.post._id
         this.deleteSocial(payload).then(() => {
           this.actionId = null
         })
+      }
+
+      if (data.action.label === 'actions.add_to_favorite') {
+        this.addFavorite(payload).then(() => {
+          this.actionId = null
+        })
+      }
+
+      if (data.action.label === 'actions.remove_favorite') {
+        this.deleteFavorite(payload).then(() => {
+          this.actionId = null
+        })
+      }
+      if (data.action.label === 'actions.edit') {
+        this.postDetail = data.post
+        this.isEdit = true
+        this.actionId = null
       }
     },
     closeAction() {

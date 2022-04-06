@@ -56,8 +56,8 @@ export default {
           show: true
         },
         {
-          icon: () => import('@/components/FavoriteIcon'),
-          label: 'actions.add_to_favorite',
+          icon: this.post.is_favorite ? () => import('@/components/FavoriteFill') : () => import('@/components/FavoriteIcon'),
+          label: this.post.is_favorite ? `actions.remove_favorite` : 'actions.add_to_favorite',
           show: true,
         },
         {

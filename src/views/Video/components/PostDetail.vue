@@ -42,7 +42,7 @@
                     {{ post.user.name }}
                   </div>
                   <div :class="darkMode ? `border-button` : `border-roundBorder` ">
-                    Public
+                    {{formatDate(post.date)}}
                   </div>
                 </div>
               </div>
@@ -148,7 +148,7 @@
             </div>
             <div
                 :class="darkMode ? `border-button` : `bg-comment`"
-                class="h-28 border-t flex items-center justify-between px-5 space-x-4 relative">
+                class="h-20 border-t flex items-center justify-between px-5 space-x-4 relative">
               <div
                   v-if="comment.sticker"
                   :class="darkMode ? `border-b border-button bg-secondary` : `bg-comment border-b`"
@@ -220,6 +220,7 @@ import PhotoView from "@/views/Video/components/PhotoView";
 import ReplyComment from "@/views/Video/components/ReplyComment";
 import StickerView from "@/views/Video/components/StickerView";
 import FastAverageColor from "fast-average-color";
+import moment from "moment";
 
 const fac = new FastAverageColor();
 export default {
@@ -278,6 +279,17 @@ export default {
   },
   methods: {
     ...mapActions('social', ['deleteLike', 'like', 'addComment']),
+    formatDate(day) {
+      let currentDate = new Date()
+      let today = moment(currentDate)
+      let postDay = moment(day)
+      let result = today.diff(postDay, 'days')
+      if (result === 1 || result === 0) {
+        return moment(day).startOf('hour').fromNow()
+      } else {
+        return moment(day).format('LLL')
+      }
+    },
     setParentColor(postIndex) {
       let interval = setInterval(() => {
         if (document.getElementById(postIndex) != null) {

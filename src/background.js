@@ -38,8 +38,8 @@ const downloadFile = async (fileUrl, info) => {
             responseType: "stream",
         })
         await response.data.pipe(fs.createWriteStream(myInstalledDir).on('finish', () => {
-            var input = fs.createReadStream(myInstalledDir);
-            var output = fs.createWriteStream(`${myInstalledDir}.enc`);
+            let input = fs.createReadStream(myInstalledDir);
+            const output = fs.createWriteStream(`${myInstalledDir}.enc`);
             input.pipe(cipher).pipe(output);
 
             output.on("finish", ()=>{
@@ -74,8 +74,8 @@ ipcMain.on("update", async(event, arg)=>{
 
 ipcMain.on("decypt", async(event, arg)=>{
     const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", arg);
-    var input = fs.createReadStream(`${myInstalledDir}.enc`);
-    var output = fs.createWriteStream(myInstalledDir);
+    let input = fs.createReadStream(`${myInstalledDir}.enc`);
+    let output = fs.createWriteStream(myInstalledDir);
     input.pipe(decipheriv).pipe(output);
 
     output.on('finish',()=> {
@@ -84,12 +84,6 @@ ipcMain.on("decypt", async(event, arg)=>{
        output.close()
     })
 });
-ipcMain.on("saveFile", async(event, url) => {
-    const mainWindow = BrowserWindow.getFocusedWindow();
-    await download(mainWindow, url)
-    event.reply("fileSaved", url)
-    
-})
 
 ipcMain.on("updateVersion", async (event, arg) => {
     autoUpdater.checkForUpdates()
@@ -188,7 +182,7 @@ if (!gotTheLock) {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
         let lastElement = commandLine[commandLine.length - 1];
-        if(lastElement.indexOf('e-school'))
+        if(lastElement.indexOf('eschool'))
             deeplink = lastElement
 
         if (mainWindow) {
@@ -201,14 +195,14 @@ if (!gotTheLock) {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    // On macOS it is common for applications and their menu bar
+    // On macOS, it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit()
     }
 });
 app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
+    // On macOS, it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
 });
@@ -229,7 +223,7 @@ app.on("open-url", (event, data) => {
     mainWindow.webContents.send('deeplink', {deeplink:data});
 });
   
-app.setAsDefaultProtocolClient("e-school");
+app.setAsDefaultProtocolClient("eschool");
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
