@@ -2,7 +2,7 @@
   <div :class="className">
     <div
         class="shadow rounded-xl w-2/5"
-        :class="darkMode ? `bg-secondary`: `bg-white`"
+        :class="darkMode ? `bg-secondary text-lightGray`: `bg-white`"
     >
       <div
           :class="darkMode ?`border-b border-facebook`: `border-b`"
@@ -32,7 +32,7 @@
               <LoadingWhite></LoadingWhite>
             </span>
           </div>
-          <div class="cursor-pointer" :class="darkMode? `` : `text-primary`" v-else>
+          <div class="cursor-pointer" :class="darkMode? `text-lightGray` : `text-primary`" v-else>
             <span v-if="isEdit">
               {{ $t('update') }}
             </span>
@@ -61,7 +61,7 @@
             <div>
               <div
                   style="border-radius: 3px;"
-                  :class="darkMode ? `border-button` : `border-roundBorder` "
+                  :class="darkMode ? `border-button text-lightGray` : `border-roundBorder` "
                   class="flex items-center border px-2 mt-1 text-sm py-1 justify-between cursor-pointer space-x-2">
                 <span class="capitalize">{{ $t('category') }}</span>
                 <div>
@@ -116,7 +116,7 @@
                       <div
                           v-if="currentHoverPhoto === key"
                           @click="removePicture(key)"
-                          :class="darkMode ? `bg-secondary` : `bg-gray-50`"
+                          :class="darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`"
                           class="w-8 h-8 flex items-center justify-center absolute right-2 top-2 rounded-full cursor-pointer
                       z-50 shadow">
                         <CloseIcon :fill="darkMode ? `#909090`: `#000000`"></CloseIcon>
@@ -128,7 +128,7 @@
               <template v-else-if="singlePhotoPreview">
                 <div
                     @click="clearData"
-                    :class="darkMode ? `bg-secondary` : `bg-gray-50`"
+                    :class="darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`"
                     class="absolute w-8 h-8 rounded-full flex items-center justify-center shadow cursor-pointer right-2 top-2">
                   <CloseIcon :fill="darkMode ? `#909090`: `#000000`"></CloseIcon>
                 </div>
@@ -147,7 +147,7 @@
                     <div
                         v-if="currentHoverPhoto === index"
                         @click="removePicture(index)"
-                        :class="darkMode ? `bg-secondary` : `bg-gray-50`"
+                        :class="darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`"
                         class="w-8 h-8 flex items-center justify-center absolute right-2 top-2 rounded-full cursor-pointer
                       z-50 shadow">
                       <CloseIcon :fill="darkMode ? `#909090`: `#000000`"></CloseIcon>
@@ -236,10 +236,7 @@
           <div
               class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
               :class="darkMode ? `bg-button`: `bg-softGray`"
-              @click="()=>{
-                this.videoPreview = null;
-                this.$refs['upload-video'].value = null;
-                this.$refs['upload-video'].click()}"
+              @click="chooseFileAndClear"
           >
             <div>
               <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`"></PostVideoIcon>
@@ -269,6 +266,13 @@
     <template v-if="isMessage">
       <Message :message="$t('limit_photo')" @closeMessage="()=>{this.isMessage = false}"></Message>
     </template>
+    <template v-if="isConfirm">
+      <ConfirmDelete
+          :message="$t(confirmMessage)"
+          @closeMessage="()=>{this.isConfirm = false}"
+          @ConfirmDeleteCart="confirmDeleteFile">
+      </ConfirmDelete>
+    </template>
     <template v-if="isPreviewPhoto">
       <PreviewPhoto :img-url="imgUrl" @closeIcon="()=>{this.isPreviewPhoto = false}"></PreviewPhoto>
     </template>
@@ -294,6 +298,7 @@ import FastAverageColor from "fast-average-color";
 import Message from "@/components/Message";
 import PreviewPhoto from "@/components/PreviewPhoto";
 import helper from "@/helper/helper";
+import ConfirmDelete from "@/views/MyCourse/components/ConfirmDelete";
 
 const fac = new FastAverageColor();
 
@@ -302,6 +307,7 @@ const payload = new FormData()
 export default {
   name: "CreatePost",
   components: {
+    ConfirmDelete,
     PreviewPhoto,
     Message,
     Pause,
@@ -337,6 +343,8 @@ export default {
       backgroundActive: 0,
       backgroundPhoto: null,
       backgroundColor: "",
+      isConfirm: false,
+      confirmMessage: "remove_selected_image",
       color: "",
       p: 1,
       vid: null,
@@ -361,6 +369,28 @@ export default {
     ...mapActions('upload', ['singleUpload', 'multiUpload', 'videoUpload']),
     ...mapActions('social', ['postSocial', 'editSocial']),
     ...mapActions('background', ['getBackground', 'getMoreBackground']),
+    videoClick() {
+      this.videoPreview = null
+      this.$refs['upload-video'].value = null
+      this.$refs['upload-video'].click()
+    },
+    confirmDeleteFile() {
+      payload.delete("photo")
+      this.videoClick()
+      this.isConfirm = false
+      if (this.isEdit) {
+        this.editPost.photo = []
+      }
+    },
+    chooseFileAndClear() {
+      if (this.isEdit) {
+        if (this.multiPhotoPreview.length || this.singlePhotoPreview || this.editPost.photo.length) {
+          this.isConfirm = true
+        } else {
+          this.videoClick()
+        }
+      }
+    },
     moreBackground() {
       this.p++
       let payload = {
@@ -438,7 +468,7 @@ export default {
           this.selectedFiles = this.selectedFiles.filter(item => item.name != this.editPost.photo[indexed].name)
         }
         this.editPost.photo = this.editPost.photo.filter((item, index) => {
-          return index !== indexed
+          return index != indexed
         })
 
         return
@@ -473,7 +503,6 @@ export default {
         this.singlePhotoPreview = null
         this.canPost = true
       }
-
     },
     selectFiles(e) {
       if (e.target.files.length) {
@@ -526,26 +555,59 @@ export default {
       this.$store.commit('upload/progress', 0)
       if (this.isEdit) {
         this.loading = true
+        this.payload.type = this.editPost.type
+        payload.delete("photo")
         if (this.selectedFiles.length) {
           for (let i = 0; i < this.selectedFiles.length; i++) {
             payload.append("photo", this.selectedFiles[i])
           }
           this.multiUpload(payload).then(res => {
-            let photo = this.editPost.photo.filter(item => item.name == undefined)
+            let photo = []
+
+            for (let i = 0; i < this.editPost.photo.length; i++) {
+              if (!this.editPost.photo[i].name) {
+                photo.push(this.editPost.photo[i])
+              }
+            }
             if (res.data && res.data.length) {
               for (let j = 0; j < res.data.length; j++) {
                 photo.push(res.data[j])
               }
             }
-
-            this.payload.type = 2
             this.payload.photo = photo
             this.editSocial(this.payload).then(() => {
               this.loading = false
               this.closeCreate()
             })
           })
+        } else if (this.videoPreview) {
+          this.payload.type = 3
+          this.videoUpload(payload).then(res => {
+            this.payload['video'] = {url: res.data.url}
+            this.editSocial(this.payload).then(() => {
+              this.loading = false
+              this.resetCaption()
+              this.closeCreate()
+            })
+          })
+        } else {
+          this.payload.photo = this.editPost.photo
+          this.editSocial(this.payload).then(() => {
+            this.loading = false
+            this.closeCreate()
+
+          })
         }
+
+        // if (!this.singlePhotoPreview && !this.multiPhotoPreview.length && !this.isBackground && !this.videoPreview) {
+        //   this.postSocial(this.payload).then(() => {
+        //     this.loading = false
+        //     this.resetCaption()
+        //     this.closeCreate()
+        //   })
+        // }
+
+
         return;
       }
 

@@ -572,6 +572,7 @@ export default {
       }
     },
     closeCreate() {
+      this.isEdit = false
       this.isPost = false
       this.getPost()
     },

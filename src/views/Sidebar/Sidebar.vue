@@ -24,7 +24,7 @@
       </div>
       <div class="profile px-10 py-8 flex items-end text-white justify-between"
            :class="darkMode?`bg-darkBlue`:`bg-primary`">
-        <div style="padding: 1px 0px;" class="flex flex-col justify-center items-center">
+        <div style="padding: 1px 0;" class="flex flex-col justify-center items-center">
           <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}"
                @mouseover="() =>{this.isEdit = true}" @mouseleave="() => {this.isEdit = false}"
@@ -40,7 +40,7 @@
                   v-if="loading">
                 <div class="loader mt-3"></div>
               </div>
-              <input type="file" ref="photo" class="hidden" @change="onSelectedPhoto">
+              <input type="file" ref="photo" class="hidden" accept="image/png, image/gif, image/jpeg" @change="onSelectedPhoto">
             </template>
           </div>
           <div class="flex justify-between items-end mt-3  cursor-pointer"
@@ -141,6 +141,7 @@ export default {
 
   methods: {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
+    ...mapActions('upload', ['singleUpload']),
     switchSidebar() {
       if (this.isHide) {
         this.$store.commit('setting/toggleSidebar', false)
@@ -164,7 +165,7 @@ export default {
       })
     },
     copyText() {
-      var copyText = document.getElementById("qrCode");
+      let copyText = document.getElementById("qrCode");
       copyText.select();
       copyText.setSelectionRange(0, 99999)
       document.execCommand("copy");
@@ -175,15 +176,26 @@ export default {
         this.loading = true
         const file = event.target.files[0];
         let formData = new FormData();
-        formData.append("image", file)
-        this.changeProfilePhotoPhoto(formData).then(response => {
-          let stProfile = localStorage.getItem("stProfile")
-          stProfile = JSON.parse(stProfile)
-          stProfile.photo = response.data.photo
-          this.$store.commit("auth/studentProfile", stProfile)
-          localStorage.setItem("stProfile", JSON.stringify(stProfile))
+        formData.append("photo", file)
+        this.singleUpload(formData).then(res => {
+          if (res.data && res.data.length) {
+            let photo = new FormData()
+            photo.append("photo", res.data[0].url)
+            this.changeProfilePhotoPhoto(photo).then(response => {
+              if (res.data && res.data.length) {
+                let stProfile = localStorage.getItem("stProfile")
+                stProfile = JSON.parse(stProfile)
+                stProfile.photo = response.data.photo
+                this.$store.commit("auth/studentProfile", stProfile)
+                localStorage.setItem("stProfile", JSON.stringify(stProfile))
+              }
+              this.loading = false
+            })
+          }
           this.loading = false
+
         })
+
 
       }
     },
