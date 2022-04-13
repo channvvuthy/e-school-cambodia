@@ -113,7 +113,10 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social?${helper.q(payload)}`).then(res => {
                     commit("postingSocial", true)
-                    commit("getSocial", res.data.data)
+                    if (res.data && res.data.status == 2)
+                        helper.errorMessage(res.data.msg)
+                    else
+                        commit("getSocial", res.data.data)
                     resolve(res.data)
                 }).catch(err => {
                     commit("postingSocial", false)

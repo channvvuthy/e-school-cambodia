@@ -7,12 +7,45 @@
       <div class="flex justify-between" style="height: 40rem;">
         <div class="w-3/5 p-5 relative">
           <div
+              class="absolute bg-black z-50 text-sm text-white font-PoppinsMedium rounded-md bg-opacity-80 bottom-24 left-10"
+              v-if="isStyle"
+          >
+            <div
+                @click="()=>{this.original = true;}"
+                class="flex items-center space-x-3 justify-between p-3 cursor-pointer border-b border-instagram">
+              <div :class="original ? `text-white`: `text-instagram`">
+                Original
+              </div>
+              <div>
+                <ImageIcon :fill="original === true ? '#FFF': '#8e8e8e'" :width="23"></ImageIcon>
+              </div>
+            </div>
+            <div
+                @click="()=>{this.original = false}"
+                class="flex items-center justify-between cursor-pointer p-3"
+                :class="original ? `text-instagram`: `text-white`">
+              <div>
+                1:1
+              </div>
+              <div class="border rounded w-6 h-6" :class="original ? `border-instagram`: `border-white`"></div>
+            </div>
+          </div>
+          <div
+              @click="()=>{this.isStyle =! this.isStyle}"
+              class="cursor-pointer absolute w-10 h-10 bg-black rounded-full z-50 flex items-center justify-center bg-opacity-60 bottom-10 left-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#abaeb3">
+              <path d="M24 13h-4v-9h-9v-4h13v13zm-24 11h13v-4h-9v-9h-4v13z"/>
+            </svg>
+          </div>
+          <div
               class="w-full h-full"
+              :class="original ?`flex items-center justify-center` : ``"
               v-for="(photo, index) in post.photo" v-if="index === currentSlide">
             {{ setParentColor(`postDetail${index}`) }}
             <img
                 :id="`postDetail${index}`"
-                :src="photo.url" class="w-full object-cover h-full">
+                :src="photo.url"
+                :class="original ?``: `w-full object-cover h-full`">
           </div>
           <div
               v-if="post.photo && post.photo.length > 1"
@@ -42,7 +75,7 @@
                     {{ post.user.name }}
                   </div>
                   <div :class="darkMode ? `border-button` : `border-roundBorder` ">
-                    {{formatDate(post.date)}}
+                    {{ formatDate(post.date) }}
                   </div>
                 </div>
               </div>
@@ -210,7 +243,7 @@ import LikeIcon from "@/components/LikeIcon";
 import LikeFillIcon from "@/components/LikeFillIcon";
 import ChevronIcon from "@/components/ChevronIcon";
 import Loading from "@/components/Loading";
-import ImageIcon from "@/components/ImageIcon";
+import ImageIcon from "@/components/ImageIcon.vue";
 import SmileEmoji from "@/views/Video/components/SmileEmoji";
 import Comment from "@/views/Video/components/Comment";
 import LoadingWhite from "@/components/LoadingWhite";
@@ -258,6 +291,8 @@ export default {
   },
   data() {
     return {
+      isStyle: false,
+      original: true,
       isPhoto: false,
       loadingReply: false,
       isSticker: false,
@@ -404,6 +439,7 @@ export default {
   },
   created() {
     this.getComment()
+    this.original = false
   }
 }
 </script>

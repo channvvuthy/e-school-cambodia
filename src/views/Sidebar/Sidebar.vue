@@ -40,7 +40,8 @@
                   v-if="loading">
                 <div class="loader mt-3"></div>
               </div>
-              <input type="file" ref="photo" class="hidden" accept="image/png, image/gif, image/jpeg" @change="onSelectedPhoto">
+              <input type="file" ref="photo" class="hidden" accept="image/png, image/gif, image/jpeg"
+                     @change="onSelectedPhoto">
             </template>
           </div>
           <div class="flex justify-between items-end mt-3  cursor-pointer"
@@ -178,9 +179,9 @@ export default {
         let formData = new FormData();
         formData.append("photo", file)
         this.singleUpload(formData).then(res => {
-          if (res.data && res.data.length) {
+          if (res.data) {
             let photo = new FormData()
-            photo.append("photo", res.data[0].url)
+            photo.append("photo", res.data.url)
             this.changeProfilePhotoPhoto(photo).then(response => {
               if (res.data && res.data.length) {
                 let stProfile = localStorage.getItem("stProfile")

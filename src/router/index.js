@@ -5,6 +5,7 @@ import Login from '../views/Auth/Login'
 import Create from '../views/Auth/Create.vue'
 import ForgotPassword from '../views/Auth/ForgotPassword.vue'
 import MyCourse from '../views/MyCourse/MyCourse'
+import Logout from "@/views/Logout/Logout";
 
 Vue.use(VueRouter);
 
@@ -14,6 +15,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login,
+    },
+    {
+        path: '/logout',
+        name: 'logout',
+        component: Logout,
     },
     {
         path: '/register',

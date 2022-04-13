@@ -103,12 +103,6 @@ ipcMain.on("nextDownload", (event, arg) => {
     event.reply('nextDownload', arg)
 })
 
-ipcMain.on("logout", (event, arg) => {
-   app.quit()
-})
-
-
-
 ipcMain.on("removeDownload", (event, arg) => {
     let dir = path.join(app.getAppPath(), "..", "..", "electronjs", arg)
     fs.unlink(dir, (err) => {

@@ -394,7 +394,9 @@
   "9890": "is too small. To continue, choose a file that's 1KB or more",
   "4009": "Invalid parameter",
   "update": "Update",
-  "remove_selected_image": "<strong>Are you sure?</strong><br/>Selected images will be deleted?",
+  "remove_selected_image": "<strong>Are you sure?</strong><br/>Selected images will be deleted",
+  "remove_video": "<strong>Are you sure?</strong><br/>The video will be removed from your post",
+  "5106": "Your post is contain pornography adult video",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",

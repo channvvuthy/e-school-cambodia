@@ -160,8 +160,10 @@
               <template v-if="videoPreview">
                 <div class="relative w-full" @mouseenter="()=>{this.isVideo = true}"
                      @mouseleave="()=>{this.isVideo = false}">
-                  <video id="video" class="w-full object-cover">
-                    <source :src="`file://${videoPreview}`">
+                  <video id="video" class="w-full object-cover"
+                         :poster="(isEdit && editPost.thumbnail != undefined) ? editPost.thumbnail.url: ``">
+                    <source :src="`${videoPreview}`" v-if="isEdit">
+                    <source :src="`file://${videoPreview}`" v-else>
                   </video>
                   <div class="w-full h-full flex items-center justify-center absolute z-40 top-0 left-0" v-if="isVideo">
                     <div
@@ -226,7 +228,7 @@
           <div
               class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
               :class="darkMode ? `bg-button`: `bg-softGray`"
-              @click="()=>{this.$refs['multiple-photo'].click()}"
+              @click="choosePhoto"
           >
             <div>
               <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"></ImageIcon>
@@ -334,6 +336,7 @@ export default {
   data() {
     return {
       editPost: this.editDetail,
+      selectedType: 'photo',
       canPost: false,
       isPreviewPhoto: false,
       imgUrl: null,
@@ -352,7 +355,7 @@ export default {
       isPlay: false,
       singlePhotoPreview: null,
       multiPhotoPreview: [],
-      videoPreview: null,
+      videoPreview: this.isEdit && this.editDetail.video ? this.editDetail.video.url : null,
       selectedFiles: [],
       loading: false,
       isCamera: false,
@@ -375,20 +378,49 @@ export default {
       this.$refs['upload-video'].click()
     },
     confirmDeleteFile() {
-      payload.delete("photo")
-      this.videoClick()
-      this.isConfirm = false
-      if (this.isEdit) {
-        this.editPost.photo = []
+      if (this.selectedType == 'video') {
+        payload.delete("photo")
+        this.videoClick()
+        this.isConfirm = false
+        if (this.isEdit) {
+          this.editPost.photo = []
+        }
       }
+      if (this.selectedType == 'photo') {
+        this.videoPreview = null
+        payload.delete('video')
+        this.isConfirm = false
+        this.$refs['multiple-photo'].click()
+      }
+    },
+    choosePhoto() {
+      this.editPost.type = 2
+      this.$refs['multiple-photo'].click()
+      // if (this.isEdit) {
+      //   this.selectedType = 'photo'
+      //   if (this.videoPreview) {
+      //     this.confirmMessage = 'remove_video'
+      //     this.isConfirm = true
+      //     this.videoPreview = null
+      //   } else {
+      //     this.$refs['multiple-photo'].click()
+      //   }
+      // } else {
+      //   this.$refs['multiple-photo'].click()
+      // }
     },
     chooseFileAndClear() {
       if (this.isEdit) {
-        if (this.multiPhotoPreview.length || this.singlePhotoPreview || this.editPost.photo.length) {
+        this.$delete(this.editPost, 'thumbnail')
+        this.selectedType = 'video'
+        this.confirmMessage = 'remove_selected_image'
+        if (this.singlePhotoPreview || (this.editPost.photo && this.editPost.photo.length)) {
           this.isConfirm = true
         } else {
           this.videoClick()
         }
+      } else {
+        this.videoClick()
       }
     },
     moreBackground() {
@@ -497,7 +529,11 @@ export default {
     selectVideo(e) {
       if (e.target.files.length) {
         this.deletePayload()
-        this.videoPreview = e.target.files[0].path
+        let protocol = ''
+        if (this.isEdit) {
+          protocol = 'file:///'
+        }
+        this.videoPreview = protocol + e.target.files[0].path
         payload.append("video", e.target.files[0])
         this.multiPhotoPreview = []
         this.singlePhotoPreview = null
@@ -515,6 +551,10 @@ export default {
       }
 
       if (this.isEdit) {
+        if (this.editPost && !this.editPost.photo) {
+          this.editPost.photo = []
+        }
+
         for (let i = 0; i < e.target.files.length; i++) {
           let file = e.target.files[i]
           let photo = {
@@ -523,9 +563,11 @@ export default {
             width: '',
             name: file.name
           }
+          // this.multiPhotoPreview.push(file.path)
           this.editPost.photo.push(photo)
           this.selectedFiles.push(file)
         }
+        this.videoPreview = null
         return;
       }
 
@@ -700,7 +742,6 @@ export default {
     pictureTaken(picture) {
 
       if (this.isEdit) {
-        console.log(this.dataURLtoBlob(picture))
         return
       }
 
@@ -739,6 +780,7 @@ export default {
     this.getBackground({
       p: this.p
     })
+
   }
 }
 </script>

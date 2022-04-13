@@ -287,8 +287,9 @@ export default {
                 })
             })
         },
-        clearLogout() {
+        clearLogout({commit}) {
             localStorage.clear()
+            commit("receivingToken", null)
         },
 
         changeProfilePhotoPhoto({commit}, formData) {

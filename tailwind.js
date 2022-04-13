@@ -19,6 +19,7 @@ module.exports = {
             darkBlue: "#02141C",
             act: "#EAF3FF",
             dadada: "#dadada",
+            instagram: "#8e8e8e",
             forum: "#eaeaea",
             borderGray: "#c9c9c9",
             secondary: "#212121",

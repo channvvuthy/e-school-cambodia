@@ -6,7 +6,7 @@ export default {
     namespaced: true,
     state: {
         list: [],
-        ads:{},
+        ads: {},
         filter: [],
         homeLoading: false,
         paginationLoading: false,
@@ -15,11 +15,11 @@ export default {
         selectedFilterName: "all"
     },
     mutations: {
-        stopWatch(state, payload){
-            payload.percentage = Math.round((payload.mark*100)/payload.duration)
+        stopWatch(state, payload) {
+            payload.percentage = Math.round((payload.mark * 100) / payload.duration)
             state.list.filter(item => {
-                if(item.type == 'vdo'){
-                    if(payload.id == item.vdo._id){
+                if (item.type == 'vdo') {
+                    if (payload.id == item.vdo._id) {
                         item.vdo.last_watch = payload
                     }
                 }
@@ -27,8 +27,8 @@ export default {
         },
         removeFavorite(state, payload) {
             let updateList = state.list.filter(item => {
-                if(item.type==='vdo'){
-                    if(item.vdo._id === payload){
+                if (item.type === 'vdo') {
+                    if (item.vdo._id === payload) {
                         item.vdo.is_favorite = 0
                     }
                 }
@@ -71,8 +71,8 @@ export default {
     },
     actions: {
         getList({
-            commit
-        }, payload) {
+                    commit
+                }, payload) {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');
@@ -80,9 +80,9 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `home?${qs}`).then(response => {
                     commit("homeLoading", false)
-                    if(response.data.msg != undefined){
+                    if (response.data.msg != undefined) {
                         helper.errorMessage(response.data.msg)
-                    }else{
+                    } else {
                         commit("receiveList", response.data.data)
                     }
                     resolve(response)
@@ -94,8 +94,8 @@ export default {
             })
         },
         getListPagination({
-            commit
-        }, payload) {
+                              commit
+                          }, payload) {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');
