@@ -336,6 +336,13 @@
             @dismissPost="()=>{this.isEdit = false}"
             @closeCreate="closeCreate"></CreatePost>
       </template>
+
+      <!-- Report post -->
+      <template v-if="isReport">
+        <Report
+            :social="reportSocial"
+            @closeReport="()=>{this.isReport = false}"></Report>
+      </template>
     </div>
   </div>
 </template>
@@ -368,6 +375,7 @@ import VueObserveVisibility from 'vue-observe-visibility'
 import Video from "@/views/Video/Video";
 import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
+import Report from "@/views/Video/components/Report.vue";
 
 Vue.use(VueObserveVisibility)
 
@@ -378,6 +386,7 @@ export default {
     ...mapState('social', ['social', 'ads', 'loadingMore']),
   },
   components: {
+    Report,
     VideoDetail,
     MediaPlayer,
     Video,
@@ -400,6 +409,7 @@ export default {
   mixins: [mode],
   data() {
     return {
+      isReport: null,
       isVideo: false,
       videoPlaying: null,
       actionId: null,
@@ -410,6 +420,7 @@ export default {
       loading: false,
       isPost: false,
       isEdit: false,
+      reportSocial: {},
       payload: {
         p: 1,
         caption: null,
@@ -460,6 +471,7 @@ export default {
     selectedAction(data) {
       let payload = {}
       payload.id = data.post._id
+      this.reportSocial = data.post
 
       if (data.action.label === 'actions.delete') {
         this.deleteSocial(payload).then(() => {
@@ -481,6 +493,10 @@ export default {
       if (data.action.label === 'actions.edit') {
         this.postDetail = data.post
         this.isEdit = true
+        this.actionId = null
+      }
+      if (data.action.label === 'actions.report') {
+        this.isReport = true
         this.actionId = null
       }
     },

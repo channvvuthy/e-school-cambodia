@@ -32,6 +32,7 @@ import sticker from "./sticker"
 import social from "./social"
 import upload from "./upload";
 import background from "./background";
+import report from "./report";
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -67,6 +68,7 @@ export default new Vuex.Store({
         etalk,
         social,
         upload,
-        background
+        background,
+        report
     }
 });

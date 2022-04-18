@@ -4,7 +4,7 @@
   >
     <div class="flex justify-center items-center">
       <div class="text-center">
-        <div class="mt-2 py-4">
+        <div class="mt-2 py-4 px-2">
           <p class="text-base text-black font-khmer_os" v-html="message"></p>
         </div>
       </div>

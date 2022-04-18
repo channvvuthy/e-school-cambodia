@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center flex-col justify-center h-screen bg-white text-center font-khmer_os">
+  <div class="flex items-center flex-col justify-center h-screen bg-white text-center font-PoppinsMedium">
     <div class="h-full flex flex-col items-center justify-center">
       <img src="e-school-logo.png" class="w-56">
       <div class="font-black flex text-4xl text-center mt-5 font-black">

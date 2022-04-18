@@ -396,7 +396,9 @@
   "update": "Update",
   "remove_selected_image": "<strong>Are you sure?</strong><br/>Selected images will be deleted",
   "remove_video": "<strong>Are you sure?</strong><br/>The video will be removed from your post",
+  "remove_background": "<strong>Are you sure?</strong><br/>The background will be removed from your post",
   "5106": "Your post is contain pornography adult video",
+  "report_thank": "Thank you for report!",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",

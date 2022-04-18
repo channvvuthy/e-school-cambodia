@@ -4,11 +4,10 @@
         class="shadow rounded-xl w-2/5"
         :class="darkMode ? `bg-secondary text-lightGray`: `bg-white`"
     >
+      <!-- Start header -->
       <div
           :class="darkMode ?`border-b border-facebook`: `border-b`"
           class="h-14 flex items-center justify-between px-5 text-lg">
-
-
         <div class="cursor-pointer" @click="()=>{this.$emit('dismissPost')}">
           <CloseIcon :fill="darkMode ? `#909090` : `#000000`"></CloseIcon>
         </div>
@@ -42,6 +41,7 @@
           </div>
         </button>
       </div>
+      <!-- End of header -->
 
       <div class="h-1"
            :class="darkMode ? `bg-green-600`: `bg-loading`"
@@ -86,7 +86,7 @@
                     v-model="payload.caption"
                     :placeholder="$t('say_something')"
                     @input="resize($event)"
-
+                    @focus="resize($event)"
                     class="outline-none bg-transparent text-center w-full"
                     style="resize: none"></textarea>
               </div>
@@ -167,7 +167,8 @@
                   </video>
                   <div class="w-full h-full flex items-center justify-center absolute z-40 top-0 left-0" v-if="isVideo">
                     <div
-                        class="h-14 text-white w-14 rounded-full flex items-center justify-center bg-black bg-opacity-50 border-white border-4 shadow cursor-pointer">
+                        class="h-14 text-white w-14 rounded-full flex items-center justify-center bg-black bg-opacity-50
+                         border-white border-4 shadow cursor-pointer">
                       <div class="ml-2" v-if="!isPlay" @click="playPause()">
                         <Next fill="#FFF" :size="30"></Next>
                       </div>
@@ -333,6 +334,12 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState('setting', ['darkMode']),
+    ...mapState('upload', ['progress']),
+    ...mapState('auth', ['stProfile']),
+    ...mapState('background', ['background', 'loadingBackground'])
+  },
   data() {
     return {
       editPost: this.editDetail,
@@ -344,7 +351,8 @@ export default {
       currentHoverPhoto: null,
       isBackground: false,
       backgroundActive: 0,
-      backgroundPhoto: null,
+      backgroundPhoto: (this.isEdit && this.editDetail.type == 1 && this.editDetail.thumbnail) ?
+          this.editDetail.thumbnail.url : null,
       backgroundColor: "",
       isConfirm: false,
       confirmMessage: "remove_selected_image",
@@ -387,28 +395,24 @@ export default {
         }
       }
       if (this.selectedType == 'photo') {
-        this.videoPreview = null
-        payload.delete('video')
-        this.isConfirm = false
         this.$refs['multiple-photo'].click()
       }
     },
     choosePhoto() {
       this.editPost.type = 2
+      if (this.isEdit) {
+        this.selectedType = 'photo'
+        if (this.videoPreview) {
+          this.confirmMessage = 'remove_video'
+          this.isConfirm = true
+          return
+        }
+        this.$refs['multiple-photo'].click()
+        return
+      }
       this.$refs['multiple-photo'].click()
-      // if (this.isEdit) {
-      //   this.selectedType = 'photo'
-      //   if (this.videoPreview) {
-      //     this.confirmMessage = 'remove_video'
-      //     this.isConfirm = true
-      //     this.videoPreview = null
-      //   } else {
-      //     this.$refs['multiple-photo'].click()
-      //   }
-      // } else {
-      //   this.$refs['multiple-photo'].click()
-      // }
     },
+
     chooseFileAndClear() {
       if (this.isEdit) {
         this.$delete(this.editPost, 'thumbnail')
@@ -461,30 +465,36 @@ export default {
     closeBackground() {
       this.isBackground = false
       this.payload.background = null
+      this.onFocus()
     },
     onKeyup(e) {
       this.payload.caption = e.target.innerText
       this.canPost = true
     },
     selectedBackground(index = 0) {
+      if (this.isEdit) {
+        this.editPost.type = 1
+      }
       this.backgroundActive = index
-      this.payload.background = this.background[index]._id
-      this.backgroundPhoto = this.background[index].photo
-      setTimeout(() => {
-        fac.getColorAsync(document.querySelector('#image'))
-            .then(color => {
-              this.backgroundColor = color.rgba
-              this.color = color.isDark ? '#fff' : '#000';
-              let element = document.getElementById("background")
-              if (color.isDark) {
-                element.classList.remove("placeholder-black")
-                element.classList.add('placeholder-white')
-              } else {
-                element.classList.remove("placeholder-white")
-                element.classList.add('placeholder-black')
-              }
-            }).catch(error => error);
-      }, 100)
+      if (this.background && this.background[index]) {
+        this.payload.background = this.background[index]._id
+        this.backgroundPhoto = this.background[index].photo
+        setTimeout(() => {
+          fac.getColorAsync(document.querySelector('#image'))
+              .then(color => {
+                this.backgroundColor = color.rgba
+                this.color = color.isDark ? '#fff' : '#000';
+                let element = document.getElementById("background")
+                if (color.isDark) {
+                  element.classList.remove("placeholder-black")
+                  element.classList.add('placeholder-white')
+                } else {
+                  element.classList.remove("placeholder-white")
+                  element.classList.add('placeholder-black')
+                }
+              }).catch(error => error);
+        }, 100)
+      }
     },
     showBackground(index = 0) {
       this.isBackground = true
@@ -551,6 +561,10 @@ export default {
       }
 
       if (this.isEdit) {
+        this.videoPreview = null
+        payload.delete('video')
+        this.isConfirm = false
+
         if (this.editPost && !this.editPost.photo) {
           this.editPost.photo = []
         }
@@ -563,7 +577,6 @@ export default {
             width: '',
             name: file.name
           }
-          // this.multiPhotoPreview.push(file.path)
           this.editPost.photo.push(photo)
           this.selectedFiles.push(file)
         }
@@ -662,7 +675,7 @@ export default {
       if (this.singlePhotoPreview) {
         this.singleUpload(payload).then(res => {
           this.singlePhotoPreview = null
-          if (res.data && res.data.length) {
+          if (res.data) {
             payload.delete("photo")
             this.payload.photo = res.data
             this.postSocial(this.payload).finally(() => {
@@ -753,13 +766,12 @@ export default {
       this.deletePayload()
       payload.append("photo", this.dataURLtoBlob(picture))
       this.isCamera = false
+    },
+    onFocus() {
+      setTimeout(() => {
+        this.$refs.caption.focus()
+      })
     }
-  },
-  computed: {
-    ...mapState('setting', ['darkMode']),
-    ...mapState('upload', ['progress']),
-    ...mapState('auth', ['stProfile']),
-    ...mapState('background', ['background', 'loadingBackground'])
   },
   mounted() {
     if (this.isEdit) {
@@ -772,15 +784,12 @@ export default {
         }
       }
     }
-    setTimeout(() => {
-      this.$refs.caption.focus()
-    })
+    this.onFocus()
   },
   created() {
     this.getBackground({
       p: this.p
     })
-
   }
 }
 </script>

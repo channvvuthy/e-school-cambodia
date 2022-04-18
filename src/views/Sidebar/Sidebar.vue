@@ -183,7 +183,7 @@ export default {
             let photo = new FormData()
             photo.append("photo", res.data.url)
             this.changeProfilePhotoPhoto(photo).then(response => {
-              if (res.data && res.data.length) {
+              if (res.data) {
                 let stProfile = localStorage.getItem("stProfile")
                 stProfile = JSON.parse(stProfile)
                 stProfile.photo = response.data.photo

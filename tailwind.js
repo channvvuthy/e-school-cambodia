@@ -9,13 +9,15 @@ module.exports = {
         },
         colors: {
             transparent: 'transparent',
+            success: "#5E9919",
+            successCheck: "#58B948",
             youtube: "#181818",
             left: "#3d3d3c",
             roundBorder: "#979797",
             iconColor: "#4A4A4A",
             current: 'currentColor',
             primary: '#055174',
-            loading:"#1977f2",
+            loading: "#1977f2",
             darkBlue: "#02141C",
             act: "#EAF3FF",
             dadada: "#dadada",
@@ -27,7 +29,7 @@ module.exports = {
             textSecondary: "#909090",
             lightGray: "#e4e6eb",
             lightBlue: "#eaf3ff",
-            comment:"#f3f3f3",
+            comment: "#f3f3f3",
             softGray: "#E7E7E7",
             heart: "#c0272d",
             pass: "#5aa20a",
@@ -188,8 +190,8 @@ module.exports = {
         fontFamily: {
             serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
             mono: ['Poppins', 'Kantumruy-Regular',],
-            khmer_os: ['Poppins','Kantumruy-Light','Kantumruy-Regular'],
-            PoppinsMedium: ['Poppins-Medium','Kantumruy-Light','Kantumruy-Regular'],
+            khmer_os: ['Poppins', 'Kantumruy-Light', 'Kantumruy-Regular'],
+            PoppinsMedium: ['Poppins-Medium', 'Kantumruy-Light', 'Kantumruy-Regular'],
 
 
         },
