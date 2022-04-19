@@ -66,11 +66,6 @@ export default {
           show: true
         },
         {
-          icon: () => import('@/components/ShareIcon'),
-          label: 'actions.share',
-          show: true
-        },
-        {
           icon: () => import('@/components/ReportIcon'),
           label: 'actions.report',
           show: true

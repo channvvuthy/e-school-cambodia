@@ -7,7 +7,7 @@
             <HelpIcon :size="35" :fill="darkMode ? `#9ca3af`: `#055174`"></HelpIcon>
           </div>
           <div class="text-lg font-PoppinsMedium">
-            Report this post
+            {{ $t('report_this_post') }}
           </div>
         </div>
         <div>
@@ -20,13 +20,18 @@
         </div>
       </div>
       <ul class="px-10 font-PoppinsMedium text-sm pb-10" v-if="!isDetail">
-        <li
-            v-for="(r, index) in report"
-            :class="darkMode ? `border-button text-gray-400` : `text-primary `"
-            :key="index"
-            class="border-b py-5 cursor-pointer" @click="addReport(r)">
-          {{ r.name }}
+        <li v-if="loading" class="flex items-center justify-center py-40">
+          <LoadingWhite></LoadingWhite>
         </li>
+        <template v-else>
+          <li
+              v-for="(r, index) in report"
+              :class="darkMode ? `border-button text-gray-400` : `text-primary `"
+              :key="index"
+              class="border-b py-5 cursor-pointer" @click="addReport(r)">
+            {{ r.name }}
+          </li>
+        </template>
       </ul>
       <div class="px-10 my-5" v-else>
         <div v-if="!isSuccess">
@@ -37,13 +42,13 @@
               class="w-full border p-5" rows="10" :placeholder="$t('say_something')"></textarea>
           <button
               @click="onSubmit"
-              :disabled="loading"
+              :disabled="isSubmit"
               class="w-full bg-primary outline-none text-white rounded-lg py-4 mt-5 font-PoppinsMedium">
-            <div v-if="!loading">
+            <div v-if="!isSubmit">
               {{ $t('submit') }}
             </div>
             <div v-else>
-              <LoadingWhite></LoadingWhite>
+              <Loader></Loader>
             </div>
           </button>
         </div>
@@ -73,11 +78,18 @@ import Modal from "../../../components/Modal";
 import HelpIcon from "../../../components/HelpIcon";
 import CloseIcon from "../../../components/CloseIcon";
 import {mapActions, mapState} from "vuex";
-import LoadingWhite from "@/components/Loader";
+import Loader from "@/components/Loader";
+import LoadingWhite from "@/components/LoadingWhite";
 
 export default {
   name: "Report",
-  components: {CloseIcon, HelpIcon, Modal, LoadingWhite},
+  components: {
+    CloseIcon,
+    HelpIcon,
+    Modal,
+    Loader,
+    LoadingWhite
+  },
   computed: {
     ...mapState('report', ['report', 'loading']),
     ...mapState('setting', ['darkMode'])
@@ -95,7 +107,8 @@ export default {
       isDetail: false,
       reportSocial: {},
       text: "",
-      isSuccess: false
+      isSuccess: false,
+      isSubmit: false,
 
     }
   },
@@ -110,7 +123,9 @@ export default {
       payload.append("id", this.social._id)
       payload.append("report", this.reportSocial._id)
       payload.append("detail", this.text)
+      this.isSubmit = true
       this.postReport(payload).then(() => {
+        this.isSubmit = false
         this.isSuccess = true
         setTimeout(() => {
           this.$emit("closeReport")

@@ -89,7 +89,7 @@ export default {
             state.loading = payload
         },
         getSocial(state, payload) {
-            state.social = payload.filter(item => item.type !== 51 && item.type !== 52)
+            state.social = payload
             state.ads = payload.filter(item => item.type === 51 || item.type === 52)
         },
         newPost(state, payload) {

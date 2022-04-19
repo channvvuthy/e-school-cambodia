@@ -62,6 +62,12 @@
                     <div>
                       <div class="font-PoppinsMedium text-lg">{{ post.user.name }}</div>
                       <div
+                          v-if="(post.type === 52 || post.type === 51)"
+                          class="capitalize text-primary text-sm">
+                        {{ $t('sponsored') }}
+                      </div>
+                      <div
+                          v-else
                           class="text-base"
                           :class="darkMode ? `text-gray-400` : `text-gray-500`">
                         {{ formatDate(post.date) }}
@@ -343,6 +349,8 @@
             :social="reportSocial"
             @closeReport="()=>{this.isReport = false}"></Report>
       </template>
+      <!-- Copy link -->
+      <input type="text" class="absolute" v-model="link" id="copyLink" style="z-index:-1">
     </div>
   </div>
 </template>
@@ -376,6 +384,7 @@ import Video from "@/views/Video/Video";
 import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
 import Report from "@/views/Video/components/Report.vue";
+import config from "./../../config"
 
 Vue.use(VueObserveVisibility)
 
@@ -409,6 +418,7 @@ export default {
   mixins: [mode],
   data() {
     return {
+      link: null,
       isReport: null,
       isVideo: false,
       videoPlaying: null,
@@ -498,6 +508,17 @@ export default {
       if (data.action.label === 'actions.report') {
         this.isReport = true
         this.actionId = null
+      }
+      if (data.action.label === 'actions.copy_link') {
+        this.link = config.customProtocolUrl + `id?=${data.post._id}&type=${data.post.type}`
+        setTimeout(() => {
+          let copyText = document.getElementById("copyLink")
+          copyText.select()
+          copyText.setSelectionRange(0, 99999)
+          document.execCommand("copy")
+          helper.success("Copied")
+          this.actionId = null
+        }, 100)
       }
     },
     closeAction() {
