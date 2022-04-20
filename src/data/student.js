@@ -9,6 +9,7 @@ const studentProfileData = {
     last_name: "",
     my_cart: "",
     phone: "",
+    photo_cover: "",
     school: {
         _id: "",
         name: "E-School",
@@ -19,6 +20,6 @@ const studentProfileData = {
     }
 }
 
-export  default {
+export default {
     studentProfileData
 }

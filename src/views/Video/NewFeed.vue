@@ -178,12 +178,13 @@
                       :class="`liker-${post.liker.length}`"
                       class="flex items-center justify-end" v-if="post.liker && post.liker.length">
                     <div
+                        @click="showLiker(post)"
                         v-if="index < 6"
                         :title="liker.name"
                         v-for="(liker, index) in post.liker"
                         :class="`circle-${index} ${likerClass()}`"
                         :key="index + Math.random()"
-                        class="rounded-full h-11 w-11 relative bg-cover bg-center border-2 cursor-pointer"
+                        class="rounded-full h-11 w-11 relative bg-cover bg-center border-2 cursor-pointer bg-gray-50"
                         :style="{backgroundImage:`url(${liker.photo})`}"
                     ></div>
                   </div>
@@ -351,6 +352,10 @@
       </template>
       <!-- Copy link -->
       <input type="text" class="absolute" v-model="link" id="copyLink" style="z-index:-1">
+      <!-- Liker -->
+      <template v-if="isLiker">
+        <Liker :social="postDetail" @closeLiker="()=>{this.isLiker = false}"></Liker>
+      </template>
     </div>
   </div>
 </template>
@@ -385,6 +390,7 @@ import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
 import Report from "@/views/Video/components/Report.vue";
 import config from "./../../config"
+import Liker from "@/views/Video/components/Liker";
 
 Vue.use(VueObserveVisibility)
 
@@ -413,11 +419,13 @@ export default {
     Avatar,
     PostVideoIcon,
     ImageIcon,
-    CreatePost
+    CreatePost,
+    Liker
   },
   mixins: [mode],
   data() {
     return {
+      isLiker: false,
       link: null,
       isReport: null,
       isVideo: false,
@@ -442,6 +450,10 @@ export default {
 
     ...mapActions('social', ['getSocial', 'postSocial', 'like',
       'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite']),
+    showLiker(post) {
+      this.isLiker = true
+      this.postDetail = post
+    },
     fullScreen(data) {
       this.postDetail = data
       this.isVideo = true

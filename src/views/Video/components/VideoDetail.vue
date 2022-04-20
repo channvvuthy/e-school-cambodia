@@ -405,7 +405,12 @@ export default {
     },
     getComment() {
       this.loading = true
-      this.$store.dispatch('social/getComment', {id: this.feed._id}).then(res => {
+      this.$store.dispatch('social/getComment',
+          {
+            id: this.feed._id,
+            type: this.feed.type
+          }
+      ).then(res => {
         this.loading = false
       })
     }

@@ -19,8 +19,21 @@
               </div>
             </div>
           </div>
+          <input type="file" class="hidden" ref="cover" @change="changeCover" accept="image/png, image/gif, image/jpeg">
           <div class="w-full bg-red-100 bg-cover h-40"
-               style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0 -5px;"></div>
+               :style="{backgroundImage:`url(${cover})`}"
+               style="background-repeat:no-repeat;background-position:0 -5px;">
+            <div class="right-10 absolute top-2 absolute z-50" v-if="changingCover">
+              <div class="loader"></div>
+            </div>
+            <div
+                v-else
+                @click="()=>{this.$refs.cover.click()}"
+                style="background-color: rgba(5,81,116,0.7)"
+                class="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer right-4 absolute top-2">
+              <CameraIcon fill="#FFFFFF"></CameraIcon>
+            </div>
+          </div>
           <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
             <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
             </div>
@@ -314,6 +327,7 @@ export default {
   },
   data() {
     return {
+      changingCover: false,
       image: null,
       err: false,
       errMessage: null,
@@ -323,6 +337,7 @@ export default {
       showSchool: false,
       isEdit: false,
       isPic: false,
+      cover: "cover.jpg",
       province: {
         _id: "",
         name: "",
@@ -340,7 +355,7 @@ export default {
   },
   methods: {
     ...mapActions('setting', ['getProvinces', 'getSchool']),
-    ...mapActions('auth', ['changeProfile', 'getStudentProfile', 'changeProfilePhotoPhoto']),
+    ...mapActions('auth', ['changeProfile', 'getStudentProfile', 'changeProfilePhotoPhoto', 'updateCover']),
     ...mapActions('upload', ['singleUpload']),
     reportDetail(page, user_id) {
       this.$router.push({name: page, params: {user_id}})
@@ -370,6 +385,30 @@ export default {
       this.stProfile.school.name = null
       this.showProvince = true
     },
+    changeCover(event) {
+      this.changingCover = true
+      if (event.target.files.length) {
+        const file = event.target.files[0];
+        let formData = new FormData();
+        formData.append("photo", file)
+        this.singleUpload(formData).then(res => {
+          if (res.data) {
+            let cover = new FormData();
+            cover.append("photo", res.data.url)
+            this.updateCover(cover).then(res => {
+              this.cover = res.data.photo
+              let stProfile = localStorage.getItem("stProfile")
+              stProfile = JSON.parse(stProfile)
+              stProfile.photo_cover = this.cover
+              this.$store.commit("auth/studentProfile", stProfile)
+              localStorage.setItem("stProfile", JSON.stringify(stProfile))
+              this.changingCover = false
+            })
+          }
+        })
+
+      }
+    },
     onSelectedPhoto(event) {
       if (event.target.value) {
         this.loading = true
@@ -377,11 +416,11 @@ export default {
         let formData = new FormData();
         formData.append("photo", file)
         this.singleUpload(formData).then(res => {
-          if (res.data && res.data.length) {
+          if (res.data && res.length) {
             let photo = new FormData()
             photo.append("photo", res.data[0].url)
             this.changeProfilePhotoPhoto(photo).then(response => {
-              if (res.data && res.data.length) {
+              if (res.data && res.length) {
                 let stProfile = localStorage.getItem("stProfile")
                 stProfile = JSON.parse(stProfile)
                 stProfile.photo = response.data.photo
@@ -502,6 +541,9 @@ export default {
       }).catch(() => {
       })
     }
+  },
+  mounted() {
+    this.cover = this.stProfile.photo_cover ? this.stProfile.photo_cover : this.cover
   },
   created() {
     this.getProvinces().then(() => {

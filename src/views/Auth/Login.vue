@@ -145,6 +145,7 @@
                         stProfile.my_cart = data.my_cart ? data.my_cart : ""
                         stProfile.phone = data.phone ? data.phone : ""
                         stProfile.photo = data.photo ? data.photo : ""
+                        stProfile.photo_cover = data.photo_cover ? data.photo_cover : ""
 
                         if (data.province) {
                             stProfile.province = data.province

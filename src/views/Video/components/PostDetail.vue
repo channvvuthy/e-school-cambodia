@@ -11,7 +11,10 @@
               v-if="isStyle"
           >
             <div
-                @click="()=>{this.original = true;}"
+                @click="()=>{
+                  this.original = true;
+                  this.isStyle = false;
+                }"
                 class="flex items-center space-x-3 justify-between p-3 cursor-pointer border-b border-instagram">
               <div :class="original ? `text-white`: `text-instagram`">
                 Original
@@ -21,11 +24,14 @@
               </div>
             </div>
             <div
-                @click="()=>{this.original = false}"
+                @click="()=>{
+                  this.original = false;
+                  this.isStyle = false;
+                }"
                 class="flex items-center justify-between cursor-pointer p-3"
                 :class="original ? `text-instagram`: `text-white`">
               <div>
-                1:1
+                1 : 1
               </div>
               <div class="border rounded w-6 h-6" :class="original ? `border-instagram`: `border-white`"></div>
             </div>
@@ -45,7 +51,7 @@
             <img
                 :id="`postDetail${index}`"
                 :src="photo.url"
-                :class="original ?``: `w-full object-cover h-full`">
+                :class="original ?`max-h-full`: `w-full object-cover h-full`">
           </div>
           <div
               v-if="post.photo && post.photo.length > 1"
@@ -432,7 +438,12 @@ export default {
     },
     getComment() {
       this.loading = true
-      this.$store.dispatch('social/getComment', {id: this.post._id}).then(res => {
+      this.$store.dispatch('social/getComment',
+          {
+            id: this.post._id,
+            type: this.post.type
+          }
+      ).then(res => {
         this.loading = false
       })
     }

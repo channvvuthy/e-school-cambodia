@@ -12,7 +12,8 @@ export default {
         loadingMore: false,
         loadingComment: false,
         comments: [],
-        replies: []
+        replies: [],
+        likes: []
     },
     mutations: {
         addFavorite(state, payload) {
@@ -90,7 +91,7 @@ export default {
         },
         getSocial(state, payload) {
             state.social = payload
-            state.ads = payload.filter(item => item.type === 51 || item.type === 52)
+            // state.ads = payload.filter(item => item.type === 51 || item.type === 52)
         },
         newPost(state, payload) {
             state.social.unshift(payload)
@@ -105,7 +106,17 @@ export default {
                     }
                 }
             }
-        }
+        },
+        getLiker(state, payload) {
+            state.likes = payload
+        },
+        geMoretLiker(state, payload) {
+            if (payload.liker && payload.liker.length) {
+                for (let i = 0; i < payload.liker.length; i++) {
+                    state.likes.liker.push(payload.liker[i])
+                }
+            }
+        },
     },
     actions: {
         getSocial({commit}, payload) {
@@ -297,6 +308,26 @@ export default {
                 })
             })
         },
+        getLiker({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/like?${helper.q(payload)}`).then(res => {
+                    commit("getLiker", res.data.data)
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        geMoretLiker({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/like?${helper.q(payload)}`).then(res => {
+                    commit("geMoretLiker", res.data.data)
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        }
 
     }
 
