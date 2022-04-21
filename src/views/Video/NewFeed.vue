@@ -206,7 +206,7 @@
                 </div>
               </div>
               <div v-if="commentDetailId === post._id">
-                <CommentDetail :id="commentDetailId"></CommentDetail>
+                <CommentDetail :id="commentDetailId" :social="post"></CommentDetail>
               </div>
             </div>
           </div>

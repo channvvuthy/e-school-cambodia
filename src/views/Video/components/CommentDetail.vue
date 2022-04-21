@@ -32,6 +32,7 @@
     </div>
     <div v-else>
       <div class="border-t px-5 pb-5"
+           @mouseleave="clearAction"
            v-if="comments.comments && comments.comments.length"
            :class="darkMode ? `border-button text-textSecondary` : ``">
         <div v-for="(comment, index) in comments.comments" :key="index">
@@ -95,7 +96,6 @@ import ImageIcon from "@/components/ImageIcon";
 import SendMessageIcon from "@/components/SendMessageIcon";
 import Loading from "@/components/Loading";
 import VueMomentsAgo from "vue-moments-ago";
-import ReplyIcon from "@/views/Chat/components/ReplyIcon";
 import helper from "@/helper/helper";
 import Sticker from "@/views/Video/components/Sticker";
 import mode from "@/mixins/mode";
@@ -120,7 +120,6 @@ export default {
     Avatar,
     SmileEmoji,
     ImageIcon,
-    ReplyIcon,
     Sticker,
     LoadingWhite
   },
@@ -130,7 +129,13 @@ export default {
     ...mapState('setting', ['darkMode']),
     ...mapState('social', ['loadingComment', 'comments', 'replies'])
   },
-  props: ['id'],
+  props: {
+    social: {
+      default: () => {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       loadingReply: false,
@@ -144,7 +149,8 @@ export default {
       },
       payload: {
         p: 1,
-        id: null,
+        id: this.social._id,
+        type: this.social.type,
       },
       comment: {
         id: "",
@@ -157,6 +163,9 @@ export default {
     ...mapActions('social', ['getComment', 'addComment']),
     reply(comment) {
       this.commentId = comment._id
+    },
+    clearAction() {
+      this.$store.commit("social/setActionId", null)
     },
     getReplyComment(id) {
       let payload = {
@@ -187,7 +196,7 @@ export default {
       return helper.cutString(text, limit)
     },
     postComment() {
-      this.comment.id = this.id
+      this.comment.id = this.social._id
       let isComment = false
       this.comment.text = this.comment.text.trim()
 
@@ -214,9 +223,6 @@ export default {
 
   mounted() {
     this.getComment(this.payload)
-  },
-  created() {
-    this.payload.id = this.id
   }
 }
 </script>

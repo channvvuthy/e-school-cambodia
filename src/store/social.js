@@ -13,9 +13,16 @@ export default {
         loadingComment: false,
         comments: [],
         replies: [],
-        likes: []
+        likes: [],
+        actionId: null,
     },
     mutations: {
+        deleteComment(state, payload) {
+            state.comments.comments = state.comments.comments.filter(item => item._id != payload)
+        },
+        setActionId(state, payload) {
+            state.actionId = payload
+        },
         addFavorite(state, payload) {
             state.social = state.social.filter(item => {
                 if (item._id == payload.id) {
@@ -251,6 +258,21 @@ export default {
                 axios.get(config.apiUrl + `social/comment/reply?${helper.q(payload)}`).then(res => {
                     commit("getReply", res.data.data)
                     resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        deleteComment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `social/comment`, {
+                    headers: {},
+                    data: {
+                        id: payload.id,
+                    }
+                }).then(res => {
+                    commit("deleteComment", payload.id)
+                    resolve(res.data)
                 }).catch(err => {
                     reject(err)
                 })
