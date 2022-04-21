@@ -32,7 +32,6 @@
     </div>
     <div v-else>
       <div class="border-t px-5 pb-5"
-           @mouseleave="clearAction"
            v-if="comments.comments && comments.comments.length"
            :class="darkMode ? `border-button text-textSecondary` : ``">
         <div v-for="(comment, index) in comments.comments" :key="index">
@@ -163,9 +162,6 @@ export default {
     ...mapActions('social', ['getComment', 'addComment']),
     reply(comment) {
       this.commentId = comment._id
-    },
-    clearAction() {
-      this.$store.commit("social/setActionId", null)
     },
     getReplyComment(id) {
       let payload = {

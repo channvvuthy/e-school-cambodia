@@ -92,14 +92,23 @@ export default {
     ...mapState('social', ['actionId'])
   },
   methods: {
-    ...mapActions('social', ['deleteComment']),
+    ...mapActions('social', ['deleteComment', 'deleteReplyComment']),
     confirmDelete() {
       let payload = {
-        id: this.comment._id
+        id: this.comment._id,
+        isReply: false,
       }
-      this.deleteComment(payload).then(() => {
-        this.isConfirm = false
-      })
+      if (this.parentCommentId) {
+        payload.isReply = true
+        this.deleteReplyComment(payload).then(() => {
+          this.isConfirm = false
+        })
+      } else {
+        this.deleteComment(payload).then(() => {
+          this.isConfirm = false
+        })
+      }
+
     },
     removeComment() {
       this.isConfirm = true

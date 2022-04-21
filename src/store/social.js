@@ -17,6 +17,13 @@ export default {
         actionId: null,
     },
     mutations: {
+        deleteReplyComment(state, payload) {
+            if (payload.isReply) {
+                state.replies = state.replies.filter(item => item._id != payload)
+            } else {
+
+            }
+        },
         deleteComment(state, payload) {
             state.comments.comments = state.comments.comments.filter(item => item._id != payload)
         },
@@ -272,6 +279,21 @@ export default {
                     }
                 }).then(res => {
                     commit("deleteComment", payload.id)
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        deleteReplyComment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + `social/comment/reply`, {
+                    headers: {},
+                    data: {
+                        id: payload.id,
+                    }
+                }).then(res => {
+                    commit("deleteReplyComment", payload)
                     resolve(res.data)
                 }).catch(err => {
                     reject(err)
