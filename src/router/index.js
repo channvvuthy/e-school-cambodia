@@ -279,9 +279,9 @@ const routes = [
         component: () => import('../views/Video/Pkgs'),
     },
     {
-        path: '/tv',
-        name: 'tv',
-        component: () => import('../views/Tv/Tv'),
+        path: '/zoom',
+        name: 'zoom',
+        component: () => import('../views/Video/Zoom'),
     },
     {
         path: '/overview',

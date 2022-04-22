@@ -60,17 +60,17 @@
               <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
             </template>
           </div>
-          <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('tv')">
-            <div v-if="$route.name === 'tv'">
+          <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('zoom')">
+            <div v-if="$route.name === 'zoom'">
               <TVFillIcon :fill="darkMode?`#ffffff`:`#055174`"></TVFillIcon>
             </div>
             <div v-else>
               <TVIcon :fill="darkMode?`#909090`:`#055174`"></TVIcon>
             </div>
-            <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'tv')">
-              {{ $t('tv') }}
+            <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'zoom')">
+              {{ $t('zoom') }}
             </p>
-            <template v-if="$route.name === 'tv'">
+            <template v-if="$route.name === 'zoom'">
               <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
             </template>
           </div>

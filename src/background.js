@@ -3,7 +3,7 @@ import path from 'path'
 let fs = require("fs");
 const {autoUpdater} = require('electron-updater')
 const {download} = require('electron-dl');
-var crypto = require('crypto');
+let crypto = require('crypto');
 let ENC_KEY = "bf3c199c2470cb477d907b1e0917c17b"; // set random encryption key
 let IV = "5183666c72eec9e4"; // set random initialisation vector
 let cipher = crypto.createCipheriv('aes-256-cbc', ENC_KEY, IV);
@@ -46,8 +46,8 @@ const downloadFile = async (fileUrl, info) => {
             responseType: "stream",
         })
         await response.data.pipe(fs.createWriteStream(myInstalledDir).on('finish', () => {
-            var input = fs.createReadStream(myInstalledDir);
-            var output = fs.createWriteStream(`${myInstalledDir}.enc`);
+            let input = fs.createReadStream(myInstalledDir);
+            let output = fs.createWriteStream(`${myInstalledDir}.enc`);
             input.pipe(cipher).pipe(output);
 
             output.on("finish", ()=>{
@@ -82,8 +82,8 @@ ipcMain.on("update", async(event, arg)=>{
 
 ipcMain.on("decypt", async(event, arg)=>{
     const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", arg);
-    var input = fs.createReadStream(`${myInstalledDir}.enc`);
-    var output = fs.createWriteStream(myInstalledDir);
+    let input = fs.createReadStream(`${myInstalledDir}.enc`);
+    let output = fs.createWriteStream(myInstalledDir);
     input.pipe(decipheriv).pipe(output);
 
     output.on('finish',()=> {
@@ -128,7 +128,6 @@ ipcMain.on("removeDownload", (event, arg) => {
     fs.unlink(dir, (err) => {
         if (err) {
             console.error(err)
-            return
         }
     })
 })
@@ -209,14 +208,14 @@ if (!gotTheLock) {
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    // On macOS it is common for applications and their menu bar
+    // On macOS, it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
         app.quit()
     }
 });
 app.on('activate', () => {
-    // On macOS it's common to re-create a window in the app when the
+    // On macOS, it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
 });
@@ -228,7 +227,6 @@ app.on('activate', () => {
 app.on('ready', async () => {
     createWindow()
 });
-
 app.name = "E-SCHOOL"
 
 // Trigger event 'open-url' on mac OS
