@@ -80,7 +80,7 @@
 
     <!-- Photo -->
     <PhotoView
-        :id="id"
+        :id="payload.id"
         @closePhoto="()=>{this.isPhoto = false}"
         :photo="photo"
         v-if="isPhoto"></PhotoView>

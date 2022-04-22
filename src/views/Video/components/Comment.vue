@@ -3,7 +3,6 @@
     <div class="mt-4 flex space-x-5" :id="comment._id">
       <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
       <div
-          @contextmenu="commentAction"
           class="rounded-xl py-4 px-3 relative" :class="darkMode ? `bg-youtube`: `bg-forum`">
         <div
             id="comment-action"
@@ -14,7 +13,7 @@
               :class="darkMode ? `pangusu-dark`: `pangusu-light`"
               class="absolute pangusu"></div>
           <ul>
-            <li class="mb-2 cursor-pointer">
+            <li class="mb-2 cursor-pointer" @click="editComment">
               {{ $t('actions.edit') }}
             </li>
             <li @click="removeComment"
@@ -46,7 +45,9 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-between space-x-1 cursor-pointer" @click="commentAction">
+      <div class="flex items-center justify-between space-x-1 cursor-pointer"
+           v-if="comment.user._id == stProfile._id"
+           @click="commentAction">
         <div class="w-1 h-1 rounded-full" :class="darkMode ? `bg-black`: `bg-instagram`"></div>
         <div class="w-1 h-1 rounded-full" :class="darkMode ? `bg-black`: `bg-instagram`"></div>
         <div class="w-1 h-1 rounded-full" :class="darkMode ? `bg-black`: `bg-instagram`"></div>
@@ -59,6 +60,11 @@
           @ConfirmDeleteCart="confirmDelete">
       </ConfirmDelete>
     </template>
+
+    <template v-if="isEdit">
+      <EditComment
+          :socialComment="comment" @closeComment="()=>{this.isEdit = false}"></EditComment>
+    </template>
   </div>
 </template>
 
@@ -68,12 +74,14 @@ import VueMomentsAgo from "vue-moments-ago";
 import Avatar from "@/Avatar";
 import {mapActions, mapState} from "vuex";
 import ConfirmDelete from "@/views/MyCourse/components/ConfirmDelete";
+import EditComment from "./EditComment";
 
 export default {
   name: "Comment",
   components: {
     ReplyIcon,
     VueMomentsAgo,
+    EditComment,
     Avatar,
     ConfirmDelete
   },
@@ -93,14 +101,21 @@ export default {
     return {
       isConfirm: false,
       confirmMessage: "delete",
+      isEdit: false,
     }
   },
   computed: {
     ...mapState('setting', ['darkMode']),
-    ...mapState('social', ['actionId'])
+    ...mapState('social', ['actionId']),
+    ...mapState('auth', ['stProfile'])
   },
   methods: {
     ...mapActions('social', ['deleteComment', 'deleteReplyComment']),
+    editComment() {
+      this.isEdit = true
+      this.clearAction()
+      this.$store.commit("social/socialComment", this.comment)
+    },
     confirmDelete() {
       let payload = {
         id: this.comment._id,

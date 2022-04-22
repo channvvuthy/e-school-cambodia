@@ -15,8 +15,12 @@ export default {
         replies: [],
         likes: [],
         actionId: null,
+        socialComment: {},
     },
     mutations: {
+        socialComment(state, payload) {
+            state.socialComment = payload
+        },
         deleteReplyComment(state, payload) {
         },
         deleteComment(state, payload) {
