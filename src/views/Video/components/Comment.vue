@@ -1,47 +1,55 @@
 <template>
-  <div class="mt-4 flex space-x-5" :id="comment._id">
-    <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
-    <div
-        @contextmenu="commentAction"
-        class="rounded-xl py-4 px-3 relative" :class="darkMode ? `bg-youtube`: `bg-forum`">
+  <div @mouseleave="clearAction">
+    <div class="mt-4 flex space-x-5" :id="comment._id">
+      <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
       <div
-          v-if="actionId === comment._id"
-          :class="darkMode ? `bg-youtube`: `bg-forum`"
-          class="absolute -right-24 top-0  px-3 py-2 rounded-lg">
+          @contextmenu="commentAction"
+          class="rounded-xl py-4 px-3 relative" :class="darkMode ? `bg-youtube`: `bg-forum`">
         <div
-            :class="darkMode ? `pangusu-dark`: `pangusu-light`"
-            class="absolute pangusu"></div>
-        <ul>
-          <li class="mb-2 cursor-pointer">
-            {{ $t('actions.edit') }}
-          </li>
-          <li @click="removeComment"
-              class="cursor-pointer">
-            {{ $t('actions.delete') }}
-          </li>
-        </ul>
-      </div>
-      <div>
-        <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
-          {{ comment.user.name }}
+            id="comment-action"
+            v-if="actionId === comment._id"
+            :class="darkMode ? `bg-youtube`: `bg-forum`"
+            class="absolute -right-21 top-0  px-3 py-2 rounded-lg">
+          <div
+              :class="darkMode ? `pangusu-dark`: `pangusu-light`"
+              class="absolute pangusu"></div>
+          <ul>
+            <li class="mb-2 cursor-pointer">
+              {{ $t('actions.edit') }}
+            </li>
+            <li @click="removeComment"
+                class="cursor-pointer">
+              {{ $t('actions.delete') }}
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
+            {{ comment.user.name }}
+          </div>
+        </div>
+        <div v-if="comment.content.photo">
+          <img :src="comment.content.photo.url" class="max-h-40 rounded my-2 m-auto">
+        </div>
+        <div v-if="comment.content.sticker">
+          <img :src="comment.content.sticker.url" class="max-h-40 rounded my-2 m-auto">
+        </div>
+        <div v-if="comment.content.text" :class="darkMode?`text-gray-300`:``">
+          {{ comment.content.text }}
+        </div>
+        <div class="flex items-center justify-between space-x-4">
+          <div class="text-gray-500 text-sm">
+            <vue-moments-ago prefix="" suffix="ago" :date="comment.date" lang="en"/>
+          </div>
+          <div class="cursor-pointer" @click="reply(comment)">
+            <ReplyIcon></ReplyIcon>
+          </div>
         </div>
       </div>
-      <div v-if="comment.content.photo">
-        <img :src="comment.content.photo.url" class="max-h-40 rounded my-2 m-auto">
-      </div>
-      <div v-if="comment.content.sticker">
-        <img :src="comment.content.sticker.url" class="max-h-40 rounded my-2 m-auto">
-      </div>
-      <div v-if="comment.content.text" :class="darkMode?`text-gray-300`:``">
-        {{ comment.content.text }}
-      </div>
-      <div class="flex items-center justify-between space-x-4">
-        <div class="text-gray-500 text-sm">
-          <vue-moments-ago prefix="" suffix="ago" :date="comment.date" lang="en"/>
-        </div>
-        <div class="cursor-pointer" @click="reply(comment)">
-          <ReplyIcon></ReplyIcon>
-        </div>
+      <div class="flex items-center justify-between space-x-1 cursor-pointer" @click="commentAction">
+        <div class="w-1 h-1 rounded-full" :class="darkMode ? `bg-black`: `bg-instagram`"></div>
+        <div class="w-1 h-1 rounded-full" :class="darkMode ? `bg-black`: `bg-instagram`"></div>
+        <div class="w-1 h-1 rounded-full" :class="darkMode ? `bg-black`: `bg-instagram`"></div>
       </div>
     </div>
     <template v-if="isConfirm">
@@ -117,13 +125,16 @@ export default {
     commentAction() {
       this.$store.commit("social/setActionId", this.comment._id)
     },
+    clearAction() {
+      this.$store.commit("social/setActionId", null)
+    },
     reply(comment) {
       if (this.parentCommentId) {
         comment._id = this.parentCommentId
       }
       this.$emit("reply", comment)
     }
-  }
+  },
 }
 </script>
 

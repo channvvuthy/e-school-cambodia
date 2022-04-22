@@ -205,9 +205,7 @@
                   {{ post.total.comment }} {{ commentText(post.total.comment) }}
                 </div>
               </div>
-              <div v-if="commentDetailId === post._id"
-                   @mouseleave="clearAction"
-              >
+              <div v-if="commentDetailId === post._id">
                 <CommentDetail :id="commentDetailId" :social="post"></CommentDetail>
               </div>
             </div>
@@ -452,9 +450,6 @@ export default {
 
     ...mapActions('social', ['getSocial', 'postSocial', 'like',
       'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite']),
-    clearAction() {
-      this.$store.commit("social/setActionId", null)
-    },
     showLiker(post) {
       this.isLiker = true
       this.postDetail = post
