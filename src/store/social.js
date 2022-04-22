@@ -18,11 +18,6 @@ export default {
     },
     mutations: {
         deleteReplyComment(state, payload) {
-            if (payload.isReply) {
-                state.replies = state.replies.filter(item => item._id != payload)
-            } else {
-
-            }
         },
         deleteComment(state, payload) {
             state.comments.comments = state.comments.comments.filter(item => item._id != payload)

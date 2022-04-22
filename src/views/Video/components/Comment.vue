@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 flex space-x-5">
+  <div class="mt-4 flex space-x-5" :id="comment._id">
     <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
     <div
         @contextmenu="commentAction"
@@ -99,7 +99,8 @@ export default {
         isReply: false,
       }
       if (this.parentCommentId) {
-        payload.isReply = true
+        document.getElementById(this.comment._id).remove()
+        payload.parentCommentId = this.parentCommentId
         this.deleteReplyComment(payload).then(() => {
           this.isConfirm = false
         })
