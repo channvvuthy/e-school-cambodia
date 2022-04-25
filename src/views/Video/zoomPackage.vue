@@ -2,7 +2,9 @@
   <div class="mt-3 overflow-y-scroll h-screen pb-40 relative"
        :class="darkMode ? `bg-youtube`: `bg-white`"
        @scroll="onScroll" ref="feed">
-    <BoxFilter @enableUserScroll="enableUserScroll($event)"></BoxFilter>
+    <BoxFilter
+        :is-zoom="true"
+        @enableUserScroll="enableUserScroll($event)"></BoxFilter>
     <div class="m-5">
       <div v-if="loading">
         <Loading></Loading>
@@ -97,19 +99,21 @@
         <ScrollTopIcon fill="#FFF" :size="24"></ScrollTopIcon>
       </div>
     </div>
-    <div class="h-24 z-50 fixed right bottom-0 e-shadow px-10 flex items-center justify-center"
-         :class="darkMode ? `bg-secondary`: `bg-white`"
-         v-if="packages.package != undefined && packages.package.is_buy == 0"
-         :style="{width: `${buyNowWidth}px`}">
-      <button
-          @click="addToCart(packages.package)"
-          :disabled="loadingBuy"
-          class="outline-none flex items-center justify-center bg-primary rounded-xl text-xl text-white w-full h-12">
-        {{ $t('buy_now') }}
-        <div class="pl-2" v-if="loadingBuy">
-          <Loader></Loader>
-        </div>
-      </button>
+    <div v-if="packages.list && packages.list.length">
+      <div class="h-24 z-50 fixed right bottom-0 e-shadow px-10 flex items-center justify-center"
+           :class="darkMode ? `bg-secondary`: `bg-white`"
+           v-if="packages.package != undefined && packages.package.is_buy == 0"
+           :style="{width: `${buyNowWidth}px`}">
+        <button
+            @click="addToCart(packages.package)"
+            :disabled="loadingBuy"
+            class="outline-none flex items-center justify-center bg-primary rounded-xl text-xl text-white w-full h-12">
+          {{ $t('buy_now') }}
+          <div class="pl-2" v-if="loadingBuy">
+            <Loader></Loader>
+          </div>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -155,10 +159,9 @@ export default {
     }
   },
   computed: {
-    ...mapState('video', ['packages']),
     ...mapState("setting", ["darkMode", "isHide"]),
     ...mapState('home', ['selectedFilterName']),
-    ...mapState('zoom', ['zoomPackages']),
+    ...mapState('zoom', ['packages']),
     isHideSidebar() {
       return this.$store.state.setting.isHide
     },
@@ -185,7 +188,7 @@ export default {
         this.showMsg = true
         return;
       }
-      this.$router.push({name: 'overview', params: {course: videoCourse}})
+      this.$router.push({name: 'zoom-detail', params: {course: videoCourse}})
     },
     listPackages() {
       this.loading = true
@@ -193,17 +196,11 @@ export default {
       payload.filter_id = this.filter_id
       payload.s = this.s
       payload.id = this.$route.params.pkg._id
-      if (this.$route.params.pkg.isZoom) {
-        this.getZoomPackage(payload).then(res => {
-          this.$store.commit("home/getFilter", res.data)
-          this.loading = false
-        })
-      } else {
-        this.getPackages(payload).then(res => {
-          this.$store.commit("home/getFilter", res.data)
-          this.loading = false
-        })
-      }
+
+      this.getZoomPackage(payload).then(res => {
+        this.$store.commit("home/getFilter", res.data)
+        this.loading = false
+      })
     },
     addToCart(video) {
       this.loadingBuy = true

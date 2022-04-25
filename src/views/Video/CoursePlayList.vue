@@ -420,7 +420,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.params.course.is_buy)
     window.addEventListener('resize', this.handleResize);
 
     this.handleResize();

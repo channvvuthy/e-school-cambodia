@@ -289,6 +289,16 @@ const routes = [
         component: () => import('../views/Video/Overview'),
     },
     {
+        path: '/zoom-detail',
+        name: 'zoom-detail',
+        component: () => import('../views/Video/zoomDetail'),
+    },
+    {
+        path: '/zoom-package',
+        name: 'zoom-package',
+        component: () => import('../views/Video/zoomPackage'),
+    },
+    {
         path: '/book-overview',
         name: 'book-overview',
         component: () => import('../views/Library/components/book/OverView'),

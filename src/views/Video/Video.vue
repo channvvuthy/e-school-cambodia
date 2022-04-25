@@ -115,7 +115,6 @@
 
 <script>
 import BoxFilter from "./components/Filter.vue"
-import ScrollTopIcon from "./../../components/ScrollTopIcon.vue"
 import Loading from "./../../components/Loading.vue"
 import CertificateIcon from "./../../components/CertificateIcon.vue"
 import TestIcon from "./../../components/TestIcon.vue"
@@ -129,7 +128,7 @@ import helper from "./../../helper/helper"
 import Empty from "./../Component/Empty.vue";
 import BuyMsg from "./../Component/BuyMsg.vue"
 import Pkg from "./components/Pkg.vue"
-
+import ScrollTopIcon from "./../../components/ScrollTopIcon.vue"
 const {ipcRenderer} = require('electron')
 
 export default {
@@ -146,7 +145,8 @@ export default {
     Empty,
     BuyMsg,
     ScrollTopIcon,
-    Pkg
+    Pkg,
+
   },
   data() {
     return {

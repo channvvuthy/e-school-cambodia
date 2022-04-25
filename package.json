@@ -47,7 +47,7 @@
     "jquery": "^3.5.1",
     "js-video-url-parser": "^0.4.3",
     "katex": "^0.13.11",
-    "moment": "^2.29.1",
+    "moment": "^2.29.3",
     "node-machine-id": "^1.1.12",
     "node-sass": "^5.0.0",
     "or": "^0.2.0",

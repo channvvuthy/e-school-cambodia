@@ -30,6 +30,7 @@ import etalk from "./etalk"
 import Vue from 'vue'
 import Vuex from 'vuex'
 import sticker from "./sticker"
+import zoom from "./zoom"
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -63,6 +64,7 @@ export default new Vuex.Store({
         network,
         attendant,
         summary,
-        etalk
+        etalk,
+        zoom
     }
 });

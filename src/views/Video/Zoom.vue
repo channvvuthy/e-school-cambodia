@@ -2,16 +2,19 @@
   <div class="mt-3 overflow-y-scroll  h-screen pb-40"
        :class="darkMode ? `bg-youtube`: ``"
        @scroll="onScroll" ref="feed">
-    <BoxFilter @enableUserScroll="enableUserScroll($event)"></BoxFilter>
-    <Pkg :packages="videos.package"></Pkg>
+    <BoxFilter @enableUserScroll="enableUserScroll($event)" :is-zoom="true"></BoxFilter>
+    <Pkg
+        :is-zoom="true"
+        :packages="courses.package"></Pkg>
     <div class="mt-10 px-5">
       <div v-if="loading">
         <Loading></Loading>
       </div>
+
       <div v-else>
         <div class="grid gap-4" :class="isHide?`grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-5`">
-          <div v-for="(video, index) in videos.list" :key="index">
-            <div class="relative cursor-pointer view" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
+          <div v-for="(video, index) in courses.list" :key="index">
+            <div class="relative cursor-pointer zoom" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
                  :style="minHeight?{minHeight:`${minHeight}px`}:{}">
               <div class="absolute left-3 top-3 z-50" v-if="video.is_new && video.is_buy === 0">
                 <NewIcon></NewIcon>
@@ -95,27 +98,32 @@
           </div>
         </div>
       </div>
+
       <div v-if="loadingMore">
         <Loading></Loading>
       </div>
-      <template v-if="videos.list == undefined || videos.list.length <= 0">
+
+      <template v-if="courses.list == undefined || courses.list.length <= 0">
         <div class="h-65 flex items-center justify-center">
           <Empty></Empty>
         </div>
       </template>
+
       <BuyMsg v-if="showMsg" :msg="msg" @cancelModal="() => {this.showMsg = false}" @yes="yes"></BuyMsg>
       <div class="fixed right-0 bottom-0 w-full z-50 flex justify-end pr-5 pb-5" v-if="showScrollTop" @click="goToTop">
         <div class="cursor-pointer rounded-full w-12 h-12 flex items-center justify-center bg-primary">
           <ScrollTopIcon fill="#FFF" :size="24"></ScrollTopIcon>
         </div>
       </div>
+
     </div>
   </div>
-</template>
 
+</template>
 <script>
+import {mapState, mapActions} from "vuex";
 import BoxFilter from "./components/Filter.vue"
-import ScrollTopIcon from "./../../components/ScrollTopIcon.vue"
+import Pkg from "./components/Pkg.vue"
 import Loading from "./../../components/Loading.vue"
 import CertificateIcon from "./../../components/CertificateIcon.vue"
 import TestIcon from "./../../components/TestIcon.vue"
@@ -124,104 +132,54 @@ import ChatIcon from "./../../components/ChatIcon.vue"
 import CartIcon from "./../../components/CartIcon.vue"
 import YoutubeIcon from "./../../components/YoutubeIcon.vue"
 import NewIcon from "./../../components/NewIcon.vue"
-import {mapState, mapActions} from "vuex"
-import helper from "./../../helper/helper"
 import Empty from "./../Component/Empty.vue";
 import BuyMsg from "./../Component/BuyMsg.vue"
-import Pkg from "./components/Pkg.vue"
-
-const {ipcRenderer} = require('electron')
+import helper from "@/helper/helper";
 
 export default {
+  computed: {
+    ...mapState('setting', ['darkMode', 'isHide']),
+    ...mapState('home', ['filter_id', 's']),
+    ...mapState('zoom', ['courses', 'loading'])
+  },
   components: {
-    BoxFilter,
-    Loading,
-    CertificateIcon,
-    YoutubeIcon,
-    TestIcon,
-    PdfIcon,
-    ChatIcon,
-    CartIcon,
-    NewIcon,
     Empty,
     BuyMsg,
-    ScrollTopIcon,
-    Pkg
+    BoxFilter,
+    Pkg,
+    Loading,
+    CartIcon,
+    CertificateIcon,
+    TestIcon,
+    NewIcon,
+    YoutubeIcon,
+    PdfIcon,
+    ChatIcon
   },
   data() {
     return {
-      page: 1,
       enableScroll: true,
+      page: 1,
       minHeight: 0,
+      loadingMore: false,
       showMsg: false,
       msg: "2006",
       showScrollTop: false
     }
   },
-  computed: {
-    ...mapState("video", ["videos", "loading", "loadingMore"]),
-    ...mapState("setting", ["darkMode", "isHide"]),
-    ...mapState('home', ['filter', 'selectedFilterName', 'filter_id', 's'])
-  },
   methods: {
-    ...mapActions('video', ['getVideo', 'getVideoWithPagination']),
-    ...mapActions('cart', ['addCart', 'getCart']),
-    cutString(text, limit) {
-      return helper.cutString(text, limit)
-    },
-    gotToPlayList(videoCourse) {
-      videoCourse.package_id = ""
-      if (localStorage.getItem('token') === null) {
-        this.showMsg = true
-        return;
-      }
-      this.$router.push({name: 'overview', params: {course: videoCourse}})
-    },
-    enableUserScroll() {
-      this.enableScroll = true
-      this.page = 1
-    },
-    matchHeight() {
-      let arr = []
-      let interval = setInterval(() => {
-        let box = document.getElementsByClassName('view')
-        if (box) {
-          for (let i = 0; i < box.length; i++) {
-            arr.push(box[i].clientHeight)
-          }
-          this.minHeight = Math.max(...arr)
-          clearInterval(interval)
-        }
-      }, 1000)
-    },
-    addToCart(video) {
-      if (localStorage.getItem('token') === null) {
-        this.showMsg = true
-        return;
-      }
-      let payload = {}
-      payload.id = video._id
-      this.addCart(payload).then(() => {
-        this.getCart()
-      })
-      this.$store.commit("video/addToCart", video._id)
-    },
-    yes() {
-      this.$router.push('login');
-    },
-    goToTop() {
-      this.$refs.feed.scrollTop = 0;
-    },
+    ...mapActions('zoom', ['getZoomCourse', 'getZoomCourseWithPagination']),
     onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
-      if (!scrollTop) {
-        this.showScrollTop = false
-      }
-
-      if (scrollTop > 300) {
-        this.showScrollTop = true
-      }
-
       if (scrollTop + clientHeight >= scrollHeight) {
+
+        if (!scrollTop) {
+          this.showScrollTop = false
+        }
+
+        if (scrollTop > 300) {
+          this.showScrollTop = true
+        }
+
         this.page++
 
         let payload = {}
@@ -237,7 +195,9 @@ export default {
         payload.p = this.page
 
         if (this.enableScroll) {
-          this.getVideoWithPagination(payload).then(res => {
+          this.loadingMore = true
+          this.getZoomCourseWithPagination(payload).then(res => {
+            this.loadingMore = false
             if (res.data.data.list.length <= 0) {
               this.enableScroll = false
             }
@@ -245,24 +205,53 @@ export default {
         }
       }
     },
+    enableUserScroll() {
+      this.enableScroll = true
+      this.page = 1
+    },
+    cutString(text, limit) {
+      return helper.cutString(text, limit)
+    },
+    matchHeight() {
+      let arr = []
+      let interval = setInterval(() => {
+        let box = document.getElementsByClassName('zoom')
+        if (box) {
+          for (let i = 0; i < box.length; i++) {
+            arr.push(box[i].clientHeight)
+          }
+          this.minHeight = Math.max(...arr)
+          clearInterval(interval)
+        }
+      }, 1000)
+    },
+    gotToPlayList(videoCourse) {
+      videoCourse.package_id = ""
+      if (localStorage.getItem('token') === null) {
+        this.showMsg = true
+        return;
+      }
+      this.$router.push(
+          {
+            name: 'zoom-detail',
+            params: {
+              course: videoCourse,
+            }
+          }
+      )
+    },
   },
   mounted() {
-
     this.$nextTick(() => {
       this.matchHeight()
     })
-    ipcRenderer.send('downloadLocation', '')
-    ipcRenderer.on("getDownloadLocation", (event, arg) => {
-      this.$store.commit("playVideo/downloadLocation", arg)
-    })
   },
   created() {
-    this.getVideo({filter_id: ""})
+    this.getZoomCourse().then(res => {
+      if (res.data && res.data.filter) {
+        this.$store.commit("home/getFilter", {filter: res.data.filter})
+      }
+    })
   }
-
 }
 </script>
-
-<style>
-
-</style>
