@@ -6,11 +6,19 @@ export default {
     namespaced: true,
     state: {
         loading: false,
-        courses: [],
+        courses: {},
         packages: [],
         playlist: []
     },
     mutations: {
+        addToCart(state, payload) {
+            state.courses.list = state.courses.list.filter(item => {
+                if (item._id === payload) {
+                    item.is_in_cart = 1
+                }
+                return item
+            })
+        },
         gettingVideo(state, payload) {
             state.loading = payload
         },

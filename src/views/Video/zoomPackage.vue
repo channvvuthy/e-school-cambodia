@@ -216,7 +216,7 @@ export default {
           document.getElementById("myCart").click()
         })
       })
-      this.$store.commit("video/addToCart", video._id)
+      this.$store.commit("zoom/addToCart", video._id)
     },
     goToTop() {
       this.$refs.feed.scrollTop = 0;

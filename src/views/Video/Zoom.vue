@@ -169,6 +169,7 @@ export default {
   },
   methods: {
     ...mapActions('zoom', ['getZoomCourse', 'getZoomCourseWithPagination']),
+    ...mapActions('cart', ['addCart', 'getCart']),
     onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
       if (scrollTop + clientHeight >= scrollHeight) {
 
@@ -224,6 +225,18 @@ export default {
           clearInterval(interval)
         }
       }, 1000)
+    },
+    addToCart(video) {
+      if (localStorage.getItem('token') === null) {
+        this.showMsg = true
+        return;
+      }
+      let payload = {}
+      payload.id = video._id
+      this.addCart(payload).then(() => {
+        this.getCart()
+      })
+      this.$store.commit("zoom/addToCart", video._id)
     },
     gotToPlayList(videoCourse) {
       videoCourse.package_id = ""

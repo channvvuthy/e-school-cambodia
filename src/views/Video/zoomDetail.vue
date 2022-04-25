@@ -46,12 +46,6 @@
           </div>
 
           <div class="cursor-pointer">
-            <div v-if="playlist.is_favorite">
-              <FavoriteFill fill="#c0272d"></FavoriteFill>
-            </div>
-            <div v-else @click="addToFavorite">
-              <FavoriteIcon :size="30"></FavoriteIcon>
-            </div>
           </div>
 
         </div>
@@ -124,8 +118,6 @@ import VideoCameraIcon from "@/views/Video/components/VideoCameraIcon";
 import Eye from "@/components/Eye";
 import helper from "@/helper/helper";
 import Loader from "@/components/Loader";
-import FavoriteIcon from "@/components/FavoriteIcon";
-import FavoriteFill from "@/components/FavoriteFill";
 import CertificateIcon from "@/components/CertificateIcon";
 import TestIcon from "@/components/TestIcon";
 import PdfIcon from "@/components/PdfIcon";
@@ -143,8 +135,6 @@ export default {
     TestIcon,
     Eye,
     Loader,
-    FavoriteIcon,
-    FavoriteFill,
     TVIcon
   },
   data() {
@@ -175,7 +165,7 @@ export default {
     },
     report(field) {
       try {
-        return this.playlist.course.report_watch[field]
+        return this.playlist.course.report_watch[field] || 0
       } catch (err) {
         return 0
       }

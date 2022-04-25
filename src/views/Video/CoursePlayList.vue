@@ -125,7 +125,7 @@
             <EnlargeIcon :size="16"></EnlargeIcon>
           </div>
           <div class="text-white text-lg" :title="video.title">
-            {{cutString( video.title, 50)}}
+            {{ cutString(video.title, 50) }}
           </div>
           <div class="cursor-pointer" @click="closeDock">
             <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
@@ -296,8 +296,8 @@ export default {
     forumDetail($event) {
       this.showMenu = false
       this.loadingComment = true
-      this.getCommentForum({id: $event._id}).then(response => {
-        this.comments = response
+      this.getCommentForum({id: $event._id}).then(res => {
+        this.comments = res
         this.loadingComment = false
       })
     },
@@ -387,8 +387,8 @@ export default {
       this.addComment(formData)
     },
     replyTextComment(data) {
-      this.replyComment(data).then(response => {
-        this.comments.comment.push(response.data.data)
+      this.replyComment(data).then(res => {
+        this.comments.comment.push(res.data.data)
       })
     },
     send(event) {
@@ -399,8 +399,8 @@ export default {
       if (this.isReply) {
         formData.append("id", this.comments.forum._id)
         formData.append("photo", this.photo);
-        this.replyComment(formData).then(response => {
-          this.comments.comment.push(response.data.data)
+        this.replyComment(formData).then(res => {
+          this.comments.comment.push(res.data.data)
           this.showModalPhoto = false
         })
       } else {
@@ -434,12 +434,12 @@ export default {
       payload.package_id = this.$route.params.course.package_id
     }
 
-    this.getPlaylist(payload).then(response => {
+    this.getPlaylist(payload).then(res => {
       let freeVideo
-      if (response.data.data.course.is_buy) {
-        freeVideo = response.data.data.list
+      if (res.data.data.course.is_buy) {
+        freeVideo = res.data.data.list
       } else {
-        freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
+        freeVideo = res.data.data.list.filter(item => item.free_watch === 1)
       }
       let order
       if (this.$route.params.course.last_watch) {

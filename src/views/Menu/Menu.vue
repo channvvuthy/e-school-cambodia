@@ -62,10 +62,10 @@
           </div>
           <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('zoom')">
             <div v-if="$route.name === 'zoom'">
-              <TVFillIcon :fill="darkMode?`#ffffff`:`#055174`"></TVFillIcon>
+              <ZoomIcon :fill="darkMode?`#ffffff`:`#055174`" :size="24"></ZoomIcon>
             </div>
             <div v-else>
-              <TVIcon :fill="darkMode?`#909090`:`#055174`"></TVIcon>
+              <ZoomIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></ZoomIcon>
             </div>
             <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'zoom')">
               {{ $t('zoom') }}
@@ -148,6 +148,7 @@ import ChatIcon from "./components/ChatIcon.vue"
 import CartIcon from "./../../components/CartIcon.vue"
 import TVIcon from "@/components/TVIcon";
 import TVFillIcon from "@/components/TVFillIcon";
+import ZoomIcon from "@/components/ZoomIcon";
 
 export default {
   components: {
@@ -164,7 +165,8 @@ export default {
     ChatIcon,
     CartIcon,
     BorderBottom,
-    TVFillIcon
+    TVFillIcon,
+    ZoomIcon
 
   },
   data() {
