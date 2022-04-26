@@ -187,7 +187,13 @@ export default {
         },
         editComment({commit}, payload) {
             return new Promise((resolve, reject) => {
-                axios.put(config.apiUrl + `social/comment`, payload).then(res => {
+                let url = 'social/comment'
+                if (payload.replyId) {
+                    delete payload.replyId
+                    url = "social/comment/reply"
+                }
+
+                axios.put(config.apiUrl + url, payload).then(res => {
                     resolve(res.data.data)
                 }).catch(err => {
                     reject(err)

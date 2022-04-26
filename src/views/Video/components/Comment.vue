@@ -63,7 +63,9 @@
 
     <template v-if="isEdit">
       <EditComment
-          :socialComment="comment" @closeComment="()=>{this.isEdit = false}"></EditComment>
+          :reply-id="replyId"
+          :socialComment="comment"
+          @closeComment="()=>{this.isEdit = false}"></EditComment>
     </template>
   </div>
 </template>
@@ -102,6 +104,7 @@ export default {
       isConfirm: false,
       confirmMessage: "delete",
       isEdit: false,
+      replyId: null,
     }
   },
   computed: {
@@ -112,6 +115,10 @@ export default {
   methods: {
     ...mapActions('social', ['deleteComment', 'deleteReplyComment']),
     editComment() {
+      if (this.parentCommentId) {
+        this.replyId = this.comment._id
+      }
+
       this.isEdit = true
       this.clearAction()
       this.$store.commit("social/socialComment", this.comment)

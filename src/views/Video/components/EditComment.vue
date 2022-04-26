@@ -97,6 +97,13 @@ export default {
     SendMessageIcon
   },
   mixins: [mode],
+  props: {
+    replyId: {
+      default: () => {
+        return null
+      }
+    }
+  },
   data() {
     return {
       isSticker: false,
@@ -140,6 +147,7 @@ export default {
 
     },
     deletePhoto() {
+      this.isEditable = true
       this.isPhoto = false
     },
     postComment() {
@@ -184,7 +192,9 @@ export default {
       }
 
       if (this.socialComment.content.hasOwnProperty('photo')) {
-        if (this.socialComment.content.photo.url == undefined) {
+        try {
+          this.socialComment.content.photo.url
+        } catch (e) {
           this.$delete(this.payload, 'photo')
         }
       }
@@ -239,6 +249,11 @@ export default {
   mounted() {
     localStorage.setItem("originalSocialComment", JSON.stringify(this.socialComment))
     this.stickerUrl = this.socialComment.content['sticker'] ? this.socialComment.content['sticker']['url'] : ""
+  },
+  created() {
+    if (this.replyId) {
+      this.payload.replyId = this.replyId
+    }
   },
   watch: {
     'socialComment.content.text': function () {
