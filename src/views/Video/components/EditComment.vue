@@ -3,7 +3,10 @@
     <Modal width="w-4/12">
       <div class="flex justify-between p-5">
         <div class="font-black text-lg">{{ $t('edit_comment') }}</div>
-        <div class="cursor-pointer" @click="closeComment">
+        <div v-if="loading">
+          <LoadingWhite></LoadingWhite>
+        </div>
+        <div v-else class="cursor-pointer" @click="closeComment">
           <CloseIcon></CloseIcon>
         </div>
       </div>
@@ -29,18 +32,27 @@
         >
           <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
           <textarea
+              ref="edit"
               v-model="socialComment.content.text"
-              @keyup.enter.exact="postComment"
               :placeholder="$t('2113')"
               class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
           <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
             <SmileEmoji :size="30" :fill="darkMode ?`#909090`: `#979797`"></SmileEmoji>
           </div>
-          <div style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+          <div
+              style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
             <input type="file" ref="socialCommentPhoto" @change="selectPhoto" accept="image/*" class="hidden">
             <div class="rounded-full h-9 w-9 flex items-center justify-center"
                  @click="()=>{this.$refs.socialCommentPhoto.click()}">
               <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
+            </div>
+          </div>
+          <div
+              v-if="isEditable"
+              @click="postComment"
+              style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+            <div class="rounded-full h-9 w-9 flex items-center justify-center">
+              <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
             </div>
           </div>
         </div>
@@ -61,13 +73,16 @@
 <script>
 import Modal from "../../../components/Modal";
 import CloseIcon from "../../../components/CloseIcon";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 import ImageIcon from "../../../components/ImageIcon";
 import SmileEmoji from "./SmileEmoji";
 import Avatar from "../../../Avatar";
 import mode from "@/mixins/mode";
-import Sticker from "@/views/Video/components/Sticker";
+import Sticker from "@/views/Video/components/Sticker.vue";
 import StickerView from "./StickerView";
+import LoadingWhite from "@/components/LoadingWhite";
+import SendMessageIcon from "@/components/SendMessageIcon";
+
 
 export default {
   components: {
@@ -77,7 +92,9 @@ export default {
     SmileEmoji,
     Avatar,
     Sticker,
-    StickerView
+    StickerView,
+    LoadingWhite,
+    SendMessageIcon
   },
   mixins: [mode],
   data() {
@@ -87,48 +104,146 @@ export default {
       isDelete: false,
       isPhoto: true,
       photo: null,
-      stickerUrl: null,
+      stickerUrl: "",
+      stickerId: "",
+      isPhotoUpdate: false,
+      isStickerUpdate: false,
+      loading: false,
+      payload: {},
+      isEditable: false
     }
   },
   computed: {
     ...mapState('setting', ['darkMode']),
     ...mapState('auth', ['stProfile']),
-    ...mapState('social', ['socialComment'])
+    socialComment() {
+      return this.$store.state.social.socialComment
+    }
   },
   methods: {
+    ...mapActions('upload', ['multiUpload']),
+    ...mapActions('social', ['editComment']),
+    setFocus() {
+      setTimeout(() => {
+        this.$refs.edit.focus()
+      })
+    },
     closeComment() {
+      try {
+        let originalSocialComment = JSON.parse(localStorage.getItem("originalSocialComment"))
+        this.socialComment.content.text = originalSocialComment.content.text
+        this.socialComment.content.photo = originalSocialComment.content.photo
+        this.socialComment.content.sticker = originalSocialComment.content.sticker
+      } catch (e) {
+      }
       this.$emit("closeComment")
+
     },
     deletePhoto() {
       this.isPhoto = false
     },
     postComment() {
+      if (!this.isEditable) {
+        return;
+      }
+
+      this.payload.id = this.socialComment._id
+      this.payload.text = this.socialComment.content.text
+
+      if (this.socialComment.content.photo && this.isPhoto) {
+        this.payload.photo = this.socialComment.content.photo
+      }
+      if (!this.isPhoto) {
+        this.payload.photo = ""
+      }
+      if (this.socialComment.content.sticker) {
+        this.payload.sticker = this.stickerId
+      }
+
+      this.loading = true
+      if (this.isPhotoUpdate) {
+        let photo = new FormData()
+        photo.append("photo", this.photo)
+        this.multiUpload(photo).then(res => {
+          this.payload.photo = res.data[0]
+          this.payload.sticker = ""
+          this.editComment(this.payload).then(() => {
+            this.loading = false
+            this.socialComment.content.sticker = null
+            this.$emit("closeComment")
+          })
+        }).finally(() => {
+          this.loading = false
+        })
+        return
+      }
+
+      if (this.isStickerUpdate) {
+        this.payload.sticker = this.stickerId
+        this.payload.photo = ""
+      }
+
+      if (this.socialComment.content.hasOwnProperty('photo')) {
+        if (this.socialComment.content.photo.url == undefined) {
+          this.$delete(this.payload, 'photo')
+        }
+      }
+
+      if (!this.isStickerUpdate && !this.isPhotoUpdate) {
+        this.$delete(this.payload, 'photo')
+        this.$delete(this.payload, 'sticker')
+      }
+
+      this.editComment(this.payload).then(res => {
+        this.socialComment.content.photo = null
+        this.socialComment.content.sticker = res.content.sticker
+        this.$emit("closeComment")
+      }).finally(() => {
+        this.loading = false
+      })
 
     },
     selectPhoto(e) {
       if (e.target.files && e.target.files.length) {
+        this.isEditable = true
+        this.isPhotoUpdate = true
+        this.isStickerUpdate = false
         this.photo = e.target.files[0]
         this.socialComment.content.photo = {
           url: URL.createObjectURL(e.target.files[0])
         }
-        this.isPhoto = true
         this.isViewSticker = false
+        this.isPhoto = true
+        this.setFocus()
       }
     },
     selectSticker(sticker) {
+      this.isEditable = true
+      this.isPhotoUpdate = false
+      this.isStickerUpdate = true
       this.socialComment.sticker = sticker._id
+      this.stickerId = sticker._id
       this.isSticker = false
-      this.socialComment.content.sticker.url = sticker.name
+      this.socialComment.content.sticker = {
+        name: sticker.name
+      }
       this.stickerUrl = sticker.sticker.name
       this.isViewSticker = true
       this.isPhoto = false
+      this.setFocus()
     },
     removeSticker() {
       this.isViewSticker = false
     },
   },
   mounted() {
-    this.stickerUrl = this.socialComment.content.sticker ? this.socialComment.content.sticker.url : null
+    localStorage.setItem("originalSocialComment", JSON.stringify(this.socialComment))
+    this.stickerUrl = this.socialComment.content['sticker'] ? this.socialComment.content['sticker']['url'] : ""
+  },
+  watch: {
+    'socialComment.content.text': function () {
+      this.isEditable = true
+    }
   }
 }
 </script>

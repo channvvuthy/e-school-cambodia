@@ -5,7 +5,6 @@
       <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
       <textarea
           v-model="comment.text"
-          @keyup.enter.exact="postComment"
           :placeholder="$t('2113')"
           class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
       <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
@@ -16,6 +15,13 @@
         <div class="rounded-full h-9 w-9 flex items-center justify-center"
              @click="()=>{this.$refs.commentPhoto.click()}">
           <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
+        </div>
+      </div>
+      <div
+          @click="postComment"
+          style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+        <div class="rounded-full h-9 w-9 flex items-center justify-center">
+          <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
         </div>
       </div>
     </div>

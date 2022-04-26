@@ -185,6 +185,15 @@ export default {
                 })
             })
         },
+        editComment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.put(config.apiUrl + `social/comment`, payload).then(res => {
+                    resolve(res.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
 
         like({commit}, payload) {
             return new Promise((resolve, reject) => {
@@ -370,7 +379,8 @@ export default {
                     reject(err)
                 })
             })
-        }
+        },
+
 
     }
 
