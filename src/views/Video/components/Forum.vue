@@ -3,87 +3,97 @@
        class="ml-5 flex flex-col justify-between"
        :style="{height:`${windowHeight}px`}">
     <div class="h-full overflow-y-scroll p-5" ref="feed" @scroll="onScroll">
-      <div v-if="!forums.length">
-        {{ $t('there_is_no_comment_to_show') }}
-      </div>
-      <div v-for="(forum,index) in forums" :key="index" class="mb-5">
-        <div class="flex">
-          <div class="h-16 w-16">
-            <div class="h-16 w-16 rounded-full bg-cover bg-center bg-gray-300"
-                 :style="{backgroundImage:`url(${forum.user.photo})`}">
-            </div>
-          </div>
-
-          <div class="ml-4">
-            <div class="w-full rounded-xl py-4 px-3" :class="darkMode ? `bg-youtube`: `bg-forum`">
-              <div>
-                <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
-                  {{ forum.user.name }}
-                </div>
-              </div>
-              <div v-if="forum.content.photo">
-                <img :src="forum.content.photo.name" class="max-h-40 rounded my-2">
-              </div>
-              <div v-if="forum.content.text" :class="darkMode?`text-gray-300`:``">
-                {{ cutString(forum.content.text, 100) }}
-              </div>
-
-              <div class="flex items-center justify-between">
-                <div class="text-gray-500 text-sm">
-                  <vue-moments-ago prefix="" suffix="ago" :date="forum.date" lang="en"/>
-                </div>
-                <div class="cursor-pointer" @click="forumDetail(forum)">
-                  <ReplyIcon></ReplyIcon>
-                </div>
-              </div>
-            </div>
-
-            <!-- Child comment -->
-            <div v-if="forum.forum_comment">
-              <div class="my-5 flex">
-                <div class="h-14 w-14">
-                  <div class="h-14 w-14 rounded-full bg-cover bg-center bg-gray-300"
-                       :style="{backgroundImage:`url(${forum.forum_comment.user.photo})`}">
-                  </div>
-                </div>
-                <div class="w-full rounded-xl py-4 px-3 ml-4" :class="darkMode ? `bg-youtube`: `bg-forum`">
-                  <div>
-                    <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
-                      {{ forum.forum_comment.user.name }}
-                    </div>
-                  </div>
-                  <div v-if="forum.forum_comment && forum.forum_comment.content.photo">
-                    <img :src="forum.forum_comment.content.photo.name" class="max-h-40 rounded my-2">
-                  </div>
-                  <div v-if="forum.forum_comment && forum.forum_comment.content.sticker">
-                    <img :src="forum.forum_comment.content.sticker.name" class="max-h-40 rounded my-2">
-                  </div>
-                  <div v-if="forum.forum_comment.content.text" :class="darkMode?`text-gray-300`:``">
-                    {{ cutString(forum.forum_comment.content.text, 100) }}
-                  </div>
-
-                  <div class="flex items-center justify-between">
-                    <div class="text-gray-500 text-sm">
-                      <vue-moments-ago prefix="" suffix="ago" :date="forum.forum_comment.date" lang="en"/>
-                    </div>
-                    <div class="cursor-pointer" @click="forumDetail(forum)">
-                      <ReplyIcon></ReplyIcon>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="flex">
-                <div class="h-14 w-14"></div>
-                <div class="ml-4 text-lg capitalize cursor-pointer"
-                     @click="forumDetail(forum)"
-                     :class="darkMode ?`text-textSecondary`: `text-primary`">
-                  {{$t('more_reply')}}...
-                </div>
-              </div>
-            </div>
-          </div>
+      <div v-if="loadingForum">
+        <div
+            v-for="key in 3" :key="key + Math.random()"
+            class="border mb-5 p-5"
+            :class="darkMode ? `border-button text-lightGray` : ``">
+          <Loading :grid="true" :number-of-columns="1"></Loading>
         </div>
+      </div>
+      <div v-else>
+        <div v-if="!forums.length">
+          {{ $t('there_is_no_comment_to_show') }}
+        </div>
+        <div v-for="(forum,index) in forums" :key="index" class="mb-5">
+          <div class="flex">
+            <div class="h-16 w-16">
+              <div class="h-16 w-16 rounded-full bg-cover bg-center bg-gray-300"
+                   :style="{backgroundImage:`url(${forum.user.photo})`}">
+              </div>
+            </div>
 
+            <div class="ml-4">
+              <div class="w-full rounded-xl py-4 px-3" :class="darkMode ? `bg-youtube`: `bg-forum`">
+                <div>
+                  <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
+                    {{ forum.user.name }}
+                  </div>
+                </div>
+                <div v-if="forum.content.photo">
+                  <img :src="forum.content.photo.name || forum.content.photo.url" class="max-h-40 rounded my-2">
+                </div>
+                <div v-if="forum.content.text" :class="darkMode?`text-gray-300`:``">
+                  {{ cutString(forum.content.text, 100) }}
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <div class="text-gray-500 text-sm">
+                    <vue-moments-ago prefix="" suffix="ago" :date="forum.date" lang="en"/>
+                  </div>
+                  <div class="cursor-pointer" @click="forumDetail(forum)">
+                    <ReplyIcon></ReplyIcon>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Child comment -->
+              <div v-if="forum.forum_comment">
+                <div class="my-5 flex">
+                  <div class="h-14 w-14">
+                    <div class="h-14 w-14 rounded-full bg-cover bg-center bg-gray-300"
+                         :style="{backgroundImage:`url(${forum.forum_comment.user.photo})`}">
+                    </div>
+                  </div>
+                  <div class="w-full rounded-xl py-4 px-3 ml-4" :class="darkMode ? `bg-youtube`: `bg-forum`">
+                    <div>
+                      <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
+                        {{ forum.forum_comment.user.name }}
+                      </div>
+                    </div>
+                    <div v-if="forum.forum_comment && forum.forum_comment.content.photo">
+                      <img :src="forum.forum_comment.content.photo.name" class="max-h-40 rounded my-2">
+                    </div>
+                    <div v-if="forum.forum_comment && forum.forum_comment.content.sticker">
+                      <img :src="forum.forum_comment.content.sticker.name" class="max-h-40 rounded my-2">
+                    </div>
+                    <div v-if="forum.forum_comment.content.text" :class="darkMode?`text-gray-300`:``">
+                      {{ cutString(forum.forum_comment.content.text, 100) }}
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                      <div class="text-gray-500 text-sm">
+                        <vue-moments-ago prefix="" suffix="ago" :date="forum.forum_comment.date" lang="en"/>
+                      </div>
+                      <div class="cursor-pointer" @click="forumDetail(forum)">
+                        <ReplyIcon></ReplyIcon>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex">
+                  <div class="h-14 w-14"></div>
+                  <div class="ml-4 text-lg capitalize cursor-pointer"
+                       @click="forumDetail(forum)"
+                       :class="darkMode ?`text-textSecondary`: `text-primary`">
+                    {{ $t('more_reply') }}...
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
 
@@ -135,6 +145,7 @@ import helper from "./../../../helper/helper"
 import VueMomentsAgo from "vue-moments-ago";
 import ReplyIcon from "@/views/Chat/components/ReplyIcon";
 import SendMessageIcon from "@/components/SendMessageIcon";
+import Loading from "@/components/Loading";
 
 export default {
   components: {
@@ -143,7 +154,8 @@ export default {
     ChatIcon,
     ImageIcon,
     ReplyIcon,
-    SendMessageIcon
+    SendMessageIcon,
+    Loading
   },
 
   props: {
@@ -201,7 +213,6 @@ export default {
       if (event.target.value) {
         this.$emit("noReply", false)
         this.$emit("openModal", event)
-
       }
     },
     choosePhoto() {

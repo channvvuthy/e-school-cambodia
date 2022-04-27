@@ -8,10 +8,10 @@
             <SmileIcon :fill="darkMode?`#ffffff`:`#055174`"></SmileIcon>
           </div>
         </div>
-        <div class="text-base font-PoppinsMedium" :class="darkMode?'text-white':''"><span
-            class="uppercase">{{ $t('2003') }}</span> <span>
-                    {{ token ? stProfile.first_name + " " + stProfile.last_name : $t('1127') }}
-                </span></div>
+        <div class="text-base font-PoppinsMedium" :class="darkMode?'text-white':''">
+          <span class="uppercase">{{ $t('2003') }}</span>
+          <span>{{ token ? stProfile.first_name + " " + stProfile.last_name : $t('1127') }}</span>
+        </div>
       </div>
       <div class="list mt-5 relative" :class="darkMode?`text-gray-300`:``">
         <div class="absolute -right-3  h-full flex items-center justify-center z-40 text-white">
@@ -36,7 +36,7 @@
             <p class="mt-3" :class="localize==='en'?'text-sm':'text-xs'">
               {{ $t('2004') }}
             </p>
-            <input type="file" ref="file" class="hidden" accept="image/x-png,image/gif,image/jpeg" @change="chooseFilt">
+            <input type="file" ref="file" class="hidden" accept="image/x-png,image/gif,image/jpeg" @change="chooseFile">
           </div>
           <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index"
                @click="getStoryDetail(my_story,index)">
@@ -58,7 +58,10 @@
       </div>
     </div>
     <StoryDetail v-if="showStory" @closeStory="closeStory"></StoryDetail>
-    <AddStory @closeAddStory="closeAddStory" v-if="showAddStory" @shareStory="shareStory"></AddStory>
+    <AddStory
+        @closeAddStory="closeAddStory"
+        v-if="showAddStory"
+        @shareStory="shareStory"></AddStory>
   </div>
 </template>
 
@@ -77,7 +80,7 @@ export default {
     StoryDetail,
     AddStory,
     SmileIcon,
-    ArrowRight
+    ArrowRight,
   },
   data() {
     return {
@@ -94,6 +97,7 @@ export default {
   },
   methods: {
     ...mapActions('auth', ['getStory', 'viewStory', 'addMyStory']),
+    ...mapActions('upload', ['multiUpload']),
     listOfStory() {
       this.$router.push({name: 'story-list'})
     },
@@ -128,7 +132,7 @@ export default {
     addStory() {
       this.$refs.file.click()
     },
-    chooseFilt(event) {
+    chooseFile(event) {
       // Reference to the DOM input element
       let input = event.target;
       this.file = event.target.files[0]
@@ -149,11 +153,18 @@ export default {
       }
     },
     shareStory() {
-      let formData = new FormData();
-      formData.append("photo", this.file)
-      this.addMyStory(formData).then(() => {
+      let payload = {}
+      let photo = new FormData()
+      photo.append("photo", this.file)
+      this.multiUpload(photo).then(res => {
+        payload.photo = res.data[0]
+        this.addMyStory(payload).then(() => {
+          this.showAddStory = false
+        })
+      }).finally(() => {
         this.showAddStory = false
       })
+
     },
     closeAddStory() {
       this.showAddStory = false

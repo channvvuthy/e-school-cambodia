@@ -1,6 +1,7 @@
 <template>
   <div class="ml-5 flex flex-col justify-between border border-t-0"
-       :class="darkMode ? `bg-secondary text-textSecondary border-secondary `: `bg-white`" :style="{height:`${windowHeight}px`}">
+       :class="darkMode ? `bg-secondary text-textSecondary border-secondary `: `bg-white`"
+       :style="{height:`${windowHeight}px`}">
     <template v-if="loading">
       <div class="p-5">
         <div v-for="i in 6" class="h-36 w-full box-loading" :key="i">
@@ -56,7 +57,7 @@
                 </div>
                 <div v-if="comment.content.text">{{ comment.content.text }}</div>
                 <div class="mt-2" v-if="comment.content.photo">
-                  <img :src="comment.content.photo.name" class="m-auto max-w-56 rounded">
+                  <img :src="comment.content.photo.name || comment.content.photo.url" class="m-auto max-w-56 rounded">
                 </div>
                 <div v-if="comment.content.sticker">
                   <img :src="comment.content.sticker.name" class="m-auto max-w-xs rounded">

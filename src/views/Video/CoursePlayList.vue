@@ -125,7 +125,7 @@
             <EnlargeIcon :size="16"></EnlargeIcon>
           </div>
           <div class="text-white text-lg" :title="video.title">
-            {{cutString( video.title, 50)}}
+            {{ cutString(video.title, 50) }}
           </div>
           <div class="cursor-pointer" @click="closeDock">
             <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
@@ -226,6 +226,7 @@ export default {
     ...mapActions('favorite', ['add', 'removeFavorite']),
     ...mapActions('cart', ['addCart', 'getCart']),
     ...mapActions('quiz', ['getQuizCertificate']),
+    ...mapActions('upload', ['multiUpload']),
 
     closeCart() {
       this.showCart = false
@@ -392,24 +393,31 @@ export default {
       })
     },
     send(event) {
-      let formData = new FormData();
+      let payload = {}
       if (event) {
-        formData.append("text", event);
+        payload.text = event
       }
-      if (this.isReply) {
-        formData.append("id", this.comments.forum._id)
-        formData.append("photo", this.photo);
-        this.replyComment(formData).then(response => {
-          this.comments.comment.push(response.data.data)
-          this.showModalPhoto = false
-        })
-      } else {
-        formData.append("photo", this.photo);
-        formData.append("id", this.video._id)
-        this.addComment(formData).then(() => {
-          this.showModalPhoto = false
-        })
-      }
+
+      let photo = new FormData()
+      photo.append("photo", this.photo)
+
+      this.multiUpload(photo).then(res => {
+        if (this.isReply) {
+          payload.id = this.comments.forum._id
+          payload.photo = res.data[0]
+          this.replyComment(payload).then(response => {
+            this.comments.comment.push(response.data.data)
+            this.showModalPhoto = false
+          })
+        } else {
+          payload.photo = res.data[0]
+          payload.id = this.video._id
+          this.addComment(payload).then(() => {
+            this.showModalPhoto = false
+          })
+        }
+
+      })
 
     },
     exit() {
@@ -420,7 +428,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route.params.course.is_buy)
     window.addEventListener('resize', this.handleResize);
 
     this.handleResize();

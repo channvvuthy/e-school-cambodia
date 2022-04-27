@@ -7,7 +7,6 @@
           class="flex items-center w-full space-x-3 rounded-full px-4 h-12">
         <textarea
             v-model="comment.text"
-            @keyup.enter.exact="replyComment"
             :placeholder="$t('reply')"
             class="outline-none w-full bg-transparent h-12 pt-3" style="resize: none"></textarea>
         <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
@@ -18,6 +17,13 @@
           <div class="rounded-full h-8 w-8 flex items-center justify-center"
                @click="()=>{this.$refs.replyPhoto.click()}">
             <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
+          </div>
+        </div>
+        <div
+            @click="replyComment"
+            style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+          <div class="rounded-full h-9 w-9 flex items-center justify-center">
+            <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
           </div>
         </div>
       </div>
@@ -53,9 +59,9 @@ import PhotoView from "@/views/Video/components/PhotoView";
 import Sticker from "@/views/Video/components/Sticker";
 import mode from "@/mixins/mode";
 import StickerView from "@/views/Video/components/StickerView";
+import SendMessageIcon from "@/components/SendMessageIcon";
 
 export default {
-  name: "ReplyComment",
   computed: {
     ...mapState('auth', ['stProfile']),
     ...mapState('setting', ['darkMode'])
@@ -66,7 +72,8 @@ export default {
     PhotoView,
     SmileEmoji,
     ImageIcon,
-    Avatar
+    Avatar,
+    SendMessageIcon
   },
   mixins: [mode],
   props: {
