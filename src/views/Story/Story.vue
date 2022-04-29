@@ -48,8 +48,9 @@
             </div>
             <div
                 class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
-                :style="{backgroundImage:`url(${my_story.photo.url})`}"
+
             >
+              <img :src="my_story.photo.url" alt="" :id="my_story._id">
               <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
             </div>
             <p class="mt-3 whitespace-nowrap flex justify-between space-x-4" :title="my_story.user.name">
@@ -83,7 +84,6 @@ import StoryDetail from "./StoryDetail.vue"
 import AddStory from "./AddStory.vue"
 import {mapState, mapActions} from "vuex"
 import helper from "./../../helper/helper"
-
 export default {
   components: {
     AddIcon,

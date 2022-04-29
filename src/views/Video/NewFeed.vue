@@ -657,6 +657,9 @@ export default {
   watch: {
     'storyDetail': function (story) {
       if (story.type === 51) {
+        this.itemClickHandler(story)
+      }
+      if (story.type === 52) {
         this.fullScreen(story)
       }
     }

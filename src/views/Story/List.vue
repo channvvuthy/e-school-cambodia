@@ -18,7 +18,18 @@
               <div class="h-64 w-full bg-cover bg-center" :style="{backgroundImage:`url(${st.photo.url})`}"></div>
               <div
                   class="mt-3 whitespace-nowrap absolute bottom-0 left-0 w-full bg-gradient-to-t from-black h-full text-white flex justify-start items-end text-sm p-3"
-                  :title="st.user.name">{{ cutString(st.user.name, 15) }}
+                  :title="st.user.name">
+                <div class="flex items-center justify-between space-x-4 ">
+                  <span v-if="(st.type === 51 || st.type === 52)">{{ cutString(st.user.name, 15) }}</span>
+                  <span v-else>{{ cutString(st.user.name, 15) }}</span>
+                  <span
+                      class="text-xs font-black text-center h-5 w-6 rounded"
+                      style="padding-top: 2px;"
+                      :class="darkMode ? `bg-iconColor` : `bg-forum text-black`"
+                      v-if="(st.type === 51 || st.type === 52)">
+                <span>AD</span>
+              </span>
+                </div>
               </div>
             </div>
           </div>
@@ -41,7 +52,21 @@
         </div>
       </div>
     </div>
-    <StoryDetail v-if="showStory" @closeStory="closeStory"></StoryDetail>
+    <StoryDetail
+        v-if="showStory"
+        @closeStory="closeStory">
+    </StoryDetail>
+    <!-- Post detail -->
+    <PostDetail
+        @dismiss="()=>{this.isPostDetail = false}"
+        :post="postDetail"
+        v-if="isPostDetail"></PostDetail>
+    <!-- Video detail -->
+    <VideoDetail
+        @dismiss="()=>{this.isVideo = false}"
+        :post="postDetail"
+        v-if="isVideo"
+    ></VideoDetail>
   </div>
 </template>
 <script>
@@ -50,12 +75,16 @@ import Loading from "./../../components/Loading.vue"
 import {mapState, mapActions} from "vuex"
 import helper from "./../../helper/helper"
 import StoryDetail from "./../Story/StoryDetail.vue"
+import VideoDetail from "@/views/Video/components/VideoDetail";
+import PostDetail from "@/views/Video/components/PostDetail";
 
 export default {
   components: {
     eHeader,
     Loading,
-    StoryDetail
+    StoryDetail,
+    VideoDetail,
+    PostDetail
   },
   computed: {
     ...mapState('setting', ['localize', 'darkMode', 'isHide']),
@@ -66,6 +95,9 @@ export default {
       window: {
         width: null
       },
+      isPostDetail: false,
+      isVideo: false,
+      postDetail: {},
       enableScroll: true,
       page: 1,
       showStory: false,
@@ -105,6 +137,20 @@ export default {
       }
     },
     getStoryDetail(story, index = 0) {
+
+      if (story.type === 51 || story.type === 52) {
+        let payload = {
+          id: story._id,
+          type: story.type
+        }
+
+        this.$store.dispatch('social/countView', payload).then(res => {
+          this.postDetail = res
+          story.type === 51 ? this.isPostDetail = true : this.isVideo = true
+        })
+        return
+      }
+
       let payload = {id: story._id}
       this.$store.commit("auth/setStoryIndex", index);
       this.viewStory(payload).then(() => {

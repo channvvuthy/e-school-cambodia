@@ -59,42 +59,59 @@
         </div>
         <div v-else>
           <!-- Contact List -->
-          <div class="flex items-center py-3 px-4 cursor-pointer" v-for="(contact, index) in contacts" :key="index"
+          <div class="flex py-3 px-4 cursor-pointer" v-for="(contact, index) in contacts" :key="index"
                @click="selectedContact(contact, index)"
                :class="darkMode?`border-b border-black ${active === index ?`bg-button`:``}`:`border-b ${active === index?`bg-blue-100`:``}`">
             <div>
-              <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-3 bg-center"
-                   :style="{backgroundImage:`url(${contact.photo})`}"></div>
-            </div>
-            <div>
-              <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">
-                <div class="flex">
-                  <div>
-                    {{ contact.name }}
-                  </div>
-                  <div v-if="contact.type===0"
-                       class="notification h-4 w-4 rounded-full ml-3 flex items-center justify-center"
-                       :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
-                    <span style="font-size:10px;">&#10003;</span>
-                  </div>
-                </div>
-              </div>
-              <div class="text-xs font-normal" :class="darkMode?`text-gray-500`:`text-gray-400`">
-                {{ contact.last == undefined ? $t('ticket') + ' ' + contact.ticket : cutString(contact.last.message, 20) }}
+              <div
+                  class="h-13 w-13 rounded-full border bg-cover bg-gray-300 mr-3 bg-center"
+                  :style="{backgroundImage:`url(${contactProfile(contact)})`}">
               </div>
             </div>
-            <div class="flex flex-1 justify-end items-end h-full">
-              <div>
-                <div class="flex justify-center" v-if="contact.unread">
-                  <div class="notification h-4 w-4 rounded-full flex items-center justify-center text-xs"
-                       :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{ contact.unread }}
-                  </div>
-                </div>
-                <div class="text-xs mt-1 whitespace-nowrap" :class="darkMode?`text-gray-500`:`text-gray-400`">
-                  {{ contact.last == undefined ? $t('unread') + ' ' + contact.unread : getDay(contact.last.date) }}
-                </div>
-              </div>
 
+            <div class="flex justify-between flex-1" :class="darkMode?`text-gray-300`:``">
+              <div>
+                <div class="font-PoppinsMedium flex space-x-1">
+                  <div>
+                    {{ contactName(contact) }}
+                  </div>
+                  <span
+                      v-if="contact.type == 'ads'"
+                      class="text-xs font-black text-center h-4 w-6 rounded font-khmer_os"
+                      :class="darkMode ? `bg-iconColor` : `bg-forum`">
+                    <span>AD</span>
+                  </span>
+                </div>
+                <div class="pt-1">
+                  <div v-if="contact.type == 'ads'">
+                    {{ cutString(contact.ads.text, 20) }}
+                  </div>
+                  <div v-else>
+                    {{
+                      contact.chat.last == undefined ? $t('ticket') + ' ' + contact.chat.ticket : cutString(contact.chat.last.message, 20)
+                    }}
+                  </div>
+                </div>
+              </div>
+              <div v-if="contact.type == 'ads'">
+                <img :src="contact.ads.photo.url" alt="" class="w-20">
+              </div>
+              <div v-else>
+                <div class="flex flex-col justify-end items-end">
+                  <div class="flex justify-center" v-if="contact.chat.unread">
+                    <div
+                        class="notification h-4 w-4 rounded-full flex items-center justify-center text-xs"
+                        :class="darkMode?`bg-white text-black`:`bg-heart text-white`">
+                      {{ contact.chat.unread }}
+                    </div>
+                  </div>
+                  <div class="text-xs mt-1 whitespace-nowrap" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                    {{
+                      contact.chat.last == undefined ? $t('unread') + ' ' + contact.chat.unread : getDay(contact.chat.last.date)
+                    }}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <!-- Contact List -->
@@ -222,7 +239,8 @@
                 <!--  Message text -->
                 <template v-if="(message.content.type === 1 || message.content.type === 0)">
                   <div
-                      :class="auth === sender(message)?`flex ${message.content.type?`justify-end` :`justify-center`}`:`flex ${message.content.type?`justify-start` :`justify-center`}`"
+                      :class="auth === sender(message)?`flex ${message.content.type?`justify-end` :`justify-center`}`:
+                      `flex ${message.content.type?`justify-start` :`justify-center`}`"
                       class="items-center relative">
                     <template v-if="message.content.type">
                       <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 cursor-pointer"
@@ -253,12 +271,16 @@
                         <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
                         <VoiceReply :message="message" v-if="message.reply.type === 4"></VoiceReply>
                         <div class="relative py-2  inline-flex items-center px-3 text-black mb-5 max-w-md"
-                             :class="darkMode?`bg-button text-gray-300 ${message.content.type == 0?`bg-opacity-40 rounded-3xl `:`rounded-xl e-shadow`}`:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl `:`rounded-xl e-shadow`}`">
+                             :class="darkMode?`bg-button text-gray-300 ${message.content.type == 0?`bg-opacity-40
+                              rounded-3xl `:`rounded-xl e-shadow`}`:`bg-white ${message.content.type == 0?`bg-opacity-20
+                               rounded-3xl `:`rounded-xl e-shadow`}`">
                           <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                         </div>
                       </div>
                       <div v-else class="relative py-2 inline-flex items-center px-3 text-black mb-5 max-w-md"
-                           :class="darkMode?`bg-button text-gray-300 ${message.content.type == 0?`bg-opacity-40 rounded-3xl `:`rounded-xl e-shadow`}`:`bg-white ${message.content.type == 0?`bg-opacity-20 rounded-3xl`:`rounded-xl e-shadow`}`">
+                           :class="darkMode?`bg-button text-gray-300 ${message.content.type == 0?`bg-opacity-40
+                           rounded-3xl `:`rounded-xl e-shadow`}`:`bg-white ${message.content.type == 0?`bg-opacity-20
+                           rounded-3xl`:`rounded-xl e-shadow`}`">
                         <MessageText :message="message" :isMind="auth === sender(message)"></MessageText>
                       </div>
 
@@ -397,12 +419,14 @@
                             <DocumentIcon :fill="darkMode?`#FFFFFF`:`#000000`"></DocumentIcon>
                           </div>
                           <div>
-                                                        <span v-if="message.content.text">
-                                                            {{ message.content.text.includes('.pdf') ? message.content.text : message.content.text + ".pdf" }}
-                                                        </span>
+                            <span v-if="message.content.text">
+                                {{
+                                message.content.text.includes('.pdf') ? message.content.text : message.content.text + ".pdf"
+                              }}
+                            </span>
                             <span v-else>
-                                                            {{ message._id }}.pdf
-                                                        </span>
+                                {{ message._id }}.pdf
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -743,6 +767,18 @@ export default {
     ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage',
       'sendMessage', 'getMention', 'deleteMessage',
       'getContacts', 'getMessage', 'deleteMember', 'blockUser', 'unblockUser', 'readMessage']),
+    contactProfile(contact) {
+      if (contact.type == 'ads') {
+        return contact.ads.photo.url
+      }
+      return contact.chat.photo
+    },
+    contactName(contact) {
+      if (contact.type == 'ads') {
+        return contact.ads.user.name
+      }
+      return contact.chat.name
+    },
     getDay(oldDate) {
       if (helper.numDay(oldDate, moment().format()) === 0) {
         return moment(oldDate).format('h:mm A')
@@ -985,34 +1021,36 @@ export default {
       })
     },
     selectedContact(contact, index) {
-      this.isTyping = false
-      this.active = index
-      this.contact = contact
-      this.sockets.unsubscribe(`message_${this.contact._id}`);
-      this.$store.commit("etalk/selectedContact", contact)
-      this.enableScroll = true
-      this.chatPage = 1
-      this.isSelectedContact = true
-      if (contact.type == 10) {
-        this.$router.push('chat-admin')
-        return;
+      if (contact.type == 'chat') {
+        contact = contact.chat
+        this.isTyping = false
+        this.active = index
+        this.contact = contact
+        this.sockets.unsubscribe(`message_${this.contact._id}`);
+        this.$store.commit("etalk/selectedContact", contact)
+        this.enableScroll = true
+        this.chatPage = 1
+        this.isSelectedContact = true
+        if (contact.type == 10) {
+          this.$router.push('chat-admin')
+          return;
+        }
+        this.message.id = this.contact._id
+        this.getMessage({
+          p: 1,
+          id: this.contact._id,
+          type: this.contact.type
+        }).then((response) => {
+          if (response.data.data.room.last) {
+            this.lastSeen = response.data.data.room.last.date
+          }
+          if (response.data.data.room.share) {
+            this.share = response.data.data.room.share
+          }
+          this.scrollToBottom()
+          this.lisentMessage()
+        })
       }
-      this.message.id = this.contact._id
-      this.getMessage({
-        p: 1,
-        id: this.contact._id,
-        type: this.contact.type
-      }).then((response) => {
-        if (response.data.data.room.last) {
-          this.lastSeen = response.data.data.room.last.date
-        }
-        if (response.data.data.room.share) {
-          this.share = response.data.data.room.share
-        }
-        this.scrollToBottom()
-        this.lisentMessage()
-      })
-
     },
     scrollToBottom() {
       let interval = setInterval(() => {
@@ -1364,10 +1402,10 @@ export default {
 /* Safari */
 @-webkit-keyframes spin {
   0% {
-    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 
