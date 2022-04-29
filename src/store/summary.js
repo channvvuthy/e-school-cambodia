@@ -9,50 +9,50 @@ export default {
         summaries: {
             watch_video: 0,
         },
-        summariesDetail:[],
+        summariesDetail: [],
         loading: false,
         course: [],
         courseDetail: [],
-        attendant:[]
+        attendant: []
     },
     mutations: {
-        setActive(state, payload){
+        setActive(state, payload) {
             state.active = payload
         },
-        getCourse(state, payload){
+        getCourse(state, payload) {
             state.course = payload
         },
-        getCoursePagination(state, payload){
-            for(let i = 0; i < payload.list.length; i ++){
+        getCoursePagination(state, payload) {
+            for (let i = 0; i < payload.list.length; i++) {
                 state.course.list.push(payload.list[i])
             }
         },
-        loadingSummary(state, payload){
+        loadingSummary(state, payload) {
             state.loading = payload
         },
-        receivedSummary(state, payload){
+        receivedSummary(state, payload) {
             state.summaries = payload
         },
-        getSummaryDetail(state, payload){
+        getSummaryDetail(state, payload) {
             state.summariesDetail = payload
         },
-        getSummaryDetailPagination(state, payload){
-            for(let i = 0; i < payload.length; i ++){
+        getSummaryDetailPagination(state, payload) {
+            for (let i = 0; i < payload.length; i++) {
                 state.summariesDetail.push(payload[i])
             }
         },
-        getCourseDetail(state, payload){
+        getCourseDetail(state, payload) {
             state.courseDetail = payload
         },
-        getAttendant(state, payload){
+        getAttendant(state, payload) {
             state.attendant = payload
         }
     },
 
     actions: {
-        getSummary({commit}, payload){
+        getSummary({commit}, payload) {
             commit("loadingSummary", true)
-            return new Promise((resolve, reject) =>{
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `report/activity?${helper.q(payload)}`).then(response => {
                     commit("loadingSummary", false)
                     resolve(response)
@@ -64,66 +64,66 @@ export default {
                 })
             })
         },
-        getSummaryDetail({commit}, payload){
+        getSummaryDetail({commit}, payload) {
             commit("loadingSummary", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `report/activity/detail?${helper.q(payload)}`).then(response =>{
+                axios.get(config.apiUrl + `report/activity/detail?${helper.q(payload)}`).then(response => {
                     resolve(response)
                     commit("getSummaryDetail", response.data.data)
                     commit("loadingSummary", false)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                     commit("loadingSummary", false)
                     helper.errorMessage(err.response.data.msg)
                 })
             })
         },
-        getSummaryDetailPagination({commit}, payload){
+        getSummaryDetailPagination({commit}, payload) {
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `report/activity/detail?${helper.q(payload)}`).then(response =>{
+                axios.get(config.apiUrl + `report/activity/detail?${helper.q(payload)}`).then(response => {
                     resolve(response)
                     commit("getSummaryDetailPagination", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                     helper.errorMessage(err.response.data.msg)
                 })
             })
         },
-        getCourse({commit}, payload){
+        getCourse({commit}, payload) {
             commit("loadingSummary", true)
-            return new Promise((resolve, reject) =>{
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `report/course?${helper.q(payload)}`).then(response => {
                     resolve(response)
                     commit("loadingSummary", false)
                     commit("getCourse", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                     commit("loadingSummary", false)
                     helper.errorMessage(err.response.data.msg)
                 })
             })
         },
-        getCoursePagination({commit}, payload){
-            return new Promise((resolve, reject) =>{
+        getCoursePagination({commit}, payload) {
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `report/course?${helper.q(payload)}`).then(response => {
                     resolve(response)
                     commit("getCoursePagination", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
-                   
+
                     helper.errorMessage(err.response.data.msg)
                 })
             })
         },
 
-        getCourseDetail({commit}, payload){
+        getCourseDetail({commit}, payload) {
             commit("loadingSummary", true)
-            return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + `report/course/detail?${helper.q(payload)}`).then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `report/course/detail?${helper.q(payload)}`).then(response => {
                     resolve(response)
                     commit("loadingSummary", false)
                     commit("getCourseDetail", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                     helper.errorMessage(err.response.data.msg)
                     commit("loadingSummary", false)
@@ -131,21 +131,21 @@ export default {
             })
         },
 
-        getAttendant({commit}, payload){
+        getAttendant({commit}, payload) {
             commit("loadingSummary", true)
-            return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + `report/attendant?${helper.q(payload)}`).then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `report/attendant?${helper.q(payload)}`).then(response => {
                     resolve(response)
                     commit("loadingSummary", false)
                     commit("getAttendant", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                     commit("loadingSummary", false)
                     helper.errorMessage(err.response.data.msg)
                 })
             })
         }
-        
+
     },
 
 }

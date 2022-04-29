@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "./../config";
+
 export default {
     namespaced: true,
     state: {
@@ -15,13 +16,13 @@ export default {
     },
 
     mutations: {
-        downloadLocation(state, payload){
+        downloadLocation(state, payload) {
             state.downloadLocation = payload
         },
-        isDownload(state, payload){
+        isDownload(state, payload) {
             state.isDownload = payload
         },
-        getPdf(state, payload){
+        getPdf(state, payload) {
             state.pdf = payload
         },
         setLastWatched(state, payload) {
@@ -45,8 +46,8 @@ export default {
 
     actions: {
         stopWatch({
-            commit
-        }, payload) {
+                      commit
+                  }, payload) {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');
@@ -55,8 +56,8 @@ export default {
             })
         },
         playVideo({
-            commit
-        }, payload) {
+                      commit
+                  }, payload) {
             axios.get(config.apiUrl + `video/play?id=${payload}`).then(() => {
                 commit("playVideo", payload)
             })
@@ -66,11 +67,11 @@ export default {
             let qs = Object.keys(payload)
                 .map(key => `${key}=${payload[key]}`)
                 .join('&');
-            return new Promise((resolve, reject) =>{
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `video/pdf?${qs}`).then(response => {
                     resolve(response)
                     commit("getPdf", response.data.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                 })
             })

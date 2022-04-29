@@ -10,22 +10,22 @@ export default {
         loadingQuiz: false
     },
     mutations: {
-        loadingGrade(state, status){
+        loadingGrade(state, status) {
             state.loadingGrade = status
         },
-        receivingGrade(state, grades){
+        receivingGrade(state, grades) {
             state.grades = grades
         },
-        loadingQuiz(state, status){
+        loadingQuiz(state, status) {
             state.loadingQuiz = status
         },
-        receivingQuiz(state, quizzes){
+        receivingQuiz(state, quizzes) {
             state.quizzes = quizzes
         }
     },
 
     actions: {
-        getGrade({commit}){
+        getGrade({commit}) {
             commit("loadingGrade", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.webViewUrl + 'page/quiz').then(response => {
@@ -38,7 +38,7 @@ export default {
                 })
             })
         },
-        getQuiz({commit}, params){
+        getQuiz({commit}, params) {
             commit("loadingQuiz", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + "quiz/list?grade_id=" + params.grade_id + "&subject_id=" + params.subject_id).then(response => {

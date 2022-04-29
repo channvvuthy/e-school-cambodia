@@ -1,6 +1,7 @@
 import axios from "axios"
 import helper from "../helper/helper"
 import config from "./../config"
+
 export default {
     namespaced: true,
     state: {
@@ -10,23 +11,23 @@ export default {
         openUrl: {}
     },
     mutations: {
-        receivingOpenPartner(state, openUrl){
+        receivingOpenPartner(state, openUrl) {
             state.openUrl = openUrl
         },
-        openingPartnerLoading(state, status){
+        openingPartnerLoading(state, status) {
             state.openLoading = status
         },
-        loadingPartner(state, status){
+        loadingPartner(state, status) {
             state.loadingPartner = status
         },
-        gettingPartner(state, partners){
+        gettingPartner(state, partners) {
             state.partners = partners
         },
-        deleteCart(state, payload){
-            if(state.packages){
-                state.packages = state.partners.filter(item =>{
-                    item.packages.filter(pk =>{
-                        if(pk._id === payload){
+        deleteCart(state, payload) {
+            if (state.packages) {
+                state.packages = state.partners.filter(item => {
+                    item.packages.filter(pk => {
+                        if (pk._id === payload) {
                             pk.is_in_cart = 0
                         }
                         return pk
@@ -35,10 +36,10 @@ export default {
                 })
             }
         },
-        addToCart(state, payload){
-            state.packages = state.partners.filter(item =>{
-                item.packages.filter(pk =>{
-                    if(pk._id === payload){
+        addToCart(state, payload) {
+            state.packages = state.partners.filter(item => {
+                item.packages.filter(pk => {
+                    if (pk._id === payload) {
                         pk.is_in_cart = 1
                     }
                     return pk
@@ -48,15 +49,15 @@ export default {
         },
     },
     actions: {
-        getPartner({commit}){
+        getPartner({commit}) {
             commit("loadingPartner", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + "partner").then(response => {
                     resolve(response.data)
                     commit("loadingPartner", false)
-                    if(response.data.msg != undefined){
+                    if (response.data.msg != undefined) {
                         helper.errorMessage(response.data.msg)
-                    }else{
+                    } else {
                         commit("gettingPartner", response.data.data)
                     }
 
@@ -67,7 +68,7 @@ export default {
                 })
             })
         },
-        openPartner({commit}, id){
+        openPartner({commit}, id) {
             commit("openingPartnerLoading", true)
             return new Promise((resovle, reject) => {
                 axios.get(config.apiUrl + 'partner/open?id=' + id).then(response => {

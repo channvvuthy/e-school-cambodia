@@ -9,14 +9,14 @@ export default {
         loading: false
     },
     mutations: {
-        gettingGallery(state, payload){
+        gettingGallery(state, payload) {
             state.loading = payload
         },
-        receivingGallery(state, payload){
+        receivingGallery(state, payload) {
             state.galleries = payload
         },
-        loadMoreGallery(state, payload){
-            for(let i = 0; i < payload.length; i++){
+        loadMoreGallery(state, payload) {
+            for (let i = 0; i < payload.length; i++) {
                 state.galleries.push(payload[i])
             }
         }
@@ -24,25 +24,25 @@ export default {
     },
 
     actions: {
-       getGallery({commit}, payload){
-            if(payload.p == undefined){
+        getGallery({commit}, payload) {
+            if (payload.p == undefined) {
                 commit("gettingGallery", true)
             }
-           return new Promise((resolve, reject) =>{
-               axios.get(config.apiUrl + `gallery?${helper.q(payload)}`).then(response =>{
-                   commit("gettingGallery", false)
-                   if(payload.p != undefined && payload.p > 1){
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `gallery?${helper.q(payload)}`).then(response => {
+                    commit("gettingGallery", false)
+                    if (payload.p != undefined && payload.p > 1) {
                         commit("loadMoreGallery", response.data.data)
-                   }else{
+                    } else {
                         commit("receivingGallery", response.data.data)
-                   }
-                   resolve(response)
-               }).catch(err =>{
+                    }
+                    resolve(response)
+                }).catch(err => {
                     commit("gettingGallery", false)
                     reject(err)
-               })
+                })
 
-           })
-       }
+            })
+        }
     }
 }

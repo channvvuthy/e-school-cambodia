@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import config from "./../config"
-import err from "./../helper/err"
 import helper from "./../helper/helper"
 
 
@@ -39,18 +38,18 @@ export default {
 
     mutations: {
 
-        getDownloadDetail(state, downloadDetails){
+        getDownloadDetail(state, downloadDetails) {
             downloadDetails.sort((a, b) => (a.order > b.order) ? 1 : -1)
             state.downloadDetails = downloadDetails
         },
-        getTeacherInfo(state, teacher){
+        getTeacherInfo(state, teacher) {
             state.teacher = teacher
         },
 
-        getLoadingCourseByScroll(state, status){
+        getLoadingCourseByScroll(state, status) {
             state.gettingCourseScroll = status
         },
-        gettingCourseByScroll(state, courseDetail){
+        gettingCourseByScroll(state, courseDetail) {
             if (courseDetail && courseDetail.list.length) {
                 for (let i = 0; i < courseDetail.list.length; i++) {
                     state.courseDetail.list.push(courseDetail.list[i])
@@ -58,24 +57,24 @@ export default {
             }
         },
 
-        gettingEbook(state, status){
+        gettingEbook(state, status) {
             state.loadingEbook = status
         },
 
-        getBook(state, bookNav){
+        getBook(state, bookNav) {
             state.bookNav = bookNav
         },
 
-        gettingVideoCoursePagination(state, status){
+        gettingVideoCoursePagination(state, status) {
             state.loadingVideoCoursePagination = status
         },
 
-        videoCourseListPagination(state, videoCourses){
+        videoCourseListPagination(state, videoCourses) {
             for (let index = 0; index < videoCourses.length; index++) {
                 state.videoCourses.push(videoCourses[index])
             }
         },
-        afterAddToCart(state, course_id){
+        afterAddToCart(state, course_id) {
             state.videoCourses = state.videoCourses.filter(item => {
                 if (item._id === course_id) {
                     item.is_in_cart = !item.is_in_cart
@@ -84,24 +83,24 @@ export default {
             })
         },
 
-        videoCourseList(state, videoCourses){
+        videoCourseList(state, videoCourses) {
             state.videoCourses = videoCourses
         },
-        gettingVideoCourse(state, status){
+        gettingVideoCourse(state, status) {
             state.loadingVideoCourse = status
         },
-        loadingVideo(state, status){
+        loadingVideo(state, status) {
             state.loadingVideo = status
         },
 
-        loadingMyCourse(state, status){
+        loadingMyCourse(state, status) {
             state.loadingCourse = status
         },
 
-        getVideoList(state, videos){
+        getVideoList(state, videos) {
             state.courses = videos
         },
-        removeActiveFavorite(state, lesson_id){
+        removeActiveFavorite(state, lesson_id) {
             state.courses.lesson = state.courses.lesson.filter(item => {
                 if (item.video._id === lesson_id) {
                     item.video.is_favorite = 0
@@ -110,68 +109,68 @@ export default {
             })
         },
 
-        getMyCourse(state, courses){
+        getMyCourse(state, courses) {
             state.myCourses = courses
         },
 
-        getLoadingCourseDetail(state, status){
+        getLoadingCourseDetail(state, status) {
             state.loadingCourseDetail = status
         },
 
-        gettingCourseDetail(state, courseList){
+        gettingCourseDetail(state, courseList) {
             state.courseDetail = courseList
         },
 
-        pagesLoading(state, status){
+        pagesLoading(state, status) {
             state.paginationLoading = status
         },
 
-        getFilterByGradeID(state, gradeID){
+        getFilterByGradeID(state, gradeID) {
             state.gradeID = gradeID
         },
-        getQueryString(state, s){
+        getQueryString(state, s) {
             state.s = s
         },
-        loadMoreVideoLesson(state, lesson){
+        loadMoreVideoLesson(state, lesson) {
             for (let i = 0; i < lesson.length; i++) {
                 state.courses.lesson.push(lesson[i])
             }
         },
 
-        gettingCourseEbook(state, status){
+        gettingCourseEbook(state, status) {
             state.loadingEbookCourse = status
         },
 
-        courseEbook(state, ebookCourses){
+        courseEbook(state, ebookCourses) {
             state.ebookCourses = ebookCourses
         },
-        gettingCourseEbookPagination(state, status){
+        gettingCourseEbookPagination(state, status) {
             state.loadingEbookCoursePagination = status
         },
-        courseEbookPagination(state, ebookCourses){
+        courseEbookPagination(state, ebookCourses) {
             for (let index = 0; index < ebookCourses.length; index++) {
                 state.ebookCourses.push(ebookCourses[index])
             }
         },
-        getReadingBook(state, status){
+        getReadingBook(state, status) {
             state.loadReading = status
         },
 
-        readingBook(state, books){
+        readingBook(state, books) {
             state.books = books
         },
-        setLessonTitle(state, LessonTitle){
+        setLessonTitle(state, LessonTitle) {
             state.LessonTitle = LessonTitle
         },
-        pushtMyCourse(state, payload){
-            for(let i = 0; i < payload.list.length; i ++){
+        pushtMyCourse(state, payload) {
+            for (let i = 0; i < payload.list.length; i++) {
                 state.myCourses.list.push(payload.list[i])
             }
         }
     },
 
     actions: {
-        videoList({commit, dispatch}){
+        videoList({commit, dispatch}) {
             commit('loadingVideo', true);
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'home?grade_id=' + this.state.course.gradeID + "&s=" + this.state.course.s).then(response => {
@@ -187,7 +186,7 @@ export default {
             })
         },
 
-        videoPagination({commit, dispatch}, page = 1){
+        videoPagination({commit, dispatch}, page = 1) {
             commit("pagesLoading", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'home?p=' + page + "&grade_id=" + this.state.course.gradeID + "&s=" + this.state.course.s).then(response => {
@@ -207,42 +206,42 @@ export default {
                 })
             })
         },
-        loadMoreVideo({commit}, lesson){
+        loadMoreVideo({commit}, lesson) {
             commit("loadMoreVideoLesson", lesson)
         },
 
-        myCourseList({commit, dispatch}, payload){
+        myCourseList({commit, dispatch}, payload) {
             commit('loadingMyCourse', true);
-            return new Promise((resolve, reject) =>{
+            return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `me/course?${helper.q(payload)}`).then(response => {
                     commit('loadingMyCourse', false);
 
                     resolve(response)
-    
+
                     if (response.data.status && response.data.status === 2) {
                         helper.errorMessage(response.data.msg)
-                    }else{
-                        if(payload.p > 1){
+                    } else {
+                        if (payload.p > 1) {
                             commit('pushtMyCourse', response.data.data)
-                        }else{
+                        } else {
                             dispatch('getMyCourse', response.data.data)
                         }
                     }
-                    
-                   
+
+
                 }).catch(err => {
                     commit('loadingMyCourse', false)
                     reject(err)
                 })
             })
-            
+
         },
 
-        getVideo({commit}, videos){
+        getVideo({commit}, videos) {
             commit('getVideoList', videos)
         },
 
-        getCourseDetail({commit, dispatch}, params){
+        getCourseDetail({commit, dispatch}, params) {
             commit('getLoadingCourseDetail', true);
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'lesson/video/?course_id=' + params.courseId + "&type=" + params.type + "&order=" + params.order).then(response => {
@@ -262,7 +261,7 @@ export default {
                 })
             })
         },
-        getCourseByScroll({commit}, params){
+        getCourseByScroll({commit}, params) {
             commit('getLoadingCourseByScroll', true);
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'lesson/video/?course_id=' + params.courseId + '&order=' + params.order).then(response => {
@@ -283,7 +282,7 @@ export default {
             })
         },
 
-        lessonView({dispatch}, video_id){
+        lessonView({dispatch}, video_id) {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'lesson/video/view?video_id=' + video_id).then(response => {
 
@@ -299,25 +298,25 @@ export default {
             })
         },
 
-        countView(){
+        countView() {
 
         },
-        getMyCourse({commit}, course){
+        getMyCourse({commit}, course) {
             commit('getMyCourse', course)
         },
 
-        gettingCourseDetail({commit}, courseList){
+        gettingCourseDetail({commit}, courseList) {
             commit('gettingCourseDetail', courseList)
         },
 
-        filterByGradeID({commit}, id){
+        filterByGradeID({commit}, id) {
             commit("getFilterByGradeID", id)
         },
-        filterByQueryString({commit}, s){
+        filterByQueryString({commit}, s) {
             commit('getQueryString', s)
         },
 
-        getVideoCourse({commit}){
+        getVideoCourse({commit}) {
             commit("gettingVideoCourse", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'course/video?s=' + this.state.course.s + "&grade_id=" + this.state.course.gradeID).then(response => {
@@ -336,7 +335,7 @@ export default {
             })
         },
 
-        videoCoursePagination({commit}, page = 1){
+        videoCoursePagination({commit}, page = 1) {
             commit("gettingVideoCoursePagination", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'course/video?s=' + this.state.course.s + "&grade_id=" + this.state.course.gradeID + "&p=" + page).then(response => {
@@ -355,7 +354,7 @@ export default {
             })
         },
 
-        getEbook({commit}, page = 1){
+        getEbook({commit}, page = 1) {
             commit('gettingEbook', true)
             return new Promise((resolve, reject) => {
                 if (localStorage.getItem('book')) {
@@ -380,10 +379,10 @@ export default {
                 }
             })
         },
-        afterAddToCart({commit}, course_id){
+        afterAddToCart({commit}, course_id) {
             commit("afterAddToCart", course_id)
         },
-        getCourseEbook({commit}, params){
+        getCourseEbook({commit}, params) {
             commit("gettingCourseEbook", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'course/e-book?s=' + this.state.course.s + "&grade_id=" + this.state.course.gradeID + "&p=" + params.page + "&member_id=" + params.member_id)
@@ -403,7 +402,7 @@ export default {
             })
         },
 
-        getCourseEbookPagination({commit}, params){
+        getCourseEbookPagination({commit}, params) {
             commit("gettingCourseEbookPagination", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'course/e-book?s=' + this.state.course.s + "&grade_id=" + this.state.course.gradeID + "&p=" + params.page + "&member_id=" + params.member_id)
@@ -422,7 +421,7 @@ export default {
                 })
             })
         },
-        readBook({commit}, params){
+        readBook({commit}, params) {
             commit('getReadingBook', true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + "lesson/e-book?course_id=" + params.course_id + "&order=" + params.order).then(response => {
@@ -441,10 +440,10 @@ export default {
                 })
             })
         },
-        setLessonTitle({commit}, LessonTitle){
+        setLessonTitle({commit}, LessonTitle) {
             commit('setLessonTitle', LessonTitle)
         },
-        removeActiveFavorite({commit}, lesson_id){
+        removeActiveFavorite({commit}, lesson_id) {
             commit("removeActiveFavorite", lesson_id)
         },
     },

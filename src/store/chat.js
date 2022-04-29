@@ -14,33 +14,33 @@ export default {
         loadAddingChat: false,
         mentions: [],
         loadingMention: false,
-        quickChat:[],
+        quickChat: [],
 
     },
     mutations: {
-        getQuickChat(state, quickChat){
+        getQuickChat(state, quickChat) {
             state.quickChat = quickChat
         },
-        loadingMention(state, status){
+        loadingMention(state, status) {
             state.loadingMention = status
         },
-        receivingMention(state, mentions){
+        receivingMention(state, mentions) {
             state.mentions = mentions
         },
-        addingChat(state, status){
+        addingChat(state, status) {
             state.loadAddingChat = status
         },
-        addingLocalCat(state, chart){
+        addingLocalCat(state, chart) {
             state.chats.push(chart)
         },
-        receivingChat(state, chart){
+        receivingChat(state, chart) {
             if (chart.content.type === 2) {
                 state.chats.push(chart)
             }
 
         },
 
-        receivingGroupChatPagination(state, chats){
+        receivingGroupChatPagination(state, chats) {
             if (chats && chats.length > 0) {
                 for (let index = 0; index < chats.length; index++) {
                     state.chats.unshift(chats[index])
@@ -48,35 +48,35 @@ export default {
             }
 
         },
-        receivingGroupChat(state, chats){
+        receivingGroupChat(state, chats) {
             if (chats && chats.length) {
                 state.chats = chats.reverse()
             }
 
         },
-        loadReadingGroupChat(state, status){
+        loadReadingGroupChat(state, status) {
             state.readingChat = status
         },
-        loadReadingGroupChatPagination(state, status){
+        loadReadingGroupChatPagination(state, status) {
             state.readingChatPagination = status
         },
-        loadingGroup(state, status){
+        loadingGroup(state, status) {
             state.loadingGroup = status
         },
-        loadingGroupPagination(state, status){
+        loadingGroupPagination(state, status) {
             state.loadingGroupPagination = status
         },
-        receiveGroupChat(state, groups){
+        receiveGroupChat(state, groups) {
             state.groups = groups
         },
-        receiveGroupChatPagination(state, groups){
+        receiveGroupChatPagination(state, groups) {
             for (let index = 0; index < groups.length; index++) {
                 state.groups.push(groups[index])
             }
         }
     },
     actions: {
-        getGroupChat({commit}, page = 1){
+        getGroupChat({commit}, page = 1) {
             if (page === 1) {
                 commit("loadingGroup", true)
                 return new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ export default {
                 })
             }
         },
-        readingGroupChat({commit}, params){
+        readingGroupChat({commit}, params) {
             commit('loadReadingGroupChat', true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'chat/read?group_id=' + params.group_id).then(response => {
@@ -134,7 +134,7 @@ export default {
                 })
             })
         },
-        readingGroupChatting({commit}, params){
+        readingGroupChatting({commit}, params) {
             commit('loadReadingGroupChatPagination', true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'chat/read?group_id=' + params.group_id + "&p=" + params.page).then(response => {
@@ -153,7 +153,7 @@ export default {
                 })
             })
         },
-        addChat({commit}, params){
+        addChat({commit}, params) {
             commit("addingChat", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'chat/add', params).then(response => {
@@ -172,20 +172,20 @@ export default {
                 })
             })
         },
-        addingLocalChat({commit}, params){
+        addingLocalChat({commit}, params) {
             commit("addingLocalCat", params)
         },
-        getQuickChat({commit}){
-            return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + `/etalk/template-message`).then(response =>{
+        getQuickChat({commit}) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `/etalk/template-message`).then(response => {
                     resolve(response)
                     commit("getQuickChat", response.data)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                 })
             })
         },
-        getMention({commit}, params){
+        getMention({commit}, params) {
             commit("loadingMention", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'chat/mention?group_id=' + params.group_id + "&name=" + params.name).then(response => {

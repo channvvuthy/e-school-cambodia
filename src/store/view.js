@@ -1,4 +1,5 @@
 import axios from "axios"
+
 export default {
     namespaced: true,
     state: {
@@ -7,11 +8,11 @@ export default {
     },
 
     mutations: {
-        getTermAndCondition(state, termAndCondition){
+        getTermAndCondition(state, termAndCondition) {
             state.termAndCondition = termAndCondition
         },
 
-        loadingTermAndCondition(state, status){
+        loadingTermAndCondition(state, status) {
             state.loadingTerm = status
         }
 
@@ -19,7 +20,7 @@ export default {
     },
 
     actions: {
-        getTerm({commit}){
+        getTerm({commit}) {
             commit("loadingTermAndCondition", true)
             return new Promise((resolve, reject) => {
                 axios.get("https://e-schoolcambodia.com/term_and_condition_for_app").then(response => {

@@ -1,7 +1,7 @@
 import axios from "axios"
-import helper from "../helper/helper"
 import config from "./../config"
 import store from "./../store"
+
 export default {
     namespaced: true,
 
@@ -14,26 +14,26 @@ export default {
 
     },
 
-    mutations:{
-        addingCart(state, payload){
+    mutations: {
+        addingCart(state, payload) {
             state.loading = payload
         },
-        gettingCart(state, payload){
+        gettingCart(state, payload) {
             state.loading = payload
         },
-        deletingCart(state, payload){
+        deletingCart(state, payload) {
             state.loading = payload
         },
-        receivedCart(state, payload){
+        receivedCart(state, payload) {
             state.carts = payload
         },
-        addingCoupon(state, payload){
+        addingCoupon(state, payload) {
             state.couponLoading = payload
         },
-        deletingCoupon(){
+        deletingCoupon() {
 
         },
-        updatingDuration(state, params){
+        updatingDuration(state, params) {
             state.carts.list.filter(items => {
                 if (items._id === params._id) {
                     items.price['duration'] = params.duration
@@ -41,114 +41,110 @@ export default {
                 return items
             })
         },
-        deletedCart(state, payload){
+        deletedCart(state, payload) {
             state.identifier = payload
         },
-        checkingOut(){
+        checkingOut() {
 
         }
 
     },
 
-    actions:{
+    actions: {
         // Add cart
-        addCart({commit}, payload){
+        addCart({commit}, payload) {
             commit("addingCart", true)
-            return new Promise((resolve, reject) =>{
-                axios.post(config.apiUrl + 'cart', payload).then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + 'cart', payload).then(response => {
                     resolve(response)
                     commit("addingCart", false)
                     store.commit('library/addToCart', payload.id)
 
-                }).catch(errr =>{
+                }).catch(errr => {
                     reject(errr)
                     commit("addingCart", false)
                 })
             })
         },
         // Get cart
-        getCart({commit}){
+        getCart({commit}) {
             commit("gettingCart", true)
-            return new Promise((resolve, reject) =>{
-                axios.get(config.apiUrl + 'cart').then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + 'cart').then(response => {
                     commit("gettingCart", false)
-                    if(!response.data.msg != undefined){
+                    if (!response.data.msg != undefined) {
                         commit("receivedCart", response.data.data)
                     }
                     resolve(response)
-                }).catch(err =>{
+                }).catch(err => {
                     commit("gettingCart", false)
                     reject(err)
                 })
             })
         },
         // Delete cart
-        deleteCart({commit}, payload){
+        deleteCart({commit}, payload) {
             commit("deletingCart", true)
-            return new Promise((resolve, reject) =>{
-                axios.delete(config.apiUrl + 'cart',{
-                    headers: {
-
-                    },
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + 'cart', {
+                    headers: {},
                     data: {
-                      id: payload
+                        id: payload
                     }
-                  }).then(response =>{
+                }).then(response => {
                     commit("deletingCart", false)
                     commit("deletedCart", payload)
                     store.commit("partner/deleteCart", payload)
                     store.commit('library/deleteCart', payload)
 
                     resolve(response)
-                }).catch(err =>{
+                }).catch(err => {
                     commit("deletingCart", false)
                     reject(err)
                 })
             })
         },
         // Add coupon
-        addCoupon({commit}, payload){
+        addCoupon({commit}, payload) {
             commit("addingCoupon", true)
-            return new Promise((resolve, reject) =>{
-                axios.post(config.apiUrl + 'cart/coupon', payload).then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + 'cart/coupon', payload).then(response => {
                     resolve(response)
                     commit("addingCoupon", false)
-                }).catch(err =>{
+                }).catch(err => {
                     commit("addingCoupon", false)
                     reject(err)
                 })
             })
         },
         // Delete coupon
-        deleteCoupon({commit}, payload){
+        deleteCoupon({commit}, payload) {
             commit("deletingCoupon", true)
-            return new Promise((resolve, reject) =>{
-                axios.delete(config.apiUrl + 'cart/coupon',{
-                    headers: {
-
-                    },
+            return new Promise((resolve, reject) => {
+                axios.delete(config.apiUrl + 'cart/coupon', {
+                    headers: {},
                     data: {
                         code: payload
                     }
-                  }).then(response =>{
+                }).then(response => {
                     resolve(response)
-                }).catch(err =>{
+                }).catch(err => {
                     reject(err)
                 })
             })
         },
         // Update duration
-        async updateDuration({commit}, params){
-            await  commit("updatingDuration", params)
+        async updateDuration({commit}, params) {
+            await commit("updatingDuration", params)
         },
         // Cart checkout
-        cartCheckout({commit}, payload){
+        cartCheckout({commit}, payload) {
             commit("checkingOut")
-            return new Promise((resolve, reject) =>{
-                axios.post(config.apiUrl + 'cart/checkout', payload).then(response =>{
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + 'cart/checkout', payload).then(response => {
                     resolve(response)
-                    
-                }).catch(err =>{
+
+                }).catch(err => {
                     reject(err)
                 })
             })

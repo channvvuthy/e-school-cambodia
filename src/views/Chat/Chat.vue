@@ -514,19 +514,19 @@
                        :class="darkMode?`bg-youtube`:`bg-primary`">
                     <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
                   </div>
-                  <template slot="isInitiating">
+                  <div slot="isInitiating">
                     Voice
-                  </template>
-                  <template slot="isRecording">
+                  </div>
+                  <div slot="isRecording">
                     <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
                       <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
                     </div>
-                  </template>
-                  <template slot="isCreating">
+                  </div>
+                  <div slot="isCreating">
                     <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
                       <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
                     </div>
-                  </template>
+                  </div>
                 </VueRecord>
               </div>
             </div>
@@ -554,17 +554,22 @@
               <div class="border-t" :class="darkMode?`border-button`:`border-gray-200`"></div>
               <div class="h-3"></div>
               <div class="flex justify-start px-3 w-full relative items-center">
-                <input type="text" placeholder="Add a caption..." class="w-full py-2 mb-3 focus:outline-none pl-2"
+                <input type="text" placeholder="Add a caption..." class="w-full py-2 focus:outline-none pl-2"
                        v-model="message.text"
                        :class="darkMode?`bg-transparent`:``">
                 <div class="flex items-center absolute -top-3 justify-center w-full text-center" v-if="sending">
                   <div class="loader"></div>
                 </div>
-                <button class="transform rotate-45 mr-5 cursor-pointer focus:outline-none relative -top-2"
-                        @click="sendFile()" :disabled="sending">
-                  <SendMessageIcon :size="30" :fill="darkMode?`#1977f2`:`#3498db`"></SendMessageIcon>
+                <button
+                    :disabled="sending"
+                    @click="sendFile()"
+                    style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+                  <div class="rounded-full h-9 w-9 flex items-center justify-center">
+                    <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
+                  </div>
                 </button>
               </div>
+              <div class="h-3"></div>
             </div>
           </div>
           <!-- Read pdf -->
@@ -601,7 +606,7 @@
             @yes="unblock()"></BuyMsg>
     <BuyMsg v-if="isDelete" :msg="`remove_message`" @cancelModal="() => {this.isDelete = false}"
             @yes="confirmDelete"></BuyMsg>
-    <AdminMember v-if="showAdminMember" @closeAdminMember="() => {showAdminMember = false}"
+    <AdminMember v-if="showAdminMember" @closeAdminMember="() => {this.showAdminMember = false}"
                  @selectedChat="selectedChat($event)"></AdminMember>
     <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
 

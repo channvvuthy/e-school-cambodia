@@ -1,6 +1,5 @@
 import axios from "axios"
 import config from "./../config"
-import err from "./../helper/err"
 
 
 export default {

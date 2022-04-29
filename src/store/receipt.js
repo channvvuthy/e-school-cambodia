@@ -14,33 +14,33 @@ export default {
 
     },
     mutations: {
-        deletedReceipt(state, _id){
+        deletedReceipt(state, _id) {
             state.receipts = state.receipts.filter(item => item._id !== _id)
         },
-        gettingReceipt(state, receipts){
+        gettingReceipt(state, receipts) {
             state.receipts = receipts
         },
-        takingReceipt(state, status){
+        takingReceipt(state, status) {
             state.takingReceipt = status
         },
-        loadingReceipt(state, status){
+        loadingReceipt(state, status) {
             state.loadingReceipt = status
         },
-        receivingReceipt(state, receiptDetail){
+        receivingReceipt(state, receiptDetail) {
             state.receiptDetail = receiptDetail
         },
-        removingReceipt(state, status){
+        removingReceipt(state, status) {
             state.deleting = status
         },
-        paginationReceipt(state, payload){
-            for(let i = 0; i < payload.length; i++){
+        paginationReceipt(state, payload) {
+            for (let i = 0; i < payload.length; i++) {
                 state.receipts.push(payload[i])
             }
         }
     },
 
     actions: {
-        getReceiptDetail({commit}, id){
+        getReceiptDetail({commit}, id) {
             commit("loadingReceipt", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + 'invoice/detail/?id=' + id).then(response => {
@@ -59,15 +59,13 @@ export default {
                 })
             })
         },
-        deleteReceipt({commit}, id){
+        deleteReceipt({commit}, id) {
             commit("removingReceipt", true)
             return new Promise((resolve, reject) => {
-                axios.delete(config.apiUrl + 'invoice',{
-                    headers:{
-
-                    },
-                    data:{
-                        id:id
+                axios.delete(config.apiUrl + 'invoice', {
+                    headers: {},
+                    data: {
+                        id: id
                     }
                 }).then(response => {
 
@@ -86,7 +84,7 @@ export default {
             })
         },
 
-        getReceipt({commit}, payload){
+        getReceipt({commit}, payload) {
             commit("takingReceipt", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `invoice?${helper.q(payload)}`).then(response => {
@@ -94,9 +92,9 @@ export default {
                         err.err(response.data.msg)
                     }
                     commit("takingReceipt", false)
-                    if(payload.p > 1){
+                    if (payload.p > 1) {
                         commit('paginationReceipt', response.data.data)
-                    }else{
+                    } else {
                         commit('gettingReceipt', response.data.data)
                     }
                     resolve(response)
