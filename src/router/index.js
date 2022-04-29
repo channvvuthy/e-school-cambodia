@@ -303,6 +303,11 @@ const routes = [
         name: 'book-overview',
         component: () => import('../views/Library/components/book/OverView'),
     },
+    {
+        path: '/logout',
+        name: 'logout',
+        component: () => import('../views/Logout/Logout'),
+    },
 
 
 ];

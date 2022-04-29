@@ -135,6 +135,7 @@ import NewIcon from "./../../components/NewIcon.vue"
 import Empty from "./../Component/Empty.vue";
 import BuyMsg from "./../Component/BuyMsg.vue"
 import helper from "@/helper/helper";
+import ScrollTopIcon from "./../../components/ScrollTopIcon.vue"
 
 export default {
   computed: {
@@ -143,6 +144,7 @@ export default {
     ...mapState('zoom', ['courses', 'loading'])
   },
   components: {
+    ScrollTopIcon,
     Empty,
     BuyMsg,
     BoxFilter,
@@ -170,6 +172,9 @@ export default {
   methods: {
     ...mapActions('zoom', ['getZoomCourse', 'getZoomCourseWithPagination']),
     ...mapActions('cart', ['addCart', 'getCart']),
+    goToTop() {
+      this.$refs.feed.scrollTop = 0;
+    },
     onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
       if (scrollTop + clientHeight >= scrollHeight) {
 

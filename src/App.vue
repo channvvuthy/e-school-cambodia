@@ -5,16 +5,24 @@
     </div>
     <div class="font-khmer_os" :class="darkMode?`bg-youtube`:``">
       <!-- Cart -->
-      <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice"></Cart>
+      <Cart v-if="showCart"
+            @closeCart="() =>{this.showCart = false}"
+            @showInvoice="showInvoice">
+      </Cart>
       <!-- Receipt info -->
-      <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail"
-                   @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
+      <ReceiptInfo v-if="showReceipt"
+                   :receiptDetail="receiptDetail"
+                   @closeInfo="() =>{this.showReceipt = false}">
+      </ReceiptInfo>
       <!-- Notification -->
-      <Notification v-if="showNotification" @closeNotification="() =>{this.showNotification = false}"
-                    @readNotification="readNotification($event)"></Notification>
+      <Notification v-if="showNotification"
+                    @closeNotification="() =>{this.showNotification = false}"
+                    @readNotification="readNotification($event)">
+      </Notification>
       <!-- NotificationDetail -->
       <NotificationDetail v-if="showNotificationDetail"
-                          @closeNotificationDetail="closeNotificationDetail"></NotificationDetail>
+                          @closeNotificationDetail="closeNotificationDetail">
+      </NotificationDetail>
       <div class="flex" v-if="!escapeRoute()">
         <div>
           <!--Sidebar-->
