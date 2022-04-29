@@ -15,7 +15,7 @@
                   :class="darkMode?`border-fb`:`border-fb`"
                   :style="{backgroundImage:`url(${st.user.photo})`}">
               </div>
-              <div class="h-64 w-full bg-cover bg-center" :style="{backgroundImage:`url(${st.photo.name})`}"></div>
+              <div class="h-64 w-full bg-cover bg-center" :style="{backgroundImage:`url(${st.photo.url})`}"></div>
               <div
                   class="mt-3 whitespace-nowrap absolute bottom-0 left-0 w-full bg-gradient-to-t from-black h-full text-white flex justify-start items-end text-sm p-3"
                   :title="st.user.name">{{ cutString(st.user.name, 15) }}

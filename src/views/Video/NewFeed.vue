@@ -389,7 +389,6 @@ import Video from "@/views/Video/Video";
 import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
 import Report from "@/views/Video/components/Report.vue";
-import config from "./../../config"
 import Liker from "@/views/Video/components/Liker";
 
 Vue.use(VueObserveVisibility)
@@ -399,6 +398,9 @@ export default {
     ...mapState('auth', ['stProfile']),
     ...mapState('setting', ['darkMode', 'isHide']),
     ...mapState('social', ['social', 'ads', 'loadingMore']),
+    storyDetail() {
+      return this.$store.state.story.storyDetail
+    }
   },
   components: {
     Report,
@@ -522,15 +524,24 @@ export default {
         this.actionId = null
       }
       if (data.action.label === 'actions.copy_link') {
-        this.link = config.customProtocolUrl + `id?=${data.post._id}&type=${data.post.type}`
-        setTimeout(() => {
-          let copyText = document.getElementById("copyLink")
-          copyText.select()
-          copyText.setSelectionRange(0, 99999)
-          document.execCommand("copy")
-          helper.success("Copied")
-          this.actionId = null
-        }, 100)
+        let payload = {
+          id: data.post._id,
+          type: data.post.type
+        }
+        this.$store.dispatch('social/copyLink', payload).then(res => {
+          if (res.data && res.data.url) {
+            this.link = res.data.url
+            setTimeout(() => {
+              let copyText = document.getElementById("copyLink")
+              copyText.select()
+              copyText.setSelectionRange(0, 99999)
+              document.execCommand("copy")
+              helper.success("Copied")
+              this.actionId = null
+            }, 100)
+          }
+        })
+
       }
     },
     closeAction() {
@@ -643,6 +654,13 @@ export default {
   created() {
     this.getPost()
   },
+  watch: {
+    'storyDetail': function (story) {
+      if (story.type === 51) {
+        this.fullScreen(story)
+      }
+    }
+  }
 }
 </script>
 <style>

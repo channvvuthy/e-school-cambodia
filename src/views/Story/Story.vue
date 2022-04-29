@@ -48,11 +48,21 @@
             </div>
             <div
                 class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
-                :style="{backgroundImage:`url(${my_story.photo.name})`}"
+                :style="{backgroundImage:`url(${my_story.photo.url})`}"
             >
               <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
             </div>
-            <p class="mt-3 whitespace-nowrap" :title="my_story.user.name">{{ cutString(my_story.user.name, 15) }}</p>
+            <p class="mt-3 whitespace-nowrap flex justify-between space-x-4" :title="my_story.user.name">
+              <span v-if="(my_story.type === 51 || my_story.type === 52)">{{ cutString(my_story.user.name, 10) }}</span>
+              <span v-else>{{ cutString(my_story.user.name, 15) }}</span>
+              <span
+                  class="text-xs font-black text-center h-5 w-6 rounded"
+                  style="padding-top: 2px;"
+                  :class="darkMode ? `bg-iconColor` : `bg-forum`"
+                  v-if="(my_story.type === 51 || my_story.type === 52)">
+                <span>AD</span>
+              </span>
+            </p>
           </div>
         </div>
       </div>
@@ -115,6 +125,17 @@ export default {
       return helper.cutString(text, limit)
     },
     getStoryDetail(story, index = 0) {
+      if (story.type === 51 || story.type === 52) {
+        let payload = {
+          id: story._id,
+          type: story.type
+        }
+
+        this.$store.dispatch('social/countView', payload).then(res => {
+          this.$store.commit('story/getStoryDetail', res)
+        })
+        return
+      }
       let payload = {id: story._id}
       this.$store.commit("auth/setStoryIndex", index);
       this.viewStory(payload).then(response => {

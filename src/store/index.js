@@ -33,6 +33,7 @@ import social from "./social"
 import upload from "./upload";
 import background from "./background";
 import report from "./report";
+import story from "./story";
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -69,6 +70,7 @@ export default new Vuex.Store({
         social,
         upload,
         background,
-        report
+        report,
+        story
     }
 });

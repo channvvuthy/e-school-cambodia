@@ -386,6 +386,15 @@ export default {
                 })
             })
         },
+        copyLink({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/share?${helper.q(payload)}`).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
 
 
     }
