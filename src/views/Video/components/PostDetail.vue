@@ -214,6 +214,13 @@
                   <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
                 </div>
               </div>
+              <div
+                  @click="postComment"
+                  style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+                <div class="rounded-full h-9 w-9 flex items-center justify-center">
+                  <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
+                </div>
+              </div>
 
             </div>
           </div>
@@ -232,6 +239,7 @@
     <!-- Photo -->
     <PhotoView
         :id="post._id"
+        :postType="post.type"
         @closePhoto="()=>{this.isPhoto = false}"
         :photo="photo"
         v-if="isPhoto"></PhotoView>
@@ -260,6 +268,7 @@ import ReplyComment from "@/views/Video/components/ReplyComment";
 import StickerView from "@/views/Video/components/StickerView";
 import FastAverageColor from "fast-average-color";
 import moment from "moment";
+import SendMessageIcon from "@/components/SendMessageIcon";
 
 const fac = new FastAverageColor();
 export default {
@@ -273,6 +282,7 @@ export default {
   },
   mixins: [mode],
   components: {
+    SendMessageIcon,
     StickerView,
     ReplyComment,
     Sticker,
@@ -314,7 +324,7 @@ export default {
       commentId: null,
       comment: {
         text: null,
-        type: 1,
+        type: this.post.type,
       }
     }
   },

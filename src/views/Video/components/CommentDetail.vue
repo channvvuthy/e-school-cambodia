@@ -87,6 +87,7 @@
     <!-- Photo -->
     <PhotoView
         :id="payload.id"
+        :post-type="social.type"
         @closePhoto="()=>{this.isPhoto = false}"
         :photo="photo"
         v-if="isPhoto"></PhotoView>
@@ -159,7 +160,7 @@ export default {
       },
       comment: {
         id: "",
-        type: 1,
+        type: this.social.type,
         text: ''
       }
     }

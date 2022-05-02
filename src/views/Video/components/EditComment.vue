@@ -47,6 +47,7 @@
               <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
             </div>
           </div>
+
           <div
               v-if="isEditable"
               @click="postComment"

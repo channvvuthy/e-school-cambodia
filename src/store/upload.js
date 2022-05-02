@@ -62,12 +62,12 @@ export default {
             }
             return new Promise((resolve, reject) => {
                 axios.post(config.microserviceUrl + `upload/video`, payload, conf).then(res => {
-                    commit("loading", false)
                     resolve(res.data)
                 }).catch(err => {
-                    commit("loading", false)
                     reject(err)
                 })
+            }).finally(() => {
+                commit("loading", false)
             })
         },
 

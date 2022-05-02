@@ -62,6 +62,9 @@ export default {
     id: {
       default: () => null,
     },
+    postType: {
+      default: () => null,
+    },
     photo: {
       default: () => {
         return {
@@ -80,7 +83,7 @@ export default {
       loading: false,
       comment: {
         id: "",
-        type: 1,
+        type: this.postType,
         text: '',
         photo: {},
       }

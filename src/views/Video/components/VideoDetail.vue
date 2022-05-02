@@ -280,7 +280,7 @@ export default {
       commentId: null,
       comment: {
         text: null,
-        type: 1,
+        type: this.post.type,
       }
     }
   },
@@ -343,7 +343,7 @@ export default {
     postComment() {
       this.comment.id = this.replyId ? this.commentId : this.feed._id
       let isComment = false
-      this.comment.text = this.comment.text.trim()
+      this.comment.text = this.comment.text ? this.comment.text.trim() : this.comment.text
 
       if (this.comment.text != '') {
         isComment = true
