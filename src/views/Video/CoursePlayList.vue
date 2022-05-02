@@ -226,7 +226,6 @@ export default {
     ...mapActions('favorite', ['add', 'removeFavorite']),
     ...mapActions('cart', ['addCart', 'getCart']),
     ...mapActions('quiz', ['getQuizCertificate']),
-    ...mapActions('upload', ['multiUpload']),
 
     closeCart() {
       this.showCart = false
@@ -297,8 +296,8 @@ export default {
     forumDetail($event) {
       this.showMenu = false
       this.loadingComment = true
-      this.getCommentForum({id: $event._id}).then(response => {
-        this.comments = response
+      this.getCommentForum({id: $event._id}).then(res => {
+        this.comments = res
         this.loadingComment = false
       })
     },
@@ -388,36 +387,29 @@ export default {
       this.addComment(formData)
     },
     replyTextComment(data) {
-      this.replyComment(data).then(response => {
-        this.comments.comment.push(response.data.data)
+      this.replyComment(data).then(res => {
+        this.comments.comment.push(res.data.data)
       })
     },
     send(event) {
-      let payload = {}
+      let formData = new FormData();
       if (event) {
-        payload.text = event
+        formData.append("text", event);
       }
-
-      let photo = new FormData()
-      photo.append("photo", this.photo)
-
-      this.multiUpload(photo).then(res => {
-        if (this.isReply) {
-          payload.id = this.comments.forum._id
-          payload.photo = res.data[0]
-          this.replyComment(payload).then(response => {
-            this.comments.comment.push(response.data.data)
-            this.showModalPhoto = false
-          })
-        } else {
-          payload.photo = res.data[0]
-          payload.id = this.video._id
-          this.addComment(payload).then(() => {
-            this.showModalPhoto = false
-          })
-        }
-
-      })
+      if (this.isReply) {
+        formData.append("id", this.comments.forum._id)
+        formData.append("photo", this.photo);
+        this.replyComment(formData).then(res => {
+          this.comments.comment.push(res.data.data)
+          this.showModalPhoto = false
+        })
+      } else {
+        formData.append("photo", this.photo);
+        formData.append("id", this.video._id)
+        this.addComment(formData).then(() => {
+          this.showModalPhoto = false
+        })
+      }
 
     },
     exit() {
@@ -442,12 +434,12 @@ export default {
       payload.package_id = this.$route.params.course.package_id
     }
 
-    this.getPlaylist(payload).then(response => {
+    this.getPlaylist(payload).then(res => {
       let freeVideo
-      if (response.data.data.course.is_buy) {
-        freeVideo = response.data.data.list
+      if (res.data.data.course.is_buy) {
+        freeVideo = res.data.data.list
       } else {
-        freeVideo = response.data.data.list.filter(item => item.free_watch === 1)
+        freeVideo = res.data.data.list.filter(item => item.free_watch === 1)
       }
       let order
       if (this.$route.params.course.last_watch) {

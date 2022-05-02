@@ -126,11 +126,8 @@ export default {
   methods: {
     ...mapActions('auth', ['logout']),
     logoutUser() {
-      this.logout().then(() => {
-        this.$forceUpdate()
-        this.$store.dispatch("auth/clearLogout")
-        this.$router.push('/logout').catch(err => err)
-      }).catch(() => {
+      this.logout().finally(() => {
+        this.$store.commit("auth/receivingToken", null)
         this.$store.dispatch("auth/clearLogout")
         this.$router.push('/logout').catch(err => err)
       })
