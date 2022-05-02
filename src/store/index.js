@@ -34,7 +34,7 @@ import upload from "./upload";
 import background from "./background";
 import report from "./report";
 import story from "./story";
-
+import zoom from "./zoom"
 Vue.use(Vuex);
 export default new Vuex.Store({
     modules: {
@@ -71,6 +71,7 @@ export default new Vuex.Store({
         upload,
         background,
         report,
-        story
+        story,
+        zoom
     }
 });

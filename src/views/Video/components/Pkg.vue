@@ -49,6 +49,9 @@ export default {
     CartIcon
   },
   props: {
+    isZoom: {
+      default: () => false
+    },
     packages: {
       type: Array,
       default: () => {
@@ -88,8 +91,14 @@ export default {
       })
     },
     pkgDetail(pkg) {
+      let name = "packages"
+
+      if (this.isZoom) {
+        name = "zoom-package"
+      }
+
       this.$router.push({
-        name: "packages",
+        name,
         params: {
           pkg
         }
