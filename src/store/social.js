@@ -16,8 +16,12 @@ export default {
         likes: [],
         actionId: null,
         socialComment: {},
+        favorites: [],
     },
     mutations: {
+        getFavorite(state, payload) {
+            state.favorites = payload
+        },
         socialComment(state, payload) {
             state.socialComment = payload
         },
@@ -335,6 +339,7 @@ export default {
         getFavorite({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `favorite/social?${helper.q(payload)}`).then(res => {
+                    commit("getFavorite", res.data.data)
                     resolve(res.data.data)
                 }).catch(err => {
                     reject(err)

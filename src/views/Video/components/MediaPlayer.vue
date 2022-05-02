@@ -3,8 +3,10 @@
     <div
         v-if="isFullScreen"
         @click="fullScreen"
-        class="absolute z-40 right-4 top-4 w-6 h-6 flex items-center justify-center cursor-pointer fullscreen"
-        style="background-color: rgba(43, 51, 63, 0.7)">
+        class="absolute z-40 right-4 top-4 w-6 h-6 flex items-center justify-center cursor-pointer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#e4e6eb">
+          <path d="M24 9h-2v-5h-7v-2h9v7zm-9 13v-2h7v-5h2v7h-9zm-15-7h2v5h7v2h-9v-7zm9-13v2h-7v5h-2v-7h9zm11 4h-16v12h16v-12z"/>
+        </svg>
     </div>
     <video ref="videoPlayer" class="video-js" @ended="ended"></video>
   </div>
