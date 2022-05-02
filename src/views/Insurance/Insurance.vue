@@ -1,132 +1,163 @@
 <template>
-    <div class="px-5 bg-white font-khmer_os text-sm h-screen py-5">
-        <div v-if="checkingInsurance"  class="flex justify-center items-center h-screen relative -top-5">
-            <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
-                <loading></loading>
-            </h1>
-        </div>
-        <div class="w-1/2 leading-6" v-else>
-            <div v-if="insuranceStatus === 0">
-                <p>
-                    សូមធ្វើការទិញវគ្គសិក្សាចាប់ពី ៤មុខវីជ្ជាឡើងទៅទើបអាចទទួលបានសេវាកម្មធានារ៉ាប់រងដែលមានតម្លៃស្មើរនឹង ១០,០០០,០០រៀល(ដប់លានរៀល)</p>
+    <div>
+        <div class="h-screen flex" :class="darkMode?`text-gray-400 ${insuranceStatus === 0?`justify-center items-center flex-col`:``}`:`${insuranceStatus === 0?`justify-center items-center flex-col`:``}`">
+            <div v-if="checkingInsurance"  class="flex justify-center items-center h-screen relative -top-5">
+                <h1 class="text-sm font-semibold font-khmer_siemreap relative -top-10">
+                    <loading></loading>
+                </h1>
             </div>
-            <div v-if="insuranceStatus===1">
-                <div class="flex  items-center">
-                    <div class="mr-3">
-                        <GotInsuranceIcon fill="#1fb141"></GotInsuranceIcon>
+            <template v-if="insuranceStatus === 0">
+                <div><Icon></Icon></div>
+                <div class="max-w-sm mt-10 text-center">
+                    {{$t('insurance_note')}}
+                    <div class="flex justify-between items-center mt-10">
+                        <button class="rounded-lg bg-primary py-3 w-full mr-3 text-white focus:outline-none" @click="() => {this.$router.push('/video')}">{{$t('2108')}}</button>
+                        <button class="rounded-lg bg-primary py-3 w-full ml-3 text-white focus:outline-none" @click="() => {this.$router.push('/library')}">{{$t('2202')}}</button>
                     </div>
-                    <div>
-                        <div class="font-khmer_os text-md font-semibold">សូមអបអរសាទរ</div>
-                        <div class="text-red-600 font-semibold text-md">
-                            {{userInsurance.first_name}} {{userInsurance.last_name}}
+                </div>
+            </template>
+            <template v-else>
+                <div class="max-w-2xl rounded-xl p-10 m-5 h-screen overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white shadow-md`">
+                    <div class="text-center">{{$t('get_insurance_note')}}</div>
+                    <div class="h-7"></div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="mb-3">{{$t('2014')}}<span class="text-heart">*</span></div>
+                            <input type="text"  class="border-b w-full focus:outline-none" name="last_name" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.first_name">
+
+                        </div>
+                        <div>
+                            <div class="mb-3">{{$t('2013')}}<span class="text-heart">*</span></div>
+                            <input type="text"  class="border-b w-full focus:outline-none" name="first_name" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.last_name">
                         </div>
                     </div>
-                </div>
-                <div class="mt-10 leading-6">
-                    ដោយសារលោកអ្នកបានទិញវគ្គសិក្សាជាមួយ <span class="text-blue-900">E-School&nbsp;</span><span
-                        class="text-red-600">Cam</span><span class="text-blue-900">bodia</span>
-                    ចំនួនបួនមុខវិជ្ជាក្នុងខែតែមួយ ដូច្នេះលោកអ្នកទទួលបាននូវសេវាកម្មធានារ៉ាប់រងអាយុជីវិតពីក្រុមហ៊ុន <span
-                        class="text-red-600">Fort </span> <span class="text-green-400">Life </span>
-                    ចំនួន១០,០០០,០០រៀល(ដប់លានរៀល)ដែលមានសុពលភាពគិតចាប់ពីពេលនេះរហូតដល់ថ្ងៃទី {{formatDate(userInsurance.expire_date)}}។ ព័ត៌មានលំអិត 090 787 999/ 023 885 007
-                </div>
-            </div>
-            <div v-if="insuranceStatus === 2">
-                <p class="mb-2 leading-6">
-                    សូមបញ្ជាក់ព័ត៌មានមួយចំនួន ដើម្បីទទួលបានសេវាធានារ៉ាប់រងអាយុជីវិតដែលមានតម្លៃស្មើរនឹង ១០,០០០,០០រៀន(ដប់លានរៀល)</p>
-                <div class="flex items-center">
-                    <input type="text" class="flex-1 py-2 border border-gray-300 rounded pl-3 focus:outline-none"
-                           placeholder="នាមត្រកូល" v-model="stProfile.first_name"/>
-                    <label class="text-red-500 relative right-5">*</label>
-                </div>
-                <div class="flex items-center mt-2">
-                    <input type="text" class="flex-1 py-2 border border-gray-300 rounded pl-3 focus:outline-none"
-                           placeholder="នាមខ្លួន" v-model="stProfile.last_name"/>
-                    <label class="text-red-500 relative right-5">*</label>
-                </div>
-                <div class="flex items-center mt-2">
-                    <div class="flex mr-20">
-                        <label>
-                            <input type="radio" name="gender" value="M" :checked="stProfile.gender === 'M'"> ប្រុស
-                        </label>
+                    <!-- Sex -->
+                    <div class="flex mt-6 items-center">
+                        <div class="mr-20 text-sm">{{$t('gender')}}</div>
+                        <div class="mr-20">
+                            <label for="female">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center cursor-pointer" :class="darkMode?``:`border-gray-300`">
+                                        <div class="h-2 w-2" :class="darkMode?``:`bg-primary`" style="border-radius:100%"></div>
+                                    </div>
+                                    <input type="radio" name="gender"  id="female" class="hidden"> 
+                                    <span class="ml-5 font-extralight text-sm"> {{$t('2016')}}</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div>
+                            <label for="male">
+                                <div class="flex items-center">
+                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center cursor-pointer" :class="darkMode?``:`border-gray-300`">
+                                        <div class="h-2 w-2" :class="darkMode?``:`bg-primary`" style="border-radius:100%"></div>
+                                    </div>
+                                    <input type="radio" name="gender"  id="male" class="hidden">
+                                    <span class="ml-5 font-extralight text-sm"> {{$t('2015')}}</span>
+                                </div>
+                            </label>
+                        </div>
+                        
                     </div>
-                    <div class="flex">
-                        <label>
-                            <input type="radio" name="gender" value="F" :checked="stProfile.gender === 'F'"> ស្រី
-                        </label>
+                    <div class="h-7"></div>
+                    <div class="text-sm">{{$t('date_of_birth')}}</div>
+                    <div class="h-3"></div>
+
+                    <div class="grid">
+                        <div>
+                            <input type="date" class="w-full bg-transparent focus:outline-none border-b" v-model="stProfile.date_of_birth" :class="darkMode?`bg-transparent border-button`:`border-gray-300`">
+                        </div>
                     </div>
-                </div>
-                <div class="flex items-center mt-2">
-                    <input type="text" class="flex-1 py-2 border border-gray-300 rounded pl-3 focus:outline-none"
-                           placeholder="ថ្ងៃខែឆ្នាំកំណើត" onfocus="(this.type='date')"
-                           v-model="stProfile.date_of_birth"/>
-                    <label class="text-red-500 relative right-5">*</label>
-                </div>
-                <div class="flex items-center mt-2">
-                    <input type="text" class="flex-1 py-2 border border-gray-300 rounded pl-3 focus:outline-none"
-                           placeholder="លេខទូរស័ព្ទ" v-model="stProfile.phone"/>
-                    <label class="text-red-500 relative right-5">*</label>
-                </div>
-                <div class="flex items-center mt-2">
-                    <input type="text"
-                           class="flex-1 py-2 border border-gray-300 rounded pl-3 focus:outline-none cursor-pointer"
-                           placeholder="ខេត្ត" v-model="stProfile.province.name" readonly @click="showAllProvince"/>
-                    <label class="text-red-500 relative right-5">*</label>
-                </div>
-                <div class="flex items-center mt-2 relative">
-                    <input type="text"
-                           class="flex-1 py-2 border border-gray-300 rounded pl-3 focus:outline-none cursor-pointer"
-                           placeholder="វិទ្យាល័យ" v-model="stProfile.school.name" readonly @click="showAllSchool"/>
-                    <label class="text-red-500 relative right-5">*</label>
-                    <img src="/ajax-loader.gif" class="absolute right-10 top-0 mt-3" v-if="loadingSchool"/>
-                </div>
-                <div class="parent border border-gray-300 rounded px-5 pb-4 mt-5 relative">
-                    <div class="absolute w-full text-center -top-3">
-                        <span class="bg-white">ព័ត៌មានអាណាព្យាបាល</span>
+                    <div class="h-7"></div>
+                    <!-- Phone -->
+                    <div class="grid grid-cols-2 gap-4">
+                         <div>
+                            <div class="mb-3 text-sm">{{$t('2009')}}<span class="text-heart">*</span></div>
+                            <input type="text"  class="border-b w-full focus:outline-none" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.phone">
+
+                        </div>
+                        <div class="relative">
+                            <div class="mb-3 text-sm">{{$t('2124')}}<span class="text-heart">*</span></div>
+                            <select class="province w-full focus:outline-none relative z-50 bg-transparent text-sm" :class="darkMode?`border-button`:`border-gray-300`"  @change="selectProvince" v-model="selectedValue">
+                                <option v-for="(province,index) in provinces" :key="index" :value="province._id">
+                                    {{province.name}}
+                                </option>
+                                
+                            </select>
+                            <div class="h-1 w-full border-b"  :class="darkMode?`border-button`:`border-gray-300 absolute left-0 bottom-0`"></div>
+                            <div class="absolute right-0 bottom-2 cursor-pointer z-10">
+                                <ChevronIcon></ChevronIcon>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center mt-3">
-                        <input type="text"
-                               class="flex-1 py-1 border border-gray-300 border-t-0 border-l-0 border-r-0  focus:outline-none"
-                               placeholder="លេខទូរស័ព្ទ" v-model="yourGuardian.phone"/>
-                        <label class="text-red-500 ">*</label>
+                    <div class="h-7"></div>
+                    <div class="grid">
+                        <div class="relative">
+                            <div class="mb-3 text-sm">{{$t('2123')}}<span class="text-heart">*</span></div>
+                            <div class="absolute left-5 top-3 w-full flex justify-end  pr-20" v-if="loading">
+                                <div class="loader "></div>
+                            </div>
+                            <select class="province w-full text-sm focus:outline-none relative z-50 bg-transparent" :class="darkMode?`border-button`:`border-gray-300`" :disabled="loading">
+                                <option v-for="(school, index) in schools" :key="index" :value="school._id">
+                                    {{school.name}}
+                                </option>
+                            </select>
+                            <div class="h-1 w-full border-b"  :class="darkMode?`border-button`:`border-gray-300 absolute left-0 bottom-0`"></div>
+                            <div class="absolute right-0 bottom-2 cursor-pointer z-10">
+                                <ChevronIcon></ChevronIcon>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center mt-3">
-                        <input type="text"
-                               class="flex-1 py-1 border border-gray-300 border-t-0 border-l-0 border-r-0 focus:outline-none"
-                               placeholder="ត្រូវជា" v-model="yourGuardian.type"/>
-                        <label class="text-red-500">*</label>
+                    <div class="h-7"></div>
+                    <div :class="darkMode?`bg-button text-gray-300`:`bg-softGray`" class="h-12 rounded flex items-center px-3">
+                        <div class="text-sm">
+                            {{$t('parent_info')}}
+                        </div>
                     </div>
-                </div>
-                <p class="mt-2">
-                    សូមចុចលើពាក្យថា យល់ព្រម លោកអ្នកត្រូវប្រាកដថាព័ត៌មាន ដែលផ្តល់មកគឺត្រឹមត្រូវដូចទៅនឹង សំបុត្រកំណើត ឬអត្តសញ្ញាណប័ណ្ណរបស់អ្នក។
-                </p>
-                <div class="flex justify-end items-center" @click="confirm">
-                    <button class="bg-custom py-2 px-5 focus:outline-none hover:bg-opacity-80 text-white rounded"
-                            :disabled="loadingConfirm">
-                        យល់ព្រម
-                        <Loader :size="10" v-if="loadingConfirm"></Loader>
-                    </button>
+                    <div class="h-7"></div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <div class="mb-3 text-sm">{{$t('2009')}}<span class="text-heart">*</span></div>
+                            <input type="text"  class="border-b w-full focus:outline-none" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="yourGuardian.phone">
+
+                        </div>
+                        <div>
+                            <div class="mb-3 text-sm">{{$t('as')}}<span class="text-heart">*</span></div>
+                            <input type="text"  class="border-b w-full focus:outline-none" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="yourGuardian.type">
+                        </div>
+                    </div>
+                    <div class="h-7"></div>
+                    <div class="text-sm">{{$t('insurance_term')}}</div>
+                    <div class="h-7"></div>
+                    <div class="flex items-center justify-center">
+                        <button class="bg-primary text-white px-40 h-12 rounded-md focus:outline-none" @click="confirm">
+                            {{$t('submit')}}
+                        </button>
+                    </div>
+                    <div class="h-7"></div>
 
                 </div>
-
-            </div>
+            </template>
+            <Message v-if="err" :message="message" @closeMessage="closeMessage"></Message>
+            <!-- <Province v-if="showProvince" :provinces="provinces" @selectProvince="selectProvince"
+                    @closeProvince="closeProvince"></Province>
+            <School v-if="showSchool" :schools="schools" @selectSchool="selectSchool"
+                    @closeSchool="closeSchool"></School> -->
         </div>
-        <Message v-if="err" :message="message" @closeMessage="closeMessage"></Message>
-        <Province v-if="showProvince" :provinces="provinces" @selectProvince="selectProvince"
-                  @closeProvince="closeProvince"></Province>
-        <School v-if="showSchool" :schools="schools" @selectSchool="selectSchool"
-                @closeSchool="closeSchool"></School>
     </div>
 </template>
 
 <script>
     import {mapState, mapActions} from "vuex"
-    import Message from "./../Auth/components/Message"
+    import Message from "./../Auth/components/Message.vue"
     import Loader from "./../../components/Loader"
     import Province from "./../Profile/components/Province"
     import School from "./../Profile/components/School"
     import GotInsuranceIcon from "./../../components/GotInsuranceIcon"
     import moment from "moment"
     import Loading from "./../../components/Loading"
+    import eHeader from "./../Video/components/Header.vue"
+    import Icon from "./components/Icon.vue"
+    import ChevronIcon from "./../../components/ChevronIcon.vue"
     export default{
         name: "Insurance",
         components: {
@@ -135,13 +166,18 @@
             Province,
             School,
             Loading,
-            GotInsuranceIcon
+            GotInsuranceIcon,
+            eHeader,
+            Icon,
+            ChevronIcon
         },
         data(){
             return {
                 showProvince: false,
                 showSchool: false,
+                loading: false,
                 err: false,
+                selectedValue: "",
                 message: "",
                 yourGuardian: {
                     phone: "",
@@ -153,7 +189,7 @@
             ...mapState('insurance', ['insuranceStatus', 'checkingInsurance', 'loadingConfirm', 'userInsurance']),
             ...mapState('auth', ['stProfile']),
             ...mapState('guardian', ['guardians', 'loadingGuardian']),
-            ...mapState('setting', ['provinces', 'schools', 'loadingProvince', 'loadingSchool']),
+            ...mapState('setting', ['provinces', 'schools', 'loadingProvince', 'loadingSchool', 'darkMode']),
 
         },
         methods: {
@@ -168,12 +204,16 @@
                 this.stProfile.school.name = null
                 this.showProvince = true
             },
-            selectProvince(province)
+            
+            selectProvince()
             {
-                this.getSchool(province._id).then(() => {
+                this.loading = true
+                this.$store.commit("setting/getAllSchool", [])
+                this.getSchool(this.selectedValue).then(() => {
                     this.showProvince = false
-                    this.stProfile.province = province
+                    this.loading = false
                 })
+
             },
             formatDate(date){
                 moment.locale('km');
@@ -202,23 +242,23 @@
             confirm(){
                 if (this.stProfile.first_name === "") {
                     this.err = true
-                    this.message = "សូមបញ្ចូលនាមត្រកូល"
+                    this.message = "please_enter_first_name"
                     return
 
                 }
                 if (this.stProfile.last_name === "") {
                     this.err = true
-                    this.message = "សូមបញ្ចូលនាមខ្លួន"
+                    this.message = "please_enter_last_name"
                     return
                 }
                 if (this.stProfile.phone === "") {
                     this.err = true
-                    this.message = "សូមបញ្ចូលលេខទូរស័ព្ទ"
+                    this.message = "please_enter_phone_number"
                     return
                 }
                 if (this.stProfile.date_of_birth === "") {
                     this.err = true
-                    this.message = "សូមបញ្ចូលថ្ងៃខែឆ្នាំកំណើត"
+                    this.message = "please_enter_date_of_birth"
                     return
                 }
                 if (this.stProfile.province._id === "") {
@@ -268,3 +308,17 @@
         }
     }
 </script>
+<style>
+    input[type="date"]::-webkit-inner-spin-button {
+        display: none;
+        -webkit-appearance: none;
+    }
+     input[type="date"]::-webkit-calendar-picker-indicator{
+         background-color: transparent;
+     }
+     .province {
+        -moz-appearance:none; /* Firefox */
+        -webkit-appearance:none; /* Safari and Chrome */
+        appearance:none;
+    }
+</style>

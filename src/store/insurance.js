@@ -11,24 +11,24 @@ export default {
         userInsurance: ""
     },
     mutations: {
-        getExpire(state, userInsurance){
+        getExpire(state, userInsurance) {
             state.userInsurance = userInsurance
         },
-        loadingConfirming(state, status){
+        loadingConfirming(state, status) {
             state.loadingConfirm = status
         },
-        checkingInsurance(state, status){
+        checkingInsurance(state, status) {
             state.checkingInsurance = status
         },
-        getInsuranceStatus(state, status){
+        getInsuranceStatus(state, status) {
             state.insuranceStatus = status
         }
     },
     actions: {
-        checkInsurance({commit}){
+        checkInsurance({commit}) {
             commit("checkingInsurance", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'user/insurance').then(response => {
+                axios.get(config.apiUrl + 'me/insurance').then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -45,10 +45,10 @@ export default {
                 })
             })
         },
-        confirmInsurance({commit}, params){
+        confirmInsurance({commit}, params) {
             commit("loadingConfirming", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + '/user/insurance/confirm', params).then(response => {
+                axios.post(config.apiUrl + 'me/insurance/confirm', params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

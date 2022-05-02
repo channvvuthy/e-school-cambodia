@@ -1,154 +1,413 @@
 <template>
+  <div>
     <div>
-        <div class="home p-5 bg-gray-50 h-screen">
-            <div v-if="loading" class="flex justify-center items-center h-screen relative -top-5">
-                <h1 class="text-sm font-semibold font-khmer_os relative -top-20">
-                    <loading></loading>
-                </h1>
+      <div class="px-5 pt-7 shadow-md text-sm"
+           :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
+        <!-- Tab -->
+        <div class="mt-7 px-3">
+          <div class="flex justify-start space-x-28">
+            <div @click="changeType('post')" class="cursor-pointer  w-12 text-center"
+                 :class="type==`post`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+              <div class="pb-2">{{ $t('post') }}</div>
+              <div v-if="type === `post`">
+                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+              </div>
             </div>
-            <div style="max-height: 100vh;overflow-y: scroll" @scroll="onScroll"
-                 id="feed" v-else>
-                <div v-if="!favorites.length" class="flex justify-center items-center h-screen">
-                    <img src="/icon/Empty/Empty.svg" class="w-64  mb-5 relative -top-28"/>
-                </div>
-                <div class="grid grid-cols-4 gap-4 mb-40">
-                    <div class="flex-col mb-5" v-for="(video, key) in favorites" :key="key">
-                        <div class="relative">
-                            <div class="absolute right-0 top-0 w-6 mt-2 mr-2 bg-gray-50 cursor-pointer bg-opacity-75"
-                                 style="border-radius:2px;z-index:50;">
-                                <img src="/icon/MenuSidebar/FavouriteFull.png" class="max-w-full"
-                                     @click="removeFav(video._id)"/>
-                            </div>
-                            <div @click="courseDetail('course-detail',video._id, video.order,video.course._id)"
-                                 class=" cursor-pointer">
-                                <div :id="video._id" class="relative">
-                                    <img :src="video.thumbnail" alt="">
-                                    <input type="range" min="0" max="100" value="100" step="1"
-                                           class="w-full percentage cursor-default absolute bottom-0 left-0"
-                                           v-if="video.last_watch"
-                                           :style="lastWatchMark(video.last_watch.percentage)">
-                                </div>
-                                <div class="font-khmer_os text-14px mt-4 font-semibold text-gray-700"
-                                     v-html="cutString(video.title, window.width <= 1366?30:45)"></div>
-                                <h2 class="text-gray-400 text-14px font-khmer_os mt-2">{{video.teacher.name}}</h2>
-                                <div class="flex">
-                                    <div class="mt-3 text-14px text-gray-500">
-                                        <Eye/>
-                                        <span class="pl-2">{{kFormatter(video.view)}}</span></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center items-end" :style="{visibility:paginationLoading?'visible':'hidden'}">
-                    <loading></loading>
-                </div>
+            <div @click="changeType('video')" class="cursor-pointer  w-12 text-center"
+                 :class="type==`video`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+              <div class="pb-2">{{ $t('2108') }}</div>
+              <div v-if="type === `video`">
+                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+              </div>
             </div>
-            <Message v-if="showMessageErr" @close="close" @deleteFavorite="deleteFavorite"></Message>
+            <div @click="changeType('book')" class="cursor-pointer w-24 text-center"
+                 :class="type==`book`?`text-primary ${darkMode?'text-white':''}`:``">
+              <div class="pb-2">{{ $t('2202') }}</div>
+              <div v-if="type === `book`">
+                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+              </div>
+            </div>
+
+          </div>
         </div>
+      </div>
     </div>
+    <div class="p-5">
+      <div v-if="loading">
+        <Loading></Loading>
+      </div>
+
+      <div v-else class="h-screen pb-72 overflow-y-scroll" @scroll="onScroll">
+        <!-- Video -->
+        <template v-if="type === `video`">
+          <div v-if="favoritedVideo.length == 0" class="h-screen pb-10" style="display:block;">
+            <Empty></Empty>
+          </div>
+          <div class="grid gap-4" :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
+            <div v-for="(view,index) in favoritedVideo" class="cursor-pointer rounded overflow-hidden"
+                 :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
+              <div class="relative" @mouseover="hideAndShowDuration(view._id)"
+                   @mouseleave="hideAndShowDuration('')" @click="viewVideo(view)">
+                <div class="absolute z-30 w-full h-full flex justify-center items-center">
+                  <video :src="playWhenOver(view.video)" autoplay="autoplay"
+                         class="flex justify-center items-center"
+                         controlsList="nodownload" v-if="hideDuration===view._id" muted></video>
+                </div>
+                <img :src="view.thumbnail">
+                <div class="absolute bottom-0 left-0 bg-red-600 h-1" v-if="view.last_watch"
+                     :style="{width:Math.round(view.last_watch.percentage) + `%`}"></div>
+                <div class="absolute right-3 bottom-2 rounded px-2 py-1 bg-black text-white bg-opacity-60 text-xs"
+                     v-if="millisToMinutesAndSeconds(view.duration)">
+                  {{ millisToMinutesAndSeconds(view.duration) }}
+                </div>
+              </div>
+
+              <div class="flex items-center justify-start cursor-text" :class="darkMode?`py-3`:`p-3`">
+                <img :src="view.teacher.photo" class="h-10 rounded mr-3">
+                <div>
+                  <div class="text-primary text-sm" :class="darkMode?'text-white':''">{{ cutString(view.title, 20) }}
+                  </div>
+                  <div class="flex font-khmer_os text-xs" :class="darkMode?`text-gray-400`:`opacity-50`">
+                    <div>{{ view.teacher.name }}</div>
+                    <div class="ml-7">{{ kFormatter(view.view) }} view</div>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <div class="float-right cursor-pointer">
+                    <div @click="confirmRemoveFavorite(view._id)">
+                      <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+        <!-- Book -->
+        <template v-else>
+          <div v-if="favoritedBook.length == 0" class="h-screen pb-10" style="display:block;">
+            <Empty></Empty>
+          </div>
+          <div class="grid gap-4" :class="isHide?'md:grid-cols-3 2xl:grid-cols-4':'md:grid-cols-2 2xl:grid-cols-3'">
+            <div v-for="(book, index) in favoritedBook" :key="index">
+              <div class="flex rounded-xl shadow p-4 relative"
+                   :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
+                <div class="absolute left-5 top-5" v-if="book.is_new">
+                  <NewIcon :size="22"></NewIcon>
+                </div>
+                <div class="px-3 flex flex-col justify-between">
+                  <div class="font-thin text-sm cursor-pointer" @click="getDetail(book)">
+                    <div>{{ cutString(book.title, 25) }}</div>
+                    <div v-if="book.des" class="text-xs my-3">{{ cutString(book.des, 90) }}</div>
+                  </div>
+                  <div class="text-xs"><span v-if="book.price.year">{{ $t('1006') }}:</span>
+                    <span :class="darkMode?``:`text-heart`">
+                      {{ book.price.year ? `${book.price.year}$` : `${$t('1007')}` }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-col justify-between flex-1 items-end">
+                  <div @click="confirmRemoveFavorite(book._id)" class="cursor-pointer">
+                    <FavoriteFill :fill="darkMode?`#ffffff`:`#c0272d`"/>
+                  </div>
+                  <div v-if="book.price.year" @click="addToCart(book)" class="cursor-pointer">
+                    <div v-if="!book.is_in_cart">
+                      <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <BuyMsg
+        v-if="confirm"
+        @cancelModal="cancelModal"
+        @yes="yes" :msg="msg">
+    </BuyMsg>
+    <div v-if="showAds">
+      <VideoADS
+          :videoUrl="videoUrl"
+          @closeAds="closeAds"
+          @lastWatchVideo="lastWatchVideo($event)">
+      </VideoADS>
+    </div>
+    <ReadingBook
+        v-if="reading"
+        @closeReading="closeReading">
+    </ReadingBook>
+    <ViewBook
+        v-if="preview"
+        @close="close"
+        @readingBook="readingBook"
+        @shopNow="shopNow"
+        @listenAudio="listenAudio"
+        @listVideo="listVideo">
+    </ViewBook>
+    <LibraryAudio
+        v-if="showAudio"
+        :is_favorite="false">
+    </LibraryAudio>
+    <Cart v-if="showCart"
+          @closeCart="()=>{this.showCart = false}"
+          @showInvoice="showInvoice">
+    </Cart>
+    <!-- Receipt info -->
+    <ReceiptInfo
+        v-if="showReceipt"
+        :receiptDetail="receiptDetail"
+        @closeInfo="() =>{this.showReceipt = false}">
+    </ReceiptInfo>
+  </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from "vuex"
-    import helper from "../../helper/helper";
-    import Eye from "./../../components/Eye"
-    import Loading from "./../../components/Loading.vue"
-    import Message from "./components/Message"
-    export default{
-        name: "Favorite",
-        components: {
-            Eye,
-            Loading,
-            Message
-        },
+import eHeader from "./../Video/components/Header.vue"
+import BorderBottom from "./../../components/BorderBottom.vue"
+import Loading from "./../../components/Loading.vue"
+import CartIcon from "./../../components/CartIcon.vue"
+import FavoriteFill from "./../../components/FavoriteFill.vue";
+import helper from "./../../helper/helper"
+import BuyMsg from "./../Component/BuyMsg.vue"
+import Empty from "./../Component/Empty.vue"
+import Cart from "./../Component/Cart.vue"
+import ReceiptInfo from "@/views/MyCourse/components/ReceiptInfo";
+import VideoADS from "./../Video/ads/VideoADS.vue"
+import ReadingBook from "./../Library/components/book/ReadingBook.vue"
+import ViewBook from "./../Library/components/book/ViewBook.vue"
+import NewIcon from "./../../components/NewIcon.vue"
+import LibraryAudio from "./../Library/Audio.vue"
 
-        data(){
-            return {
-                window: {
-                    width: 0,
-                    height: 0
-                },
-                page: 1,
-                showMessageErr: false,
-                id: null,
-                noResult:false,
-            }
-        },
-        computed: {
-            ...mapState('favorite', ['loading', 'favorites', 'paginationLoading']),
-        },
-        destroyed() {
-            window.removeEventListener('resize', this.handleResize);
-        },
-        methods: {
-            ...mapActions('favorite', ['getFavorite', 'removeFavorite', 'favoritePagination']),
+import {mapState, mapActions} from "vuex"
 
-            handleResize() {
-                this.window.width = window.innerWidth;
-                this.window.height = window.innerHeight;
-            },
+export default {
+  components: {
+    eHeader,
+    BorderBottom,
+    Loading,
+    FavoriteFill,
+    BuyMsg,
+    VideoADS,
+    CartIcon,
+    ReadingBook,
+    ViewBook,
+    NewIcon,
+    LibraryAudio,
+    Cart,
+    Empty,
+    ReceiptInfo
+  },
+  computed: {
+    ...mapState('setting', ['darkMode', 'isHide']),
+    ...mapState('favorite', ['loading', 'favoritedVideo', 'favoritedBook']),
+    ...mapState('social', ['favorites']),
+    ...mapState('library', ['details']),
+  },
+  data() {
+    return {
+      title: '1109',
+      type: 'post',
+      page: 1,
+      enableScroll: true,
+      confirm: false,
+      id: null,
+      msg: "delete",
+      preview: false,
+      hideDuration: "",
+      showAds: false,
+      videoUrl: "",
+      reading: false,
+      showAudio: false,
+      showCart: false,
+      receiptDetail: {},
+      showReceipt: false
+    }
+  },
+  methods: {
+    ...mapActions('favorite', ['getVideoFavorite', 'getBookFavorite', 'removeFavoriteVideo', 'removeFavoriteBook']),
+    ...mapActions("playVideo", ["stopWatch", "playVideo"]),
+    ...mapActions('cart', ['addCart', 'getCart']),
+    ...mapActions('library', ['getLibraryDetail']),
 
-            onScroll ({target: {scrollTop, clientHeight, scrollHeight}}) {
-                if (scrollTop + clientHeight >= scrollHeight) {
-                    this.page++
-                    if(!this.noResult){
-                        this.favoritePagination(this.page).then(response =>{
-                            if(response.length <=0){
-                                this.noResult = true
-                            }
-                        })
-                    }
-                    
-                } else {
-                    this.pagesLoading = false
-                }
-            },
-            cutString(text, limit){
-                return helper.cutString(text, limit)
-            },
-            kFormatter(num){
-                return helper.kFormatter(num)
-            },
-            courseDetail(name, videoId, order, courseId){
-                this.$router.push({name: name, params: {videoId: videoId, order: order, courseId: courseId}})
-            },
+    changeType(type) {
+      this.enableScroll = true
+      this.type = type
 
-            close(){
-                this.showMessageErr = false
-            },
-            removeFav(id){
-                this.id = id
-                this.showMessageErr = true
-            },
-            lastWatchMark(percentage){
-                return `background: linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214, 214, 214) 0%)`;
-            },
-            deleteFavorite(){
-                this.removeFavorite(this.id).then(() => {
-                    this.showMessageErr = false
-                })
-            }
-        },
+      if (type === 'video') {
+        this.getVideoFavorite({
+          p: this.page,
+        })
+      }
+      if (type === 'book') {
+        this.getBookFavorite({
+          p: this.page,
+        })
+      }
+      if (type === 'post') {
+        this.$store.dispatch("social/getFavorite", {
+          p: this.page,
+        })
+      }
+    },
+    playWhenOver(video) {
+      if (typeof video === "object") {
+        let len = video.length - 1;
+        return video[len]["url"];
+      }
+      return false;
+    },
+    lastWatchVideo(event) {
+      event.id = this.id;
+      this.stopWatch(event);
+    },
+    showInvoice(data) {
+      this.receiptDetail = data
+      this.showReceipt = true
+      this.showCart = false
+    },
+    addToCart(book) {
+      let payload = {}
+      payload.id = book._id
+      this.addCart(payload).then(() => {
+        this.getCart()
+      })
+      this.$store.commit("favorite/addToCart", book._id)
+    },
+    viewVideo(video) {
+      this.id = video._id;
+      this.playVideo(this.id);
+      this.showAds = true;
 
-        created(){
-            window.addEventListener('resize', this.handleResize);
-            this.handleResize();
+      if (video.last_watch) {
+        this.$store.commit('playVideo/setLastWatched', video.last_watch.mark)
+      }
 
-            this.getFavorite()
+      this.$store.commit("playVideo/getVideoUrl", video.video);
+    },
+    close() {
+      this.preview = false
+    },
+    shopNow() {
+      this.preview = false
+      let payload = {}
+      payload.id = this.details._id
 
+      this.addCart(payload).then(() => {
+        this.getCart()
+        this.showCart = true
+
+      })
+    },
+    closeReading() {
+      this.reading = false
+    },
+    listVideo() {
+      this.$router.push('library-video')
+      this.close()
+    },
+    readingBook() {
+      this.reading = true
+      this.showAudio = false
+      this.close()
+    },
+    closeAds() {
+      this.showAds = false;
+    },
+    kFormatter(num) {
+      return helper.kFormatter(num)
+    },
+    cutString(text, limit) {
+      return helper.cutString(text, limit)
+    },
+    getDetail(library) {
+      this.getLibraryDetail({id: library._id}).then(() => {
+        this.preview = true
+      })
+    },
+    hideAndShowDuration(id = "") {
+      this.hideDuration = id;
+    },
+    millisToMinutesAndSeconds(millis) {
+      if (millis !== undefined) {
+        let minutes = Math.floor(millis / 60000);
+        let seconds = ((millis % 60000) / 1000).toFixed(0);
+        return minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+      }
+      return false;
+    },
+    confirmRemoveFavorite(id) {
+      this.confirm = true
+      this.id = id
+    },
+    cancelModal() {
+      this.confirm = false
+    },
+    yes() {
+      if (this.type === `video`) {
+        this.removeFavoriteVideo(this.id).then(() => {
+          this.confirm = false
+        })
+      } else {
+        this.removeFavoriteBook(this.id).then(() => {
+          this.$store.commit('favorite/removeFavoriteBook', this.id)
+          this.confirm = false
+        })
+      }
+
+    },
+    listenAudio() {
+      this.showAudio = false
+      setTimeout(() => {
+        this.showAudio = true
+      }, 100)
+      this.close()
+    },
+    onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
+      if (scrollTop + clientHeight >= scrollHeight) {
+        this.page++
+
+        let payload = {}
+
+        payload.p = this.page
+        payload.paginate = 1
+
+        if (this.enableScroll) {
+          if (this.type === `video`) {
+            this.getVideoFavorite(payload).then(res => {
+              if (res.data.data.length <= 0) {
+                this.enableScroll = false
+              }
+            })
+          } else {
+            this.getBookFavorite(payload).then(res => {
+              if (res.data.data.length <= 0) {
+                this.enableScroll = false
+              }
+            })
+          }
         }
-    }
-</script>
-<style>
-    #feed::-webkit-scrollbar {
-        width: 5px !important;
-    }
-    #feed::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.3) !important;
-    }
+      }
+    },
 
-    #feed::-webkit-scrollbar-thumb {
-        -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0.5) !important;
+  },
+  created() {
+    if (this.type == 'post') {
+      this.$store.commit("favorite/loading", true)
+      this.$store.dispatch('social/getFavorite', {
+        p: this.page
+      }).finally(() => {
+        this.$store.commit("favorite/loading", false)
+      })
+    } else {
+      this.getVideoFavorite({
+        p: this.page,
+      })
     }
-</style>
+  }
+
+
+}
+</script>

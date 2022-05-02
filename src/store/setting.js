@@ -1,40 +1,67 @@
 import config from "./../config"
 import axios from "axios"
-export  default {
+import i18n from "./../i18n"
+
+export default {
     namespaced: true,
     state: {
         provinces: [],
         loadingProvince: false,
         loadingSchool: false,
-        schools: []
+        schools: [],
+        isHide: false,
+        localize: localStorage.getItem('localize') ? localStorage.getItem('localize') : "en",
+        page: 1,
+        darkMode: false,
+        feedWidth: 600,
     },
     mutations: {
-        gettingProvince(state, status){
+        setFeedWidth(state, payload) {
+            state.feedWidth = payload
+        },
+        setDarkMode(state, payload) {
+            state.darkMode = payload
+            localStorage.setItem("darkMode", payload)
+        },
+        setPagination(state, payload) {
+            state.page = payload
+        },
+        toggleSidebar(state, status) {
+            state.isHide = status
+        },
+        setLocalize(state, localize) {
+            localStorage.setItem('localize', localize)
+            state.localize = localize
+            i18n.locale = localize
+
+        },
+        gettingProvince(state, status) {
             state.loadingProvince = status
         },
 
-        getAllProvince(state, province){
+        getAllProvince(state, province) {
             state.provinces = province
         },
-        gettingSchool(state, status){
+        gettingSchool(state, status) {
             state.loadingSchool = status
         },
-        getAllSchool(state, school){
+        getAllSchool(state, school) {
             state.schools = school
         },
     },
     actions: {
-        getProvinces({commit}){
+        getProvinces({commit}) {
             if (localStorage.getItem('provinces')) {
                 commit("getAllProvince", JSON.parse(localStorage.getItem('provinces')))
             } else {
                 commit("gettingProvince", true)
                 return new Promise((resolve, reject) => {
                     axios.get(config.apiUrl + 'province').then(response => {
+                        resolve(response)
                         commit("gettingProvince", false)
                         commit("getAllProvince", response.data.data)
                         localStorage.setItem('provinces', JSON.stringify(response.data.data))
-                        resolve(response.data)
+
                     }).catch(err => {
                         commit("gettingProvince", false)
                         reject(err)
@@ -42,10 +69,10 @@ export  default {
                 })
             }
         },
-        getSchool({commit}, province_id){
+        getSchool({commit}, province_id) {
             commit("gettingSchool", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + `province/school?province_id=${province_id }`).then(response => {
+                axios.get(config.apiUrl + `province/school?province_id=${province_id}`).then(response => {
                     setTimeout(() => {
                         commit("gettingSchool", false)
                     }, 1000)
@@ -57,10 +84,19 @@ export  default {
                 })
             })
         },
-        companyInfo(){
+        companyInfo() {
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'company/info').then(response => {
+                axios.get(config.apiUrl + 'company/about').then(response => {
                     resolve(response.data.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        checkForUpdate({commit}) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.checkingVersionUrl + `update`).then(res => {
+                    resolve(res)
                 }).catch(err => {
                     reject(err)
                 })

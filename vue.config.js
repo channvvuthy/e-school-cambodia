@@ -1,5 +1,5 @@
 module.exports = {
-    lintOnSave: true,
+    lintOnSave: false,
     devServer: {
         proxy: 'http://localhost:8080'
     },
@@ -9,13 +9,24 @@ module.exports = {
             builderOptions: {
                 "appId": "com.e-school-cambodia.com",
                 "productName": "E-SCHOOL",
-                "copyright":"Copyright ©2021 E-School Cambodia",
-                "publish":{
-                    "provider":"github",
-                    "owner":"channvuthy271",
-                    "host":"github.com",
-                    "protocol":"https",
-                   "releaseType":"release",
+                "protocols": {
+                    "name": "e-school-protocol",
+                    "schemes": [
+                        "eschool"
+                    ]
+                },
+                "copyright": "Copyright ©2021 E-School Cambodia",
+                "publish": {
+                    "provider": "github",
+                    "owner": "channvuthy271",
+                    "host": "github.com",
+                    "protocol": "https",
+                    "releaseType": "release",
+                },
+                "mac": {
+                    "category": "public.app-category.education",
+                    "target": ["pkg", "dmg"],
+                    "icon": "build/icons/icon.icns",
                 },
                 "win": {
                     "target": [
@@ -27,7 +38,7 @@ module.exports = {
                             ]
                         }
                     ],
-                    "icon":"build/icons/icon.ico"
+                    "icon": "build/icons/icon.ico"
                 },
                 "linux":{
                     "target":"deb"

@@ -5,14 +5,14 @@
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded overflow-hidden shadow-xl transform transition-all  sm:align-middle"
+            <div class="inline-block align-bottom bg-white rounded-2xl overflow-hidden shadow-xl transform transition-all  sm:align-middle"
                  :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="bg-white">
                     <div class="flex justify-center items-center">
                         <div class="text-center">
                             <div class="mt-2 py-3 px-3">
-                                <p class="text-sm text-black text-sm font-khmer_os">
-                                    {{message}}
+                                <p class="text-base text-black  font-khmer_os">
+                                    {{$t(message)}}
                                 </p>
                             </div>
                         </div>
@@ -21,8 +21,8 @@
                 <hr>
                 <div class="flex justify-center items-center font-khmer_os py-3">
                     <button type="button" @click="closeErr"
-                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        បាទ/ចាស់
+                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto">
+                        {{$t('1008')}}
                     </button>
                 </div>
             </div>
@@ -35,7 +35,6 @@
         name: "ErrMessage",
         props: {
             message: {
-                type: String,
                 default: () => {
                     return "លេខទូរស័ព្ទមិនត្រឹមត្រូវ"
                 }

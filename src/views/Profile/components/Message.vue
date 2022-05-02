@@ -1,44 +1,36 @@
 <template>
-    <div class="fixed z-50 inset-0 overflow-y-auto">
-        <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform transition-all  sm:align-middle"
-                 :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                <div class="bg-white">
+    <div class="fixed z-50  overflow-y-auto flex items-center justify-center w-full h-full bg-black bg-opacity-90 top-0 left-0">
+            <div class="rounded-xl overflow-hidden shadow-xl" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                <div>
                     <div class="flex justify-center items-center">
-                        <div class="text-center mt-0 mx-4 ">
+                        <div class="text-center mt-0 mx-4 px-3">
                             <div class="mt-2 py-4">
-                                <p class="text-sm text-black text-sm font-khmer_os">
-                                    {{ message }}
+                                <p class="text-sm text-sm font-khmer_siemreab">
+                                    {{ $t(message) }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="sm:flex sm:flex-row text-sm font-khmer_os h-10 justify-center items-center">
+                <div class="w-full h-1 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                <div class="flex flex-row text-sm  h-10 justify-center items-center">
                     <button type="button" @click="closeMessage"
                             v-if="!hide"
                             class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        <span v-if="gender === 'M'">បាទ</span>
-                        <span v-if="gender === 'F'">ចាស</span>
+                       <span :class="darkMode?`text-white`:`text-youtube`">{{$t('1010')}}</span>
                     </button>
                 </div>
             </div>
-        </div>
     </div>
 </template>
 
 <script>
     import helper from "./../../../helper/helper"
+    import {mapState} from "vuex"
     export default{
         name: "ForgotPassword",
         props: {
             message: {
-                type: String,
                 default: () => {
                     return 'សូមធ្វើការទិញថ្នាក់នេះជាមុនសិន'
                 }
@@ -57,6 +49,7 @@
             },
         },
         computed: {
+            ...mapState('setting', ['darkMode']),
             gender(){
                 return helper.gender()
             }

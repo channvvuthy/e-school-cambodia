@@ -1,75 +1,81 @@
 <template>
-    <div class="flex justify-center items-center min-h-screen bg-blue-50">
-        <div class="flex-col rounded w-96 p-6 shadow-lg bg-white">
-            <img src="/e-school-logo.png" class="m-auto w-20 mb-8"/>
-            <div class="font-khmer_os text-sm mb-5  p-0 flex justify-center items-center">
-                <div class="px-0 cursor-pointer" @click="switchTap('login')">
-                    <p :class="tap=='login'?'text-blue-700':''">ចូលគណនី</p>
-                </div>
-                <div class="flex justify-center items-center w-10">
-                    <div class="border -2 border-t-0 border-b-0 border-l-0 border-gray-300 h-5">
+    <div class="flex flex-col justify-between h-screen" :class="darkMode?`bg-youtube`:`bg-white`">
+        <div class="flex justify-center items-center h-full flex-1">
+            <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:`bg-white`">
+                <div class="flex flex-col justify-center items-center">
+                    <div class="border border-primary w-20 h-20 leading-20 flex justify-center items-center rounded-full bg-white">
+                        <img src="/e-school-logo.png" class="w-12"/>
                     </div>
                 </div>
-                <div @click="switchTap('create')" class="cursor-pointer">
-                    <p :class="tap=='create'?'text-blue-700':''">បង្កើតគណនីថ្មី</p>
-                </div>
-            </div>
-            <div v-if="tap == 'login'">
-                <form class="flex-col text-sm font-khmer_os" v-if="tap == 'login'">
-                    <div class="relative">
-                        <span class="absolute l-0 buttom-0 mt-2 text-sm font-medium text-gray-500 ">+855</span>
-                        <input type="text" placeholder="លេខទូរស័ព្ទ" v-model="auth.phone" @keypress="isNumber($event)"
-                               class="p-2 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4 pl-10"/>
-                        <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
-                    </div>
-                    <div class="relative">
-                        <input type="password" placeholder="លេខសម្ងាត់" autocomplete="off" v-model="auth.password"
-                               v-on:keyup.enter="studentLogin"
-                               class="p-2 px-0 border border-solid border-1 border-light-blue-500 w-full focus:outline-none border-t-0 border-r-0 border-l-0 mb-4"/>
-                        <span class="absolute r-0 buttom-0 mt-2 text-red-700 text-lg">*</span>
-                    </div>
-                    <div class="text-right text-blue-700 cursor-pointer mb-4 mt-1" @click="showForgotPassword()">
-                        ភ្លេចពាក្យសម្ងាត់
-                    </div>
-                </form>
+                <div class="mt-10">
+                    <form class="flex-col text-sm font-khmer_os" v-if="tap == 'login'">
+                        <div class="relative">
+                            <span class="absolute mt-2 text-sm font-medium opacity-30" :class="darkMode?`left-2`:`left-0`">
+                                <PhoneIcon :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
+                            </span>
+                            <input type="text" :placeholder="$t('2009')" v-model="auth.phone" @keypress="isNumber($event)" ref="phone"
+                            :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-borderGray`" 
+                            class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
+                        </div>
+                        <div class="h-5"></div>
+                        <div class="relative">
+                            <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
+                                <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                            </span>
+                            <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="auth.password"
+                                v-on:keyup.enter="studentLogin"
+                                ref="password"
+                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border-borderGray`" 
+                                class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
+                        </div>
+                        <div class="h-3"></div>
+                        <div class="text-right cursor-pointer mb-4" @click="goTo('forgot-password')" :class="darkMode?`text-white`:`text-gray-500 `">
+                            {{$t('2011')}}?
+                        </div>
+                        <div class="h-3"></div>
+                    </form>
 
-                <div class="p-3 text-center flex justify-center items-center text-white rounded w-full text-sm outline-none text-sm cursor-pointer font-khmer_os hover:bg-blue-800"
-                     @click="studentLogin" :class="loginLoading?'bg-blue-400':'bg-blue-700'">
-                    <div class="pl-2">
-                        <span v-if="!loginLoading">ចូលគណនី</span>
-                        <span v-else>កុំពុងដំណើការ &nbsp;<Loader :size="10"/></span>
+                    <button class="relative focus:outline-none h-11 p-3 text-center flex justify-center items-center text-white rounded-lg w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                        :class="darkMode?`bg-button`:`bg-primary`"
+                        @click="studentLogin" :disabled="loginLoading">
+                        <div class="pl-2" >
+                            <span v-if="!loginLoading">{{$t('2007')}}</span>
+                            <div class="absolute flex justify-center items-center -top-2" v-else>
+                                <div class="loader"></div>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="h-10"></div>
+                    <div class="flex justify-end text-sm">
+                        <div class="mr-3" :class="darkMode?`text-white`:`text-gray-500`">{{$t('2012')}}</div>
+                        <div class="underline cursor-pointer" @click="goTo('register')" :class="darkMode?`text-white`:`text-primary`" >{{$t('2008')}}</div>
                     </div>
                 </div>
             </div>
-            <Create v-if="tap == 'create'" @registerSuccess="registerSuccess"></Create>
+            <template>
+                <Message v-if="errorMessage" :message="errorMessage" @closeMessage="closeMessage"></Message>
+            </template>
         </div>
-
-        <template>
-            <ForgotPassword v-if="forgotPassword" @cancel="cancel()" v-on:agree="agree($event)"
-                            @changePasswordSuccess="changePasswordSuccess"></ForgotPassword>
-        </template>
-        <template>
-            <Message v-if="errorMessage" :message="errorMessage" @closeMessage="closeMessage"></Message>
-        </template>
+        <img src="e-footer.png" class="w-full" v-if="!darkMode">
     </div>
 </template>
 
 <script>
-    import Create from "./Create";
-    import ForgotPassword from "./ForgotPassword"
     import Loader from "./../../components/Loader"
     import Message from "./components/Message"
     import helper from "./../../helper/helper"
     import {mapActions, mapState} from "vuex"
     import config from "./../../config"
     import studentProfileData from "./../../data/student"
+    import PhoneIcon from "./../../components/PhoneIcon.vue"
+    import LockIcon from "./../../components/LockIcon.vue"
 
     export default{
         components: {
-            Create,
-            ForgotPassword,
             Loader,
-            Message
+            PhoneIcon,
+            Message,
+            LockIcon
         },
         data(){
             return {
@@ -89,27 +95,14 @@
 
         computed: {
             ...mapState('auth', ['loginLoading']),
+            ...mapState('setting', ['darkMode']),
         },
         methods: {
             ...mapActions('auth', ['login', 'getStudentProfile', 'getToken']),
 
-            registerSuccess(){
-                this.tap = "login"
-            },
-
             changePasswordSuccess(){
                 this.forgotPassword = false
             },
-
-            switchTap(tap){
-                this.tap = tap;
-            },
-
-            showForgotPassword(){
-                this.auth.password = null
-                this.forgotPassword = true;
-            },
-
             cancel(){
                 this.forgotPassword = false;
             },
@@ -125,7 +118,9 @@
             isNumber(evt){
                 return helper.isNumber(evt)
             },
-
+            goTo(page){
+                this.$router.push({name: page})
+            },
             studentLogin(){
                 if (this.loginLoading) {
                     return
@@ -133,17 +128,13 @@
 
                 if (this.auth.phone && this.auth.password) {
                     this.login(this.auth).then(response => {
-
                         if (response.data.status !== 0) {
-                            this.errorMessage = response.data.msg;
+                            helper.errorMessage(response.data.msg)
                             return;
                         }
-
                         let data = response.data.data;
-
                         localStorage.setItem('token', data.token);
-                        let stProfile = studentProfileData
-
+                        let stProfile = studentProfileData.studentProfileData
                         stProfile._id = data._id
                         stProfile.first_name = data.first_name
                         stProfile.gender = data.gender
@@ -154,6 +145,7 @@
                         stProfile.my_cart = data.my_cart ? data.my_cart : ""
                         stProfile.phone = data.phone ? data.phone : ""
                         stProfile.photo = data.photo ? data.photo : ""
+                        stProfile.photo_cover = data.photo_cover ? data.photo_cover : ""
 
                         if (data.province) {
                             stProfile.province = data.province
@@ -171,27 +163,36 @@
                                 name: "E-School"
                             }
                         }
-
                         localStorage.setItem('stProfile', JSON.stringify(stProfile));
-
                         this.getStudentProfile(stProfile)
                         this.getToken(data.token)
+                        this.$store.commit('auth/receivingToken', data.token)
+                        this.$store.commit("setting/toggleSidebar", false)
                         this.$router.push({
                             name: "home"
                         })
+                    }).catch(err=>{
+                        helper.errorMessage(err.response.data.msg)
                     });
 
                     return;
                 }
 
                 if (!this.auth.phone) {
-                    this.errorMessage = "សូមបញ្ចូលលេខទូរស័ព្ទ";
+                    helper.errorMessage('please_enter_phone_number')
+                    this.$refs.phone.focus()
+                    return;
                 }
 
                 if (!this.auth.password) {
-                    this.errorMessage = "សូមបញ្ចូលពាក្យសម្ងាត់";
+                    helper.errorMessage('please_enter_password')
+                    this.$refs.password.focus()
+
                 }
             }
+        },
+        mounted(){
+            this.$refs.phone.focus()
         }
     }
 </script>

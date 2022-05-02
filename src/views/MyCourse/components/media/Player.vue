@@ -550,7 +550,7 @@
         },
     }
 </script>
-<style>
+<style scoped>
     /*, #volumeSlider*/
     .seekSlider, #volumeSlider {
         -webkit-appearance: none;
@@ -564,7 +564,7 @@
 
     #volumeSlider {
         height: 3px;
-        background: #ffffff;
+        background: #979797;
         box-shadow: none;
     }
 

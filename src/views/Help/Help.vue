@@ -1,32 +1,38 @@
 <template>
-    <div class="bg-white h-screen  p-5 font-khmer_os">
-        <div v-if="loadingHelp" class="flex justify-center items-center h-screen relative -top-5">
-            <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
-                <loading></loading>
-            </h1>
-        </div>
-        <div v-else>
-            <div class="grid grid-cols-4 gap-4 font-khmer_os text-sm">
-                <div class="cursor-pointer" v-for="(h,key) in help" :key="key" @click="getHelpDetail(h)">
-                    <img :src="h.thumbnail" alt="">
-                    <div class="mt-2">{{h.title}}</div>
+   <div>
+        <div class="h-screen overflow-y-scroll pb-40  p-5 font-siemreap" :class="darkMode?`bg-youtube text-gray-300`:`bg-transparent`">
+            <div v-if="loadingHelp" class="flex justify-center items-center h-screen relative -top-5">
+                <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
+                    <loading></loading>
+                </h1>
+            </div>
+            <div v-else>
+                <div class="grid md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4 text-sm">
+                    <div class="cursor-pointer" v-for="(h,key) in help" :key="key" @click="getHelpDetail(h)">
+                       <div :class="darkMode?`bg-secondary`:`bg-white shadow-lg`" class="rounded-lg overflow-hidden">
+                            <img :src="h.thumbnail">
+                            <div class="p-4">{{h.title}}</div>
+                       </div>
+                    </div>
                 </div>
             </div>
+            <Detail v-if="showDetail" @closeAds="closeDetail" :youTubeId="youTubeId" :title="title"></Detail>
         </div>
-        <Detail v-if="showDetail" @closeDetail="closeDetail" :youTubeId="youTubeId" :title="title"></Detail>
-    </div>
+   </div>
 </template>
 
 <script>
     import {mapActions, mapState} from "vuex"
-    import Detail from "./components/Detail"
+    import Detail from "./components/Detail.vue"
     import Loading from "./../../components/Loading"
+    import eHeader from "./../Video/components/Header.vue"
     const {ipcRenderer} = require('electron')
     export default{
         name: "Help",
         components: {
             Detail,
-            Loading
+            Loading,
+            eHeader
         },
         data(){
             return {
@@ -37,7 +43,8 @@
             }
         },
         computed: {
-            ...mapState('help', ['help', 'loadingHelp'])
+            ...mapState('help', ['help', 'loadingHelp']),
+            ...mapState('setting', ['darkMode'])
         },
 
         methods: {
@@ -46,9 +53,9 @@
                 this.showDetail = false
             },
             getHelpDetail(help){
+                this.$store.commit("playVideo/getVideoUrl", help.video);
                 this.title = help.title
                 this.youTubeId = help.youtube_url
-                ipcRenderer.send('youtubeVideo', help.youtube_url)
                 this.showDetail = true
             }
         },

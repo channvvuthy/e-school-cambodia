@@ -1,45 +1,40 @@
 <template>
-    <div class="fixed inset-0 overflow-y-auto" style="z-index: 52">
+    <div class="fixed inset-0 overflow-y-auto bg-black top-0 left-0 w-full h-full bg-opacity-90" style="z-index: 58">
         <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform transition-all  sm:align-middle"
-                 :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                <div class="bg-white">
+            <div class="inline-block align-bottom  rounded-xl text-left overflow-hidden shadow-xl transform transition-all  sm:align-middle"
+                 :class="`w-${size} ${darkMode?`bg-secondary text-gray-300`:`bg-white`}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+                <div>
                     <div class="flex justify-center items-center">
                         <div class="mt-2 py-2 w-60">
-                            <div class="border border-gray-200 border-t-0 border-l-0 border-r-0 flex justify-center items-center">
-                                <p class="text-sm text-black text-sm font-khmer_os mb-3">
+                            <div class="border-b flex justify-center items-center" :class="darkMode?`border-button`:`border-gray-300`">
+                                <p class="text-sm text-sm font-khmer_os mb-3">
                                     {{ message }}
                                 </p>
                             </div>
-                            <ul class="list-none font-khmer_os text-blue-700">
-                                <li class="border border-t-0 py-2 border-l-0 border-r-0 border-gray-200 text-center cursor-pointer hover:bg-gray-50"
-                                    @click="chooseDuration(1)" :class="duration === 1?'text-red-500':'text-black'">1 ខែ
+                            <ul class="list-none font-khmer_os">
+                                <li class="border-b py-2 text-center cursor-pointer"
+                                    @click="chooseDuration(1)" :class="duration === 1?`text-red-500 ${darkMode?`border-button`:`border-gray-300`}`:`${darkMode?`border-button`:`border-gray-300`}`">1 ខែ
                                 </li>
-                                <li class="border border-t-0 py-2 border-l-0 border-r-0 border-gray-200 text-center cursor-pointer hover:bg-gray-50"
-                                    @click="chooseDuration(2)" :class="duration === 2?'text-red-500':'text-black'">2 ខែ
+                                <li class="border-b  py-2 text-center cursor-pointer"
+                                    @click="chooseDuration(2)" :class="duration === 2?`text-red-500 ${darkMode?`border-button`:`border-gray-300`}`:`${darkMode?`border-button`:`border-gray-300`}`">2 ខែ
                                 </li>
-                                <li class="border border-t-0 py-2 border-l-0 border-r-0 border-gray-200 text-center cursor-pointer hover:bg-gray-50"
-                                    @click="chooseDuration(3)" :class="duration === 3?'text-red-500':'text-black'">3 ខែ
+                                <li class="border-b py-2 text-center cursor-pointer"
+                                    @click="chooseDuration(3)" :class="duration === 3?`text-red-500 ${darkMode?`border-button`:`border-gray-300`}`:`${darkMode?`border-button`:`border-gray-300`}`">3 ខែ
                                 </li>
-                                <li class="border border-t-0 py-2 border-l-0 border-r-0 border-gray-200 text-center cursor-pointer hover:bg-gray-50"
-                                    @click="chooseDuration(6)" :class="duration === 6?'text-red-500':'text-black'">6 ខែ
+                                <li class="border-b py-2 text-center cursor-pointer"
+                                    @click="chooseDuration(6)" :class="duration === 6?`text-red-500 ${darkMode?`border-button`:`border-gray-300`}`:`${darkMode?`border-button`:`border-gray-300`}`">6 ខែ
                                 </li>
-                                <li class="py-1 text-center cursor-pointer hover:bg-gray-50"
-                                    @click="chooseDuration(12)" :class="duration === 12?'text-red-500':'text-black'">1 ឆ្នាំ
+                                <li class="border-b py-1 text-center cursor-pointer"
+                                    @click="chooseDuration(12)" :class="duration === 12?`text-red-500 ${darkMode?`border-button`:`border-gray-300`}`:` ${darkMode?`border-button`:`border-gray-300`}`">1 ឆ្នាំ
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="sm:flex sm:flex-row text-sm font-khmer_os py-3 justify-center items-center">
+                <div class="sm:flex sm:flex-row font-khmer_os py-2 justify-center items-center">
                     <button type="button" @click="closeDuration"
-                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                            class="w-full inline-flex justify-center px-4 text-base">
                         បោះបង់
                     </button>
                 </div>
@@ -49,6 +44,7 @@
 </template>
 
 <script>
+    import {mapState} from "vuex"
     export default{
         name: "ChooseDuration",
         props: {
@@ -70,6 +66,9 @@
                     return 12
                 }
             }
+        },
+        computed:{
+            ...mapState('setting', ['darkMode'])
         },
         methods: {
             closeDuration($event){

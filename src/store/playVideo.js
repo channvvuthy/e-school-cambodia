@@ -1,70 +1,76 @@
-import axios from "axios"
-import config from "./../config"
+import axios from "axios";
+import config from "./../config";
+
 export default {
     namespaced: true,
     state: {
-        video: [],
-        loadingVideo: false,
-        stop_watch: 0,
-        loadingNextVideo: false,
+        videoUrl: "",
+        defaultVolumeRange: 100,
+        stopWatch: false,
+        videoPlay: "",
+        lastWatched: 0,
+        pdf: "",
+        isDownload: "",
+        downloadLocation: ""
+
     },
 
     mutations: {
-        loadingPlay(state, status){
-            state.loadingVideo = status
+        downloadLocation(state, payload) {
+            state.downloadLocation = payload
         },
-        stopWatching(){
+        isDownload(state, payload) {
+            state.isDownload = payload
+        },
+        getPdf(state, payload) {
+            state.pdf = payload
+        },
+        setLastWatched(state, payload) {
+            state.lastWatched = payload
+        },
+        setDefaultVolumeRange(state, payload) {
+            state.defaultVolumeRange = payload
+        },
+        getVideoUrl(state, payload) {
+            state.videoUrl = payload
+        },
+        stopWatch(state, payload) {
+            state.stopWatch = payload
+        },
+        playVideo(state, payload) {
+            state.videoPlay = payload
+        },
 
-        },
-
-        getVideoFromLink(state, video){
-            state.video = video.streamingData
-        },
-
-        setUserLastWatch(state, stop_watch){
-            state.stop_watch = stop_watch
-        },
-        NextVideo(state, status){
-            state.loadingNextVideo = status
-        }
 
     },
 
     actions: {
-        gettingNextVideo({commit}, status){
-            commit("NextVideo", status)
+        stopWatch({
+                      commit
+                  }, payload) {
+            let qs = Object.keys(payload)
+                .map(key => `${key}=${payload[key]}`)
+                .join('&');
+            axios.get(config.apiUrl + `video/stop?${qs}`).then(() => {
+                commit("stopWatch", true)
+            })
         },
-        setLastWatch({commit}, lastWatch){
-            commit("setUserLastWatch", lastWatch)
-        },
-        getVideoLink({commit, dispatch}, ytId){
-            commit("loadingPlay", true)
-            return new Promise((resolve, reject) => {
-                axios.get(config.videoApi + ytId).then(response => {
-                    commit("loadingPlay", false)
-                    dispatch("getVideoSuccess", response.data)
-                    let jsonOffset = response.data.indexOf('{');
-                    let result = response.data.substring(jsonOffset);
-                    let videos = JSON.parse(result)
-
-                    resolve(videos.player_response.streamingData.formats)
-
-                }).catch((error) => {
-                    commit("loadingPlay", false)
-                    reject(error)
-                })
+        playVideo({
+                      commit
+                  }, payload) {
+            axios.get(config.apiUrl + `video/play?id=${payload}`).then(() => {
+                commit("playVideo", payload)
             })
         },
 
-        getVideoSuccess({commit}, video){
-            commit("getVideoFromLink", video)
-        },
-        stopWatch({commit}, params){
-
-            commit("stopWatching")
+        getPdf({commit}, payload) {
+            let qs = Object.keys(payload)
+                .map(key => `${key}=${payload[key]}`)
+                .join('&');
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + '/lesson/stop_watch?lesson_id=' + params.lesson_id + "&mark=" + parseInt(params.mark) + "&duration=" + params.duration).then(response => {
+                axios.get(config.apiUrl + `video/pdf?${qs}`).then(response => {
                     resolve(response)
+                    commit("getPdf", response.data.data)
                 }).catch(err => {
                     reject(err)
                 })

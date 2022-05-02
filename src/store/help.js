@@ -12,25 +12,25 @@ export default {
 
     },
     mutations: {
-        receivingYouTube(state, youtube_url){
+        receivingYouTube(state, youtube_url) {
             state.youtube_url = youtube_url
         },
-        loadingHelp(state, status){
+        loadingHelp(state, status) {
             state.loadingHelp = status
         },
-        receivingHelp(state, other){
+        receivingHelp(state, other) {
             state.help = other
         },
-        gettingHelpDetail(state, status){
+        gettingHelpDetail(state, status) {
             state.loadingHelpDetail = status
         }
     },
 
     actions: {
-        getHelp({commit}){
+        getHelp({commit}) {
             commit("loadingHelp", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + "introduction").then(response => {
+                axios.get(config.apiUrl + "company/help").then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -42,24 +42,6 @@ export default {
                     resolve(response)
                 }).catch(err => {
                     commit("loadingHelp", false)
-                    reject(err)
-                })
-            })
-        },
-        helpDetail({commit}, youtube_url){
-            commit("gettingHelpDetail", true)
-            return new Promise((resolve, reject) => {
-                axios.get(config.videoApi + youtube_url).then(response => {
-
-                    if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
-                    }
-
-                    commit("gettingHelpDetail", false)
-                    commit("receivingYouTube", response.data)
-                    resolve(response)
-                }).catch(err => {
-                    commit("gettingHelpDetail", false)
                     reject(err)
                 })
             })

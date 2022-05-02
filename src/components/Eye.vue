@@ -1,21 +1,30 @@
 <template>
-    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="eye" role="img"
-         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" class="svg-inline--fa fa-eye fa-w-18">
-        <path fill="currentColor"
-              d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"
-              class=""></path>
-    </svg>
+  <svg id="Editable-line" viewBox="0 0 32 32" xml:space="preserve"
+       :height="size"
+       xmlns="http://www.w3.org/2000/svg">
+  <path d="  M16,7C9.934,7,4.798,10.776,3,16c1.798,5.224,6.934,9,13,9s11.202-3.776,13-9C27.202,10.776,22.066,7,16,7z"
+        fill="none" id="XMLID_10_" :stroke="fill" stroke-linecap="round" stroke-linejoin="round"
+        stroke-miterlimit="10" stroke-width="1"/>
+    <circle cx="16" cy="16" fill="none" id="XMLID_12_" r="5" :stroke="fill" stroke-linecap="round"
+            stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1"/>
+</svg>
+
 </template>
 
 <script>
-    export default{
-        name: "Eye"
+export default {
+  name: "Eye",
+  props: {
+    size: {
+      default: () => {
+        return 25
+      }
+    },
+    fill: {
+      default: () => {
+        return "#4A4A4A"
+      }
     }
+  }
+}
 </script>
-
-<style scoped>
-    svg {
-        width: 15px;
-        display: inline;
-    }
-</style>

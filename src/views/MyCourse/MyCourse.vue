@@ -1,199 +1,270 @@
 <template>
-    <div class="my-course font-khmer_os text-14px">
-        <div class="flex items-center p-5">
-            <div class="cursor-pointer rounded-full border border-gray-200 hover:bg-gray-200 px-3 py-1 flex justify-center items-center mr-5"
-                 :class="active ==1?'bg-gray-300':'bg-gray-100 '"
-                 @click="courseFilter(1)">
-                <h2>វីដេអូ</h2>
-            </div>
-            <div class="cursor-pointer rounded-full border border-gray-200 hover:bg-gray-200 px-3 py-1 flex justify-center items-center"
-                 :class="active ==2?'bg-gray-300':'bg-gray-100 '"
-                 @click="courseFilter(2)">
-                <span>សៀវភៅ</span>
-            </div>
+  <div class="my-course font-siemreap">
+    <div class="px-5 mt-5 h-screen overflow-y-scroll pb-40" @scroll="onScroll">
+      <div v-if="loadingCourse " class="flex justify-center items-center h-screen relative -top-5">
+        <h1 class="text-sm font-semibold font-khmer_os relative -top-32">
+          <loading></loading>
+        </h1>
+      </div>
+      <div class="flex justify-center items-center  h-screen pb-40" v-if="!isEmpty(myCourses.list)">
+        <div class="text-center relative">
+          <Empty></Empty>
         </div>
-        <div class="px-5">
-            <div v-if="loadingCourse " class="flex justify-center items-center h-screen relative -top-5">
-                <h1 class="text-sm font-semibold font-khmer_os relative -top-32">
-                    <loading></loading>
-                </h1>
+      </div>
+      <div class="mb-5" v-if="myCourses.package && myCourses.package.length">
+        <Pkg :packages="myCourses.package"></Pkg>
+      </div>
+      <div class="grid gap-4" :class="isHide?`md:grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-4`">
+        <div v-for="(video, index) in myCourses.list" :key="index">
+          <div class="relative rounded-xl cursor-pointer my-course-view"
+               :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
+               :style="minHeight?{minHeight:`${minHeight}px`}:{}">
+            <div class="absolute left-3 top-3" v-if="video.is_new">
+              <NewIcon></NewIcon>
             </div>
-            <div class="flex justify-center items-center  h-screen" v-if="!myCourses.length">
-                <div class="text-center relative -top-40">
-                    <img src="/icon/Empty/Empty.svg" class="w-64  mb-5"/>
+            <div class="absolute top-3 left-3">
+              <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
+                   :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
+                <span>✓</span>
+              </div>
+            </div>
+            <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-xl m-auto"
+                 onerror="this.onerror=null; this.src='/poster.png'"/>
+            <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1"
+                 :style="{width:`${video.last_watch.percentage}%`}"></div>
+            <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
+              <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
+                <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover"
+                     :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
+                <div class="text-sm font-semibold mt-4">{{ video.teacher.name }} ({{
+                    cutString(video.title, 30)
+                  }})
                 </div>
-            </div>
-            <div class="overflow-y-scroll max-h-screen pb-96">
-                <div class="grid gap-4" v-if="!loadingCourse"
-                     :class="active ==1?'grid-cols-4':'grid-cols-6'">
-                    <template v-if="active === 1">
-                        <div class="flex-col mb-5 cursor-pointer relative" v-for="(video, key) in myCourses" :key="key"
-                             @click="goToPlayList(video)">
-                            <div class="relative" :id="video._id">
-                                <img :src="video.thumbnail" class="w-full">
-                                <input type="range" min="0" max="100" value="100" step="1"
-                                       class="w-full percentage cursor-default absolute bottom-0 left-0"
-                                       v-if="video.last_watch"
-                                       :style="lastWatchMark(video.last_watch.percentage)">
-                                <div class="absolute flex justify-start items-center font-khmer_os left-0  bg-white w-full bg-opacity-60 h-8 bottom-3">
-                                    <img :src="video.teacher.photo" alt="teacher"
-                                         class="rounded rounded-full h-10 shadow ml-3">
-                                    <span class="text-14px ml-2">{{video.teacher.name}}</span>
-                                </div>
-                            </div>
-                            <div class="font-khmer_os text-14px mt-3 font-semibold text-gray-700"
-                                 v-html="cutString(video.title, window.width <= 1366?30:45)"></div>
-                            <div class="flex">
-                                <div class="mt text-14px text-gray-500">
-                                    <span class="font-khmer_os">{{formatDate(video.deadline)}}</span></div>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-if="active === 2">
-                        <div class="flex-col mb-5 cursor-pointer relative shadow justify-center text-center pb-2"
-                             v-for="(video, key) in myCourses" :key="key"
-                             @click="viewBook(video)">
-                            <div>
-                                <img :src="video.thumbnail" class="m-auto w-full"/>
-                            </div>
-                            <div class="flex justify-center items-centers ">
-                                <div class="mt text-14px text-gray-500 mt-2 align-bottom">
-                                    <span class="font-khmer_os  text-14px align-bottom">ផុត {{formatDate(video.deadline)}}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
+                <div class="flex items-end w-full justify-between mt-4 text-center text-sm">
+                  <div class="cursor-pointer">
+                    <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
+                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                      {{ video.total_video ? video.total_video : 0 }}
+                    </div>
+                  </div>
+                  <div class="cursor-pointer">
+                    <PdfIcon :fill="darkMode?`#909090`:`#000000`"></PdfIcon>
+                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                      {{ video.total_pdf ? video.total_pdf : 0 }}
+                    </div>
+                  </div>
+                  <div class="cursor-pointer">
+                    <ChatIcon :fill="darkMode?`#909090`:`#000000`"></ChatIcon>
+                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                         :class="darkMode?`text-skyBlue`:`text-primary`">
+                      {{ video.has_support ? $t('1008') : $t('1009') }}
+                    </div>
+                  </div>
+                  <div class="cursor-pointer">
+                    <TestIcon :fill="darkMode?`#909090`:`#000000`"></TestIcon>
+                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                         :class="darkMode?`text-skyBlue`:`text-primary`">
+                      {{ video.has_quiz ? $t('1008') : $t('1009') }}
+                    </div>
+                  </div>
+                  <div class="cursor-pointer">
+                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon>
+                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                         :class="darkMode?`text-skyBlue`:`text-primary`">
+                      {{ video.has_certificate ? $t('1008') : $t('1009') }}
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <div class="mt-5 border-t w-full h-1" :class="darkMode?`border-button`:`border-gray-300`"></div>
+              <div class="flex justify-between items-center w-full relative top-5">
+                <div class="text-sm">{{ $t('date_expired') }} : <span>{{ formatDate(video.deadline) }}</span></div>
+                <div @click="addToCart(video)">
+                  <CartIcon :fill="darkMode?`#909090`:`#000000`" v-if="!video.is_in_cart"></CartIcon>
+                </div>
+              </div>
+
             </div>
+          </div>
         </div>
-        <ViewBook v-if="showView" :view="bookDetail" @closeView="closeView" :loading="loading" @read="read"></ViewBook>
-        <ReadingBook v-if="showReading" :books="bookReading" @closeReading="closeReading"></ReadingBook>
+      </div>
     </div>
+    <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice($event)"></Cart>
+    <!-- Receipt info -->
+    <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail"
+                 @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
+  </div>
 </template>
 
 <script>
-    import {mapState, mapActions} from "vuex"
-    import helper from "./../../helper/helper"
-    import moment from "moment"
-    import ViewBook from "./components/View"
-    import ReadingBook from "./../Book/components/Read"
-    import Loading from "./../../components/Loading"
+import {mapState, mapActions} from "vuex"
+import helper from "./../../helper/helper"
+import moment from "moment"
+import Loading from "./../../components/Loading"
+import eHeader from "./../Video/components/Header.vue"
+import CertificateIcon from "./../../components/CertificateIcon.vue"
+import TestIcon from "./../../components/TestIcon.vue"
+import PdfIcon from "./../../components/PdfIcon.vue"
+import ChatIcon from "./../../components/ChatIcon.vue"
+import CartIcon from "./../../components/CartIcon.vue"
+import YoutubeIcon from "./../../components/YoutubeIcon.vue"
+import NewIcon from "./../../components/NewIcon.vue"
+import Cart from "./../Component/Cart.vue"
+import Empty from "./../Component/Empty.vue"
+import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
+import Pkg from "@/views/MyCourse/Pkg";
 
-    export default{
-        name: "MyCourse",
-        components: {
-            ViewBook,
-            ReadingBook,
-            Loading
-        },
-        data(){
-            return {
-                window: {
-                    width: 0,
-                    height: 0
-                },
-                active: 1,
-                showView: false,
-                showReading: false,
-                loading: false,
-                bookReading: "",
-                bookDetail: {}
-            }
-        },
-
-        computed: {
-            ...mapState('course', ['myCourses', 'loadingCourse']),
-            query(){
-                return this.$store.state.course.s
-            },
-
-            gradeID(){
-                return this.$store.state.course.gradeID
-            }
-        },
-        destroyed() {
-            window.removeEventListener('resize', this.handleResize);
-        },
-        methods: {
-            ...mapActions('course', ['myCourseList', 'filterByQueryString', 'readBook', 'setLessonTitle']),
-            handleResize() {
-                this.window.width = window.innerWidth;
-                this.window.height = window.innerHeight;
-            },
-
-            viewBook(book){
-                this.bookDetail = book
-                this.showView = true
-            },
-            closeView(){
-                this.bookDetail = {}
-                this.showView = false
-            },
-            closeReading(){
-                this.showReading = false
-            },
-
-            read($event){
-                this.title = $event.title
-                this.setLessonTitle(this.title)
-                this.loading = true
-                this.readBook({course_id: $event.id, order: ''}).then(response => {
-                    this.bookReading = response
-
-                    this.loading = false
-                    this.showView = false
-                    this.showReading = true
-                })
-            },
+export default {
+  name: "MyCourse",
+  components: {
+    Loading,
+    eHeader,
+    CertificateIcon,
+    TestIcon,
+    PdfIcon,
+    ChatIcon,
+    CartIcon,
+    YoutubeIcon,
+    NewIcon,
+    Cart,
+    Empty,
+    ReceiptInfo,
+    Pkg
+  },
+  data() {
+    return {
+      window: {
+        width: 0,
+      },
+      active: 1,
+      showView: false,
+      showReading: false,
+      loading: false,
+      bookReading: "",
+      bookDetail: {},
+      minHeight: 0,
+      showCart: false,
+      showReceipt: false,
+      receiptDetail: {},
+      page: 1,
+      enableScroll: true,
 
 
-            cutString(text, limit){
-                return helper.cutString(text, limit)
-            },
-            formatDate(date){
-                moment.locale('km');
-                return moment(date).format('ll');
-            },
-            goToPlayList(video){
-                this.$store.commit("course/getTeacherInfo", video.teacher)
-                let order = 1;
-
-                if (video.last_watch && video.last_watch.order) {
-                    order = video.last_watch.order
-                }
-
-                this.$router.push({name: 'course-detail', params: {videoId: video._id, order: order, courseId: video._id}})
-            },
-            lastWatchMark(percentage){
-                return `background: linear-gradient(90deg, rgb(255, 14, 9) ${percentage}%, rgb(214, 214, 214) 0%)`;
-            },
-            courseFilter(active){
-                this.filterByQueryString('');
-                this.myCourseList(active)
-                this.active = active
-            }
-        },
-
-        created(){
-            window.addEventListener('resize', this.handleResize);
-            this.handleResize();
-
-            this.myCourseList(1)
-        },
-        watch: {
-            query: function () {
-                this.myCourseList(this.active)
-            },
-
-            gradeID: function () {
-                this.myCourseList(this.active)
-            }
-        }
     }
+  },
+
+  computed: {
+    ...mapState('course', ['myCourses', 'loadingCourse']),
+    ...mapState("setting", ["darkMode", "isHide"]),
+    query() {
+      return this.$store.state.course.s
+    },
+
+    gradeID() {
+      return this.$store.state.course.gradeID
+    }
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    ...mapActions('course', ['myCourseList', 'filterByQueryString', 'readBook', 'setLessonTitle']),
+    ...mapActions('cart', ['addCart', 'getCart']),
+    handleResize() {
+      this.window.width = window.innerWidth;
+    },
+    isEmpty(list) {
+      try {
+        return list.length
+      } catch (err) {
+        return false
+      }
+    },
+    gotToPlayList(videoCourse) {
+      videoCourse.is_buy = 1
+      this.$router.push({name: 'video-detail', params: {course: videoCourse}})
+    },
+
+
+    matchHeight() {
+      let arr = []
+      let interval = setInterval(() => {
+        let box = document.getElementsByClassName('my-course-view')
+        if (box) {
+          for (let i = 0; i < box.length; i++) {
+            arr.push(box[i].clientHeight)
+          }
+          this.minHeight = Math.max(...arr)
+          clearInterval(interval)
+        }
+      }, 1000)
+    },
+
+    cutString(text, limit) {
+      return helper.cutString(text, limit)
+    },
+    formatDate(date) {
+      moment.locale('en');
+      return moment(date).format('ll');
+    },
+    addToCart(video) {
+      let payload = {}
+      payload.id = video._id
+      this.addCart(payload).then(() => {
+        this.showCart = true
+      })
+    },
+    showInvoice(data) {
+      this.receiptDetail = data
+      this.showReceipt = true
+      this.showCart = false
+    },
+    onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
+      if (scrollTop + clientHeight >= scrollHeight - 1) {
+        this.page++
+
+        let payload = {}
+
+        payload.p = this.page
+
+        if (this.enableScroll) {
+          this.myCourseList(payload).then(response => {
+            if (response.data.msg == undefined)
+              if (response.data.data.list.length <= 0)
+                this.enableScroll = false
+
+          })
+        }
+      }
+    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.matchHeight()
+    })
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+
+    this.myCourseList({
+      p: this.page
+    })
+  },
+  watch: {
+    query: function () {
+      this.myCourseList(this.active)
+    },
+
+    gradeID: function () {
+      this.myCourseList(this.active)
+    }
+  }
+}
 </script>
 
 <style scoped>
-    svg {
-        width: 40px;
-    }
+svg {
+  width: 40px;
+}
 </style>

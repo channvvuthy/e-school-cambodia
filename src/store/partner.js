@@ -1,5 +1,7 @@
 import axios from "axios"
+import helper from "../helper/helper"
 import config from "./../config"
+
 export default {
     namespaced: true,
     state: {
@@ -9,30 +11,55 @@ export default {
         openUrl: {}
     },
     mutations: {
-        receivingOpenPartner(state, openUrl){
+        receivingOpenPartner(state, openUrl) {
             state.openUrl = openUrl
         },
-        openingPartnerLoading(state, status){
+        openingPartnerLoading(state, status) {
             state.openLoading = status
         },
-        loadingPartner(state, status){
+        loadingPartner(state, status) {
             state.loadingPartner = status
         },
-        gettingPartner(state, partners){
+        gettingPartner(state, partners) {
             state.partners = partners
         },
-        addCartToPartner(state, payload){
-            state.partners[payload.index].packages[payload.key].is_in_cart = 1
+        deleteCart(state, payload) {
+            if (state.packages) {
+                state.packages = state.partners.filter(item => {
+                    item.packages.filter(pk => {
+                        if (pk._id === payload) {
+                            pk.is_in_cart = 0
+                        }
+                        return pk
+                    })
+                    return item
+                })
+            }
+        },
+        addToCart(state, payload) {
+            state.packages = state.partners.filter(item => {
+                item.packages.filter(pk => {
+                    if (pk._id === payload) {
+                        pk.is_in_cart = 1
+                    }
+                    return pk
+                })
+                return item
+            })
         },
     },
     actions: {
-        getPartner({commit}){
+        getPartner({commit}) {
             commit("loadingPartner", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + "partner").then(response => {
                     resolve(response.data)
                     commit("loadingPartner", false)
-                    commit("gettingPartner", response.data.data)
+                    if (response.data.msg != undefined) {
+                        helper.errorMessage(response.data.msg)
+                    } else {
+                        commit("gettingPartner", response.data.data)
+                    }
 
                 }).catch(err => {
                     reject(err)
@@ -41,10 +68,10 @@ export default {
                 })
             })
         },
-        openPartner({commit}, course_id){
+        openPartner({commit}, id) {
             commit("openingPartnerLoading", true)
             return new Promise((resovle, reject) => {
-                axios.get(config.apiUrl + 'partner/open?course_id=' + course_id).then(response => {
+                axios.get(config.apiUrl + 'partner/open?id=' + id).then(response => {
                     resovle(response.data)
                     commit("openingPartnerLoading", false)
                     commit("receivingOpenPartner", response.data.data)

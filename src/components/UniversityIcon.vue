@@ -15,21 +15,21 @@
 </template>
 
 <script>
-    export default{
-        name: "UniversityIcon",
-        props: {
-            width: {
-                type: Number,
-                default: function () {
-                    return 30
-                }
-            },
-            height: {
-                type: Number,
-                default: function () {
-                    return 30
-                }
-            }
-        }
+export default {
+  name: "UniversityIcon",
+  props: {
+    width: {
+      type: Number,
+      default: function () {
+        return 30
+      }
+    },
+    height: {
+      type: Number,
+      default: function () {
+        return 30
+      }
     }
+  }
+}
 </script>

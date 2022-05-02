@@ -5,8 +5,11 @@
                 <loading></loading>
             </h1>
         </div>
-        <div v-else>
-            <iframe id="otherFrame" class="w-full h-screen pb-20" :srcdoc="other"></iframe>
+        <div v-else class="relative">
+            <div class="w-full absolute h-10 left-0 top-0 flex items-center bg-transparent z-50">
+                <div class="h-10 w-10 cursor-pointer bg-red-4000" @click="back"></div>
+            </div>
+            <iframe id="otherFrame" class="w-full h-screen pb-20" :srcdoc="other" ref="iframeContent"></iframe>
         </div>
 
     </div>
@@ -25,22 +28,11 @@
         },
         methods: {
             ...mapActions('other', ['getOther']),
-        },
-        updated(){
-            const iframe = document.getElementById('otherFrame');
-            const iframeWin = iframe.contentWindow || iframe;
-            const iframeDoc = iframe.contentDocument || iframeWin.document;
-            var script = iframeDoc.createElement("script");
-            script.append(`
-                window.onload = function() {
-                 document.body.addEventListener('click', function(event){
-                     if(event.target.innerHTML ==='&nbsp;'){
-                         event.preventDefault()
-                     }
-                 }, true);
-              }
-            `);
-            iframeDoc.documentElement.appendChild(script);
+            back(){
+                this.$router.push({
+                    name:"other-refresh"
+                }).catch(err=>{err})
+            }
         },
         created(){
             this.getOther()

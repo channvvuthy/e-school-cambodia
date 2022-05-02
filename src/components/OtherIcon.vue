@@ -1,17 +1,13 @@
 <template>
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-         width="24" height="24"
-         viewBox="0 0 172 172"
-         style="fill:#000000;">
-        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
-           stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
-           font-size="none" text-anchor="none" style="mix-blend-mode: normal">
-            <path d="M0,172v-172h172v172z" fill="none"></path>
-            <g :fill="fill">
-                <path d="M17.2,13.76c-1.89978,0.00019 -3.43981,1.54022 -3.44,3.44v137.6c0.00019,1.89978 1.54022,3.43981 3.44,3.44h137.6c1.89978,-0.00019 3.43981,-1.54022 3.44,-3.44v-137.6c-0.00019,-1.89978 -1.54022,-3.43981 -3.44,-3.44zM20.64,20.64h61.92v61.92h-61.92zM89.44,20.64h61.92v61.92h-61.92zM20.64,89.44h61.92v61.92h-61.92zM89.44,89.44h61.92v61.92h-61.92z"></path>
-            </g>
+    <svg id="Outline" :height="size" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <g :fill="fill">
+            <path d="m344 16h-240a40.045 40.045 0 0 0 -40 40v400a40.045 40.045 0 0 0 40 40h304a40.045 40.045 0 0 0 40-40v-336a8 8 0 0 0 -2.343-5.657l-96-96a8 8 0 0 0 -5.657-2.343zm88 440a24.028 24.028 0 0 1 -24 24h-304a24.028 24.028 0 0 1 -24-24v-400a24.028 24.028 0 0 1 24-24h232v56a40.045 40.045 0 0 0 40 40h56zm-80-412.687 68.687 68.687h-44.687a24.028 24.028 0 0 1 -24-24z"/>
+            <path d="m192 232a24 24 0 1 0 24 24 24.028 24.028 0 0 0 -24-24zm0 32a8 8 0 1 1 8-8 8.009 8.009 0 0 1 -8 8z"/>
+            <path d="m256 232a24 24 0 1 0 24 24 24.028 24.028 0 0 0 -24-24zm0 32a8 8 0 1 1 8-8 8.009 8.009 0 0 1 -8 8z"/>
+            <path d="m320 232a24 24 0 1 0 24 24 24.028 24.028 0 0 0 -24-24zm0 32a8 8 0 1 1 8-8 8.009 8.009 0 0 1 -8 8z"/>
         </g>
     </svg>
+
 </template>
 
 <script>
@@ -19,9 +15,13 @@
         name: "OtherIcon",
         props: {
             fill: {
-                type: String,
                 default: function () {
                     return "#000000"
+                }
+            },
+            size: {
+                default: function () {
+                    return 24
                 }
             }
         }

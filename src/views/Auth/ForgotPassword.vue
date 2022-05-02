@@ -1,124 +1,189 @@
 <template>
-    <div>
-        <div>
-            <div class="fixed z-10 inset-0 overflow-y-auto" v-if="!err">
-                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-                    </div>
-                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                    <div class="inline-block align-bottom bg-white rounded text-center overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-72"
-                         role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                        <div class="bg-white px-4 pt-3">
-                            <div class="flex justify-center items-center">
-                                <div class="mt-3">
-                                    <div class="mt-2">
-                                        <p class="text-sm text-black text-sm font-khmer_os ">
-                                            សូមបំពេញលេខទូរស័ព្ទរបស់អ្នកដើម្បីទទួលពាក្យសម្ងាត់ថ្មី
-                                        </p>
-                                    </div>
-                                    <div class="mt-5 flex items-center relative">
-                                        <input
-                                                v-model="phone"
-                                                @keypress="isNumber($event)"
-                                                type="text"
-                                                class="p-1 pl-2 border border-solid border-1 border-light-blue-500 w-full focus:outline-none  border rounded mb-4"
-                                        />
-                                        <img src="/ajax-loader.gif" class="absolute right-0 top-0 mt-2 mr-3"
-                                             v-if="checking"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="flex justify-between items-center font-khmer_os">
-                            <button type="button" @click="cancel()"
-                                    class="text-sm font-khmer_os mt-3 w-full inline-flex justify-center  px-4 py-2 text-base font-medium text-blue-700 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-                                បោះបង់
-                            </button>
-                            <div class="border border-1 border-gray-200 border-l-0 border-t-0 border-b-0 h-11"></div>
-                            <button type="button" @click="agree($event)"
-                                    class="w-full inline-flex justify-center  px-4 py-2  text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                                បាទ/ចាស់
-                            </button>
-                        </div>
+    <div class="flex flex-col justify-between h-screen">
+        <div class="flex justify-center items-center h-full flex-1" :class="darkMode?`bg-youtube`:`bg-white`">
+            <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                <div class="flex justify-between items-center">
+                    <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
+                        <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"></ChevronIcon>
                     </div>
                 </div>
+                <div class="h-10"></div>
+                <div class="flex justify-center text-base font-semibold">
+                    {{$t('2011')}}
+                </div>
+                <div class="h-5"></div>
+                <div class="text-center text-gray-400 px-11 text-sm">
+                <span v-if="!showReset">{{$t('reset_password_des')}}</span>
+                <span v-else> {{$t('reset_password')}}</span>
+                </div>
+                <div class="h-5"></div>
+                <form class="flex-col text-sm font-khmer_os w-full">
+                    <div class="relative" v-if="!showReset">
+                        <span class="absolute text-sm font-medium opacity-40" :class="darkMode?`left-2 mt-3`:`-left-1 mt-2`">
+                            <PhoneIcon size="22" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
+                        </span>
+                        <input type="text" :placeholder="$t('2009')" v-model="phone" @keypress="isNumber($event)" 
+                        ref="forgetPassword"
+                        :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube pl-8`:`pl-7 border-b border-borderGray`" 
+                        class="h-10 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4"/>
+                    </div>
+                    <template v-if="showReset">
+                        <div class="relative">
+                            <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
+                            <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                            </span>
+                            <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="payload.password"
+                                ref="password"
+                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-1 border-borderGray border-t-0 border-r-0 border-l-0`" 
+                                class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
+                        </div>
+                        <div class="relative">
+                                <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
+                                <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                            </span>
+                            <input type="password" :placeholder="$t('2017')" autocomplete="off" v-model="payload.confirm_password"
+                                ref="confirmPassword"
+                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-1 border-borderGray border-t-0 border-r-0 border-l-0`" 
+                                class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
+                        </div>
+                    </template>
+                </form>
+                <button class="relative focus:outline-none p-3 mt-4 text-center text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os" :class="darkMode?`bg-button`:`bg-primary`" @click="checkPhoneNumber" :disabled="loadingRegister" v-if="!showReset">
+                    <span v-if="!loadingRegister">{{$t('2007')}}</span>
+                    <div class="absolute flex justify-center items-center -top-2 w-full" v-else>
+                        <div class="loader"></div>
+                    </div>
+                </button>
+
+                <button class="relative focus:outline-none p-3 mt-4 justify-center items-center text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os" :class="darkMode?`bg-button`:`bg-primary`" @click="modifyPassword" :disabled="resetingPassword" v-else>
+                    <span v-if="!resetingPassword">{{$t('1122')}}</span>
+                    <div class="absolute flex justify-center items-center -top-2 w-full" v-else>
+                        <div class="loader"></div>
+                    </div>
+                </button>
             </div>
+            <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
+
         </div>
-        <ErrMessage v-if="err" :message="message" @closeErr="closeErr"/>
-        <ChangePassword v-if="changePass" @closeChangePassword="closeChangePassword"
-                        @changePasswordSuccess="changePasswordSuccess"/>
+        <img src="e-footer.png" class="w-full" v-if="!darkMode">
     </div>
 </template>
+
 <script>
-    import {mapActions, mapState} from "vuex"
+    import {mapState, mapActions} from "vuex"
     import ErrMessage from "./components/ErrMessage"
     import helper from "./../../helper/helper"
-    import ChangePassword from "./components/ChangPassword"
-
+    import ChevronIcon from "./../../components/ChevronIcon.vue"
+    import PhoneIcon from "./../../components/PhoneIcon.vue"
+    import LockIcon from "./../../components/LockIcon.vue"
+    import axios from "axios"
 
     export default{
-        name: "ForgotPassword",
+        name: "Create",
         components: {
             ErrMessage,
-            ChangePassword
+            PhoneIcon,
+            ChevronIcon,
+            LockIcon
         },
-
         data(){
             return {
                 err: false,
-                changePass: false,
-                hideForgot: false,
-                phone: null,
-                message: "លេខទូរស័ព្ទមិនត្រឹមត្រូវ"
+                message: null,
+                phone:null,
+                showReset: false,
+                resetingPassword: false,
+                payload: {
+                    password: null,
+                    confirm_password: null
+                }
             }
         },
-
         computed: {
-            ...mapState('auth', ['checking'])
+            ...mapState('auth', ['loadingRegister']),
+            ...mapState('setting', ['darkMode'])
         },
-
+        mounted(){
+            this.$refs.forgetPassword.focus()
+            this.payload.device_id = helper.deviceId()
+            this.payload.device_os = helper.deviceOs()
+            this.payload.device_name = helper.deviceName()
+            this.payload.app_version = process.env.VUE_APP_VERSION
+        },
         methods: {
-            ...mapActions('auth', ['checkPhoneExist', 'getPhone']),
+            ...mapActions('auth', ['checkPhoneExist', 'changeForgotPassword','getToken']),
+            checkPhoneNumber(){
+                if (!this.phone) {
+                    helper.errorMessage('please_enter_phone_number')
+                    this.$refs.forgetPassword.focus()
+                    return false
+                }
+                
+                this.payload.phone = this.phone
+            
+                this.checkPhoneExist(this.payload).then(response=>{
+                    if(response.status === 1 || response.status === 2){
+                        helper.errorMessage(response.msg)
+                    }else{
+                        this.payload.xtoken = response.data.token
+                        this.showReset = true                    
+                        axios.interceptors.request.use(
+                            (config) => {
+                              
+                                config.headers['xtoken'] = response.data.token
+                                return config;
+                            },
 
-            closeChangePassword(){
-                this.changePass = false
-            },
-            changePasswordSuccess(){
-                this.$emit("changePasswordSuccess")
+                            (error) => {
+                                return Promise.reject(error);
+                            }
+                        );
+
+                    }
+                })
             },
             isNumber(evt){
                 return helper.isNumber(evt)
             },
-
-            cancel(){
-                this.$emit('cancel');
-            },
-
             closeErr(){
                 this.err = false
             },
-
-            agree(){
-                if (!this.phone) {
-                    this.message = "សូមបញ្ចូលលេខទូរស័ព្ទ"
-                    this.err = true
-                    return;
-                }
-
-                this.checkPhoneExist(this.phone).then(response => {
-                    if (response.data.exist == 0) {
-                        this.message = "លេខទូរស័ព្ទមិនត្រឹមត្រូវ"
-                        this.err = true
-                    } else {
-                        this.err = false
-                        this.getPhone(this.phone)
-                        this.changePass = true
-                    }
+            storeUserData(data){
+                localStorage.setItem('token', data.token)
+                this.$store.commit('auth/studentProfile',data)
+                this.getToken(data.token)
+                this.$store.commit('auth/receivingToken', data.token)
+                this.$store.commit("setting/toggleSidebar", false)
+                this.$router.push({
+                    name: "home"
                 })
             },
-        },
+            modifyPassword(){
+                if (!this.payload.password) {
+                    helper.errorMessage('please_enter_password')
+                    this.$refs.forgetPassword.focus()
+                    return false
+                }
+                if (this.payload.confirm_password != this.payload.password) {
+                    helper.errorMessage('4104')
+                    this.$refs.confirmPassword.focus()
+                    return false
+                }
+                
+                this.resetingPassword = true
+
+                this.changeForgotPassword(this.payload).then(result =>{
+                    if(result.status === 1 || result.status === 2){
+                        helper.errorMessage(result.msg)
+                    }else{
+                        let data = result.data
+                        let stProfile = data
+
+                        localStorage.setItem('stProfile', JSON.stringify(stProfile));
+                    this.storeUserData(data)
+                    }
+                })
+            }
+        }
     }
 </script>

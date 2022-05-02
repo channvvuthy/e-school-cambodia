@@ -1,6 +1,8 @@
 import axios from "axios"
 import config from "./../config"
 import err from "./../helper/err"
+import helper from "./../helper/helper"
+
 export default {
     namespaced: true,
     state: {
@@ -14,59 +16,60 @@ export default {
 
     },
     mutations: {
-        showCommentPagination(){
+        showCommentPagination() {
 
         },
-        addingComment(state, status){
+        addingComment(state, status) {
             state.addingComment = status
         },
-        gettingCommentReply(state, comment){
-            state.comments.push(comment)
+        gettingCommentReply(state, comment) {
+            state.comments.unshift(comment)
         },
-        gettingComment(state, comments){
+        gettingComment(state, comments) {
             state.comments = comments
         },
-        gettingCommentPagination(state, comment){
+        addComment(state, payload) {
+            state.forums.push(payload)
+        },
+        gettingCommentPagination(state, comment) {
             if (comment && comment.length) {
                 for (let index = 0; index < comment.length; index++) {
                     state.comments.push(comment[index])
                 }
             }
         },
-        showingComment(state, status){
+        showingComment(state, status) {
             state.loadingComment = status
         },
-        addForm(state, forum){
+        addForm(state, forum) {
             state.forums.unshift(forum)
         },
-        addingForum(state, status){
+        addingForum(state, status) {
             state.loadingAdd = status
         },
-        loadingForum(state, status){
+        loadingForum(state, status) {
             state.loadingForum = status
         },
-        gettingForum(state, forums){
+        gettingForum(state, forums) {
             state.forums = forums
         },
-        loadingForumPagination(state, status){
+        loadingForumPagination(state, status) {
             state.loadingForumPagination = status
         },
-        gettingForumPagination(state, forums){
+        gettingForumPagination(state, forums) {
             for (let i = 0; i < forums.length; i++) {
                 state.forums.push(forums[i])
             }
         }
     },
     actions: {
-        getForum({commit}, params){
+        getForum({commit}, params) {
             commit("loadingForum", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'forum?s=' + params.s + "&p=" + params.p + "&lesson_id=" + params.lesson_id).then(response => {
-
+                axios.get(config.apiUrl + `forum?${helper.q(params)}`).then(response => {
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
-
                     commit("loadingForum", false)
                     commit("gettingForum", response.data.data)
                     resolve(response)
@@ -76,7 +79,23 @@ export default {
                 })
             })
         },
-        addForum({commit}, data){
+        getCommentForum({commit}, params = "") {
+            commit("loadingForum", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `forum/comment?${helper.q(params)}`).then(response => {
+                    if (response.data.status && response.data.status === 2) {
+                        helper.errorMessage(response.data.msg)
+                    }
+                    resolve(response.data.data)
+                    commit("loadingForum", false)
+                }).catch(err => {
+                    commit("loadingForum", false)
+                    reject(err)
+                })
+            })
+        },
+
+        addForum({commit}, data) {
             commit("addingForum", true)
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'forum/add', data).then(response => {
@@ -94,11 +113,10 @@ export default {
                 })
             })
         },
-        getForumPagination({commit}, params){
+        getForumPagination({commit}, params) {
             commit("loadingForumPagination", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'forum?s=' + params.s + "&p=" + params.p + "&lesson_id=" + params.lesson_id).then(response => {
-
+                axios.get(config.apiUrl + `forum?${helper.q(params)}`).then(response => {
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
                     }
@@ -112,7 +130,7 @@ export default {
                 })
             })
         },
-        showComment({commit}, params){
+        showComment({commit}, params) {
             commit("showingComment", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + "forum/comment?forum_id=" + params.forum_id + "&p=" + params.p).then(response => {
@@ -130,38 +148,45 @@ export default {
                 })
             })
         },
-        showCommentPagination({commit}, params){
+        showCommentPagination({commit}, params) {
             commit("showCommentPagination", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + "forum/comment?forum_id=" + params.forum_id + "&p=" + params.p).then(response => {
-
+                axios.get(config.apiUrl + `forum/comment?${helper.q(params)}`).then(response => {
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
                     }
-
-                    commit("showCommentPagination", false)
-                    commit("gettingCommentPagination", response.data.data.comment)
                     resolve(response.data.data)
+                    commit("showCommentPagination", false)
                 }).catch(err => {
                     commit("showCommentPagination", false)
                     reject(err)
                 })
             })
         },
-        addComment({commit}, params){
+        addComment({commit}, params) {
             commit("addingComment", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'forum/comment/add', params).then(response => {
+                axios.post(config.apiUrl + `forum`, params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
                     }
 
                     commit("addingComment", false)
-                    commit("gettingCommentReply", response.data.data)
+                    commit("addComment", response.data.data)
                     resolve(response.data.data)
                 }).catch(err => {
                     commit("addingComment", false)
+                    reject(err)
+                })
+            })
+        },
+        replyComment({commit}, payload) {
+            commit("addingComment", false)
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + 'forum/comment', payload).then(response => {
+                    resolve(response)
+                }).catch(err => {
                     reject(err)
                 })
             })

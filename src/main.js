@@ -7,44 +7,81 @@ import axios from 'axios'
 import config from "./config"
 import helper from "./helper/helper";
 import VueSweetalert2 from 'vue-sweetalert2';
-
-// If you don't need the styles, do not connect
+import i18n from './i18n'
+import 'tw-elements';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 Vue.use(VueSweetalert2);
-
-
 axios.interceptors.request.use(
     (config) => {
         let token = localStorage.getItem('token');
-
         if (token) {
             config.headers['xtoken'] = token
             config.headers['device-id'] = helper.deviceId()
         }
-
         return config;
     },
-
     (error) => {
         return Promise.reject(error);
     }
 );
 
+axios.interceptors.response.use(function (response) {
+    if (response.data && response.data.status === 1) {
+        helper.errorMessage(response.data.msg)
+    }
+    return response;
+}, function (error) {
+    return Promise.reject(error);
+});
+
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.defaults.headers.common['app-version'] = config.appVersion;
+axios.defaults.headers.common['device-os'] = helper.deviceOs();
+axios.defaults.headers.common['device-id'] = helper.deviceId();
+axios.defaults.headers.common['device-name'] = helper.deviceName();
 
-axios.defaults.headers.common['Authorization'] = `Basic ZS1zY2hvb2wtYXBwOmUtc2Nob29sLWFwcC1QQCQkdzByZCE=`;
+
+axios.defaults.headers.common['Authorization'] = config.auth;
 
 
 Vue.config.productionTip = false;
 
+router.beforeEach((to, from, next) => {
+    // use the language from the routing param or default language
+    let language = localStorage.getItem('localize')
+    if (!language) {
+        language = 'en'
+    }
+
+    // set the current language for i18n.
+    i18n.locale = language
+    next()
+});
 new Vue({
     router,
     store,
+    i18n,
     render: h => h(App),
-    created(){
-        store.dispatch('online/onlineOffline');
+    created() {
+        if (localStorage.getItem('token')) {
+            store.commit('auth/studentProfile', JSON.parse(localStorage.getItem('stProfile')))
+        }
+
+        if (localStorage.getItem('darkMode')) {
+            if ((localStorage.getItem('darkMode') == null || localStorage.getItem('darkMode') == "false" || localStorage.getItem('darkMode') == false)) {
+                store.commit('setting/setDarkMode', false)
+            } else {
+                store.commit('setting/setDarkMode', true)
+            }
+        } else {
+            store.commit('setting/setDarkMode', localStorage.setItem('darkMode', false))
+        }
+
+        if (!localStorage.getItem('localize')) {
+            localStorage.setItem('localize', 'en')
+        }
+
     }
 }).$mount('#app');

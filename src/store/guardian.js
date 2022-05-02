@@ -11,25 +11,25 @@ export default {
         deleting: false,
     },
     mutations: {
-        deletingGuardian(state, _id){
+        deletingGuardian(state, _id) {
             state.guardians = state.guardians.filter(item => item._id !== _id)
         },
-        loadingGuardian(state, status){
+        loadingGuardian(state, status) {
             state.loadingGuardian = status
         },
-        receivingGuardian(state, guardians){
+        receivingGuardian(state, guardians) {
             state.guardians = guardians
         },
-        loadAddingGuardian(state, status){
+        loadAddingGuardian(state, status) {
             state.loadingAdd = status
         }
     },
 
     actions: {
-        getGuardian({commit}){
+        getGuardian({commit}) {
             commit("loadingGuardian", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + 'user/guardian').then(response => {
+                axios.get(config.apiUrl + 'me/guardian').then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -46,10 +46,10 @@ export default {
             })
         },
 
-        addingGuardian({commit}, params){
+        addingGuardian({commit}, params) {
             commit("loadAddingGuardian", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/guardian/add', params).then(response => {
+                axios.post(config.apiUrl + 'me/guardian', params).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)
@@ -64,10 +64,15 @@ export default {
                 })
             })
         },
-        removeGuardian({commit}, _id){
+        removeGuardian({commit}, _id) {
             commit("deletingGuardian", _id)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'user/guardian/remove', {_id}).then(response => {
+                axios.delete(config.apiUrl + 'me/guardian', {
+                    headers: {},
+                    data: {
+                        _id: _id
+                    }
+                }).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
                         err.err(response.data.msg)

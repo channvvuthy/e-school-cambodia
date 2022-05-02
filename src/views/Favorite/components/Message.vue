@@ -1,42 +1,35 @@
 <template>
-    <div class="fixed inset-0 overflow-y-auto" style="z-index:122;">
-        <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
-            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform transition-all  sm:align-middle"
-                 :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
-                <div class="bg-white relative">
-                    <div class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer" @click="close">
-                        <CloseIcon :width="18" :height="18"></CloseIcon>
+    <div class="fixed inset-0 overflow-y-auto flex items-center justify-center w-full h-full bg-black bg-opacity-90 top-0 left-0" style="z-index:122;">
+            <div class="relative rounded-xl shadow-md" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" >
+                <div>
+                    <div class="absolute right-3 top-3  cursor-pointer" @click="close">
+                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
                     </div>
-                    <div class="flex justify-center items-center">
+                    <div class="flex justify-center items-center p-5">
                         <div class="text-center mt-0 mx-4 ">
                             <div class="mt-2 py-4">
-                                <p class="text-sm text-black text-sm font-khmer_os">
+                                <p class="text-base text-sm font-khmer_siemreap">
                                     {{ message }}
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="sm:flex sm:flex-row text-sm font-khmer_os h-10 justify-center items-center">
+                <div class="w-full h-1 border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
+                <div class="sm:flex sm:flex-row text-sm font-khmer_siemreap h-12 justify-center items-center">
                     <button type="button" @click="deleteFavorite"
-                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
-                        <span v-if="gender() === 'M'">បាទ</span>
-                        <span v-else>ចាស់</span>
+                            class="w-full inline-flex justify-center  px-4   text-base font-medium  focus:outline-none">
+                        <span class="text-base">{{$t('1008')}}</span>
                     </button>
                 </div>
             </div>
-        </div>
     </div>
 </template>
 
 <script>
     import helper from "./../../../helper/helper"
     import CloseIcon from "./../../../components/CloseIcon"
+    import {mapState} from "vuex"
     export default{
         name: "ForgotPassword",
         components: {
@@ -61,6 +54,9 @@
                     return false
                 }
             },
+        },
+        computed:{
+            ...mapState('setting', ['darkMode'])
         },
         methods: {
             deleteFavorite($event){

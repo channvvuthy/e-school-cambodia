@@ -7,19 +7,19 @@ export default {
     namespaced: true,
     state: {
         other: "",
-        loadingOther:false,
+        loadingOther: false,
     },
     mutations: {
-        loadingOther(state, status){
+        loadingOther(state, status) {
             state.loadingOther = status
         },
-        receivingOther(state, other){
+        receivingOther(state, other) {
             state.other = other
         }
     },
 
     actions: {
-        getOther({commit}){
+        getOther({commit}) {
             commit("loadingOther", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.webViewUrl + "page/other").then(response => {
