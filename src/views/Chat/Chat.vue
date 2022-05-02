@@ -64,7 +64,7 @@
                :class="darkMode?`border-b border-black ${active === index ?`bg-button`:``}`:`border-b ${active === index?`bg-blue-100`:``}`">
             <div>
               <div
-                  class="h-13 w-13 rounded-full border bg-cover bg-gray-300 mr-3 bg-center"
+                  class="h-13 w-13 rounded-full border bg-cover bg-center bg-gray-300 mr-3 bg-center"
                   :style="{backgroundImage:`url(${contactProfile(contact)})`}">
               </div>
             </div>
@@ -243,7 +243,7 @@
                       `flex ${message.content.type?`justify-start` :`justify-center`}`"
                       class="items-center relative">
                     <template v-if="message.content.type">
-                      <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 cursor-pointer"
+                      <div class="h-13 w-13 rounded-full shadow bg-cover bg-center bg-gray-300 mr-10 cursor-pointer"
                            :style="{backgroundImage:`url(${senderPhoto(message)})`}" v-if="auth !== sender(message)">
                         <div class="h-13 w-13"></div>
                       </div>
@@ -297,7 +297,7 @@
                 <template v-if="message.content.type === 4">
                   <div :class="auth === sender(message)?`flex justify-end`:`flex justify-start`"
                        class="items-center relative">
-                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 cursor-pointer"
+                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-center bg-gray-300 mr-10 cursor-pointer"
                          :style="{backgroundImage:`url(${senderPhoto(message)})`}"
                          v-if="auth !== sender(message)"></div>
                     <div>
@@ -596,19 +596,70 @@
 
     <div class="fixed bg-black w-full h-full left-0 top-0 bg-opacity-70" style="z-index:50;" v-if="replyId"
          @click="() => {this.replyId = false}"></div>
-    <Rename v-if="isRename" @cancelRename="() => {this.isRename = false}" :group="contact"></Rename>
-    <Member v-if="isMember" @closeMember="() => {this.isMember = false}" :contact="contact"
-            @adminLeft="adminLeft"></Member>
-    <BuyMsg v-if="isConfirm" @cancelModal="() => {this.isConfirm = false}" :msg="msg" @yes="leaveGroup()"></BuyMsg>
-    <BuyMsg v-if="isDisconnect" @cancelModal="() => {this.isDisconnect = false}" :msg="`block_contact`"
-            @yes="disconnect()"></BuyMsg>
-    <BuyMsg v-if="isUnblock" @cancelModal="() => {this.isUnblock = false}" :msg="`unblock_contact`"
-            @yes="unblock()"></BuyMsg>
-    <BuyMsg v-if="isDelete" :msg="`remove_message`" @cancelModal="() => {this.isDelete = false}"
-            @yes="confirmDelete"></BuyMsg>
-    <AdminMember v-if="showAdminMember" @closeAdminMember="() => {this.showAdminMember = false}"
-                 @selectedChat="selectedChat($event)"></AdminMember>
-    <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
+    <Rename
+        v-if="isRename"
+        @cancelRename="() => {this.isRename = false}"
+        :group="contact">
+    </Rename>
+    <Member
+        v-if="isMember"
+        @closeMember="() => {this.isMember = false}"
+        :contact="contact"
+        @adminLeft="adminLeft">
+    </Member>
+    <BuyMsg
+        v-if="isConfirm"
+        @cancelModal="() => {this.isConfirm = false}"
+        :msg="msg"
+        @yes="leaveGroup()">
+    </BuyMsg>
+    <BuyMsg
+        v-if="isDisconnect"
+        @cancelModal="() => {this.isDisconnect = false}"
+        :msg="`block_contact`"
+        @yes="disconnect()">
+    </BuyMsg>
+    <BuyMsg
+        v-if="isUnblock"
+        @cancelModal="() => {this.isUnblock = false}"
+        :msg="`unblock_contact`"
+        @yes="unblock()">
+    </BuyMsg>
+    <BuyMsg
+        v-if="isDelete"
+        :msg="`remove_message`"
+        @cancelModal="() => {this.isDelete = false}"
+        @yes="confirmDelete">
+    </BuyMsg>
+    <AdminMember
+        v-if="showAdminMember"
+        @closeAdminMember="() => {this.showAdminMember = false}"
+        @selectedChat="selectedChat($event)">
+    </AdminMember>
+    <PreviewImage
+        v-if="viewChat"
+        :URL="previewUrl"
+        @closePreviewImage="()=>{this.viewChat = false}">
+    </PreviewImage>
+    <!-- Post detail -->
+    <PostDetail
+        @dismiss="()=>{this.isPostDetail = false}"
+        :post="postDetail"
+        v-if="isPostDetail">
+    </PostDetail>
+    <!-- Video detail -->
+    <VideoDetail
+        @dismiss="()=>{this.isVideo = false}"
+        :post="postDetail"
+        v-if="isVideo">
+    </VideoDetail>
+    <Modal
+        @dismiss="()=>{this.loadingAds = false}"
+        v-if="loadingAds"
+        width="20"
+        :is-transparent="true">
+      <LoadingWhite></LoadingWhite>
+    </Modal>
 
   </div>
 </template>
@@ -648,6 +699,10 @@ import MicIcon from "./../HotChat/components/MicIcon.vue"
 import BoubleIcon from "./components/BoubleIcon.vue"
 import isRead from "./components/IsRead.vue"
 import PreviewImage from "./components/PreviewImage.vue"
+import VideoDetail from "@/views/Video/components/VideoDetail";
+import PostDetail from "@/views/Video/components/PostDetail";
+import Modal from "@/components/Modal"
+import LoadingWhite from "@/components/LoadingWhite";
 
 Vue.use(new VueSocketIO({
   connection: config.urlSocket
@@ -669,6 +724,10 @@ export default {
     }
   },
   components: {
+    LoadingWhite,
+    Modal,
+    VideoDetail,
+    PostDetail,
     MicIcon,
     SearchIcon,
     ImageIcon,
@@ -701,6 +760,10 @@ export default {
       contact: {
         type: 0,
       },
+      loadingAds: false,
+      isPostDetail: false,
+      postDetail: {},
+      isVideo: false,
       searchQuery: "",
       eTalkOption: false,
       chatOption: false,
@@ -774,7 +837,7 @@ export default {
       'getContacts', 'getMessage', 'deleteMember', 'blockUser', 'unblockUser', 'readMessage']),
     contactProfile(contact) {
       if (contact.type == 'ads') {
-        return contact.ads.photo.url
+        return contact.ads.user.photo
       }
       return contact.chat.photo
     },
@@ -1054,6 +1117,24 @@ export default {
           }
           this.scrollToBottom()
           this.lisentMessage()
+        })
+      }
+      if (contact.type == 'ads') {
+        this.loadingAds = true
+        contact = contact.ads
+        let payload = {
+          id: contact._id,
+          type: contact.type
+        }
+        this.$store.dispatch("social/countView", payload).then(res => {
+          this.postDetail = res
+          if (contact.type == 51) {
+            this.isPostDetail = true
+          } else {
+            this.isVideo = true
+          }
+        }).finally(() => {
+          this.loadingAds = false
         })
       }
     },

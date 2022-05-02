@@ -74,7 +74,6 @@ export default {
             }
         },
         selectedContact(state, payload) {
-            console.log(state.contacts)
             if (state.contacts.length) {
                 for (let i in state.messages) {
                     if (state.contacts[i].type == 'chat')

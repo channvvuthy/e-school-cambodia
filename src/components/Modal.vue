@@ -1,7 +1,11 @@
 <template>
   <div :class="className" id="dismiss" @click="dismiss">
     <div :class="width">
+      <div v-if="isTransparent">
+        <slot></slot>
+      </div>
       <div
+          v-else
           :class="`shadow ${radius}  ${darkMode ? `bg-secondary text-textSecondary`: `bg-white`}`">
         <slot></slot>
       </div>
@@ -17,6 +21,9 @@ export default {
   name: "Modal",
   mixins: [mode],
   props: {
+    isTransparent: {
+      default: () => false
+    },
     radius: {
       default: () => 'rounded-xl'
     },
