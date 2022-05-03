@@ -481,8 +481,6 @@ export default {
         }
         this.$store.dispatch('social/countView', payload)
       }
-
-
     },
     stopVideo(post) {
       this.videoPlaying = null;
@@ -575,7 +573,6 @@ export default {
         payload.liker = post.liker.filter(item => item._id != this.stProfile._id)
         this.$store.commit('social/removeLike', payload)
       })
-
     },
     likePost(post) {
       let payload = {

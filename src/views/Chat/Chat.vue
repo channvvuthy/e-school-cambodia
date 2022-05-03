@@ -1417,11 +1417,13 @@ export default {
   updated() {
     if (this.contacts.length) {
       for (let i = 0; i < this.contacts.length; i++) {
-        this.sockets.subscribe(`message_${this.contacts[i]._id}`, function (data) {
-          if (this.contacts[i]._id != this.contact._id) {
-            this.$store.commit('etalk/lastMessage', data)
-          }
-        })
+        if (this.contacts[i].type == `chat`) {
+          this.sockets.subscribe(`message_${this.contacts[i].chat._id}`, function (data) {
+            if (this.contacts[i].chat._id != this.contact._id) {
+              this.$store.commit('etalk/lastMessage', data)
+            }
+          })
+        }
       }
     }
   },
@@ -1445,8 +1447,8 @@ export default {
       if (value) {
         this.getMessage({
           p: 1,
-          id: this.contacts[value]._id,
-          type: this.contacts[value].type
+          id: this.contacts[value].chat._id,
+          type: this.contacts[value].chat.type
         }).then(() => {
           this.selectedContact(this.contacts[value], value)
         })

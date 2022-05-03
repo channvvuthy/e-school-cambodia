@@ -377,7 +377,7 @@ export default {
     postComment() {
       this.comment.id = this.replyId ? this.commentId : this.post._id
       let isComment = false
-      this.comment.text = this.comment.text.trim()
+      this.comment.text = this.comment.text ? this.comment.text.trim() : this.comment.text
 
       if (this.comment.text != '') {
         isComment = true
@@ -428,6 +428,7 @@ export default {
         type: post.type
       }
       this.deleteLike(payload).then(() => {
+        this.post.is_like = 0
         payload.liker = post.liker.filter(item => item._id != this.stProfile._id)
         this.$store.commit('social/removeLike', payload)
       })
@@ -438,7 +439,9 @@ export default {
         id: post._id,
         type: post.type
       }
-      this.like(payload)
+      this.like(payload).then(() => {
+        this.post.is_like = 1
+      })
     },
     kFormatter(num) {
       return helper.kFormatter(num)
