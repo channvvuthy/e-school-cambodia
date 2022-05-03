@@ -357,7 +357,14 @@
     <PostDetail
         @dismiss="()=>{this.isPostDetail = false}"
         :post="postDetail"
-        v-if="isPostDetail"></PostDetail>
+        v-if="isPostDetail">
+    </PostDetail>
+    <!-- Video detail -->
+    <VideoDetail
+        @dismiss="()=>{this.isVideo = false}"
+        :post="postDetail"
+        v-if="isVideo">
+    </VideoDetail>
   </div>
 </template>
 
@@ -396,6 +403,7 @@ import moment from "moment";
 import LikeFillIcon from "@/components/LikeFillIcon";
 import CreatePost from "@/views/Component/Post/CreatePost";
 import PostDetail from "@/views/Video/components/PostDetail";
+import VideoDetail from "@/views/Video/components/VideoDetail";
 
 export default {
   components: {
@@ -423,7 +431,8 @@ export default {
     LikeIcon,
     LikeFillIcon,
     CreatePost,
-    PostDetail
+    PostDetail,
+    VideoDetail
 
   },
   computed: {

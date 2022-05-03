@@ -17,8 +17,12 @@ export default {
         actionId: null,
         socialComment: {},
         favorites: [],
+        recomments:[],
     },
     mutations: {
+        getRecomment(state, payload) {
+            state.recomments = payload
+        },
         getFavorite(state, payload) {
             state.favorites = payload
         },
@@ -418,6 +422,16 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social/share?${helper.q(payload)}`).then(res => {
                     resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        getRecomment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/recomment-course?${helper.q(payload)}`).then(res => {
+                    resolve(res.data)
+                    commit("getRecomment", res.data.data)
                 }).catch(err => {
                     reject(err)
                 })

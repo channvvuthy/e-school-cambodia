@@ -130,6 +130,7 @@ import Empty from "./../Component/Empty.vue";
 import BuyMsg from "./../Component/BuyMsg.vue"
 import Pkg from "./components/Pkg.vue"
 
+
 const {ipcRenderer} = require('electron')
 
 export default {

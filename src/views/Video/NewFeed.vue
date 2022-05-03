@@ -227,114 +227,118 @@
       <div class="w-35 pl-5">
         <div
             v-for="index in 6" :key="index + Math.random()"
-            v-if="loadingNewFeed"
+            v-if="loadingRecomment"
             class="border py-3 px-4 mb-4"
             :class="darkMode ? `border-button text-lightGray` : ``">
           <Loading :grid="true" :number-of-columns="1"></Loading>
         </div>
-        <div v-if="!loadingNewFeed">
-          <div v-for="(ad, index) in ads" :key="index" class="mb-4">
-
-            <div class="border" :class="darkMode ? `border-button text-lightGray` : ``">
-              <div class="py-3 px-4">
-                <div class="flex justify-between">
-                  <div class="flex space-x-4">
-                    <Avatar :avatar-url="ad.user.photo" :size="14"></Avatar>
-                    <div>
-                      <div class="font-semibold text-lg">{{ ad.user.name }}</div>
-                      <div class="capitalize text-primary text-sm">
-                        {{ $t('sponsored') }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="text-lg mt-4 font-light whitespace-pre-wrap"
-                     v-if="ad.caption"
-                     :class="darkMode ? `text-lightGray` : ``">
-                  {{ ad.caption }}
-                </div>
-
-                <!-- Photo -->
-                <div v-if="ad.photo && ad.photo.length" class="mt-4">
-                  <div id="carouselExampleSlidesOnly" class="carousel slide relative" data-bs-ride="carousel">
-                    <div class="carousel-inner relative w-full overflow-hidden">
-                      <div
-                          v-for="(photo, key) in ad.photo" :key="key"
-                          :class="key == 0 ? `active` : ``"
-                          class="carousel-item relative float-left w-full">
-                        <img
-                            :src="photo.url"
-                            class="block w-full"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!--Video-->
-                <div v-if="ad.video" class="mt-4 relative">
-                  <div class="absolute w-full h-full flex items-center justify-center z-10">
-                    <div
-                        class="h-16 w-16 rounded-full flex items-center justify-center cursor-pointer"
-                        style="background-color: rgba(5,81,116,0.5)">
-                      <div class="pl-1">
-                        <Next fill="#FFF"></Next>
-                      </div>
-                    </div>
-                  </div>
-                  <img :src="ad.thumbnail.url">
-                </div>
-
-                <!-- Tool -->
-                <div class="flex items-center px-3 mt-4 justify-between"
-                     :class="darkMode ? `text-lightGray` : `text-primary`">
-                  <div class="flex items-center space-x-16">
-                    <div class="flex items-center space-x-2">
-                      <div>
-                        <LikeIcon :size="20"></LikeIcon>
-                      </div>
-                      <div v-if="post.total && post.total.like">
-                        {{ kFormatter(post.total.like) }}
-                      </div>
-                    </div>
-                    <div class="flex items-center space-x-2" v-if="post.total && post.total.seen">
-                      <div>
-                        <Eye :size="28"></Eye>
-                      </div>
-                      <div>
-                        {{ kFormatter(post.total.seen) }}
-                      </div>
-                    </div>
-                  </div>
+        <div v-if="!loadingRecomment"
+             class="border py-3 px-4 mb-4"
+             :class="darkMode ? `border-button text-lightGray` : ``"
+        >
+          <div
+              :class="darkMode ? `text-lightGray` : `text-primary`"
+              class="font-black text-xl mb-4 font-PoppinsMedium">
+            {{ $t('recommend_course') }}
+          </div>
+          <div v-for="(video, index) in recomments" :key="index" class="mb-4">
+            <div class="relative cursor-pointer view" :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
+                 :style="minHeight?{minHeight:`${minHeight}px`}:{}">
+              <div class="absolute left-3 top-3 z-50" v-if="video.is_new && video.is_buy === 0">
+                <NewIcon></NewIcon>
+              </div>
+              <div class="absolute top-3 left-3" v-if="video.is_buy">
+                <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
+                     :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
+                  <span>✓</span>
                 </div>
               </div>
-              <!--Comment -->
-              <div class="flex h-16 border-t flex items-center w-full mt-4 space-x-5 px-3"
-                   :class="darkMode ? `border-button text-lightGray` : ``">
-                <Avatar :avatar-url="stProfile.photo" :size="8"></Avatar>
-                <textarea
-                    placeholder="Add comment"
-                    class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
+              <div class="relative">
+                <img :src="video.thumbnail" class="m-auto"
+                     style="min-height:12rem;"/>
+                <div class="absolute w-full h-full bg-gradient-to-t top-0 from-black cursor-pointer"
+                     @click="gotToPlayList(video)"></div>
+              </div>
+              <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1"
+                   :style="{width:`${video.last_watch.percentage}%`}"></div>
+              <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
+                <div @click="gotToPlayList(video)" class="flex flex-col relative w-full">
+                  <div class="flex items-center">
+                    <div class="w-14 h-14  bg-gray-300 bg-cover rounded border-2 border-white shadow bg-center"
+                         :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
+                    <div class="ml-5 text-white pb-2">{{ video.teacher.name }}</div>
+                  </div>
+                  <div class="text-base font-semibold mt-3 text-center">{{ cutString(video.title, 30) }}</div>
+                  <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
+                    <div class="cursor-pointer" :title="$t('2108')">
+                      <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></YoutubeIcon>
+                      <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                        {{ video.total_video ? video.total_video : 0 }}
+                      </div>
+                    </div>
+                    <div class="cursor-pointer" :title="$t('pdf')">
+                      <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></PdfIcon>
+                      <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
+                        {{ video.total_pdf ? video.total_pdf : 0 }}
+                      </div>
+                    </div>
+                    <div class="cursor-pointer" :title="$t('support')">
+                      <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></ChatIcon>
+                      <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                           :class="darkMode?`text-skyBlue`:`text-primary`">
+                        {{ video.has_support ? $t('1008') : $t('1009') }}
+                      </div>
+                    </div>
+                    <div class="cursor-pointer" :title="$t('2111')">
+                      <TestIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></TestIcon>
+                      <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                           :class="darkMode?`text-skyBlue`:`text-primary`">
+                        {{ video.has_quiz }}
+                      </div>
+                    </div>
+                    <div class="cursor-pointer" :title="$t('1114')">
+                      <CertificateIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></CertificateIcon>
+                      <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                           :class="darkMode?`text-skyBlue`:`text-primary`">
+                        {{ video.has_certificate ? $t('1008') : $t('1009') }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex w-full justify-between items-center relative top-5 mt-5 text-base">
+                  <template v-if="video.price.year">
+                    <div :class="darkMode?`text-gray-300`:``">
+                      <del class="font-black text-xl">${{ video.price.highlight }}</del>&nbsp; <span
+                        :class="darkMode?`text-gray-300`:`text-red-700`">{{ video.price.year }} USD</span></div>
+                    <div @click="addToCart(video)">
+                      <div v-if="!video.is_in_cart" style="background-color:rgba(5,81,116,0.24)"
+                           class="rounded-full w-10 h-10 flex items-center justify-center">
+                        <CartIcon :fill="darkMode?`#909090`:`#055174`"></CartIcon>
+                      </div>
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div :class="darkMode?`text-gray-300`:`text-red-700`">{{ $t('1007') }}</div>
+                  </template>
+                </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-      <!-- End ads -->
-
+      <!-- End recomment -->
       <!-- Post detail -->
       <PostDetail
           @dismiss="()=>{this.isPostDetail = false}"
           :post="postDetail"
-          v-if="isPostDetail"></PostDetail>
+          v-if="isPostDetail">
+      </PostDetail>
       <!-- Video detail -->
       <VideoDetail
           @dismiss="()=>{this.isVideo = false}"
           :post="postDetail"
-          v-if="isVideo"
-      ></VideoDetail>
+          v-if="isVideo">
+      </VideoDetail>
       <!-- Edit post -->
       <template v-if="isEdit">
         <CreatePost
@@ -343,7 +347,6 @@
             @dismissPost="()=>{this.isEdit = false}"
             @closeCreate="closeCreate"></CreatePost>
       </template>
-
       <!-- Report post -->
       <template v-if="isReport">
         <Report
@@ -354,8 +357,15 @@
       <input type="text" class="absolute" v-model="link" id="copyLink" style="z-index:-1">
       <!-- Liker -->
       <template v-if="isLiker">
-        <Liker :social="postDetail" @closeLiker="()=>{this.isLiker = false}"></Liker>
+        <Liker
+            :social="postDetail"
+            @closeLiker="()=>{this.isLiker = false}"/>
       </template>
+      <BuyMsg
+          v-if="showMsg"
+          :msg="msg"
+          @cancelModal="() => {this.showMsg = false}"
+          @yes="yes"/>
     </div>
   </div>
 </template>
@@ -390,6 +400,13 @@ import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
 import Report from "@/views/Video/components/Report.vue";
 import Liker from "@/views/Video/components/Liker";
+import CartIcon from "@/components/CartIcon";
+import CertificateIcon from "@/components/CertificateIcon";
+import YoutubeIcon from "@/components/YoutubeIcon";
+import PdfIcon from "@/components/PdfIcon";
+import ChatIcon from "@/components/ChatIcon";
+import TestIcon from "@/components/TestIcon";
+import BuyMsg from "@/views/Component/BuyMsg";
 
 Vue.use(VueObserveVisibility)
 
@@ -397,12 +414,18 @@ export default {
   computed: {
     ...mapState('auth', ['stProfile']),
     ...mapState('setting', ['darkMode', 'isHide']),
-    ...mapState('social', ['social', 'ads', 'loadingMore']),
+    ...mapState('social', ['social', 'loadingMore', 'recomments']),
     storyDetail() {
       return this.$store.state.story.storyDetail
     }
   },
   components: {
+    CartIcon,
+    CertificateIcon,
+    YoutubeIcon,
+    PdfIcon,
+    ChatIcon,
+    TestIcon,
     Report,
     VideoDetail,
     MediaPlayer,
@@ -422,7 +445,8 @@ export default {
     PostVideoIcon,
     ImageIcon,
     CreatePost,
-    Liker
+    Liker,
+    BuyMsg
   },
   mixins: [mode],
   data() {
@@ -441,6 +465,10 @@ export default {
       isPost: false,
       isEdit: false,
       reportSocial: {},
+      loadingRecomment: false,
+      showMsg: false,
+      minHeight: 0,
+      msg: "2006",
       payload: {
         p: 1,
         caption: null,
@@ -451,7 +479,31 @@ export default {
   methods: {
 
     ...mapActions('social', ['getSocial', 'postSocial', 'like',
-      'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite']),
+      'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite', 'getRecomment']),
+    ...mapActions('cart', ['addCart', 'getCart']),
+    addToCart(video) {
+      if (localStorage.getItem('token') === null) {
+        this.showMsg = true
+        return;
+      }
+      let payload = {}
+      payload.id = video._id
+      this.addCart(payload).then(() => {
+        this.getCart()
+      })
+      this.$store.commit("video/addToCart", video._id)
+    },
+    gotToPlayList(videoCourse) {
+      videoCourse.package_id = ""
+      if (localStorage.getItem('token') === null) {
+        this.showMsg = true
+        return;
+      }
+      this.$router.push({name: 'overview', params: {course: videoCourse}})
+    },
+    yes() {
+      this.$router.push('login');
+    },
     showLiker(post) {
       this.isLiker = true
       this.postDetail = post
@@ -650,6 +702,10 @@ export default {
   },
   created() {
     this.getPost()
+    this.loadingRecomment = true
+    this.getRecomment().then(() => {
+      this.loadingRecomment = false
+    })
   },
   watch: {
     'storyDetail': function (story) {
