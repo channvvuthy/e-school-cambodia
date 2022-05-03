@@ -396,6 +396,7 @@ export default {
       this.deleteLike(payload).then(() => {
         payload.liker = post.liker.filter(item => item._id != this.stProfile._id)
         this.$store.commit('social/removeLike', payload)
+        this.post.is_like = 0
       })
 
     },
@@ -404,7 +405,9 @@ export default {
         id: post._id,
         type: post.type
       }
-      this.like(payload)
+      this.like(payload).then(() => {
+        this.post.is_like = 1
+      })
     },
     kFormatter(num) {
       return helper.kFormatter(num)

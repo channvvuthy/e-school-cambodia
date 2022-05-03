@@ -17,8 +17,12 @@ export default {
         actionId: null,
         socialComment: {},
         favorites: [],
+        recomments:[],
     },
     mutations: {
+        getRecomment(state, payload) {
+            state.recomments = payload
+        },
         getFavorite(state, payload) {
             state.favorites = payload
         },
@@ -81,24 +85,47 @@ export default {
                 name: auth.state.stProfile.first_name + ' ' + auth.state.stProfile.last_name,
                 photo: auth.state.stProfile.photo
             }
-            state.social = state.social.filter(item => {
-                if (item._id == payload.id) {
-                    item.is_like = 1
-                    item.liker.push(user)
-                    item.total.like = parseInt(item.total.like) + 1
-                }
-                return item
-            })
+            if (payload.isFavorite) {
+                state.favorites = state.favorites.filter(item => {
+                    if (item._id == payload.id) {
+                        item.is_like = 1
+                        item.liker.push(user)
+                        item.total.like = parseInt(item.total.like) + 1
+                    }
+                    return item
+                })
+            } else {
+                state.social = state.social.filter(item => {
+                    if (item._id == payload.id) {
+                        item.is_like = 1
+                        item.liker.push(user)
+                        item.total.like = parseInt(item.total.like) + 1
+                    }
+                    return item
+                })
+            }
+
         },
         removeLike(state, payload) {
-            state.social = state.social.filter(item => {
-                if (item._id == payload.id) {
-                    item.is_like = 0
-                    item.liker = payload.liker
-                    item.total.like = parseInt(item.total.like) - 1
-                }
-                return item
-            })
+            if (payload.isFavorite) {
+                state.favorites = state.favorites.filter(item => {
+                    if (item._id == payload.id) {
+                        item.is_like = 0
+                        item.liker = payload.liker
+                        item.total.like = parseInt(item.total.like) - 1
+                    }
+                    return item
+                })
+            } else {
+                state.social = state.social.filter(item => {
+                    if (item._id == payload.id) {
+                        item.is_like = 0
+                        item.liker = payload.liker
+                        item.total.like = parseInt(item.total.like) - 1
+                    }
+                    return item
+                })
+            }
         },
         loadingMore(state, payload) {
             state.loadingMore = payload
@@ -395,6 +422,16 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social/share?${helper.q(payload)}`).then(res => {
                     resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        getRecomment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/recomment-course?${helper.q(payload)}`).then(res => {
+                    resolve(res.data)
+                    commit("getRecomment", res.data.data)
                 }).catch(err => {
                     reject(err)
                 })
