@@ -448,6 +448,42 @@ export default {
                     reject(err)
                 })
             })
+        },
+        updateName({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `me/update-name`, payload).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        updatePhone({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.post(config.apiUrl + `me/update-phone`, payload).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        getNames({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `me/update-name`).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
+        getPhoneUpdate({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `me/update-phone`).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
         }
     }
 }

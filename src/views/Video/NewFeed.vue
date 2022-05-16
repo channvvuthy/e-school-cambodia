@@ -238,7 +238,7 @@
         >
           <div
               :class="darkMode ? `text-lightGray` : `text-primary`"
-              class="font-black text-xl mb-4 font-PoppinsMedium">
+              class="text-xl mb-4 font-PoppinsMedium">
             {{ $t('recommend_course') }}
           </div>
           <div v-for="(video, index) in recomments" :key="index" class="mb-4">
