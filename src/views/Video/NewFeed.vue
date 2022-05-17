@@ -2,6 +2,7 @@
   <div
       :class="darkMode ? `bg-secondary`: `bg-white`">
     <div class="px-5 flex items-center h-24"
+         v-if="token"
          :class="mode(darkMode ?`border-b border-button` : ``)">
       <Avatar
           :avatar-url="stProfile.photo"
@@ -412,7 +413,7 @@ Vue.use(VueObserveVisibility)
 
 export default {
   computed: {
-    ...mapState('auth', ['stProfile']),
+    ...mapState('auth', ['stProfile','token']),
     ...mapState('setting', ['darkMode', 'isHide']),
     ...mapState('social', ['social', 'loadingMore', 'recomments']),
     storyDetail() {
@@ -509,8 +510,10 @@ export default {
       this.postDetail = post
     },
     fullScreen(data) {
-      this.postDetail = data
-      this.isVideo = true
+        if(this.token){
+            this.postDetail = data
+            this.isVideo = true
+        }
     },
     setParentColor(postIndex) {
       let interval = setInterval(() => {
@@ -601,7 +604,8 @@ export default {
       this.actionId = post._id
     },
     showCommentDetail(id) {
-      this.commentDetailId = id
+      if(this.token)
+        this.commentDetailId = id
     },
     postComment() {
 
@@ -651,8 +655,10 @@ export default {
       }
     },
     itemClickHandler(data) {
-      this.postDetail = data
-      this.isPostDetail = true
+      if(this.token){
+        this.postDetail = data
+        this.isPostDetail = true
+      }
     },
     post() {
       if (this.loading) {

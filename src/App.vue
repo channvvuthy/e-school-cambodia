@@ -196,7 +196,7 @@ export default {
           }
 
         } else {
-          this.$router.push({name: 'login'}).catch(err => {
+          this.$router.push({name: 'home'}).catch(err => {
             err
           })
         }
