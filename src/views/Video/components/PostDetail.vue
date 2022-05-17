@@ -75,13 +75,20 @@
                :class="darkMode ? `border-button`: ``">
             <div class="overflow-y-scroll h-full">
               <div class="p-5 flex space-x-3">
-                <Avatar :avatar-url="post.user.photo" :size="14"></Avatar>
+                <div @click="userDetail(post.user)">
+                  <Avatar :avatar-url="post.user.photo" :size="14"></Avatar>
+                </div>
                 <div>
                   <div class="text-lg font-semibold" :class="darkMode?`text-gray-300`:`text-primary`">
                     {{ post.user.name }}
                   </div>
                   <div :class="darkMode ? `border-button` : `border-roundBorder` ">
-                    {{ formatDate(post.date) }}
+                    <div v-if="post.type >=51">
+                      {{$t('sponsored')}}
+                    </div>
+                    <div v-else>
+                      {{ formatDate(post.date) }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -330,6 +337,14 @@ export default {
   },
   methods: {
     ...mapActions('social', ['deleteLike', 'like', 'addComment']),
+    userDetail(user) {
+      this.$router.push({
+        name: "user",
+        params: {
+          user_id: user._id
+        }
+      })
+    },
     formatDate(day) {
       let currentDate = new Date()
       let today = moment(currentDate)

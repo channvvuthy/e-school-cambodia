@@ -1,7 +1,9 @@
 <template>
   <div @mouseleave="clearAction">
     <div class="mt-4 flex space-x-5" :id="comment._id">
-      <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
+      <div @click="userDetail(comment.user)">
+        <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
+      </div>
       <div
           class="rounded-xl py-4 px-3 relative" :class="darkMode ? `bg-youtube`: `bg-forum`">
         <div
@@ -114,6 +116,14 @@ export default {
   },
   methods: {
     ...mapActions('social', ['deleteComment', 'deleteReplyComment']),
+    userDetail(user) {
+      this.$router.push({
+        name: "user",
+        params: {
+          user_id: user._id
+        }
+      })
+    },
     editComment() {
       if (this.parentCommentId) {
         this.replyId = this.comment._id

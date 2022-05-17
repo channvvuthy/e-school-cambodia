@@ -14,7 +14,7 @@
                         <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center flex items-center justify-center relative "
                              :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                         <div class="mt-2">
-                            <span>
+                            <span :class="darkMode ? `text-gray-300`: ``">
                                  {{ stProfile.first_name }}  {{ stProfile.last_name }}
                             </span>
                         </div>
