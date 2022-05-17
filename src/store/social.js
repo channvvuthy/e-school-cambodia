@@ -179,6 +179,35 @@ export default {
                 })
             })
         },
+        getMySocial({commit}, payload) {
+            commit("postingSocial", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/me?${helper.q(payload)}`).then(res => {
+                    commit("postingSocial", true)
+                    if (res.data && res.data.status == 2)
+                        helper.errorMessage(res.data.msg)
+                    else
+                        commit("getSocial", res.data.data)
+                    resolve(res.data)
+                }).catch(err => {
+                    commit("postingSocial", false)
+                    reject(err)
+                })
+            })
+        },
+        getMoreMySocial({commit}, payload) {
+            commit("loadingMore", true)
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/me?${helper.q(payload)}`).then(res => {
+                    commit("getMoreSocial", res.data.data)
+                    resolve(res.data)
+                    commit("loadingMore", false)
+                }).catch(err => {
+                    commit("loadingMore", false)
+                    reject(err)
+                })
+            })
+        },
         getMoreSocial({commit}, payload) {
             commit("loadingMore", true)
             return new Promise((resolve, reject) => {

@@ -82,6 +82,8 @@ export default {
     if (this.post.user._id != this.stProfile._id) {
       this.actions[0].show = false
       this.actions[1].show = false
+    }else{
+      this.actions[4].show = false
     }
   }
 }

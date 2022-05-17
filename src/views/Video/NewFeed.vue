@@ -470,6 +470,7 @@ export default {
       showMsg: false,
       minHeight: 0,
       msg: "2006",
+      deletePayload:{},
       payload: {
         p: 1,
         caption: null,

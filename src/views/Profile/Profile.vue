@@ -38,7 +38,7 @@
                     <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                         <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
                         </div>
-                        <div class="text-center">
+                        <div class="text-center font-black">
                             (+855){{ stProfile.phone }}
                         </div>
                     </div>
@@ -55,9 +55,9 @@
                                     <ProfileIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></ProfileIcon>
                                 </div>
                                 <div class="mt-2">
-                  <span>
-                      {{ stProfile.first_name }}  {{ stProfile.last_name }}
-                  </span>
+                                      <span>
+                                          {{ stProfile.first_name }}  {{ stProfile.last_name }}
+                                      </span>
                                 </div>
                             </div>
                         </div>
@@ -73,9 +73,9 @@
                                     <GenderIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></GenderIcon>
                                 </div>
                                 <div class="mt-2">
-                  <span>
-                      {{ stProfile.gender == "M" ? $t('2015') : $t('2016') }}
-                  </span>
+                                      <span>
+                                          {{ stProfile.gender == "M" ? $t('2015') : $t('2016') }}
+                                      </span>
                                 </div>
                             </div>
                         </div>
@@ -91,12 +91,12 @@
                                     <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></MarkerIcon>
                                 </div>
                                 <div class="mt-2">
-                  <span v-if="stProfile.province">
-                      {{ stProfile.province.name }}
-                  </span>
+                                    <span v-if="stProfile.province">
+                                        {{ stProfile.province.name }}
+                                    </span>
                                     <span v-else>
-                     {{ $t('unknown') }}
-                  </span>
+                                        {{ $t('unknown') }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -112,22 +112,31 @@
                                     <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
                                 </div>
                                 <div class="mt-2 px-3">
-                   <span v-if="stProfile.school">
-                      {{ stProfile.school.name }}
-                  </span>
+                                    <span v-if="stProfile.school">
+                                        {{ stProfile.school.name }}
+                                    </span>
                                     <span v-else>
-                   {{ $t('unknown') }}
-                  </span>
+                                        {{ $t('unknown') }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="p-5 flex space-x-6">
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
+                     @click="social"
+                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer font-black w-full justify-center">
+                    <SocialIcon :fill="darkMode?`#909090`:`#055174`"></SocialIcon>
+                    <div>
+                        {{$t('social')}}
+                    </div>
+                </div>
+                <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="()=>{this.isChangeName = true}"
-                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer">
+                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer w-full justify-center">
                     <EditIcon :fill="darkMode?`#909090`:`#055174`"></EditIcon>
                     <div>
                         {{$t('request_change_name')}}
@@ -135,7 +144,7 @@
                 </div>
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="()=>{this.isChangePhone = true}"
-                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer">
+                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer w-full justify-center">
                     <EditIcon :fill="darkMode?`#909090`:`#055174`"></EditIcon>
                     <div>
                         {{$t('request_change_phone')}}
@@ -341,9 +350,11 @@
     import ProfileIcon from "./../../components/ProfileIcon.vue"
     import ChangeName from "./components/ChangeName";
     import ChangePhone from "./components/ChangePhone";
+    import SocialIcon from "../../components/SocialIcon";
 
     export default {
         components: {
+            SocialIcon,
             ChangePhone,
             ChangeName,
             ProfileIcon,
@@ -585,6 +596,14 @@
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
 
                 }).catch(() => {
+                })
+            },
+            social() {
+                this.$router.push({
+                    name: "social",
+                    params: {
+                        user: this.stProfile
+                    }
                 })
             }
         },

@@ -1,38 +1,48 @@
 <template>
     <div class="h-screen">
+        <a
+                :class="darkMode ? `text-gray-300`: `text-primary`"
+                @click="()=>{this.$router.go(-1)}"
+                href="#" class="absolute right-2 bottom-2">
+            {{$t('back')}}
+        </a>
         <!-- Detail -->
-         <template>
+        <template>
             <div class="flex mt-5 px-5">
                 <div class="w-3/5 rounded-xl overflow-hidden shadow-md relative">
                     <div class="h-full w-full absolute top-0 left-0 flex flex-col items-center justify-center">
-                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center flex items-center justify-center relative " :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                        <div class="w-32 h-32 rounded-full bg-gray-300 bg-cover bg-center flex items-center justify-center relative "
+                             :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
+                        <div class="mt-2">
+                            <span>
+                                 {{ stProfile.first_name }}  {{ stProfile.last_name }}
+                            </span>
+                        </div>
                     </div>
-                    <div class="w-full bg-red-100 bg-cover h-40" style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;"></div>
+                    <div class="w-full bg-red-100 bg-cover h-40"
+                         style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;"></div>
                     <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                         <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
                         </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-3 gap-3 ml-5 w-full">
-                    <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3 " >
+                    <div class="shadow-md rounded-xl relative"
+                         :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3 cursor-pointer" @click="social">
                             <div class="text-center w-full">
-                                {{$t('name')}}
+                                {{$t('social')}}
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                     <ProfileIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></ProfileIcon>
-                                </div>
-                                <div class="mt-2">
-                                    <span>
-                                         {{ stProfile.first_name }}  {{ stProfile.last_name }}
-                                    </span>
+                                    <SocialIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SocialIcon>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3"  >
+                    <div class="shadow-md rounded-xl relative"
+                         :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3">
                             <div class="text-center w-full">
                                 {{$t('gender')}}
                             </div>
@@ -48,8 +58,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-md rounded-xl relative " :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3"  >
+                    <div class="shadow-md rounded-xl relative "
+                         :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3">
                             <div class="text-center w-full">
                                 {{$t('location')}}
                             </div>
@@ -68,8 +79,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-md rounded-xl relative" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
-                        <div class="flex items-center justify-between px-10 py-3"  >
+                    <div class="shadow-md rounded-xl relative"
+                         :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                        <div class="flex items-center justify-between px-10 py-3">
                             <div class="text-center w-full">
                                 {{$t('2123')}}
                             </div>
@@ -88,7 +100,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-md rounded-xl relative cursor-pointer" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" @click="goTo('gallery')">
+                    <div class="shadow-md rounded-xl relative cursor-pointer"
+                         :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" @click="goTo('gallery')">
                         <div class="flex items-center justify-between px-10 py-3">
                             <div class="text-center w-full">
                                 {{$t('1113')}}
@@ -100,7 +113,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="shadow-md rounded-xl relative cursor-pointer" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"  @click="goTo('friend')">
+                    <div class="shadow-md rounded-xl relative cursor-pointer"
+                         :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" @click="goTo('friend')">
                         <div class="flex items-center justify-between px-10 py-3">
                             <div class="text-center w-full">
                                 {{$t('friend')}}
@@ -112,12 +126,12 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </template>
         <!-- End Detail -->
-       
+
     </div>
 </template>
 
@@ -142,9 +156,11 @@
     import ProfileIcon from "./../../components/ProfileIcon.vue"
     import GalleryIcon from "./../../components/GalleryIcon.vue"
     import NetworkIcon from "./../../components/NetworkIcon.vue"
+    import SocialIcon from "../../components/SocialIcon";
 
-    export default{
+    export default {
         components: {
+            SocialIcon,
             ProfileIcon,
             GenderIcon,
             CameraIcon,
@@ -163,9 +179,9 @@
             EditIcon,
             GalleryIcon,
             NetworkIcon
-            
+
         },
-        data(){
+        data() {
             return {
                 image: null,
                 err: false,
@@ -176,14 +192,14 @@
                 showSchool: false,
                 isEdit: false,
                 isPic: false,
-                stProfile:{},
-                province:{
-                    _id:"",
-                    name:"",
-                },
-                school:{
+                stProfile: {},
+                province: {
                     _id: "",
-                    name:"",
+                    name: "",
+                },
+                school: {
+                    _id: "",
+                    name: "",
                 },
                 updating: false,
             }
@@ -194,45 +210,55 @@
         },
         methods: {
             ...mapActions('setting', ['getProvinces', 'getSchool']),
-            ...mapActions('auth', ['changeProfile', 'getStudentProfile', 'changeProfilePhotoPhoto','getUser']),
-             reportDetail(page,user_id){
-                this.$router.push({name: page, params:{user_id}})
+            ...mapActions('auth', ['changeProfile', 'getStudentProfile', 'changeProfilePhotoPhoto', 'getUser']),
+            social() {
+                this.$router.push({
+                    name: "social",
+                    params: {
+                        user: this.stProfile
+                    }
+                })
             },
-            closeProvince(){
+            reportDetail(page, user_id) {
+                this.$router.push({name: page, params: {user_id}})
+            },
+            closeProvince() {
                 this.showProvince = false
             },
 
-            closeSchool(){
+            closeSchool() {
                 this.showSchool = false
             },
 
-            changePhoto(){
+            changePhoto() {
                 this.$refs.image.click()
             },
-            defaultSelectedProvince(province){
-                if(this.stProfile.province != undefined && this.stProfile.province._id != undefined){
+            defaultSelectedProvince(province) {
+                if (this.stProfile.province != undefined && this.stProfile.province._id != undefined) {
                     return province._id == this.stProfile.province._id
                 }
                 return false
             },
-            cutString(text,limit){
+            cutString(text, limit) {
                 return helper.cutString(text, limit)
             },
             goTo(page) {
-                this.$router.push({ name: page,params:{id: this.$route.params.user_id} }).catch((err)=>{err});
+                this.$router.push({name: page, params: {id: this.$route.params.user_id}}).catch((err) => {
+                    err
+                });
             },
 
-            showAllProvince(){
+            showAllProvince() {
                 this.stProfile.school.name = null
                 this.showProvince = true
             },
-            onSelectedPhoto(event){
+            onSelectedPhoto(event) {
                 if (event.target.value) {
                     this.loading = true
                     const file = event.target.files[0];
                     let formData = new FormData();
-                    formData.append("image",file)
-                    this.changeProfilePhotoPhoto(formData).then(response =>{
+                    formData.append("image", file)
+                    this.changeProfilePhotoPhoto(formData).then(response => {
                         let stProfile = localStorage.getItem("stProfile")
                         stProfile = JSON.parse(stProfile)
                         stProfile.photo = response.data.photo
@@ -240,32 +266,32 @@
                         localStorage.setItem("stProfile", JSON.stringify(stProfile))
                         this.loading = false
                     })
-                    
+
                 }
             },
-            updateProfile(){
-                if(!this.$refs.first_name.value){
+            updateProfile() {
+                if (!this.$refs.first_name.value) {
                     helper.errorMessage("please_enter_first_name")
                     this.$refs.first_name.focus()
                     return
                 }
-                if(!this.$refs.last_name.value){
+                if (!this.$refs.last_name.value) {
                     helper.errorMessage("please_enter_last_name")
                     this.$refs.last_name.focus()
                     return
                 }
-                if(!this.$refs.phone.value){
+                if (!this.$refs.phone.value) {
                     helper.errorMessage("please_enter_phone_number")
                     this.$refs.phone.focus()
                     return
                 }
-                if(!this.$refs.dob.value){
+                if (!this.$refs.dob.value) {
                     helper.errorMessage("please_enter_date_of_birth")
                     this.$refs.dob.focus()
                     return
                 }
-                if(this.school._id == ""){
-                      helper.errorMessage("4118")
+                if (this.school._id == "") {
+                    helper.errorMessage("4118")
                     return;
                 }
 
@@ -285,26 +311,25 @@
                 })
 
             },
-            filterSchool(event){
-               
+            filterSchool(event) {
+
             },
-            closeMessage()
-            {
+            closeMessage() {
                 this.err = false
             },
 
-            changeGender(gender){
+            changeGender(gender) {
                 this.stProfile.gender = gender
             },
-            enableUpdate(){
+            enableUpdate() {
                 this.noUpdate = false
-                if(this.province.name == ""){
+                if (this.province.name == "") {
                     this.province = this.stProfile.province
                 }
             },
-            takeSchool(school){
+            takeSchool(school) {
                 this.noUpdate = false
-                if(this.province.name == ""){
+                if (this.province.name == "") {
                     this.province = this.stProfile.province
                 }
                 this.school = school
@@ -313,28 +338,27 @@
             onChange(e) {
                 this.noUpdate = false
                 this.showSchool = false
-                try{
+                try {
                     let name = e.target.options[e.target.options.selectedIndex].text
                     let province = {
                         _id: e.target.value,
                         name: name
                     }
                     this.province = province
-                }catch(errr){}
-                this.getSchool(e.target.value).then(()=>{
+                } catch (errr) {
+                }
+                this.getSchool(e.target.value).then(() => {
                     this.school.name = ""
                     this.school._id = ""
                 })
             },
-            showAllSchool()
-            {
+            showAllSchool() {
                 if (!this.schools.length || this.loadingSchool) {
                     return false
                 }
                 this.showSchool = true
             },
-            onFileChange(e)
-            {
+            onFileChange(e) {
                 const file = e.target.files[0];
                 this.stProfile.photo = URL.createObjectURL(file);
                 this.image = this.$refs.image.files[0];
@@ -347,14 +371,15 @@
                     this.stProfile.photo = response.data.photo
                     this.getStudentProfile(this.stProfile)
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
-                    
-                }).catch(() => {})
+
+                }).catch(() => {
+                })
             }
         },
-        created(){
+        created() {
             this.getUser({
                 id: this.$route.params.user_id
-            }).then(response =>{
+            }).then(response => {
                 this.stProfile = response.data.data
             })
         }
