@@ -15,6 +15,9 @@ export default {
     },
 
     mutations: {
+        toggleFavorite(state, payload) {
+            state.playlist.is_favorite = payload
+        },
         getPackagesPagination(state, payload) {
             for (let i = 0; i < payload.length; i++) {
                 state.packages.list.push(payload[i]);
