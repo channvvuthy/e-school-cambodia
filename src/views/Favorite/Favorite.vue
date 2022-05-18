@@ -592,12 +592,14 @@
 
                 if (data.action.label === 'actions.add_to_favorite') {
                     this.addFavorite(payload).then(() => {
+                        helper.success('0010')
                         this.actionId = null
                     })
                 }
 
                 if (data.action.label === 'actions.remove_favorite') {
                     this.deleteFavorite(payload).then(() => {
+                        helper.success('0011')
                         this.actionId = null
                     })
                 }
