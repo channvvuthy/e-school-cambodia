@@ -1,6 +1,6 @@
 <template>
   <div
-      class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black">
+      class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black bg-opacity-80">
     <div class="md:w-96 2xl:w-100 h-85 rounded-lg flex flex-col justify-between text-white relative"
          :style="{backgroundColor:`${backgroundColor}`,color:`${color}`}">
       <!-- Profile -->
@@ -8,7 +8,7 @@
         <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center cursor-pointer z-50"
              :style="{backgroundImage:`url(${storyDetail.user.photo})`}" @click="getUser(storyDetail.user._id)"></div>
         <div class="flex flex-col items-center justify-start text-left text-base">
-          <div>
+          <div class="text-gray-300">
             <div>{{ storyDetail.user.name }}</div>
             <vue-moments-ago prefix="" suffix="ago" :date="storyDetail.date" lang="en"/>
           </div>
@@ -164,6 +164,7 @@ export default {
     averageColor() {
       fac.getColorAsync(document.querySelector('.story-profile'))
           .then(color => {
+            console.log(color)
             this.backgroundColor = color.rgba
             this.color = color.isDark ? '#fff' : '#000';
           }).catch(e => {

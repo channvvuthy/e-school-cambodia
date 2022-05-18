@@ -13,35 +13,39 @@
                 <div class="mt-10">
                     <form class="flex-col text-sm font-khmer_os" v-if="tap == 'login'">
                         <div class="relative">
-                            <span class="absolute mt-2 text-sm font-medium opacity-30" :class="darkMode?`left-2`:`left-0`">
+                            <span class="absolute mt-2 text-sm font-medium opacity-30"
+                                  :class="darkMode?`left-2`:`left-0`">
                                 <PhoneIcon :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
                             </span>
-                            <input type="text" :placeholder="$t('2009')" v-model="auth.phone" @keypress="isNumber($event)" ref="phone"
-                            :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-borderGray`" 
-                            class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
+                            <input type="text" :placeholder="$t('2009')" v-model="auth.phone"
+                                   @keypress="isNumber($event)" ref="phone"
+                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-borderGray`"
+                                   class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
                         </div>
                         <div class="h-5"></div>
                         <div class="relative">
-                            <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
+                            <span class="absolute mt-2 text-sm font-medium opacity-40"
+                                  :class="darkMode?`left-2`:`left-0`">
                                 <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                             </span>
                             <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="auth.password"
-                                v-on:keyup.enter="studentLogin"
-                                ref="password"
-                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border-borderGray`" 
-                                class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
+                                   v-on:keyup.enter="studentLogin"
+                                   ref="password"
+                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border-borderGray`"
+                                   class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
                         </div>
                         <div class="h-3"></div>
-                        <div class="text-right cursor-pointer mb-4" @click="goTo('forgot-password')" :class="darkMode?`text-white`:`text-gray-500 `">
+                        <div class="text-right cursor-pointer mb-4" @click="goTo('forgot-password')"
+                             :class="darkMode?`text-white`:`text-gray-500 `">
                             {{$t('2011')}}?
                         </div>
                         <div class="h-3"></div>
                     </form>
 
                     <button class="relative focus:outline-none h-11 p-3 text-center flex justify-center items-center text-white rounded-lg w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                        :class="darkMode?`bg-button`:`bg-primary`"
-                        @click="studentLogin" :disabled="loginLoading">
-                        <div class="pl-2" >
+                            :class="darkMode?`bg-button`:`bg-primary`"
+                            @click="studentLogin" :disabled="loginLoading">
+                        <div class="pl-2">
                             <span v-if="!loginLoading">{{$t('2007')}}</span>
                             <div class="absolute flex justify-center items-center -top-2" v-else>
                                 <div class="loader"></div>
@@ -51,7 +55,9 @@
                     <div class="h-10"></div>
                     <div class="flex justify-end text-sm">
                         <div class="mr-3" :class="darkMode?`text-white`:`text-gray-500`">{{$t('2012')}}</div>
-                        <div class="underline cursor-pointer" @click="goTo('register')" :class="darkMode?`text-white`:`text-primary`" >{{$t('2008')}}</div>
+                        <div class="underline cursor-pointer" @click="goTo('register')"
+                             :class="darkMode?`text-white`:`text-primary`">{{$t('2008')}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,14 +79,14 @@
     import PhoneIcon from "./../../components/PhoneIcon.vue"
     import LockIcon from "./../../components/LockIcon.vue"
 
-    export default{
+    export default {
         components: {
             Loader,
             PhoneIcon,
             Message,
             LockIcon
         },
-        data(){
+        data() {
             return {
                 tap: "login",
                 forgotPassword: false,
@@ -103,39 +109,47 @@
         methods: {
             ...mapActions('auth', ['login', 'getStudentProfile', 'getToken']),
 
-            changePasswordSuccess(){
+            changePasswordSuccess() {
                 this.forgotPassword = false
             },
-            cancel(){
+            cancel() {
                 this.forgotPassword = false;
             },
 
-            agree(){
+            agree() {
                 this.forgotPassword = false;
             },
 
-            closeMessage(){
+            closeMessage() {
                 this.errorMessage = null;
             },
 
-            isNumber(evt){
+            isNumber(evt) {
                 return helper.isNumber(evt)
             },
-            goTo(page){
+            goTo(page) {
                 this.$router.push({name: page})
             },
-            studentLogin(){
+            studentLogin() {
                 if (this.loginLoading) {
                     return
                 }
 
                 if (this.auth.phone && this.auth.password) {
-                    this.login(this.auth).then(response => {
-                        if (response.data.status !== 0) {
-                            helper.errorMessage(response.data.msg)
+                    this.login(this.auth).then(res => {
+                        if (res.data.status !== 0) {
+                            helper.errorMessage(res.data.msg)
                             return;
                         }
-                        let data = response.data.data;
+                        if (res.data.data && res.data.data.story) {
+                            let currentStory = {
+                                photo: {
+                                    url: res.data.data.story
+                                }
+                            }
+                            this.$store.commit("story/setStory", currentStory)
+                        }
+                        let data = res.data.data;
                         localStorage.setItem('token', data.token);
                         let stProfile = studentProfileData.studentProfileData
                         stProfile._id = data._id
@@ -174,8 +188,8 @@
                         this.$router.push({
                             name: "home"
                         })
-                    }).catch(err=>{
-                        helper.errorMessage(err.response.data.msg)
+                    }).catch(err => {
+                        helper.errorMessage(err.res.data.msg)
                     });
 
                     return;
@@ -194,7 +208,7 @@
                 }
             }
         },
-        mounted(){
+        mounted() {
             this.$refs.phone.focus()
         }
     }
