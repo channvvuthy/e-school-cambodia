@@ -4,7 +4,7 @@
                 :class="darkMode ? `text-gray-300`: `text-primary`"
                 @click="()=>{this.$router.go(-1)}"
                 href="#" class="absolute right-2 bottom-2">
-            {{$t('back')}}
+            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"></BackMenuIcon>
         </a>
         <!-- Detail -->
         <template>
@@ -157,9 +157,11 @@
     import GalleryIcon from "./../../components/GalleryIcon.vue"
     import NetworkIcon from "./../../components/NetworkIcon.vue"
     import SocialIcon from "../../components/SocialIcon";
+    import BackMenuIcon from "../../components/BackMenuIcon";
 
     export default {
         components: {
+            BackMenuIcon,
             SocialIcon,
             ProfileIcon,
             GenderIcon,

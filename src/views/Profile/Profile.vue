@@ -1,5 +1,11 @@
 <template>
     <div class="h-screen">
+        <a
+                :class="darkMode ? `text-gray-300`: `text-primary`"
+                @click="()=>{this.$router.go(-1)}"
+                href="#" class="absolute right-2 bottom-2">
+            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"/>
+        </a>
         <!-- Detail -->
         <template v-if="!isEdit">
             <div class="flex mt-5 px-5">
@@ -128,7 +134,7 @@
             <div class="p-5 flex space-x-6">
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="social"
-                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer font-black w-full justify-center">
+                     class="p-5 rounded-lg shadow flex items-center space-x-3 cursor-pointer font-black w-full justify-center">
                     <SocialIcon :fill="darkMode?`#909090`:`#055174`"></SocialIcon>
                     <div>
                         {{$t('social')}}
@@ -136,7 +142,7 @@
                 </div>
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="()=>{this.isChangeName = true}"
-                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer w-full justify-center">
+                     class="p-5 rounded-lg shadow flex items-center space-x-3 cursor-pointer w-full justify-center">
                     <EditIcon :fill="darkMode?`#909090`:`#055174`"></EditIcon>
                     <div>
                         {{$t('request_change_name')}}
@@ -144,7 +150,7 @@
                 </div>
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="()=>{this.isChangePhone = true}"
-                     class="p-5 rounded-lg shadow flex space-x-3 cursor-pointer w-full justify-center">
+                     class="p-5 rounded-lg shadow flex items-center space-x-3 cursor-pointer w-full justify-center">
                     <EditIcon :fill="darkMode?`#909090`:`#055174`"></EditIcon>
                     <div>
                         {{$t('request_change_phone')}}
@@ -351,9 +357,11 @@
     import ChangeName from "./components/ChangeName";
     import ChangePhone from "./components/ChangePhone";
     import SocialIcon from "../../components/SocialIcon";
+    import BackMenuIcon from "../../components/BackMenuIcon";
 
     export default {
         components: {
+            BackMenuIcon,
             SocialIcon,
             ChangePhone,
             ChangeName,

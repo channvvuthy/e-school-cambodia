@@ -99,7 +99,7 @@
                                 <div v-if="post.thumbnail && post.type === 1" class="relative">
                                     <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                                         <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
-                                            <div v-if="post.caption.length > 200">
+                                            <div v-if="post.caption && post.caption.length > 200">
                   <span class="less"
                         @click="seeMore"
                   >{{ cutString(post.caption, 200) }} <span
@@ -121,16 +121,17 @@
                                 <div class="font-light mt-4 whitespace-pre-wrap"
                                      v-else-if="post.caption"
                                      :class="darkMode ? `text-lightGray` : ``">
-                                    <div v-if="post.caption.length > 200">
-                  <span class="less"
-                        @click="seeMore"
-                  >{{ cutString(post.caption, 200) }} <span
-                          class="capitalize cursor-pointer"
-                          :class="darkMode ? `text-gray-300`: `text-primary`">{{ $t('see_more') }}</span>
-                  </span>
-                                        <span class="more hidden">
-                    {{ post.caption }}
-                  </span>
+                                    <div v-if="post.caption && post.caption.length > 200">
+                                        <span class="less"
+                                              @click="seeMore">
+                                          {{ cutString(post.caption, 200) }}
+                                          <span
+                                                  class="capitalize cursor-pointer"
+                                                  :class="darkMode ? `text-gray-300`: `text-primary`">
+                                              {{ $t('see_more') }}
+                                          </span>
+                                        </span>
+                                        <span class="more hidden">{{ post.caption }}</span>
                                     </div>
                                     <div v-else>
                                         {{ post.caption }}
@@ -379,6 +380,13 @@
                     :msg="msg"
                     @cancelModal="() => {this.showMsg = false}"
                     @yes="yes"/>
+            <BuyMsg
+                    v-if="isDelete"
+                    :msg="msg"
+                    @cancelModal="() => {
+                        this.isDelete = false; this.actionId = null
+                    }"
+                    @yes="confirmDeleteSocial"/>
         </div>
     </div>
 </template>
@@ -483,6 +491,7 @@
                 minHeight: 0,
                 msg: "2006",
                 deletePayload: {},
+                isDelete: false,
                 payload: {
                     p: 1,
                     caption: null,
@@ -566,15 +575,22 @@
             playVideo(post) {
                 this.videoPlaying = post._id
             },
+            confirmDeleteSocial() {
+                this.deleteSocial(this.deletePayload).then(() => {
+                    this.actionId = null
+                    this.isDelete = false
+                    helper.success('008')
+                })
+            },
             selectedAction(data) {
                 let payload = {}
                 payload.id = data.post._id
                 this.reportSocial = data.post
 
                 if (data.action.label === 'actions.delete') {
-                    this.deleteSocial(payload).then(() => {
-                        this.actionId = null
-                    })
+                    this.deletePayload = payload
+                    this.isDelete = true
+                    this.msg = "007"
                 }
 
                 if (data.action.label === 'actions.add_to_favorite') {

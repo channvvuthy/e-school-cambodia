@@ -4,7 +4,7 @@
                 :class="darkMode ? `text-gray-300`: `text-primary`"
                 @click="()=>{this.$router.go(-1)}"
                 href="#" class="absolute right-2 bottom-2">
-            {{$t('back')}}
+            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"/>
         </a>
         <div
                 :class="darkMode ? `bg-secondary`: `bg-white`">
@@ -65,7 +65,9 @@
                                 <div class="px-5 pt-5">
                                     <div class="flex justify-between">
                                         <div class="flex space-x-4">
-                                            <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
+                                            <div @click="userDetail(post.user)">
+                                                <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
+                                            </div>
                                             <div>
                                                 <div class="font-PoppinsMedium text-lg">{{ post.user.name }}</div>
                                                 <div
@@ -278,6 +280,13 @@
                         :msg="msg"
                         @cancelModal="() => {this.showMsg = false}"
                         @yes="yes"/>
+                <BuyMsg
+                        v-if="isDelete"
+                        :msg="msg"
+                        @cancelModal="() => {
+                        this.isDelete = false; this.actionId = null
+                    }"
+                        @yes="confirmDeleteSocial"/>
             </div>
             <div class="h-40"></div>
         </div>
@@ -321,6 +330,7 @@
     import ChatIcon from "@/components/ChatIcon";
     import TestIcon from "@/components/TestIcon";
     import BuyMsg from "@/views/Component/BuyMsg";
+    import BackMenuIcon from "../../components/BackMenuIcon";
 
     Vue.use(VueObserveVisibility)
 
@@ -334,6 +344,7 @@
             }
         },
         components: {
+            BackMenuIcon,
             CartIcon,
             CertificateIcon,
             YoutubeIcon,
@@ -383,6 +394,7 @@
                 minHeight: 0,
                 msg: "2006",
                 deletePayload: {},
+                isDelete: false,
                 enableScroll: true,
                 showScrollTop: false,
                 isMind: false,
@@ -398,6 +410,14 @@
             ...mapActions('social', ['getMySocial', 'postSocial', 'like',
                 'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite', 'getRecomment']),
             ...mapActions('cart', ['addCart', 'getCart']),
+            userDetail(user) {
+                this.$router.push({
+                    name: "user",
+                    params: {
+                        user_id: user._id
+                    }
+                })
+            },
             onScroll: function ({target: {scrollTop, clientHeight, scrollHeight}}) {
                 if (!scrollTop) {
                     this.showScrollTop = false
@@ -476,15 +496,22 @@
             playVideo(post) {
                 this.videoPlaying = post._id
             },
+            confirmDeleteSocial() {
+                this.deleteSocial(this.deletePayload).then(() => {
+                    this.actionId = null
+                    this.isDelete = false
+                    helper.success('008')
+                })
+            },
             selectedAction(data) {
                 let payload = {}
                 payload.id = data.post._id
                 this.reportSocial = data.post
 
                 if (data.action.label === 'actions.delete') {
-                    this.deleteSocial(payload).then(() => {
-                        this.actionId = null
-                    })
+                    this.deletePayload = payload
+                    this.isDelete = true
+                    this.msg = "007"
                 }
 
                 if (data.action.label === 'actions.add_to_favorite') {
