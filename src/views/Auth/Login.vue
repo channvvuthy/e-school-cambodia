@@ -1,5 +1,8 @@
 <template>
     <div class="flex flex-col justify-between h-screen" :class="darkMode?`bg-youtube`:`bg-white`">
+        <a href="#" class="absolute left-2 top-2 text-xs uppercase font-black" @click="()=>{this.$router.push('/')}">
+            {{$t('1101')}}
+        </a>
         <div class="flex justify-center items-center h-full flex-1">
             <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:`bg-white`">
                 <div class="flex flex-col justify-center items-center">

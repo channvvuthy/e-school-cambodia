@@ -309,6 +309,11 @@ const routes = [
         name: 'book-overview',
         component: () => import('../views/Library/components/book/OverView'),
     },
+    {
+        path: '/social/:user',
+        name: 'social',
+        component: () => import('../views/Video/Social'),
+    },
 
 
 ];
