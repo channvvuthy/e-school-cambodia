@@ -1,59 +1,71 @@
 <template>
     <div>
-        <div class="h-screen py-4 overflow-y-scroll pb-40 text-base" :class="darkMode?`bg-youtube text-gray-400`:`bg-transparent text-youtube`">
+        <div class="h-screen py-4 overflow-y-scroll pb-40 text-base"
+             :class="darkMode?`bg-youtube text-gray-400`:`bg-transparent text-youtube`">
             <div class="px-5 py-1 font-khmer_os">
                 <div v-if="loading" class="flex justify-center items-center h-screen relative -top-5">
                     <h1 class="text-sm font-semibold font-khmer_os relative -top-20">
-                        <loading></loading>
+                        <loading/>
                     </h1>
                 </div>
                 <div class="text-14px" v-else>
                     <div class="w-3/4 px-10" :class="darkMode?``:`bg-white e-shadow rounded-xl`">
-                       <div class="flex items-center justify-center py-5">
-                           <img src="eschool-cambodia.png" class="w-56">
-                       </div>
-                       <div>{{company.des}}</div>
-                       <div class="h-5"></div>
-                       <div>{{$t('contact')}}</div>
-                        
-                       <ul>
-                           <li class="flex items-center h-12">
-                               <PhoneIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></PhoneIcon>
-                               <div class="ml-3">
-                                   {{ company.phone }}
-                               </div>
-                           </li>
-                           <li class="flex items-center h-12">
-                               <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></MarkerIcon>
-                               <div class="ml-3">
-                                   {{ company.address }} <span :class="darkMode?`text-fb`:`text-primary`" class="cursor-pointer underline" @click="openLink(mapUrl)">មើលផែនទី</span>
-                               </div>
-                           </li>
-                           <li class="flex items-center h-12 cursor-pointer" @click="openLink(company.website )">
-                               <WebIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></WebIcon>
-                               <div class="ml-3" :class="darkMode?`text-fb`:`text-primary`">
-                                   {{ company.website }}
-                               </div>
-                           </li>
-                       </ul>
-                       <div class="h-10"></div>
-                       <div class="flex items-center justify-center social">
-                           <div class="cursor-pointer" @click="openLink(telegramUrl)">
-                               <TelegramIcon :size="45"></TelegramIcon>
-                           </div>
-                           <div class="cursor-pointer px-3" @click="openLink(facebookUrl)">
-                               <FacebookIcon></FacebookIcon>
-                           </div>
-                           <div class="cursor-pointer pr-3" @click="openLink(youtubeUrl)">
-                               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 473.931 473.931" height="45" style="enable-background:new 0 0 473.931 473.931" xml:space="preserve">
+                        <div class="flex items-center justify-center py-5">
+                            <img src="eschool-cambodia.png" class="w-56">
+                        </div>
+                        <div>{{company.des}}</div>
+                        <div class="h-5"></div>
+                        <div>{{$t('contact')}}</div>
+
+                        <ul>
+                            <li class="flex items-center h-12">
+                                <PhoneIcon :fill="darkMode?`#909090`:`#055174`" :size="24"/>
+                                <div class="ml-3">
+                                    {{ company.phone }}
+                                </div>
+                            </li>
+                            <li class="flex items-center h-12">
+                                <MarkerIcon
+                                        :fill="darkMode?`#909090`:`#055174`"
+                                        :size="24"/>
+                                <div class="ml-3">
+                                    {{ company.address }}
+                                    <span
+                                            :class="darkMode?`text-fb`:`text-primary`"
+                                            class="cursor-pointer underline"
+                                            @click="openLink(mapUrl)">
+                                        មើលផែនទី
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="flex items-center h-12 cursor-pointer" @click="openLink(company.website )">
+                                <WebIcon :fill="darkMode?`#909090`:`#055174`" :size="24"/>
+                                <div class="ml-3" :class="darkMode?`text-fb`:`text-primary`">
+                                    {{ company.website }}
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="h-10"></div>
+                        <div class="flex items-center justify-center social">
+                            <div class="cursor-pointer" @click="openLink(telegramUrl)">
+                                <TelegramIcon :size="45"/>
+                            </div>
+                            <div class="cursor-pointer px-3" @click="openLink(facebookUrl)">
+                                <FacebookIcon/>
+                            </div>
+                            <div class="cursor-pointer pr-3" @click="openLink(youtubeUrl)">
+                                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                                     xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                     viewBox="0 0 473.931 473.931" height="45"
+                                     style="enable-background:new 0 0 473.931 473.931" xml:space="preserve">
                                 <circle style="fill:#D42428" cx="236.966" cy="236.966" r="236.966"/>
-                                <path style="fill:#CC202D" d="M404.518,69.38c92.541,92.549,92.549,242.593,0,335.142c-92.541,92.541-242.593,92.545-335.142,0
+                                    <path style="fill:#CC202D" d="M404.518,69.38c92.541,92.549,92.549,242.593,0,335.142c-92.541,92.541-242.593,92.545-335.142,0
                                     L404.518,69.38z"/>
-                                <path style="fill:#BA202E" d="M470.321,277.964L310.843,118.487l-12.864,12.864l-12.864-12.864l-14.099,14.099l9.47,9.47
+                                    <path style="fill:#BA202E" d="M470.321,277.964L310.843,118.487l-12.864,12.864l-12.864-12.864l-14.099,14.099l9.47,9.47
                                     l-3.091,3.091l-24.557-24.557l-1.048,1.055l-33.092-33.092l-14.099,14.099l3.858,3.858l-5.665,5.665l-23.854-23.854l-9.889,9.889
                                     l23.255,56.003l-10.473,42.997l28.632,28.639l-72.418,5.066l-1.096,125.667l116.537,116.679
                                     C362.678,465.505,451.836,383.833,470.321,277.964z"/>
-                                <path style="fill:#FFFFFF" d="M321.724,291.91h-15.289l0.075-8.875c0-3.948,3.237-7.169,7.199-7.169h0.98
+                                    <path style="fill:#FFFFFF" d="M321.724,291.91h-15.289l0.075-8.875c0-3.948,3.237-7.169,7.199-7.169h0.98
                                     c3.963,0,7.214,3.222,7.214,7.169L321.724,291.91z M264.404,272.89c-3.865,0-7.038,2.608-7.038,5.796v43.161
                                     c0,3.188,3.173,5.781,7.038,5.781c3.895,0,7.068-2.593,7.068-5.781v-43.165C271.472,275.498,268.299,272.89,264.404,272.89z
                                     M357.473,248.752v82.102c0,19.697-17.077,35.809-37.96,35.809H163.444c-20.887,0-37.96-16.116-37.96-35.809v-82.102
@@ -80,15 +92,15 @@
                                     V176.716z M181.722,197.269h16.969l0.015-58.648l20.045-50.241h-18.555l-10.657,37.324l-10.81-37.421h-18.357l21.324,50.372
                                     L181.722,197.269z"/>
                                 </svg>
-                           </div>
-                           <div class="cursor-pointer" @click="openLink(linkedinUrl)">
-                               <InIcon></InIcon>
-                           </div>
-                       </div>
-                       <div class="h-5"></div>
-                       <div class="text-center">
-                           {{ $t('version') }} {{ appVersion }}
-                       </div>
+                            </div>
+                            <div class="cursor-pointer" @click="openLink(linkedinUrl)">
+                                <InIcon/>
+                            </div>
+                        </div>
+                        <div class="h-5"></div>
+                        <div class="text-center">
+                            {{ $t('version') }} {{ appVersion }}
+                        </div>
                         <div class="h-10"></div>
                     </div>
                 </div>
@@ -107,13 +119,14 @@
     import YoutubeIcon from "./../../components/YoutubeIcon.vue"
     import InIcon from "./../../components/InIcon.vue"
     import InstagramIcon from "./../../components/InstagramIcon.vue"
+
     const {ipcRenderer} = require('electron')
     import config from "./../../config"
-    import Loading from  "./../../components/Loading"
+    import Loading from "./../../components/Loading"
     import eHeader from "./../Video/components/Header.vue"
     import TelegramIcon from "./../HotChat/components/TelegramIcon.vue"
 
-    export default{
+    export default {
         name: "About",
         components: {
             TelegramIcon,
@@ -128,37 +141,37 @@
             Loading,
             eHeader
         },
-        data(){
+        data() {
             return {
                 loading: false,
                 company: null,
                 facebookUrl: "https://facebook.com/196770961113954",
                 youtubeUrl: "https://www.youtube.com/channel/UCXAVs_YRUwsnx5I-Toy-7Dg",
                 linkedinUrl: "https://www.linkedin.com/in/eschoolcambodia/",
-                telegramUrl:"https://t.me/eschool_community",
+                telegramUrl: "https://t.me/eschool_community",
                 mapUrl: "https://www.google.com/maps/search/?api=1&query=",
                 src: ""
             }
         },
         computed: {
             ...mapState('setting', ['darkMode']),
-            appVersion(){
+            appVersion() {
                 return config.appVersion
             }
         },
         methods: {
             ...mapActions('setting', ['companyInfo']),
-            openLink(link){
+            openLink(link) {
                 ipcRenderer.send('openLink', link)
             }
         },
 
-        created(){
+        created() {
             this.loading = true
             this.companyInfo().then(response => {
                 this.loading = false
                 this.company = response
-                this.mapUrl += `${this.company.latitude},${this.company.longitude}` 
+                this.mapUrl += `${this.company.latitude},${this.company.longitude}`
                 this.src = "https://maps.google.com/maps?q=" + response.latitude + "," + response.longitude + "&z=15&output=embed"
             }).catch(() => {
                 this.loading = false

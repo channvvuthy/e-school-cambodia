@@ -1,10 +1,12 @@
 <template>
     <div class="flex flex-col justify-between h-screen">
-        <div class="flex justify-center items-center h-full flex-1" :class="darkMode?`bg-youtube`:`bg-white`">
-            <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+        <div class="flex justify-center items-center h-full flex-1"
+             :class="darkMode?`bg-youtube`:`bg-white`">
+            <div class="flex-col rounded-3xl w-100 p-6 e-shadow"
+                 :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                 <div class="flex justify-between items-center">
                     <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
-                        <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"></ChevronIcon>
+                        <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"/>
                     </div>
                 </div>
                 <div class="h-10"></div>
@@ -19,50 +21,65 @@
                 <div class="h-5"></div>
                 <form class="flex-col text-sm font-khmer_os w-full">
                     <div class="relative" v-if="!showReset">
-                        <span class="absolute text-sm font-medium opacity-40" :class="darkMode?`left-2 mt-3`:`-left-1 mt-2`">
-                            <PhoneIcon size="22" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
+                        <span class="absolute text-sm font-medium opacity-40"
+                              :class="darkMode?`left-2 mt-3`:`-left-1 mt-2`">
+                            <PhoneIcon size="22" :fill="darkMode?`#e4e7eb`:`#000000`"/>
                         </span>
                         <input type="text" :placeholder="$t('2009')" v-model="phone" @keypress="isNumber($event)" 
                         ref="forgetPassword"
-                        :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube pl-8`:`pl-7 border-b border-borderGray`" 
+                        :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border
+                        border-youtube pl-8`:`pl-7 border-b border-borderGray`"
                         class="h-10 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4"/>
                     </div>
                     <template v-if="showReset">
                         <div class="relative">
                             <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
-                            <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                            <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"/>
                             </span>
                             <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="payload.password"
                                 ref="password"
-                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-1 border-borderGray border-t-0 border-r-0 border-l-0`" 
+                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border
+                                border-youtube`:`border border-1 border-borderGray border-t-0 border-r-0 border-l-0`"
                                 class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
                         </div>
                         <div class="relative">
                                 <span class="absolute mt-2 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
                                 <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                             </span>
-                            <input type="password" :placeholder="$t('2017')" autocomplete="off" v-model="payload.confirm_password"
-                                ref="confirmPassword"
-                                :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-1 border-borderGray border-t-0 border-r-0 border-l-0`" 
-                                class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
+                            <input type="password"
+                                   :placeholder="$t('2017')" autocomplete="off"
+                                   v-model="payload.confirm_password"
+                                   ref="confirmPassword"
+                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border
+                                   border-youtube`:`border border-1 border-borderGray border-t-0 border-r-0 border-l-0`"
+                                   class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10"/>
                         </div>
                     </template>
                 </form>
-                <button class="relative focus:outline-none p-3 mt-4 text-center text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os" :class="darkMode?`bg-button`:`bg-primary`" @click="checkPhoneNumber" :disabled="loadingRegister" v-if="!showReset">
+                <button
+                        class="relative focus:outline-none p-3 mt-4 text-center text-white rounded-lg h-11
+                        w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                        :class="darkMode?`bg-button`:`bg-primary`"
+                        @click="checkPhoneNumber"
+                        :disabled="loadingRegister" v-if="!showReset">
                     <span v-if="!loadingRegister">{{$t('2007')}}</span>
                     <div class="absolute flex justify-center items-center -top-2 w-full" v-else>
                         <div class="loader"></div>
                     </div>
                 </button>
 
-                <button class="relative focus:outline-none p-3 mt-4 justify-center items-center text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os" :class="darkMode?`bg-button`:`bg-primary`" @click="modifyPassword" :disabled="resetingPassword" v-else>
+                <button
+                        class="relative focus:outline-none p-3 mt-4 justify-center items-center text-white rounded-lg
+                        h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                        :class="darkMode?`bg-button`:`bg-primary`"
+                        @click="modifyPassword" :disabled="resetingPassword" v-else>
                     <span v-if="!resetingPassword">{{$t('1122')}}</span>
                     <div class="absolute flex justify-center items-center -top-2 w-full" v-else>
                         <div class="loader"></div>
                     </div>
                 </button>
             </div>
-            <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
+            <ErrMessage v-if="err" :message="message" @closeErr="closeErr"/>
 
         </div>
         <img src="e-footer.png" class="w-full" v-if="!darkMode">

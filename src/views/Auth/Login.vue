@@ -19,19 +19,21 @@
                             </span>
                             <input type="text" :placeholder="$t('2009')" v-model="auth.phone"
                                    @keypress="isNumber($event)" ref="phone"
-                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-borderGray`"
+                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border
+                                   border-youtube`:`border-borderGray`"
                                    class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
                         </div>
                         <div class="h-5"></div>
                         <div class="relative">
                             <span class="absolute mt-2 text-sm font-medium opacity-40"
                                   :class="darkMode?`left-2`:`left-0`">
-                                <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                                <lock-icon :fill="darkMode?`#e4e7eb`:`#000000`"/>
                             </span>
                             <input type="password" :placeholder="$t('2010')" autocomplete="off" v-model="auth.password"
                                    v-on:keyup.enter="studentLogin"
                                    ref="password"
-                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border-borderGray`"
+                                   :class="darkMode?`caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border
+                                   border-youtube`:`border-borderGray`"
                                    class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4 pl-10 border-b"/>
                         </div>
                         <div class="h-3"></div>
@@ -42,7 +44,10 @@
                         <div class="h-3"></div>
                     </form>
 
-                    <button class="relative focus:outline-none h-11 p-3 text-center flex justify-center items-center text-white rounded-lg w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                    <button
+                            class="relative focus:outline-none h-11 p-3 text-center flex
+                            justify-center items-center text-white rounded-lg w-full
+                            text-sm outline-none text-sm cursor-pointer font-khmer_os"
                             :class="darkMode?`bg-button`:`bg-primary`"
                             @click="studentLogin" :disabled="loginLoading">
                         <div class="pl-2">
@@ -62,7 +67,7 @@
                 </div>
             </div>
             <template>
-                <Message v-if="errorMessage" :message="errorMessage" @closeMessage="closeMessage"></Message>
+                <Message v-if="errorMessage" :message="errorMessage" @closeMessage="closeMessage"/>
             </template>
         </div>
         <img src="e-footer.png" class="w-full" v-if="!darkMode">

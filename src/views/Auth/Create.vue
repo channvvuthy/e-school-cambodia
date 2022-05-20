@@ -1,10 +1,12 @@
 <template>
     <div class="flex flex-col justify-between h-screen bg-white">
-        <div class="flex justify-center items-center h-full flex-1" :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
-            <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary`:``">
+        <div class="flex justify-center items-center h-full flex-1"
+             :class="darkMode?`bg-youtube text-gray-300`:`bg-white`">
+            <div class="flex-col rounded-3xl w-100 p-6 e-shadow"
+                 :class="darkMode?`bg-secondary`:``">
                 <div class="flex justify-between items-center">
                     <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
-                        <ChevronIcon :fill="darkMode?`#e4e7eb`:`#000000`"></ChevronIcon>
+                        <ChevronIcon :fill="darkMode?`#e4e7eb`:`#000000`"/>
                     </div>
                     <div class="flex-1 text-center text-md">
                         {{$t('2008')}}
@@ -14,27 +16,28 @@
                 <form class="flex-col text-sm font-khmer_os">
                     <div class="relative">
                         <div class="opacity-50 absolute top-3" :class="darkMode?`left-2`:`left-0`">
-                        <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
+                        <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"/>
                         </div>
                         <input
                                 type="text"
                                 ref="first_name"
                                 :placeholder="$t('2013') + '*'"
-                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40
+                                border border-youtube`:`border-b border-borderGray`"
                                 class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
                                 v-model="studentInfo.first_name"
                         />
                     </div>
                     <div class="relative">
                         <div class="opacity-50 absolute top-3" :class="darkMode?`left-2`:`left-0`">
-                            <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"></UserIcon>
+                            <UserIcon :fill="darkMode?`#e4e7eb`:`#000000`" :size="20"/>
                         </div>
                         <input
                                 type="text"
                                 ref="last_name"
                                 :placeholder="$t('2014')+ '*'"
-                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b border-borderGray`"
-
+                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40
+                                border border-youtube`:`border-b border-borderGray`"
                                 class="p-2 w-full focus:outline-none mb-4 pl-8 h-12 placeholder-gray-500"
                                 v-model="studentInfo.last_name"
                         />
@@ -64,13 +67,14 @@
                 <form class="flex-col text-sm font-khmer_os w-full">
                     <div class="relative">
                         <span class="absolute mt-3 text-sm font-medium opacity-40" :class="darkMode?`left-2`:`left-0`">
-                            <PhoneIcon size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
+                            <PhoneIcon size="20" :fill="darkMode?`#e4e7eb`:`#000000`"/>
                         </span>
                         <input type="text" :placeholder="$t('2009')+ '*'"
-                            ref="phone"
-                            v-model="studentInfo.phone"
-                            @keypress="isNumber($event)"
-                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
+                               ref="phone"
+                               v-model="studentInfo.phone"
+                               @keypress="isNumber($event)"
+                               :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40
+                               border border-youtube`:`border-b   border-borderGray`"
 
                             class="h-12 placeholder-gray-500 p-2 w-full focus:outline-none mb-4 pl-8"/>
                     </div>
@@ -79,22 +83,23 @@
                                 <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
                             </span>
                         <input type="password" :placeholder="$t('2010')+ '*'"
-                            v-model="studentInfo.password"
-                            ref="password"
-                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
-
-                            class="h-12 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4 pl-8"/>
+                               v-model="studentInfo.password"
+                               ref="password"
+                               :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40
+                               border border-youtube`:`border-b   border-borderGray`"
+                               class="h-12 placeholder-gray-500 p-2 px-0 w-full focus:outline-none mb-4 pl-8"/>
 
                     </div>
                     <div class="relative">
                         <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
-                                <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                                <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"/>
                             </span>
                         <input type="password" :placeholder="$t('2017')+ '*'"
-                            ref="confirm_password"
-                            v-model="studentInfo.confirm_password"
-                                :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40 border border-youtube`:`border-b   border-borderGray`"
-                            class="h-12 placeholder-gray-500 p-2 px-0  w-full focus:outline-none mb-4 pl-8"/>
+                               ref="confirm_password"
+                               v-model="studentInfo.confirm_password"
+                               :class="darkMode?`h-12  caret-white text-gray-300 rounded-md bg-black bg-opacity-40
+                               border border-youtube`:`border-b   border-borderGray`"
+                               class="h-12 placeholder-gray-500 p-2 px-0  w-full focus:outline-none mb-4 pl-8"/>
                     </div>
                 </form>
                 <div class="flex justify-start items-center mt-4">
@@ -116,18 +121,24 @@
                     </label>
                 </div>
                 <div class="h-5"></div>
-                <button class="focus:outline-none p-3 mt-4 text-center relative text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                <button
+                        class="focus:outline-none p-3 mt-4 text-center relative text-white rounded-lg h-11 w-full
+                        text-sm outline-none text-sm cursor-pointer font-khmer_os"
                         @click="createAccount" :disabled="loadingRegister"
                         :class="darkMode?`bg-button`:`bg-primary`"
                         >
-                    
-                    <div class="absolute flex justify-center items-center w-full left-0 -top-3 " v-if="loadingRegister">
+                    <div class="absolute flex justify-center items-center w-full left-0 -top-3 "
+                         v-if="loadingRegister">
                         <div class="loader"></div>
                     </div>
                     <span v-else>{{$t('2008')}}</span>
                 </button>
-                <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
-                <TermAndCondition v-if="showTerm" @closeTermAndCondition="closeTermAndCondition"></TermAndCondition>
+                <ErrMessage
+                        v-if="err"
+                        :message="message" @closeErr="closeErr"/>
+                <TermAndCondition
+                        v-if="showTerm"
+                        @closeTermAndCondition="closeTermAndCondition"/>
             </div>
         </div>
        <img src="e-footer.png" class="w-full" v-if="!darkMode">
