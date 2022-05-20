@@ -13,10 +13,10 @@
                                 <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
                             </div>
                         </div>
-                        <div @click="changeType('video')" class="cursor-pointer  w-12 text-center"
-                             :class="type==`video`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
-                            <div class="pb-2">{{ $t('2108') }}</div>
-                            <div v-if="type === `video`">
+                        <div @click="changeType('course')" class="cursor-pointer  w-12 text-center"
+                             :class="type==`course`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
+                            <div class="pb-2">{{ $t('course') }}</div>
+                            <div v-if="type === `course`">
                                 <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
                             </div>
                         </div>
@@ -39,13 +39,15 @@
 
             <div v-else class="h-screen pb-72 overflow-y-scroll" @scroll="onScroll">
                 <!-- Video -->
-                <template v-if="type === `video`">
+                <template v-if="type === `course`">
                     <div v-if="favoritedVideo.length == 0" class="h-screen pb-10" style="display:block;">
                         <Empty></Empty>
                     </div>
-                    <div class="grid gap-4"
+                    <div class="grid gap-5"
                          :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
-                        <div v-for="(view,index) in favoritedVideo" class="cursor-pointer rounded overflow-hidden"
+                        <div v-for="(view,index) in favoritedVideo"
+                             :id="view._id"
+                             class="cursor-pointer rounded overflow-hidden"
                              :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
                             <div class="relative" @mouseover="hideAndShowDuration(view._id)"
                                  @mouseleave="hideAndShowDuration('')" @click="viewVideo(view)">
@@ -66,9 +68,8 @@
                             <div class="flex items-center justify-start cursor-text" :class="darkMode?`py-3`:`p-3`">
                                 <img :src="view.teacher.photo" class="h-10 rounded mr-3">
                                 <div>
-                                    <div class="text-primary text-sm" :class="darkMode?'text-white':''">{{
-                                        cutString(view.title, 20)
-                                        }}
+                                    <div class="text-primary text-sm" :class="darkMode?'text-white':''">
+                                        {{cutString(view.title, 20) }}
                                     </div>
                                     <div class="flex font-khmer_os text-xs"
                                          :class="darkMode?`text-gray-400`:`opacity-50`">
@@ -127,17 +128,18 @@
                         </div>
                     </div>
                 </template>
-                <template v-else>
+                <template v-if="type === `post`">
                     <div v-if="favorites.length == 0" class="h-screen pb-10" style="display:block;">
                         <Empty></Empty>
                     </div>
                     <div v-else class="w-65">
                         <div v-for="post in favorites" :key="post._id">
                             <div
-                                    v-observe-visibility="visibilityChanged"
+                                    :id="post._id"
                                     :data-id="post._id"
                                     :data-type="post.type"
-                                    class="border mb-5" :class="darkMode ? `border-button text-lightGray` : ``">
+                                    class="border mb-5"
+                                    :class="darkMode ? `border-button text-lightGray` : ``">
                                 <div class="px-5 pt-5">
                                     <div class="flex justify-between">
                                         <div class="flex space-x-4">
@@ -183,12 +185,12 @@
                                         <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                                             <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
                                                 <div v-if="post.caption.length > 200">
-                          <span class="less" @click="seeMore">
-                              {{ cutString(post.caption, 200) }}
-                              <span class="capitalize cursor-pointer font-bold">
-                                  {{ $t('see_more') }}
-                              </span>
-                          </span>
+                                                      <span class="less" @click="seeMore">
+                                                          {{ cutString(post.caption, 200) }}
+                                                          <span class="capitalize cursor-pointer font-bold">
+                                                              {{ $t('see_more') }}
+                                                          </span>
+                                                      </span>
                                                     <span class="more hidden">{{ post.caption }}</span>
                                                 </div>
                                                 <div v-else>
@@ -205,14 +207,14 @@
                                          v-else-if="post.caption"
                                          :class="darkMode ? `text-lightGray` : ``">
                                         <div v-if="post.caption.length > 200">
-                  <span class="less" @click="seeMore">
-                      {{ cutString(post.caption, 200) }}
-                      <span
-                              class="capitalize cursor-pointer"
-                              :class="darkMode ? `text-gray-300`: `text-primary`">
-                          {{ $t('see_more') }}
-                      </span>
-                  </span>
+                                              <span class="less" @click="seeMore">
+                                                  {{ cutString(post.caption, 200) }}
+                                                  <span
+                                                          class="capitalize cursor-pointer"
+                                                          :class="darkMode ? `text-gray-300`: `text-primary`">
+                                                      {{ $t('see_more') }}
+                                                  </span>
+                                              </span>
                                             <span class="more hidden">{{ post.caption }}</span>
                                         </div>
                                         <div v-else>
@@ -299,10 +301,8 @@
                                     </div>
                                 </div>
                                 <div v-if="commentDetailId === post._id">
-                                    <CommentDetail :id="commentDetailId" :social="post"></CommentDetail>
+                                    <CommentDetail :id="commentDetailId" :social="post"/>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -312,44 +312,38 @@
         <BuyMsg
                 v-if="confirm"
                 @cancelModal="cancelModal"
-                @yes="yes" :msg="msg">
-        </BuyMsg>
+                @yes="yes" :msg="msg"/>
         <div v-if="showAds">
             <VideoADS
                     :videoUrl="videoUrl"
                     @closeAds="closeAds"
-                    @lastWatchVideo="lastWatchVideo($event)">
-            </VideoADS>
+                    @lastWatchVideo="lastWatchVideo($event)"/>
+
         </div>
         <ReadingBook
                 v-if="reading"
-                @closeReading="closeReading">
-        </ReadingBook>
+                @closeReading="closeReading"/>
         <ViewBook
                 v-if="preview"
                 @close="close"
                 @readingBook="readingBook"
                 @shopNow="shopNow"
                 @listenAudio="listenAudio"
-                @listVideo="listVideo">
-        </ViewBook>
+                @listVideo="listVideo"/>
         <LibraryAudio
                 v-if="showAudio"
-                :is_favorite="false">
-        </LibraryAudio>
+                :is_favorite="false"/>
         <Cart v-if="showCart"
               @closeCart="()=>{this.showCart = false}"
-              @showInvoice="showInvoice">
-        </Cart>
+              @showInvoice="showInvoice"/>
         <!-- Receipt info -->
         <ReceiptInfo
                 v-if="showReceipt"
                 :receiptDetail="receiptDetail"
-                @closeInfo="() =>{this.showReceipt = false}">
-        </ReceiptInfo>
+                @closeInfo="() =>{this.showReceipt = false}"/>
         <!-- Liker -->
         <template v-if="isLiker">
-            <Liker :social="postDetail" @closeLiker="()=>{this.isLiker = false}"></Liker>
+            <Liker :social="postDetail" @closeLiker="()=>{this.isLiker = false}"/>
         </template>
 
         <!-- Edit post -->
@@ -358,20 +352,18 @@
                     :edit-detail="postDetail"
                     :is-edit="true"
                     @dismissPost="()=>{this.isEdit = false}"
-                    @closeCreate="closeCreate"></CreatePost>
+                    @closeCreate="closeCreate"/>
         </template>
         <!-- Post detail -->
         <PostDetail
                 @dismiss="()=>{this.isPostDetail = false}"
                 :post="postDetail"
-                v-if="isPostDetail">
-        </PostDetail>
+                v-if="isPostDetail"/>
         <!-- Video detail -->
         <VideoDetail
                 @dismiss="()=>{this.isVideo = false}"
                 :post="postDetail"
-                v-if="isVideo">
-        </VideoDetail>
+                v-if="isVideo"/>
     </div>
 </template>
 
@@ -554,15 +546,6 @@
             showAction(post) {
                 this.actionId = post._id
             },
-            visibilityChanged(isVisible, entry) {
-                if (isVisible) {
-                    let payload = {
-                        id: entry.target.getAttribute('data-id'),
-                        type: entry.target.getAttribute('data-type')
-                    }
-                    this.$store.dispatch('social/countView', payload)
-                }
-            },
             cutString(text, limit) {
                 return helper.cutString(text, limit)
             },
@@ -592,13 +575,16 @@
 
                 if (data.action.label === 'actions.add_to_favorite') {
                     this.addFavorite(payload).then(() => {
+                        helper.success('0010')
                         this.actionId = null
                     })
                 }
 
                 if (data.action.label === 'actions.remove_favorite') {
                     this.deleteFavorite(payload).then(() => {
+                        helper.success('0011')
                         this.actionId = null
+                        document.getElementById(payload.id).remove()
                     })
                 }
                 if (data.action.label === 'actions.edit') {
@@ -646,7 +632,7 @@
                 this.enableScroll = true
                 this.type = type
 
-                if (type === 'video') {
+                if (type === 'course') {
                     this.getVideoFavorite({
                         p: this.page,
                     })
@@ -686,16 +672,9 @@
                 })
                 this.$store.commit("favorite/addToCart", book._id)
             },
-            viewVideo(video) {
-                this.id = video._id;
-                this.playVideo(this.id);
-                this.showAds = true;
-
-                if (video.last_watch) {
-                    this.$store.commit('playVideo/setLastWatched', video.last_watch.mark)
-                }
-
-                this.$store.commit("playVideo/getVideoUrl", video.video);
+            viewVideo(videoCourse) {
+                videoCourse.package_id = ""
+                this.$router.push({name: 'overview', params: {course: videoCourse}})
             },
             close() {
                 this.preview = false
@@ -753,7 +732,7 @@
                 this.confirm = false
             },
             yes() {
-                if (this.type === `video`) {
+                if (this.type === `course`) {
                     this.removeFavoriteVideo(this.id).then(() => {
                         this.confirm = false
                     })

@@ -45,7 +45,12 @@
                             @closeCreate="closeCreate"></CreatePost>
                 </template>
             </div>
-            <div class="flex p-5">
+            <div class="flex p-5 relative">
+                <div v-if="!social.length"
+                     :class="darkMode ? `bg-secondary`: `bg-white`"
+                     class="flex items-center justify-center w-full h-screen absolute left-0 top-0">
+                    <Empty/>
+                </div>
                 <!-- New feed -->
                 <div class="w-65">
                     <template v-if="loadingNewFeed">
@@ -106,14 +111,16 @@
                                         <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                                             <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
                                                 <div v-if="post.caption.length > 200">
-                  <span class="less"
-                        @click="seeMore"
-                  >{{ cutString(post.caption, 200) }} <span
-                          class="capitalize cursor-pointer font-bold">{{ $t('see_more') }}</span>
-                  </span>
+                                                  <span class="less"
+                                                        @click="seeMore">
+                                                      {{ cutString(post.caption, 200) }}
+                                                      <span class="capitalize cursor-pointer font-bold">
+                                                          {{ $t('see_more') }}
+                                                      </span>
+                                                  </span>
                                                     <span class="more hidden">
-                    {{ post.caption }}
-                  </span>
+                                                        {{ post.caption }}
+                                                    </span>
                                                 </div>
                                                 <div v-else>
                                                     {{ post.caption }}
@@ -331,6 +338,7 @@
     import TestIcon from "@/components/TestIcon";
     import BuyMsg from "@/views/Component/BuyMsg";
     import BackMenuIcon from "../../components/BackMenuIcon";
+    import Empty from "../Component/Empty";
 
     Vue.use(VueObserveVisibility)
 
@@ -344,6 +352,7 @@
             }
         },
         components: {
+            Empty,
             BackMenuIcon,
             CartIcon,
             CertificateIcon,
@@ -516,12 +525,14 @@
 
                 if (data.action.label === 'actions.add_to_favorite') {
                     this.addFavorite(payload).then(() => {
+                        helper.success('0010')
                         this.actionId = null
                     })
                 }
 
                 if (data.action.label === 'actions.remove_favorite') {
                     this.deleteFavorite(payload).then(() => {
+                        helper.success('0011')
                         this.actionId = null
                     })
                 }

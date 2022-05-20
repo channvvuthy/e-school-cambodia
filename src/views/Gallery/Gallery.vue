@@ -182,12 +182,20 @@
         computed: {
             ...mapState('gallery', ['loading', 'galleries']),
             ...mapState('setting', ['darkMode', 'isHide']),
-            ...mapState('auth', ['stProfile', 'storyDetail'])
+            ...mapState('auth', ['stProfile', 'storyDetail']),
+            ...mapState('story', ['currentStory'])
         },
         methods: {
             ...mapActions('gallery', ['getGallery']),
             ...mapActions('auth', ['viewStory']),
             deleteMyStory() {
+                if (this.currentStory.hasOwnProperty('photo')) {
+                    if (this.deletedStory.photo.url == this.currentStory.photo.url) {
+                        this.$store.commit("story/setStory", {})
+                        localStorage.removeItem("currentStory")
+                    }
+                }
+
                 this.isDelete = false
                 this.deletedStory.id = this.deletedStory._id
                 this.$store.dispatch("story/deleteStory", this.deletedStory).then(res => {

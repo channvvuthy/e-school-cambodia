@@ -90,10 +90,8 @@
                                         {{ cutString(contact.ads.text, 20) }}
                                     </div>
                                     <div v-else>
-                                        {{
-                                        contact.chat.last == undefined ? $t('ticket') + ' ' + contact.chat.ticket :
-                                        cutString(contact.chat.last.message, 20)
-                                        }}
+                                        {{contact.chat.last == undefined ? $t('ticket') + ' ' + contact.chat.ticket :
+                                        cutString(contact.chat.last.message, 20) }}
                                     </div>
                                 </div>
                             </div>
@@ -111,10 +109,8 @@
                                     </div>
                                     <div class="text-xs mt-1 whitespace-nowrap"
                                          :class="darkMode?`text-gray-500`:`text-gray-400`">
-                                        {{
-                                        contact.chat.last == undefined ? $t('unread') + ' ' + contact.chat.unread :
-                                        getDay(contact.chat.last.date)
-                                        }}
+                                        {{contact.chat.last == undefined ? $t('unread') + ' ' + contact.chat.unread :
+                                        getDay(contact.chat.last.date) }}
                                     </div>
                                 </div>
                             </div>
@@ -173,11 +169,17 @@
                                  @click="() => {this.isDisconnect = true}">
                                 {{ $t('block') }}
                             </div>
+
                             <div class="px-8 h-12 flex items-center border-b"
                                  :class="darkMode?`border-youtube`:`border-gray-200`"
                                  v-else
                                  @click="() => {this.isUnblock = true}">
                                 {{ $t('unblock') }}
+                            </div>
+                            <div class="px-8 h-12 flex items-center border-b"
+                                 @click="userDetail(user)"
+                                 :class="darkMode?`border-youtube`:`border-gray-200`">
+                                {{ $t('profile') }}
                             </div>
                             <div class="px-8 h-12 flex items-center border-b"
                                  :class="darkMode?`border-youtube`:`border-gray-200`">
@@ -863,6 +865,7 @@
                 previewUrl: "",
                 share: "",
                 lastSeen: "",
+                user: {},
                 message: {
                     id: "",
                     reply_id: "",
@@ -892,6 +895,14 @@
             ...mapActions('etalk', ['getContact', 'setPhoto', 'muteContact', 'deleteMute', 'getAdminMessage',
                 'sendMessage', 'getMention', 'deleteMessage',
                 'getContacts', 'getMessage', 'deleteMember', 'blockUser', 'unblockUser', 'readMessage']),
+            userDetail(user) {
+                this.$router.push({
+                    name: "user",
+                    params: {
+                        user_id: user._id
+                    }
+                })
+            },
             contactProfile(contact) {
                 if (contact.type == 'ads') {
                     return contact.ads.user.photo
@@ -1165,12 +1176,16 @@
                         p: 1,
                         id: this.contact._id,
                         type: this.contact.type
-                    }).then((response) => {
-                        if (response.data.data.room.last) {
-                            this.lastSeen = response.data.data.room.last.date
+                    }).then((res) => {
+
+                        if (res.data.data.room && res.data.data.room.user) {
+                            this.user = res.data.data.room.user
                         }
-                        if (response.data.data.room.share) {
-                            this.share = response.data.data.room.share
+                        if (res.data.data.room.last) {
+                            this.lastSeen = res.data.data.room.last.date
+                        }
+                        if (res.data.data.room.share) {
+                            this.share = res.data.data.room.share
                         }
                         this.scrollToBottom()
                         this.lisentMessage()
@@ -1275,8 +1290,8 @@
                     payload.id = this.contact._id
                     payload.type = this.contact.type
 
-                    this.getMessage(payload).then((response) => {
-                        if (response.data.data.length) {
+                    this.getMessage(payload).then((res) => {
+                        if (res.data.data.length) {
                             this.scrollToTop()
                         }
                         this.loadingMessage = false
@@ -1462,9 +1477,9 @@
                 this.deleteMessage({
                     id: this.messageId._id,
                     type: this.contact.type
-                }).then((response) => {
-                    if (response.data.msg != undefined) {
-                        helper.errorMessage(response.data.msg)
+                }).then((res) => {
+                    if (res.data.msg != undefined) {
+                        helper.errorMessage(res.data.msg)
                     } else {
                         this.$store.commit("etalk/removeMessage", this.messageId._id)
                     }
@@ -1522,8 +1537,8 @@
                             this.getMention({
                                 id: this.contact._id,
                                 s: this.getSecondPart(value)
-                            }).then((response) => {
-                                this.showMention = !!(response.data.data && response.data.data.length);
+                            }).then((res) => {
+                                this.showMention = !!(res.data.data && res.data.data.length);
                             })
                         } else {
                             this.showMention = false

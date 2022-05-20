@@ -387,6 +387,13 @@
                         this.isDelete = false; this.actionId = null
                     }"
                     @yes="confirmDeleteSocial"/>
+            <BuyMsg
+                    v-if="isLoginRequire"
+                    msg="2006"
+                    @yes="()=>{this.$router.push('/login')}"
+                    @cancelModal="() => {
+                        this.isLoginRequire = false;
+                    }"/>
         </div>
     </div>
 </template>
@@ -473,6 +480,7 @@
         data() {
             return {
                 isLiker: false,
+                isLoginRequire: false,
                 link: null,
                 isReport: null,
                 isVideo: false,
@@ -505,12 +513,16 @@
                 'deleteLike', 'deleteSocial', 'addFavorite', 'deleteFavorite', 'getRecomment']),
             ...mapActions('cart', ['addCart', 'getCart']),
             userDetail(user) {
-                this.$router.push({
-                    name: "user",
-                    params: {
-                        user_id: user._id
-                    }
-                })
+                if (this.token) {
+                    this.$router.push({
+                        name: "user",
+                        params: {
+                            user_id: user._id
+                        }
+                    })
+                }
+                this.isLoginRequire = true
+
             },
             addToCart(video) {
                 if (localStorage.getItem('token') === null) {
@@ -536,6 +548,11 @@
                 this.$router.push('login');
             },
             showLiker(post) {
+                if (!this.token) {
+                    this.isLoginRequire = true
+                    return
+                }
+
                 this.isLiker = true
                 this.postDetail = post
             },
@@ -543,7 +560,9 @@
                 if (this.token) {
                     this.postDetail = data
                     this.isVideo = true
+                    return
                 }
+                this.isLoginRequire = true
             },
             setParentColor(postIndex) {
                 let interval = setInterval(() => {
@@ -595,12 +614,14 @@
 
                 if (data.action.label === 'actions.add_to_favorite') {
                     this.addFavorite(payload).then(() => {
+                        helper.success('0010')
                         this.actionId = null
                     })
                 }
 
                 if (data.action.label === 'actions.remove_favorite') {
                     this.deleteFavorite(payload).then(() => {
+                        helper.success('0011')
                         this.actionId = null
                     })
                 }
@@ -638,11 +659,18 @@
                 this.actionId = null
             },
             showAction(post) {
-                this.actionId = post._id
+                if (this.token) {
+                    this.actionId = post._id
+                    return
+                }
+                this.isLoginRequire = true
             },
             showCommentDetail(id) {
-                if (this.token)
-                    this.commentDetailId = id
+                if (!this.token) {
+                    this.isLoginRequire = true
+                    return;
+                }
+                this.commentDetailId = id
             },
             postComment() {
 
@@ -658,6 +686,11 @@
                 return text
             },
             disLikePost(post) {
+                if (!this.token) {
+                    this.isLoginRequire = true
+                    return
+                }
+
                 let payload = {
                     id: post._id,
                     type: post.type
@@ -668,6 +701,11 @@
                 })
             },
             likePost(post) {
+                if (!this.token) {
+                    this.isLoginRequire = true
+                    return
+                }
+
                 let payload = {
                     id: post._id,
                     type: post.type
@@ -695,7 +733,9 @@
                 if (this.token) {
                     this.postDetail = data
                     this.isPostDetail = true
+                    return;
                 }
+                this.isLoginRequire = true
             },
             post() {
                 if (this.loading) {

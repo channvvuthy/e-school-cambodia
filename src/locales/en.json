@@ -415,8 +415,12 @@
   "007": "Are you sure you want to delete?",
   "008": "Your post has been deleted",
   "009": "Your story has been added",
+  "0010": "Favorite has been added",
+  "0011": "Favorite has been removed",
   "social": "Social",
   "back": "Back",
+  "profile": "Profile",
+  "course": "Course",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",
