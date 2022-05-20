@@ -422,6 +422,7 @@
   "profile": "Profile",
   "course": "Course",
   "504": "Gateway Timeout",
+  "502": "Gateway Timeout",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",

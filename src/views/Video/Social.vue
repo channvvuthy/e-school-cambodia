@@ -4,7 +4,9 @@
                 :class="darkMode ? `text-gray-300`: `text-primary`"
                 @click="()=>{this.$router.go(-1)}"
                 href="#" class="absolute right-2 bottom-2">
-            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"/>
+            <BackMenuIcon
+                    :fill="darkMode?`#ffffff`:`#055174`"
+                    :width="30"/>
         </a>
         <div
                 :class="darkMode ? `bg-secondary`: `bg-white`">
@@ -27,12 +29,12 @@
                             @click="createPost"
                             class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
                             :class="darkMode ? `bg-button`: `bg-softGray`">
-                        <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`"></PostVideoIcon>
+                        <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`"/>
                     </div>
                     <div class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
                          @click="createPost"
                          :class="darkMode ? `bg-button`: `bg-softGray`">
-                        <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"></ImageIcon>
+                        <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"/>
                     </div>
                     <div class="w-10 h-10 rounded-full flex items-center justify-center  text-sm fot-semibold cursor-pointer"
                          :class="darkMode ? `bg-button text-lightGray `: `bg-softGray text-primary`">
@@ -42,7 +44,7 @@
                 <template v-if="isPost">
                     <CreatePost
                             @dismissPost="()=>{this.isPost = false}"
-                            @closeCreate="closeCreate"></CreatePost>
+                            @closeCreate="closeCreate"/>
                 </template>
             </div>
             <div class="flex p-5 relative">
@@ -71,7 +73,7 @@
                                     <div class="flex justify-between">
                                         <div class="flex space-x-4">
                                             <div @click="userDetail(post.user)">
-                                                <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
+                                                <Avatar :avatar-url="post.user.photo" :size="16"/>
                                             </div>
                                             <div>
                                                 <div class="font-PoppinsMedium text-lg">{{ post.user.name }}</div>
@@ -103,7 +105,7 @@
                                                     class="absolute w-60 py-5 right-0 top-10 z-50 rounded-xl shadow-md">
                                                 <ActionList
                                                         @selectedAction="selectedAction($event)"
-                                                        :post="post"></ActionList>
+                                                        :post="post"/>
                                             </div>
                                         </div>
                                     </div>
@@ -158,7 +160,7 @@
                                     <div v-if="post.video" class="mt-4 overflow-hidden">
                                         <MediaPlayer
                                                 @fullScreen="fullScreen($event)"
-                                                :video-url="post.video.url" :post="post"></MediaPlayer>
+                                                :video-url="post.video.url" :post="post"/>
                                     </div>
                                     <!-- Background -->
                                     <div></div>
@@ -169,12 +171,14 @@
                                             <div class="flex items-center space-x-2">
                                                 <div class="cursor-pointer">
                                                     <div v-if="post.is_like" @click="disLikePost(post)">
-                                                        <LikeFillIcon :size="22"
-                                                                      :fill="darkMode ? `#909090`: `#055174`"></LikeFillIcon>
+                                                        <LikeFillIcon
+                                                                :size="22"
+                                                                :fill="darkMode ? `#909090`: `#055174`"/>
                                                     </div>
                                                     <div @click="likePost(post)" v-else>
-                                                        <LikeIcon :size="22"
-                                                                  :fill="darkMode ? `#909090`: `#4A4A4A`"></LikeIcon>
+                                                        <LikeIcon
+                                                                :size="22"
+                                                                :fill="darkMode ? `#909090`: `#4A4A4A`"/>
                                                     </div>
 
                                                 </div>
@@ -185,7 +189,7 @@
                                             <div class="flex items-center space-x-2"
                                                  v-if="post.total && post.total.seen">
                                                 <div>
-                                                    <Eye :size="30" :fill="darkMode ? `#909090`: `#4A4A4A`"></Eye>
+                                                    <Eye :size="30" :fill="darkMode ? `#909090`: `#4A4A4A`"/>
                                                 </div>
                                                 <div>
                                                     {{ kFormatter(post.total.seen) }}
@@ -226,7 +230,7 @@
                                     </div>
                                 </div>
                                 <div v-if="commentDetailId === post._id">
-                                    <CommentDetail :id="commentDetailId" :social="post"></CommentDetail>
+                                    <CommentDetail :id="commentDetailId" :social="post"/>
                                 </div>
                             </div>
                         </div>
@@ -236,7 +240,7 @@
                                 v-for="i in 2" :key="i + Math.random()"
                                 class="border mb-5 p-5"
                                 :class="darkMode ? `border-button text-lightGray` : ``">
-                            <Loading :grid="true" :number-of-columns="1"></Loading>
+                            <Loading :grid="true" :number-of-columns="1"/>
                         </div>
                     </template>
                 </div>
@@ -252,27 +256,25 @@
                 <PostDetail
                         @dismiss="()=>{this.isPostDetail = false}"
                         :post="postDetail"
-                        v-if="isPostDetail">
-                </PostDetail>
+                        v-if="isPostDetail"/>
                 <!-- Video detail -->
                 <VideoDetail
                         @dismiss="()=>{this.isVideo = false}"
                         :post="postDetail"
-                        v-if="isVideo">
-                </VideoDetail>
+                        v-if="isVideo"/>
                 <!-- Edit post -->
                 <template v-if="isEdit">
                     <CreatePost
                             :edit-detail="postDetail"
                             :is-edit="true"
                             @dismissPost="()=>{this.isEdit = false}"
-                            @closeCreate="closeCreate"></CreatePost>
+                            @closeCreate="closeCreate"/>
                 </template>
                 <!-- Report post -->
                 <template v-if="isReport">
                     <Report
                             :social="reportSocial"
-                            @closeReport="()=>{this.isReport = false}"></Report>
+                            @closeReport="()=>{this.isReport = false}"/>
                 </template>
                 <!-- Copy link -->
                 <input type="text" class="absolute" v-model="link" id="copyLink" style="z-index:-1">
