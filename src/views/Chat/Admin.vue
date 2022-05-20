@@ -100,7 +100,7 @@
                 <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"
                      class="px-4 py-3 flex text-sm items-center relative justify-between">
                     <div class="flex text-sm items-center">
-                        <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center"
+                        <div class="h-12 w-12 rounded-full shadow bg-cover bg-gray-300 mr-3 flex items-center justify-center bg-center"
                              :style="{backgroundImage:`url(${contact.photo})`}">
                             <div class="loading" v-if="settingImage"></div>
                         </div>
@@ -164,7 +164,7 @@
                             <template v-if="message.content.type === 1">
                                 <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"
                                      class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10"
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 bg-center"
                                          :style="{backgroundImage:`url(${senderPhoto(message)})`}"
                                          v-if="message.is_admin == 0">
                                         <div class="h-13 w-13"></div>
@@ -220,7 +220,7 @@
                             <template v-if="message.content.type === 3">
                                 <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"
                                      class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10"
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 bg-center"
                                          :style="{backgroundImage:`url(${senderPhoto(message)})`}"
                                          v-if="message.is_admin == 0"></div>
                                     <div>
@@ -270,7 +270,7 @@
                             <template v-if="message.content.type === 2">
                                 <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"
                                      class="items-center relative mb-3">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10"
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 bg-center"
                                          :style="{backgroundImage:`url(${senderPhoto(message)})`}"
                                          v-if="message.is_admin == 0"></div>
                                     <div>
@@ -329,7 +329,7 @@
                             <template v-if="message.content.type === 4">
                                 <div :class="message.is_admin == 1?`flex justify-end`:`flex justify-start`"
                                      class="items-center relative">
-                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10"
+                                    <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-10 bg-center"
                                          :style="{backgroundImage:`url(${senderPhoto(message)})`}"
                                          v-if="message.is_admin == 0"></div>
                                     <div>
@@ -557,7 +557,6 @@
     import VoiceReply from "./components/VoiceReply.vue"
     import ImageIcon from "./components/LinkIcon.vue"
     import PdfIcon from "./../../components/PdfIcon.vue"
-    // import VueRecord from '@codekraft-studio/vue-record'
     import EnlargeIcon from "./../../components/EnlargeIcon.vue"
     import CloseIcon from "./../../components/CloseIcon.vue"
     import SendMessageIcon from "./../../components/SendMessageIcon.vue"
