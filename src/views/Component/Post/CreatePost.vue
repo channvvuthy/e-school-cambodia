@@ -644,6 +644,8 @@ export default {
               this.resetCaption()
               this.closeCreate()
             })
+          }).catch(()=>{
+            this.loading = false
           })
         } else {
           this.payload.photo = this.editPost.photo
@@ -717,6 +719,8 @@ export default {
             this.resetCaption()
             this.closeCreate()
           })
+        }).catch(()=>{
+            this.loading = false
         })
 
       }

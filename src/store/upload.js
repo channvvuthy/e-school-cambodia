@@ -1,5 +1,6 @@
 import axios from "axios"
 import config from "./../config"
+import helper from "../helper/helper";
 
 export default {
     namespaced: true,
@@ -64,6 +65,10 @@ export default {
                 axios.post(config.microserviceUrl + `upload/video`, payload, conf).then(res => {
                     resolve(res.data)
                 }).catch(err => {
+                    commit("loading", false)
+                    if (err.response.status == 504) {
+                        helper.errorMessage(err.response.status)
+                    }
                     reject(err)
                 })
             }).finally(() => {
