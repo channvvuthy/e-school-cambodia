@@ -4,7 +4,7 @@
                 :class="darkMode ? `text-gray-300`: `text-primary`"
                 @click="()=>{this.$router.go(-1)}"
                 href="#" class="absolute right-2 bottom-2">
-            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"></BackMenuIcon>
+            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"/>
         </a>
         <!-- Detail -->
         <template>
@@ -35,7 +35,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <SocialIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SocialIcon>
+                                    <SocialIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <GenderIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></GenderIcon>
+                                    <GenderIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                     <span>
@@ -66,7 +66,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></MarkerIcon>
+                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                     <span v-if="stProfile.province_name">
@@ -87,7 +87,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
+                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2 px-3 text-center">
                                      <span v-if="stProfile.school_name" :title="stProfile.school_name">
@@ -108,7 +108,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <GalleryIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></GalleryIcon>
+                                    <GalleryIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +121,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <NetworkIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></NetworkIcon>
+                                    <NetworkIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                             </div>
                         </div>

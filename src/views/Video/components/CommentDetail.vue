@@ -2,38 +2,38 @@
     <div>
         <div class="flex h-20 border-t flex items-center w-full mt-4 px-5 space-x-5"
              :class="darkMode ? `border-button text-textSecondary` : ``">
-            <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
+            <Avatar :avatar-url="stProfile.photo" :size="10"/>
             <textarea
                     v-model="comment.text"
                     :placeholder="$t('2113')"
                     class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
             <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
-                <SmileEmoji :size="30" :fill="darkMode ?`#909090`: `#979797`"></SmileEmoji>
+                <SmileEmoji :size="30" :fill="darkMode ?`#909090`: `#979797`"/>
             </div>
             <div style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
                 <input type="file" ref="commentPhoto" @change="selectPhoto" accept="image/*" class="hidden">
                 <div class="rounded-full h-9 w-9 flex items-center justify-center"
                      @click="()=>{this.$refs.commentPhoto.click()}">
-                    <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
+                    <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"/>
                 </div>
             </div>
             <div
                     @click="postComment"
                     style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
                 <div class="rounded-full h-9 w-9 flex items-center justify-center">
-                    <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
+                    <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"/>
                 </div>
             </div>
         </div>
         <StickerView
                 @removeSticker="removeSticker"
-                v-if="comment.sticker" :sticker-url="stickerUrl"></StickerView>
+                v-if="comment.sticker" :sticker-url="stickerUrl"/>
         <div v-if="loadingComment" class="p-5">
             <div
                     v-for="key in 1" :key="key + Math.random()"
                     class="border mb-5 rounded-md p-5"
                     :class="darkMode ? `border-button text-lightGray` : ``">
-                <Loading :grid="true" :number-of-columns="1"></Loading>
+                <Loading :grid="true" :number-of-columns="1"/>
             </div>
         </div>
         <div v-else>
@@ -41,28 +41,28 @@
                  v-if="comments.comments && comments.comments.length"
                  :class="darkMode ? `border-button text-textSecondary` : ``">
                 <div v-for="(comment, index) in comments.comments" :key="index">
-                    <Comment :comment="comment" @reply="reply($event)"></Comment>
+                    <Comment :comment="comment" @reply="reply($event)"/>
                     <div v-if="comment.reply_comment" class="pl-20">
                         <div v-if="replies.comment && replies.comment._id === comment._id">
                             <div v-for="(list, index) in replies.list">
                                 <Comment
                                         :avata-size="12"
                                         :parent-comment-id="comment._id"
-                                        :comment="list" @reply="reply($event)"></Comment>
+                                        :comment="list" @reply="reply($event)"/>
                             </div>
                         </div>
                         <div v-else>
                             <Comment
                                     :avata-size="12"
                                     :parent-comment-id="comment._id"
-                                    :comment="comment.reply_comment" @reply="reply($event)"></Comment>
+                                    :comment="comment.reply_comment" @reply="reply($event)"/>
 
                             <button class="ml-17 mt-3 text-lg capitalize outline-none"
                                     :disabled="loadingReply"
                                     @click="getReplyComment(comment._id)"
                                     :class="darkMode ?`text-textSecondary`: `text-primary`">
                                 <template v-if="loadingReply">
-                                    <LoadingWhite></LoadingWhite>
+                                    <LoadingWhite/>
                                 </template>
                                 <template v-else>{{ $t('more_reply') }}...</template>
                             </button>
@@ -70,7 +70,7 @@
 
                     </div>
                     <div class="pl-20 mt-3" v-if="commentId === comment._id">
-                        <ReplyComment :id="commentId"></ReplyComment>
+                        <ReplyComment :id="commentId"/>
                     </div>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                  @closeSticker="()=>{this.isSticker = false}"
                  @selectSticker="selectSticker($event)"
                  :is-parent-class="true"
-                 default-position="border w-96 h-1/2 z-50 rounded-xl shadow-lg flex flex-col justify-between"></Sticker>
+                 default-position="border w-96 h-1/2 z-50 rounded-xl shadow-lg flex flex-col justify-between"/>
 
         <!-- Photo -->
         <PhotoView
@@ -90,7 +90,7 @@
                 :post-type="social.type"
                 @closePhoto="()=>{this.isPhoto = false}"
                 :photo="photo"
-                v-if="isPhoto"></PhotoView>
+                v-if="isPhoto"/>
     </div>
 </template>
 

@@ -78,15 +78,18 @@
              v-if="showOpt">
             <div class="w-80 rounded-xl shadow" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                 <!-- Header -->
-                <div class="py-3 text-center flex items-center justify-center"><span>{{ $t('choose_quality') }}</span>
+                <div class="py-3 text-center flex items-center justify-center">
+                    <span>{{ $t('choose_quality') }}</span>
                 </div>
                 <div class="w-full h-1 border-b" :class="darkMode?`border-button`:`border-gray-3000`"></div>
                 <ul>
                     <li class="w-full text-center h-12 leading-11 flex items-center justify-center border-b cursor-pointer"
-                        :class="darkMode?`border-button`:`border-gray-300`" @click="download(360)"><span>360p</span>
+                        :class="darkMode?`border-button`:`border-gray-300`" @click="download(360)">
+                        <span>360p</span>
                     </li>
                     <li class="w-full text-center h-12 leading-11 flex items-center justify-center border-b cursor-pointer"
-                        :class="darkMode?`border-button`:`border-gray-300`" @click="download(720)"><span>720p</span>
+                        :class="darkMode?`border-button`:`border-gray-300`" @click="download(720)">
+                        <span>720p</span>
                     </li>
                 </ul>
                 <div class="flex items-center justify-center py-3 cursor-pointer"

@@ -2,7 +2,7 @@
     <div @mouseleave="clearAction">
         <div class="mt-4 flex space-x-5" :id="comment._id">
             <div @click="userDetail(comment.user)">
-                <Avatar :avatar-url="comment.user.photo" :size="avataSize"></Avatar>
+                <Avatar :avatar-url="comment.user.photo" :size="avataSize"/>
             </div>
             <div
                     class="rounded-xl py-4 px-3 relative" :class="darkMode ? `bg-youtube`: `bg-forum`">
@@ -47,7 +47,7 @@
                         <vue-moments-ago prefix="" suffix="ago" :date="comment.date" lang="en"/>
                     </div>
                     <div class="cursor-pointer" @click="reply(comment)">
-                        <ReplyIcon></ReplyIcon>
+                        <ReplyIcon/>
                     </div>
                 </div>
             </div>
@@ -63,8 +63,7 @@
             <ConfirmDelete
                     :message="$t(confirmMessage)"
                     @closeMessage="()=>{this.isConfirm = false}"
-                    @ConfirmDeleteCart="confirmDelete">
-            </ConfirmDelete>
+                    @ConfirmDeleteCart="confirmDelete"/>
         </template>
 
         <template v-if="isEdit">
