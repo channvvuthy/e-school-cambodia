@@ -1,7 +1,7 @@
 <template>
     <div class="w-full h-full fixed left-0 top-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
         <div class="absolute right-5 top-5 cursor-pointer" @click="closePreviewImage">
-            <CloseIcon fill="#aaa"></CloseIcon>
+            <CloseIcon fill="#aaa"/>
         </div>
         <div class="w-96">
             <img :src="URL">

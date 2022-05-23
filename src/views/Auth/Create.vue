@@ -79,8 +79,10 @@
                             class="h-12 placeholder-gray-500 p-2 w-full focus:outline-none mb-4 pl-8"/>
                     </div>
                     <div class="relative">
-                        <span class="absolute mt-3 text-sm font-medium opacity-50" :class="darkMode?`left-2`:`left-0`">
-                                <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"></lock-icon>
+                        <span
+                                class="absolute mt-3 text-sm font-medium opacity-50"
+                                :class="darkMode?`left-2`:`left-0`">
+                                <lock-icon :size="20" :fill="darkMode?`#e4e7eb`:`#000000`"/>
                             </span>
                         <input type="password" :placeholder="$t('2010')+ '*'"
                                v-model="studentInfo.password"

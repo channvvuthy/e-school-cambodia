@@ -15,7 +15,7 @@
                         <div class="relative">
                             <span class="absolute mt-2 text-sm font-medium opacity-30"
                                   :class="darkMode?`left-2`:`left-0`">
-                                <PhoneIcon :fill="darkMode?`#e4e7eb`:`#000000`"></PhoneIcon>
+                                <PhoneIcon :fill="darkMode?`#e4e7eb`:`#000000`"/>
                             </span>
                             <input type="text" :placeholder="$t('2009')" v-model="auth.phone"
                                    @keypress="isNumber($event)" ref="phone"

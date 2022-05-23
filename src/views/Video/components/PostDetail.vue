@@ -46,7 +46,7 @@
                         <img
                                 :id="`postDetail${index}`"
                                 :src="photo.url"
-                                :class="original ?`max-h-full`: `w-full object-cover h-full`">
+                                :class="original ?`h-full`: `w-full object-cover h-full`">
                     </div>
                     <div
                             v-if="post.photo && post.photo.length > 1"

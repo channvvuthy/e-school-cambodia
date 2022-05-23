@@ -6,7 +6,7 @@
                     {{ $t('quick_reply') }}
                 </div>
                 <div class="cursor-pointer" @click="closeQuickReply">
-                    <CloseIcon :width="24" :fill="darkMode?`#909090`:`#000`"></CloseIcon>
+                    <CloseIcon :width="24" :fill="darkMode?`#909090`:`#000`"/>
                 </div>
             </div>
             <ul v-if="quickChat.data && quickChat.data.length" class="overflow-y-scroll max-h-96">

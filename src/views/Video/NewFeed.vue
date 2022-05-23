@@ -670,9 +670,6 @@
                 }
                 this.commentDetailId = id
             },
-            postComment() {
-
-            },
             commentText(comment) {
                 let text = this.$i18n.t('2114')
 

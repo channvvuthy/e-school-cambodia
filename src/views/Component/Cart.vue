@@ -4,7 +4,7 @@
          style="z-index:55" v-if="showPay === false">
       <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" class="rounded-xl shadow relative py-3 w-4/12">
         <div @click="closeCart" class="absolute top-3 right-3 cursor-pointer" id="closeCart">
-          <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`"></CloseIcon>
+          <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`"/>
         </div>
         <!-- Title -->
         <div class="w-full text-center h-12 flex items-center justify-center text-base">
@@ -28,7 +28,7 @@
                    v-for="(receipt, index) in receipts" :key="index">
                 <div class="flex justify-between items-center">
                   <div class="mr-5">
-                    <InvoiceIcon :size="40" :fill="darkMode?`#D1D5DB`:`#000000`"></InvoiceIcon>
+                    <InvoiceIcon :size="40" :fill="darkMode?`#D1D5DB`:`#000000`"/>
                   </div>
                   <div class="flex flex-col justify-betwen flex-1">
                     <div>{{ receipt.receipt }}</div>
@@ -36,7 +36,7 @@
                   </div>
                   <div class="text-bold mr-3 font-mono">${{ receipt.amount }}</div>
                   <div class="cursor-pointer" @click="confirmDeleteCart(receipt._id, 0)">
-                    <DeleteIcon :fill="darkMode?`#D1D5DB`:`#c0272d`"></DeleteIcon>
+                    <DeleteIcon :fill="darkMode?`#D1D5DB`:`#c0272d`"/>
                   </div>
 
                 </div>
@@ -65,7 +65,7 @@
                 <!-- Price -->
                 <div class="flex flex-col items-end">
                   <div class="cursor-pointer flex-1" @click="confirmDeleteCart(cart._id, 1)">
-                    <DeleteIcon :fill="darkMode?`#D1D5DB`:`#c0272d`"></DeleteIcon>
+                    <DeleteIcon :fill="darkMode?`#D1D5DB`:`#c0272d`"/>
                   </div>
                   <div class="flex flex-col">
                     <div class="flex items-center justify-between">
@@ -109,20 +109,28 @@
         </template>
         <template v-else>
           <div class="flex items-center justify-center mt-5 mb-2">
-            <CartIcon :fill="darkMode?`#383838`:`#E5E7EB`" :size="60"></CartIcon>
+            <CartIcon :fill="darkMode?`#383838`:`#E5E7EB`" :size="60"/>
           </div>
         </template>
       </div>
     </div>
-    <BuyMsg v-if="showConfirm" :msg="`delete`" @cancelModal="cancelModal" @yes="yes"></BuyMsg>
-    <AddCoupon @closeCoupon="closeCoupon" v-if="showCoupon" @addedCoupon="addedCoupon"></AddCoupon>
+    <BuyMsg
+            v-if="showConfirm" :msg="`delete`"
+            @cancelModal="cancelModal"
+            @yes="yes"/>
+    <AddCoupon
+            @closeCoupon="closeCoupon"
+            v-if="showCoupon"
+            @addedCoupon="addedCoupon"/>
     <ChooseDuration
         v-if="showDurationForm"
         @closeDuration="closeDuration"
         @choseDuration="choseDuration"
-        :duration="durationSelected">
-    </ChooseDuration>
-    <Pay v-if="showPay" @closePay="closePay" @showInvoice="showInvoice($event)"></Pay>
+        :duration="durationSelected"/>
+    <Pay
+            v-if="showPay"
+            @closePay="closePay"
+            @showInvoice="showInvoice($event)"/>
   </div>
 </template>
 <script>

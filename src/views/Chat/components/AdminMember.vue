@@ -6,7 +6,7 @@
                     Select Chat
                 </div>
                 <div class="cursor-pointer" @click="closeAdminMember">
-                    <CloseIcon :width="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                    <CloseIcon :width="20" :fill="darkMode?`#909090`:`#000000`"/>
                 </div>
             </div>
             <div class="flex items-center justify-center h-40 w-full pb-14" v-if="loading">
