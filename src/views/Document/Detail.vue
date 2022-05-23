@@ -1,32 +1,38 @@
 <template>
     <div>
-        <eHeader :lable="$t('1112') + ' / ' + title"></eHeader>
-        <div :class="darkMode?`bg-youtube text-gray-300 mt-5 px-5 `:`mt-5 px-5 `" class="h-screen pb-80 overflow-y-scroll" @scroll="onScroll">
+        <eHeader :lable="$t('1112') + ' / ' + title"/>
+        <div :class="darkMode?`bg-youtube text-gray-300 mt-5 px-5 `:`mt-5 px-5 `"
+             class="h-screen pb-80 overflow-y-scroll" @scroll="onScroll">
             <div class="w-1/2">
                 <div class="relative">
-                    <input type="text" class="w-full h-12 border rounded-lg pl-4 focus:outline-none shadow" :placeholder="$t('1001')" :class="darkMode?`bg-secondary border-button`:``" v-model="s" v-on:keyup.enter="search">
+                    <input type="text" class="w-full h-12 border rounded-lg pl-4 focus:outline-none shadow"
+                           :placeholder="$t('1001')" :class="darkMode?`bg-secondary border-button`:``"
+                           v-model="s" v-on:keyup.enter="search">
                     <div class="absolute right-4 top-3">
-                        <SearchIcon :fill="darkMode?`#909090`:`#000000`"></SearchIcon>
+                        <SearchIcon :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                 </div>
             </div>
             <div class="h-5"></div>
             <div v-if="documents.length <= 0" class="flex items-center justify-center h-65">
-                <Empty :des="$t(`there_are_no_documents_in_this_view`)"></Empty>
+                <Empty :des="$t(`there_are_no_documents_in_this_view`)"/>
             </div>
             <template v-if="loadingDoc">
-                <Loading></Loading>
+                <Loading/>
             </template>
             <template v-else>
                 <div class="grid md:grid-cols-3 2xl:grid-cols-4 gap-5">
-                    <div class="rounded-xl shadow w-full p-5" :class="darkMode?`bg-secondary`:`bg-white`" v-for="(document, index) in documents" :key="index">
-                        <div class="p-8 rounded-xl inline-block cursor-pointer" :class="darkMode?`bg-button`:`bg-softGray`" @click="previewFile(document)">
-                            <FolderIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 1"></FolderIcon>
-                            <PdfIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 2"></PdfIcon>
-                            <!-- <ImageIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 3"></ImageIcon> -->
+                    <div class="rounded-xl shadow w-full p-5" :class="darkMode?`bg-secondary`:`bg-white`"
+                         v-for="(document, index) in documents" :key="index">
+                        <div class="p-8 rounded-xl inline-block cursor-pointer" :class="darkMode?`bg-button`:`bg-softGray`"
+                             @click="previewFile(document)">
+                            <FolderIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 1"/>
+                            <PdfIcon :size="50" :fill="darkMode?`#909090`:`#055174`" v-if="document.type === 2"/>
                             <img :src="document.url" v-if="document.type === 3" class="h-20 rounded">
                         </div>
-                        <div class="font-semibold text-lg mt-5" :class="darkMode?`text-gray-300`:`text-primary`" :title="document.name">
+                        <div class="font-semibold text-lg mt-5"
+                             :class="darkMode?`text-gray-300`:`text-primary`"
+                             :title="document.name">
                             {{cutString(document.name, 25)}}
                         </div>
                         <div class="flex items-center justify-between mt-3">
@@ -35,11 +41,11 @@
                             </div>
                             <div class="flex items-center ">
                                 <div class="cursor-pointer" @click="showEdit(document)">
-                                    <EditIcon :fill="darkMode?`#909090`:`#c0272d`" :size="18"></EditIcon>
+                                    <EditIcon :fill="darkMode?`#909090`:`#c0272d`" :size="18"/>
                                 </div>
                                 <div class="w-4"></div>
                                 <div class="cursor-pointer" @click="confirmDelete(document._id)">
-                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"/>
                                 </div>
                             </div>
                         </div>
@@ -48,32 +54,42 @@
             </template>
         </div>
         <div class="fixed bottom-0 right-0 bg-transparent h-36 w-full">
-            <div class="t-shadow  w-full h-36 t-shadow p-10" :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}" style="box-shadow: 0px -3px 2px rgba(50, 50, 50, 0.);" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+            <div class="t-shadow  w-full h-36 t-shadow p-10" :style="isHide?{marginLeft:'0px'}:{marginLeft:'350px'}"
+                 style="box-shadow: 0px -3px 2px rgba(50, 50, 50, 0.0);"
+                 :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                 <div class="flex items-center" :class="darkMode?``:`text-gray-500`">
                     <div class="flex items-center cursor-pointer" @click="() =>{this.$refs.add_image.click()}">
                         <div>
-                            <ImageIcon :fill="darkMode?`#909090`:`#000000`"></ImageIcon>
+                            <ImageIcon :fill="darkMode?`#909090`:`#000000`"/>
                         </div>
                         <div class="ml-5">
                             {{$t('add_image')}}
                         </div>
-                        <input type="file" class="hidden" ref="add_image" accept="image/png, image/gif, image/jpeg" @change="addImage">
+                        <input type="file"
+                               class="hidden" ref="add_image"
+                               accept="image/png, image/gif, image/jpeg"
+                               @change="addImage">
                     </div>
 
-                    <div class="flex items-center mx-20 cursor-pointer" @click="() =>{this.$refs.attach_file.click()}">
+                    <div class="flex items-center mx-20 cursor-pointer"
+                         @click="() =>{this.$refs.attach_file.click()}">
                         <div>
-                            <AttachFileIcon :fill="darkMode?`#909090`:`#000000`"></AttachFileIcon>
+                            <AttachFileIcon :fill="darkMode?`#909090`:`#000000`"/>
                         </div>
                         <div class="ml-5">
                             {{$t('attach_file')}}
                         </div>
-                        <input type="file" class="hidden" ref="attach_file"  accept="application/pdf" @change="addFile">
+                        <input
+                                type="file" class="hidden" ref="attach_file"
+                                accept="application/pdf" @change="addFile">
                     </div>
 
 
-                    <div class="flex items-center cursor-pointer" @click="() =>{this.showDirectory = true}">
-                        <div class="border rounded-full w-6 h-6 flex items-center justify-center" :class="darkMode?`border-gray-500`:`border-youtube`">
-                            <AddIcon :fill="darkMode?`#909090`:`#000000`" :size="15"></AddIcon>
+                    <div class="flex items-center cursor-pointer"
+                         @click="() =>{this.showDirectory = true}">
+                        <div class="border rounded-full w-6 h-6 flex items-center justify-center"
+                             :class="darkMode?`border-gray-500`:`border-youtube`">
+                            <AddIcon :fill="darkMode?`#909090`:`#000000`" :size="15"/>
                         </div>
                         <div class="ml-5">
                             {{$t('create_folder')}}
@@ -82,14 +98,16 @@
                 </div>
             </div>
         </div>
-        <Directroy v-if="showDirectory" @closeDirectory="closeDirectory"></Directroy>
+        <Directroy v-if="showDirectory" @closeDirectory="closeDirectory"/>
         <!-- Preview Image -->
-        <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="showPreview">
-            <div class="w-96 rounded-lg flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
+        <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90"
+             v-if="showPreview">
+            <div class="w-96 rounded-lg flex flex-col justify-between"
+                 :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
                 <div class="py-4 px-5 relative">
                     {{$t('preview')}}
                     <div class="absolute right-2 top-3 cursor-pointer" @click="() => {this.showPreview = false}">
-                        <CloseIcon :width="18" :fill="darkMode?`#abaeb3`:`#000000`"></CloseIcon>
+                        <CloseIcon :width="18" :fill="darkMode?`#abaeb3`:`#000000`"/>
                     </div>
                 </div>
                 <div class="border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
@@ -97,8 +115,11 @@
                 <div class="px-5" v-if="directories.length">
                     <div class="mb-3"> {{$t('choose_parent_directory')}}</div>
                     <div>
-                        <select v-model="directroy" class="w-full h-10 focus:outline-none" :class="darkMode?`border bg-youtube border-button text-gray-300`:`bg-white border border-gray-300`">
-                            <option :value="directory._id" v-for="(directory, index) in directories" :key="index" >{{directory.name}}</option>
+                        <select v-model="directroy" class="w-full h-10 focus:outline-none"
+                                :class="darkMode?`border bg-youtube border-button text-gray-300`:`bg-white border border-gray-300`">
+                            <option
+                                    :value="directory._id" v-for="(directory, index) in directories"
+                                    :key="index" >{{directory.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -108,8 +129,11 @@
                 </div>
                 <div class="h-5"></div>
                 <div class="flex justify-end px-5">
-                    <button class="bg-primary h-11 text-white w-40 rounded mb-5 focus:outline-none relative" @click="createImage" :disabled="loading">
-                        <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="loading">
+                    <button class="bg-primary h-11 text-white w-40 rounded mb-5 focus:outline-none relative"
+                            @click="createImage"
+                            :disabled="loading">
+                        <div class="flex items-center absolute -top-1 justify-center w-full text-center"
+                             v-if="loading">
                             <div class="loader"></div>
                         </div>
                         <span v-else>{{$t('add_image')}}</span>
@@ -118,31 +142,44 @@
             </div>
         </div>
         <!-- Preview Pdf -->
-        <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90" v-if="showPdf">
-            <div class="w-96 rounded-xl flex flex-col justify-between" :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
+        <div class="w-full h-full fixed top-0 left-0 bg-black z-50 flex items-center justify-center bg-opacity-90"
+             v-if="showPdf">
+            <div class="w-96 rounded-xl flex flex-col justify-between"
+                 :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow`">
                 <div class="py-3 px-5 relative">
                     {{$t('preview')}}
                     <div class="absolute right-2 top-3 cursor-pointer" @click="() => {this.showPdf = false}">
-                        <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                 </div>
                 <div class="border-t" :class="darkMode?`border-button`:`border-gray-300`"></div>
                 <div class="h-5"></div>
                 <div class="px-5">
                     <div class="mb-3"> {{$t('choose_parent_directory')}}</div>
-                    <select v-model="directroy" class="w-full h-10 focus:outline-none" :class="darkMode?`border bg-youtube border-button text-gray-300`:`bg-white border border-gray-300`">
-                        <option :value="directory._id" v-for="(directory, index) in directories" :key="index" >{{directory.name}}</option>
+                    <select v-model="directroy" class="w-full h-10 focus:outline-none"
+                            :class="darkMode?`border bg-youtube border-button text-gray-300`:`bg-white border border-gray-300`">
+                        <option
+                                :value="directory._id" v-for="(directory, index) in directories"
+                                :key="index" >
+                            {{directory.name}}
+                        </option>
                     </select>
                 </div>
                 <div class="px-5 justify-center mt-5">
                     <div class="flex items-center">
-                       <div class="mr-3"><PdfIcon :size="35"></PdfIcon></div><div> {{fileName}}</div>
+                       <div class="mr-3">
+                           <PdfIcon :size="35"/>
+                       </div>
+                        <div> {{fileName}}</div>
                     </div>
                 </div>
                 <div class="h-5"></div>
                 <div class="flex justify-end px-5">
-                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative" @click="createImage" :disabled="loading">
-                        <div class="flex items-center absolute -top-1 justify-center w-full text-center" v-if="loading">
+                    <button class="bg-primary h-11 text-white w-40 rounded-md mb-5 focus:outline-none relative"
+                            @click="createImage" :disabled="loading">
+                        <div
+                                class="flex items-center absolute -top-1 justify-center w-full text-center"
+                                v-if="loading">
                             <div class="loader"></div>
                         </div>
                         <span v-else>{{$t('attach_file')}}</span>
@@ -151,35 +188,44 @@
             </div>
         </div>
         <!-- Confirm -->
-        <BuyMsg v-if="showConfirm" :msg="msg" @cancelModal="() => {this.showConfirm = false}" @yes="yes"></BuyMsg>
+        <BuyMsg v-if="showConfirm"
+                :msg="msg" @cancelModal="() => {this.showConfirm = false}"
+                @yes="yes"/>
         <!-- Viwe pdf file -->
-        <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-95 flex items-center justify-center z-50" v-if="pdfUrl">
+        <div class="fixed w-full h-full left-0 top-0 bg-black bg-opacity-95 flex items-center justify-center z-50"
+             v-if="pdfUrl">
            <div style="max-height:90%;">
                <div class="rounded-t h-12 w-full bg-primary flex justify-between items-center px-3">
                    <div class="cursor-pointer" @click="openFullscreen">
-                       <EnlargeIcon :size="20"></EnlargeIcon>
+                       <EnlargeIcon :size="20"/>
                    </div>
                    <div class="flex-1 text-center text-white">
                        {{fileName}}
                    </div>
                    <div class="cursor-pointer" @click="() => {this.pdfUrl = ``}">
-                       <CloseIcon fill="#FFF" :width="20"></CloseIcon>
+                       <CloseIcon fill="#FFF" :width="20"/>
                    </div>
                </div>
-                <div class="overflow-y-scroll w-110 rounded-b" id="fullScreen" style="max-height:36rem;"><SinglePdf :pdfUrl="pdfUrl"></SinglePdf></div>
+                <div class="overflow-y-scroll w-110 rounded-b" id="fullScreen" style="max-height:36rem;">
+                    <SinglePdf :pdfUrl="pdfUrl"/></div>
            </div>
         </div>
         <!--  -->
         <!-- View image -->
-        <div class="fixed w-full h-full bg-black bg-opacity-95 flex items-center justify-center z-50 top-0 left-0 p-10" v-if="preivewImage">
-             <div class="absolute right-5 top-5 cursor-pointer" @click="() => {this.preivewImage = false}">
-                    <CloseIcon fill="#888" :width="20"></CloseIcon>
+        <div class="fixed w-full h-full bg-black bg-opacity-95 flex items-center justify-center z-50 top-0 left-0 p-10"
+             v-if="preivewImage">
+             <div class="absolute right-5 top-5 cursor-pointer"
+                  @click="() => {this.preivewImage = false}">
+                    <CloseIcon fill="#888" :width="20"/>
                 </div>
             <div class="relative overflow-y-scroll max-h-full p-5">
                 <img :src="preivewImage" class="max-w-full">
             </div>
         </div>
-         <Edit @cancelRename="()=>{this.isEdit = false}" v-if="isEdit" :group="files"></Edit>
+         <Edit
+                 @cancelRename="()=>{this.isEdit = false}"
+                 v-if="isEdit"
+                 :group="files"/>
     </div>
 </template>
 <script>

@@ -21,7 +21,7 @@
                      v-if="chat.content.type === 1"
                 >
                 </div>
-                <ImageView :chat="chat" v-if="chat.content.type === 2"></ImageView>
+                <ImageView :chat="chat" v-if="chat.content.type === 2"/>
                 <img v-if="chat.content.type === 2">
                 <Audio :chat="chat" v-if="chat.content.type === 3"></Audio>
 

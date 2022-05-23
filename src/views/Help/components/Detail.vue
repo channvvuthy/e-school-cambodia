@@ -2,35 +2,50 @@
     <div class="fixed inset-0 overflow-y-auto font-khmer_os" style="z-index:53">
         <div class="flex items-end justify-center min-h-screen text-center sm:block sm:p-0">
             <div class="fixed inset-0 transition-opacity" aria-hidden="true">
-                <div class="absolute inset-0 bg-black" @click="closeAds"  @mouseover="()=>{this.showToolbar = false}"></div>
+                <div class="absolute inset-0 bg-black"
+                     @click="closeAds"
+                     @mouseover="()=>{this.showToolbar = false}"></div>
             </div>
                 <div class="flex justify-center items-center text-center py-10">
-                    <div class="p-1 w-8 h-8 opacity-60 absolute rounded-full cursor-pointer top-5 right-5 flex justify-center items-center" @click="closeAds">
-                      <CloseIcon fill="#ffffff"></CloseIcon>
+                    <div
+                            class="p-1 w-8 h-8 opacity-60 absolute rounded-full cursor-pointer top-5 right-5 flex
+                            justify-center items-center"
+                            @click="closeAds">
+                      <CloseIcon fill="#ffffff"/>
                     </div>
                     <div>
                         <div class="relative">
                            
                             <div class="w-11/12 relative m-auto">
-                                <div class="flex justify-center items-center bg-black bg-opacity-70 rounded py-1 px-2 absolute top-5 cursor-pointer z-50" v-if="showToolbar" @click="toggleFullScreen">
+                                <div
+                                        class="flex justify-center items-center bg-black bg-opacity-70 rounded py-1 px-2
+                                        absolute top-5 cursor-pointer z-50"
+                                        v-if="showToolbar" @click="toggleFullScreen">
                                     <div class="border border-white opacity-80 m-1">
-                                        <EnlargeIcon></EnlargeIcon>
+                                        <EnlargeIcon/>
                                     </div>
                                 </div>
                             </div>
-                            <div class="absolute w-full h-full flex justify-center items-center" v-if="loading"><LoadingWhite></LoadingWhite></div>
-                            <video autoplay  controlsList="nodownload" id="eVideo" class="m-auto w-full" ref="eVideo" @click="playPause()" poster="/poster-home.png"
+                            <div class="absolute w-full h-full flex justify-center items-center" v-if="loading">
+                                <LoadingWhite/>
+                            </div>
+                            <video autoplay  controlsList="nodownload" id="eVideo" class="m-auto w-full" ref="eVideo"
+                                   @click="playPause()" poster="/poster-home.png"
                                    @timeupdate="timeUpdate()"
                                     @pause="pause()"
                                    @mouseover="()=>{this.showSound = false,this.showToolbar = true}"
                                    >
                                 <source :src="url"/>
                             </video>
-                            <div class="bg-black text-white rounded-md text-sm bg-opacity-70 h-10 flex justify-between px-5 items-center w-11/12 relative -top-14 m-auto" :class="showToolbar?'visible':'invisible'">
+                            <div
+                                    class="bg-black text-white rounded-md text-sm bg-opacity-70 h-10 flex justify-between
+                                    px-5 items-center w-11/12 relative -top-14 m-auto" :class="showToolbar?'visible':'invisible'">
                                 <button id="playPauseBtn" class="bg-transparent focus:outline-none opacity-80"
                                         @click="playPause()">
-                                    <div v-if="showPlay"><PlayIcon ></PlayIcon></div>
-                                    <PauseIcon v-else></PauseIcon>
+                                    <div v-if="showPlay">
+                                        <PlayIcon />
+                                    </div>
+                                    <PauseIcon v-else/>
                                 </button>
                                 <div class="px-5 opacity-80">
                                     <span id="currentTime"></span>
@@ -45,8 +60,9 @@
                                 </div>
 
                                 <div class="px-5 0 cursor-pointer relative">
-                                    <div class="opacity-80" @click="showSettingModal">
-                                        <SettingIcon></SettingIcon>
+                                    <div class="opacity-80"
+                                         @click="showSettingModal">
+                                        <SettingIcon/>
                                     </div>
                                     <!--Setting-->
                                     <div class="bg-black absolute bottom-8 w-48 right-5 px-3 bg-opacity-70 rounded-md py-2"
@@ -55,14 +71,14 @@
                                              @click="showPlaybackModal">
                                             <div>{{$t('playback_speed')}}</div>
                                             <div class="transform -rotate-90">
-                                                <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                                <ChevronIcon fill="#ffffff" :size="16"/>
                                             </div>
                                         </div>
                                         <div class="flex justify-between items-center h-10 leading-10"
                                              @click="showQualityModal">
                                             <div>{{$t('quality')}}</div>
                                             <div class="transform -rotate-90">
-                                                <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                                <ChevronIcon fill="#ffffff" :size="16"/>
                                             </div>
                                         </div>
                                     </div>
@@ -72,7 +88,7 @@
                                          v-if="showPlayback">
                                         <div class="flex items-center h-10 leading-10 px-3" @click="playbackBack">
                                             <div class="transform rotate-90 mr-3">
-                                                <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                                <ChevronIcon fill="#ffffff" :size="16"/>
                                             </div>
                                             <div>{{$t('playback_speed')}}</div>
                                         </div>
@@ -125,19 +141,25 @@
                                          v-if="showQuality">
                                         <div class="flex items-center h-10 leading-10 px-3" @click="backQuality">
                                             <div class="transform rotate-90 mr-3">
-                                                <ChevronIcon fill="#ffffff" :size="16"></ChevronIcon>
+                                                <ChevronIcon fill="#ffffff" :size="16"/>
                                             </div>
                                             <div>{{$t('quality')}}</div>
                                         </div>
                                         <hr class="opacity-30">
                                         <div>
-                                            <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(1)">
+                                            <div
+                                                    class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                                    @click="changeVideoQuality(1)">
                                                 <span class="text-base absolute left-5" v-if="defaultQuality ===1">&#10003;</span>{{$t('auto')}}
                                             </div>
-                                            <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(360)">
+                                            <div
+                                                    class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                                    @click="changeVideoQuality(360)">
                                                 <span class="text-base absolute left-5" v-if="defaultQuality ===360">&#10003;</span>360p
                                             </div>
-                                            <div class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative" @click="changeVideoQuality(720)">
+                                            <div
+                                                    class="h-10 leading-1 text-left flex px-10 hover:bg-black items-center hover:bg-opacity-30 relative"
+                                                    @click="changeVideoQuality(720)">
                                                 <span class="text-base absolute left-5" v-if="defaultQuality ===720">&#10003;</span>720p
                                             </div>
                                         </div>
@@ -145,14 +167,19 @@
                                     <!--End quality-->
                                 </div>
                                 <div class="relative">
-                                    <div class="absolute h-40 w-16 bottom-0 -right-8 z-2" 
-                                        @mouseover="()=>{ (this.showSetting || this.showQuality || this.showPlayback)?this.showSound= false:this.showSound= true}"
-                                        @mouseout="()=>{this.showSound= false}"
+                                    <div
+                                            class="absolute h-40 w-16 bottom-0 -right-8 z-2"
+                                            @mouseover="()=>{
+                                                (this.showSetting || this.showQuality || this.showPlayback)?this.showSound= false:this.showSound= true
+                                            }"
+                                            @mouseout="()=>{this.showSound= false}"
                                         >
                                     </div>
-                                    <div class="opacity-80 cursor-pointer z-40" @click="showSoundModal" @mouseover="()=>{this.showSound= true,this.showSetting= false}">
-                                        <SoundIcon v-if="!muted"></SoundIcon>
-                                        <MutedIcon :size="20" v-else></MutedIcon>
+                                    <div class="opacity-80 cursor-pointer z-40"
+                                         @click="showSoundModal"
+                                         @mouseover="()=>{this.showSound= true,this.showSetting= false}">
+                                        <SoundIcon v-if="!muted"/>
+                                        <MutedIcon :size="20" v-else/>
                                     </div>
                                     <div class="range-slider absolute -left-7 bottom-16 opacity-80"
                                          :class="showSound?'visible':'invisible'"

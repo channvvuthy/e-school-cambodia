@@ -1,8 +1,9 @@
 <template>
     <div>
         <div :class="downloaded.length<=0?`flex flex-col p-5`:`p-5`">
-            <div class="h-screen flex justify-center items-center pb-40" v-if="downloaded.length <= 0 || active ===2">
-                <Empty></Empty>
+            <div class="h-screen flex justify-center items-center pb-40"
+                 v-if="downloaded.length <= 0 || active ===2">
+                <Empty/>
             </div>
             <div class="flex justify-start font-siemreap h-screen overflow-y-scroll pb-40" v-else>
                 <div class="grid gap-4" :class="isHide?`md:grid-cols-4 2xl:grid-cols-5`:`md:grid-cols-3 2xl:grid-cols-4`">
@@ -19,31 +20,31 @@
                             </div>
                             <div class="flex items-end w-full justify-between mt-4 text-center text-sm px-5" @click="gotToPlayList(video)">
                                 <div class="cursor-pointer">
-                                    <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"></YoutubeIcon>
+                                    <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"/>
                                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                         {{ video.total_video?video.total_video: 0}}
                                     </div>
                                 </div>
                                 <div class="cursor-pointer">
-                                    <PdfIcon :fill="darkMode?`#909090`:`#000000`"></PdfIcon>
+                                    <PdfIcon :fill="darkMode?`#909090`:`#000000`"/>
                                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                         {{ video.total_pdf?video.total_pdf:0 }}
                                 </div>
                                 </div>
                                 <div class="cursor-pointer">
-                                    <ChatIcon :fill="darkMode?`#909090`:`#000000`"></ChatIcon>
+                                    <ChatIcon :fill="darkMode?`#909090`:`#000000`"/>
                                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                         {{ video.has_support?$t('1008'):$t('1009') }}
                                     </div>   
                                 </div>
                                 <div class="cursor-pointer">
-                                    <TestIcon :fill="darkMode?`#909090`:`#000000`"></TestIcon>
+                                    <TestIcon :fill="darkMode?`#909090`:`#000000`"/>
                                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                         {{ video.has_quiz?$t('1008'):$t('1009') }}
                                     </div>
                                 </div>
                                 <div class="cursor-pointer">
-                                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`"></CertificateIcon>
+                                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`"/>
                                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center" :class="darkMode?`text-skyBlue`:`text-primary`">
                                         {{ video.has_certificate?$t('1008'):$t('1009') }}
                                     </div>
@@ -57,7 +58,7 @@
                                     {{$t('date_expired')}} : .. .. ..
                                 </div>
                                 <div class="cursor-pointer" @click="confrimDelete(video)">
-                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"/>
                                 </div>
                             </div>
                             <div class="h-4"></div>
@@ -66,7 +67,11 @@
                 </div>
             </div>
         </div>
-        <BuyMsg v-if="isConfrim" :msg="`delete`" @cancelModal="() => {this.isConfrim = false}" @yes="yes"></BuyMsg>
+        <BuyMsg
+                v-if="isConfrim"
+                :msg="`delete`"
+                @cancelModal="() => {this.isConfrim = false}"
+                @yes="yes"/>
     </div>
 </template>
 <script>

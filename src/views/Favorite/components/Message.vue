@@ -3,7 +3,7 @@
             <div class="relative rounded-xl shadow-md" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`" >
                 <div>
                     <div class="absolute right-3 top-3  cursor-pointer" @click="close">
-                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                     <div class="flex justify-center items-center p-5">
                         <div class="text-center mt-0 mx-4 ">

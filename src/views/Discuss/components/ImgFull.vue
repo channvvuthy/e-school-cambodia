@@ -11,7 +11,7 @@
                     <div class="flex justify-center items-center relative py-8">
                         <div class="absolute -top-0 -right-1 cursor-pointer opacity-50 hover:opacity-70"
                              @click="hideFullImage" v-if="loadingImg">
-                            <CloseIcon fill="#ffffff"></CloseIcon>
+                            <CloseIcon fill="#ffffff"/>
                         </div>
                         <img :src="Url" class="max-w-full" id="img" @load="loadedImage"/>
                     </div>

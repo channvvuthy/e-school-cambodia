@@ -17,7 +17,7 @@
                 >
                 </div>
                 <div class="float-right">
-                    <ImageView :chat="chat" v-if="chat.content.type === 2" justify="end"></ImageView>
+                    <ImageView :chat="chat" v-if="chat.content.type === 2" justify="end"/>
                 </div>
                 <Audio :chat="chat" v-if="chat.content.type === 3" class="float-right"></Audio>
             </div>

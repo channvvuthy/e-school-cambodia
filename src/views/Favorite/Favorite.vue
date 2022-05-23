@@ -10,21 +10,21 @@
                              :class="type==`post`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
                             <div class="pb-2">{{ $t('post') }}</div>
                             <div v-if="type === `post`">
-                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"/>
                             </div>
                         </div>
                         <div @click="changeType('course')" class="cursor-pointer  w-12 text-center"
                              :class="type==`course`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
                             <div class="pb-2">{{ $t('course') }}</div>
                             <div v-if="type === `course`">
-                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"/>
                             </div>
                         </div>
                         <div @click="changeType('book')" class="cursor-pointer w-24 text-center"
                              :class="type==`book`?`text-primary ${darkMode?'text-white':''}`:``">
                             <div class="pb-2">{{ $t('2202') }}</div>
                             <div v-if="type === `book`">
-                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"/>
                             </div>
                         </div>
 
@@ -120,7 +120,7 @@
                                     </div>
                                     <div v-if="book.price.year" @click="addToCart(book)" class="cursor-pointer">
                                         <div v-if="!book.is_in_cart">
-                                            <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon>
+                                            <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"/>
                                         </div>
                                     </div>
                                 </div>
@@ -144,7 +144,7 @@
                                     <div class="flex justify-between">
                                         <div class="flex space-x-4">
                                             <div @click="userDetail(post.user)">
-                                                <Avatar :avatar-url="post.user.photo" :size="16"></Avatar>
+                                                <Avatar :avatar-url="post.user.photo" :size="16"/>
                                             </div>
                                             <div>
                                                 <div class="font-PoppinsMedium text-lg">{{ post.user.name }}</div>
@@ -168,7 +168,7 @@
                                                     class="w-full h-full fixed top-0 left-0 z-40"
                                                     v-if="actionId === post._id"></div>
                                             <div @click="showAction(post)">
-                                                <Action></Action>
+                                                <Action/>
                                             </div>
                                             <div
                                                     v-if="actionId === post._id"
@@ -176,8 +176,7 @@
                                                     class="absolute w-60 py-5 right-0 top-10 z-50 rounded-xl shadow-md">
                                                 <ActionList
                                                         @selectedAction="selectedAction($event)"
-                                                        :post="post">
-                                                </ActionList>
+                                                        :post="post"/>
                                             </div>
                                         </div>
                                     </div>
@@ -244,11 +243,11 @@
                                                 <div class="cursor-pointer">
                                                     <div v-if="post.is_like" @click="disLikePost(post)">
                                                         <LikeFillIcon :size="22"
-                                                                      :fill="darkMode ? `#909090`: `#055174`"></LikeFillIcon>
+                                                                      :fill="darkMode ? `#909090`: `#055174`"/>
                                                     </div>
                                                     <div @click="likePost(post)" v-else>
                                                         <LikeIcon :size="22"
-                                                                  :fill="darkMode ? `#909090`: `#4A4A4A`"></LikeIcon>
+                                                                  :fill="darkMode ? `#909090`: `#4A4A4A`"/>
                                                     </div>
 
                                                 </div>
@@ -259,7 +258,7 @@
                                             <div class="flex items-center space-x-2"
                                                  v-if="post.total && post.total.seen">
                                                 <div>
-                                                    <Eye :size="30" :fill="darkMode ? `#909090`: `#4A4A4A`"></Eye>
+                                                    <Eye :size="30" :fill="darkMode ? `#909090`: `#4A4A4A`"/>
                                                 </div>
                                                 <div>
                                                     {{ kFormatter(post.total.seen) }}
@@ -289,7 +288,7 @@
                                      v-if="commentDetailId !== post._id"
                                      @click="showCommentDetail(post._id)"
                                      :class="darkMode ? `border-button text-lightGray` : ``">
-                                    <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
+                                    <Avatar :avatar-url="stProfile.photo" :size="10"/>
                                     <textarea
                                             disabled
                                             readonly

@@ -27,21 +27,21 @@
                     <div class="flex justify-start px-5 pt-2">
                         <button class="bg-transparent focus:outline-none mr-5 transform rotate-180"
                                 @click="previousVideo()">
-                            <NextIcon></NextIcon>
+                            <NextIcon/>
                         </button>
                         <button id="playPauseBtn" class="bg-transparent focus:outline-none mr-5"
                                 @click="playPause()">
-                            <PlayIcon v-if="showPlay"></PlayIcon>
-                            <PauseIcon v-else></PauseIcon>
+                            <PlayIcon v-if="showPlay"/>
+                            <PauseIcon v-else/>
                         </button>
                         <button class="bg-transparent focus:outline-none mr-5" @click="nextVideo()">
-                            <NextIcon></NextIcon>
+                            <NextIcon/>
                         </button>
 
                         <button id="muteBtn" class="mr-3 bg-transparent focus:outline-none"
                                 @click="vidMute()">
-                            <SoundIcon v-if="!muted"></SoundIcon>
-                            <MutedIcon v-else></MutedIcon>
+                            <SoundIcon v-if="!muted"/>
+                            <MutedIcon v-else/>
                         </button>
                         <div class="text-white mr-3 flex">
                             <span id="currentTime"></span>
@@ -55,7 +55,7 @@
                     <div class="flex justify-start items-center px-5 relative">
                         <div class="mr-5">
                             <div class="cursor-pointer mt-2" @click="showOptionTool()">
-                                <SettingIcon></SettingIcon>
+                                <SettingIcon/>
                             </div>
                             <!--Show option-->
                             <div class="absolute bg-white text-black text-14px font-khmer_os w-44 text-center right-5 -top-46 rounded shadow">
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="cursor-pointer mt-2" id="fullScreenBtn" @click="toggleFullScreen()">
-                            <FullScreenIcon></FullScreenIcon>
+                            <FullScreenIcon/>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
                 <div class="absolute top-0 left-0 w-full h-full flex justify-center items-center text-center"
                      :style="{height:video.height+'px'}">
                     <div>
-                        <LoadingWhite></LoadingWhite>
+                        <LoadingWhite/>
                     </div>
                 </div>
             </div>
