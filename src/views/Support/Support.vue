@@ -57,13 +57,13 @@
             <div class="flex items-center">
                 <div class="flex items-center cursor-pointer">
                     <div>
-                        <ImageIcon :fill="darkMode?`#909090`:`#000000`"></ImageIcon>
+                        <ImageIcon :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                     <div class="ml-5">{{$t('add_image')}}</div>
                 </div>
                 <div class="flex items-center cursor-pointer ml-10">
                     <div>
-                        <AttachFileIcon :fill="darkMode?`#909090`:`#000000`"></AttachFileIcon>
+                        <AttachFileIcon :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                     <div class="ml-5">
                         {{$t('attach_file')}}

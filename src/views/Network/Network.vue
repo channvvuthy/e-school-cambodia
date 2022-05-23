@@ -34,7 +34,7 @@
                            v-on:keyup.enter="search"
                            v-model="s">
                     <div class="absolute right-3 top-2">
-                        <SearchIcon :fill="darkMode?`#FFFFFF`:`#000000`"></SearchIcon>
+                        <SearchIcon :fill="darkMode?`#FFFFFF`:`#000000`"/>
                     </div>
                 </div>
                 <!-- Loading -->
@@ -54,14 +54,13 @@
                 </div>
                 <template v-else>
                     <!-- Add friend -->
-                    <AddFriend :friendNotInContact="friendNotInContact" v-if="active === `add_friend`"></AddFriend>
+                    <AddFriend :friendNotInContact="friendNotInContact" v-if="active === `add_friend`"/>
                     <!-- Friend -->
-                    <Friend :friends="friends" v-if="active === `friend`"></Friend>
+                    <Friend :friends="friends" v-if="active === `friend`"/>
                     <!-- Request -->
-                    <Request :request="myRequest" v-if="active === `your_request`" :s="s"></Request>
+                    <Request :request="myRequest" v-if="active === `your_request`" :s="s"/>
                     <!-- Rriend request -->
-                    <friendRequest :friendRequest="friendRequest" v-if="active === `friend_request`"></friendRequest>
-
+                    <friendRequest :friendRequest="friendRequest" v-if="active === `friend_request`"/>
                 </template>
 
             </div>

@@ -5,14 +5,16 @@
                 <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform transition-all  sm:align-middle"
-                 :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+            <div
+                    class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl
+                    transform transition-all  sm:align-middle"
+                    :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="bg-white font-khmer_os relative">
                     <div class="flex-cols items-center">
                         <div class="flex justify-between items-center p-5">
                             <div class="flex-1 text-center">{{view.title}}</div>
                             <div class="cursor-pointer opacity-60" @click="closeView">
-                                <CloseIcon :width="20" :height="20"></CloseIcon>
+                                <CloseIcon :width="20" :height="20"/>
                             </div>
                         </div>
                     </div>
@@ -20,7 +22,9 @@
                         <div class="bg-black py-5 relative">
                             <img :src="view.thumbnail" class="m-auto" style="max-width:50%"/>
                         </div>
-                        <div class="text-center text-custom p-2 font-medium cursor-pointer flex justify-center items-center"
+                        <div
+                                class="text-center text-custom p-2 font-medium cursor-pointer flex
+                                justify-center items-center"
                              @click="read(view._id,view.title)">
                             អាន <img src="/ajax-loader.gif" v-if="loading" class="ml-2"/>
                         </div>

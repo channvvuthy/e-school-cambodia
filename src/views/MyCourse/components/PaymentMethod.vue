@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- This example requires Tailwind CSS v2.0+ -->
         <div class="fixedinset-0 overflow-y-auto" v-if="!showReceipt" style="z-index:700">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
@@ -8,8 +7,10 @@
                 </div>
 
                 <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-                <div class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-72"
-                     role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+                <div
+                        class="inline-block align-bottom bg-white rounded text-left overflow-hidden shadow-xl transform
+                        transition-all sm:my-8 sm:align-middle w-72"
+                        role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                     <div class="bg-white">
                         <div class="flex justify-between">
                             <h3 class="py-4 px-5 text-sm font-semibold text-gray-900 font-khmer_os" id="modal-headline">
@@ -39,22 +40,31 @@
                     </div>
                 </div>
             </div>
-            <Message v-if="err" :message="errMessage" :hide="hide" @showCart="showCart"></Message>
-            <ConfirmPayment v-if="confirmPayment" :html="confirmPaymentView"
-                            @closeConfirmPayment="closeConfirmPayment"></ConfirmPayment>
+            <Message
+                    v-if="err"
+                    :message="errMessage"
+                    :hide="hide"
+                    @showCart="showCart"/>
+            <ConfirmPayment
+                    v-if="confirmPayment"
+                    :html="confirmPaymentView"
+                    @closeConfirmPayment="closeConfirmPayment"/>
         </div>
-        <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail" @closeInfo="closeInfo()"></ReceiptInfo>
+        <ReceiptInfo
+                v-if="showReceipt"
+                :receiptDetail="receiptDetail"
+                @closeInfo="closeInfo()"/>
     </div>
 </template>
 
 <script>
     import CloseIcon from "./../components/CloseIcon"
     import {mapActions, mapState} from "vuex"
-    import Message  from "./Message"
+    import Message from "./Message"
     import ConfirmPayment from "./../components/ConfirmPayment"
     import ReceiptInfo from "./../components/ReceiptInfo"
 
-    export default{
+    export default {
         name: "PaymentMethod",
         components: {
             CloseIcon,
@@ -63,7 +73,7 @@
             ReceiptInfo
         },
 
-        data(){
+        data() {
             return {
                 showReceipt: false,
                 err: false,
@@ -93,23 +103,23 @@
             ...mapActions('receipt', ['getReceiptDetail']),
             ...mapActions('cart', ['getCart']),
 
-            closePaymentMethod($event){
+            closePaymentMethod($event) {
                 this.$emit("closePaymentMethod", $event);
             },
-            closeInfo($event){
+            closeInfo($event) {
                 this.closePaymentMethod($event)
                 this.showReceipt = false
                 this.getCart()
 
             },
-            showCart(){
+            showCart() {
                 this.err = false
                 this.hide = false
             },
-            closeConfirmPayment(){
+            closeConfirmPayment() {
                 this.confirmPayment = false
             },
-            paymentCheckout(is_paylater, code){
+            paymentCheckout(is_paylater, code) {
                 this.payment_option = code
 
                 let checkout = []

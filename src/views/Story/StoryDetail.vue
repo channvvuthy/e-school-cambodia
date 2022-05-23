@@ -1,6 +1,7 @@
 <template>
   <div
-      class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center flex bg-black bg-opacity-80">
+      class="fixed z-50 inset-0 overflow-y-auto font-siemreap w-full h-full left-0 top-0 items-center justify-center
+      flex bg-black bg-opacity-80">
     <div class="md:w-96 2xl:w-100 h-85 rounded-lg flex flex-col justify-between text-white relative"
          :style="{backgroundColor:`${backgroundColor}`,color:`${color}`}">
       <!-- Profile -->
@@ -21,18 +22,18 @@
         <div
             class="transform rotate-90 relative -left-20 cursor-pointer bg-secondary w-8 h-8 rounded-full flex items-center justify-center"
             :class="previous?'visible':'invisible'" @click="previousStory">
-          <ChevronIcon fill="#909090"></ChevronIcon>
+          <ChevronIcon fill="#909090"/>
         </div>
         <!-- Right -->
         <div
             class="transform -rotate-90 relative -right-20 cursor-pointer bg-secondary w-8 h-8 rounded-full flex items-center justify-center"
             :class="next?'visible':'invisible'" @click="nextStory">
-          <ChevronIcon fill="#ffffff"></ChevronIcon>
+          <ChevronIcon fill="#ffffff"/>
         </div>
       </div>
       <!-- Close -->
       <div class="absolute right-3 top-4 cursor-pointer z-50" @click="closeStory">
-        <close-icon :fill="color"></close-icon>
+        <close-icon :fill="color"/>
       </div>
       <div class="flex-1 flex items-center justify-center overflow-hidden" style="max-height:80%;">
         <img :src="storyDetail.photo.name" style="max-height:100%;" class="story-profile"/>
@@ -42,10 +43,10 @@
       <div class="cursor-pointer w-full flex justify-start px-3  items-end text-sm mb-2 relative z-50"
       >
         <div class="flex items-center mb-4" @click="showUserViewer(storyDetail._id)">
-          <span><Eye :fill="color"></Eye></span>
+          <span><Eye :fill="color"/></span>
           <span class="px-1"> {{ storyDetail.view }}</span>
           <span class="pr-1">{{ $t('1004') }}</span>
-          <span><ChevronIcon :fill="color" :size="18"></ChevronIcon></span>
+          <span><ChevronIcon :fill="color" :size="18"/></span>
         </div>
       </div>
       <!-- End viewer -->
@@ -56,10 +57,10 @@
         <div class="top-0 sticky relative pt-14 pb-4" :class="darkMode?`bg-secondary`:`text-black bg-white`">
           <div class="absolute right-3 top-0 cursor-pointer opacity-70 z-50 top-4"
                @click="()=>{this.showViewer = false}">
-            <close-icon :fill="darkMode?'#afb0b4':'#000000'"></close-icon>
+            <close-icon :fill="darkMode?'#afb0b4':'#000000'"/>
           </div>
           <div class="flex ml-5 text-sm font-semibold items-center">
-            <span><Eye :fill="darkMode?'#ffffff':'#000000'"></Eye></span>
+            <span><Eye :fill="darkMode?'#ffffff':'#000000'"/></span>
             <span class="px-2" :class="darkMode?`text-white`:`text-black`"> {{ storyDetail.view }}</span>
             <span class="pr-1" :class="darkMode?`text-white`:`text-black`">{{ $t('1004') }}</span>
           </div>

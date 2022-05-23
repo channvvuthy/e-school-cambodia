@@ -9,8 +9,8 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('profile')">
             <div>
-              <ProfileIcon fill="#FFFFFF" :size="24" v-if="$route.name === `profile`"></ProfileIcon>
-              <ProfileIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else></ProfileIcon>
+              <ProfileIcon fill="#FFFFFF" :size="24" v-if="$route.name === `profile`"/>
+              <ProfileIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else/>
             </div>
 
           </div>
@@ -22,7 +22,7 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('change-password')">
             <div>
-              <LockIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></LockIcon>
+              <LockIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"/>
             </div>
 
           </div>
@@ -34,8 +34,8 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('parent')">
             <div>
-              <GuardianIcon fill="#FFFFFF" v-if="$route.name === `parent`"></GuardianIcon>
-              <GuardianIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></GuardianIcon>
+              <GuardianIcon fill="#FFFFFF" v-if="$route.name === `parent`"/>
+              <GuardianIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
             </div>
 
           </div>
@@ -47,8 +47,8 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('insurance')">
             <div>
-              <InsuranceIcon fill="#FFFFFF" v-if="$route.name === `insurance`"></InsuranceIcon>
-              <InsuranceIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></InsuranceIcon>
+              <InsuranceIcon fill="#FFFFFF" v-if="$route.name === `insurance`"/>
+              <InsuranceIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
             </div>
 
           </div>
@@ -60,8 +60,8 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('invoice')">
             <div>
-              <InvoiceIcon fill="#FFFFFF" v-if="$route.name === `invoice`"></InvoiceIcon>
-              <InvoiceIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></InvoiceIcon>
+              <InvoiceIcon fill="#FFFFFF" v-if="$route.name === `invoice`"/>
+              <InvoiceIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
             </div>
 
           </div>
@@ -73,8 +73,8 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('other')">
             <div>
-              <OtherIcon fill="#FFFFFF" v-if="$route.name === `other` || $route.name === `other-refresh`"></OtherIcon>
-              <OtherIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></OtherIcon>
+              <OtherIcon fill="#FFFFFF" v-if="$route.name === `other` || $route.name === `other-refresh`"/>
+              <OtherIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
             </div>
 
           </div>
@@ -86,7 +86,7 @@
           <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('')">
             <div>
-              <LogoutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"></LogoutIcon>
+              <LogoutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"/>
             </div>
 
           </div>

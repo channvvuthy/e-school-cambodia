@@ -10,14 +10,14 @@
                  @click="switchSidebar">
                 <template v-if="!isHide">
                     <div class="bg-white rounded-full absolute h-3 w-3 left-0 top-5 flex justify-center items-center">
-                        <BackIcon :width="8" :height="8"></BackIcon>
+                        <BackIcon :width="8" :height="8"/>
                     </div>
                     <img src="/icon/Menu/menu.png" class="h-5">
                 </template>
                 <template v-else>
                     <div
                             class="bg-white rounded-full absolute h-3 w-3 right-2 top-5 flex justify-center items-center transform rotate-180">
-                        <BackIcon :width="8" :height="8"></BackIcon>
+                        <BackIcon :width="8" :height="8"/>
                     </div>
                     <img src="/icon/Menu/menu-rotate.png" class="h-5">
                 </template>
@@ -38,7 +38,7 @@
                 </div>
                 <div class="cursor-pointer" @click="getMyQr()">
                     <div>
-                        <QRIcon></QRIcon>
+                        <QRIcon/>
                     </div>
                     <div class="text-sm mt-2 font-PoppinsMedium">
                         My QR
@@ -48,14 +48,14 @@
             <div class="py-3 overflow-y-scroll h-screen pb-40 flex flex-col justify-between">
                 <div class="px-5 flex-1">
                     <template v-if="token">
-                        <Study></Study>
+                        <Study/>
                         <div class="h-10"></div>
-                        <Report></Report>
+                        <Report/>
                         <div class="h-10"></div>
-                        <Privacy></Privacy>
+                        <Privacy/>
                         <div class="h-10"></div>
                     </template>
-                    <eSchool></eSchool>
+                    <eSchool/>
                     <div class="h-5"></div>
                 </div>
                 <div v-if="ads">

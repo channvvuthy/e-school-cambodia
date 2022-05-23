@@ -14,11 +14,11 @@
                     <div class="bg-white px-5 py-4">
                         <div class="flex items-center justify-between">
                             <div class="flex justify-center">
-                                <CartIcon></CartIcon>
+                                <CartIcon/>
                                 <h2 class="font-khmer_os text-sm mt-2 pl-1 font-semibold">កន្ត្រក</h2>
                             </div>
                             <div class="cursor-pointer" @click="closeCart">
-                                <CloseIcon></CloseIcon>
+                                <CloseIcon/>
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                                             <div class="flex flex-col ml-5 justify-between h-full text-right">
                                                 <div class="cursor-pointer flex justify-end flex-1"
                                                      @click="deleteCartList(ct._id)">
-                                                    <DeleteIcon></DeleteIcon>
+                                                    <DeleteIcon/>
                                                 </div>
                                                 <div class="flex justify-between items-between">
                                                     <span class="relative right-5 text-gray-500 text-14px font-khmer_os"
@@ -65,10 +65,10 @@
                                                     <div class="flex-cols relative"
                                                          @click="ct.price.month?duration((ct.price.duration ? ct.price.duration : 12),ct._id):false">
                                                         <div class="transform rotate-180 cursor-pointer">
-                                                            <Chevron></Chevron>
+                                                            <Chevron/>
                                                         </div>
                                                         <div class="cursor-pointer">
-                                                            <Chevron></Chevron>
+                                                            <Chevron/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -104,23 +104,23 @@
         <Coupon
                 v-if="showCouponForm"
                 @closeCoupon="closeCoupon"
-                @couponExist="couponExist">
-        </Coupon>
+                @couponExist="couponExist"/>
         <ChooseDuration
                 v-if="showDurationForm"
                 @closeDuration="closeDuration"
                 @choseDuration="choseDuration"
-                :duration="durationSelected">
-        </ChooseDuration>
-        <ConfirmDelete v-if="showConfirmForm"
-                       @ConfirmDeleteCart="ConfirmDeleteCart"
-                       @closeMessage="closeMessage">
-        </ConfirmDelete>
-        <RemoveCoupon v-if="showRemoveCouponForm"
-                      @closeRemoveCoupon="closeRemoveCoupon"
-                      @ConfirmDeleteCoupon="ConfirmDeleteCoupon">
-        </RemoveCoupon>
-        <PaymentMethod v-if="showPaymentMethodForm" @closePaymentMethod="closePaymentMethod"></PaymentMethod>
+                :duration="durationSelected"/>
+        <ConfirmDelete
+                v-if="showConfirmForm"
+                @ConfirmDeleteCart="ConfirmDeleteCart"
+                @closeMessage="closeMessage"/>
+        <RemoveCoupon
+                v-if="showRemoveCouponForm"
+                @closeRemoveCoupon="closeRemoveCoupon"
+                @ConfirmDeleteCoupon="ConfirmDeleteCoupon"/>
+        <PaymentMethod
+                v-if="showPaymentMethodForm"
+                @closePaymentMethod="closePaymentMethod"/>
     </div>
 </template>
 
@@ -130,7 +130,7 @@
     import Chevron from "./Chevron"
     import CloseIcon from "./CloseIcon"
     import Coupon from "./Coupon"
-    import {mapActions, mapState}  from  "vuex"
+    import {mapActions, mapState} from "vuex"
     import helper from "./../../../helper/helper"
     import Loading from "./../../../components/Loading"
     import ChooseDuration from "./../components/ChooseDuration"
@@ -138,9 +138,9 @@
     import RemoveCoupon from "./../components/RemoveCoupon"
     import PaymentMethod from "./../components/PaymentMethod"
 
-    export default{
+    export default {
         name: "Cart",
-        data(){
+        data() {
             return {
                 showCouponForm: false,
                 showDurationForm: false,
@@ -176,56 +176,56 @@
         methods: {
             ...mapActions('cart', ['getCart', 'removeCart', 'deleteCoupon', 'updateDuration']),
 
-            closePaymentMethod($event){
+            closePaymentMethod($event) {
                 this.showPaymentMethodForm = false
                 this.closeCart($event)
             },
-            showPaymentMethod(){
+            showPaymentMethod() {
                 this.showPaymentMethodForm = true
             },
-            cutString(text, limit){
+            cutString(text, limit) {
                 return helper.cutString(text, limit)
             },
 
-            closeCart($event){
+            closeCart($event) {
                 this.$emit("closeCart", $event)
             },
 
-            showCoupon(){
+            showCoupon() {
                 this.showCouponForm = true
             },
 
-            closeCoupon(){
+            closeCoupon() {
                 this.showCouponForm = false
             },
 
-            deleteCartList(course_id){
+            deleteCartList(course_id) {
                 this.showConfirmForm = true
                 this.course_id = course_id
             },
 
-            ConfirmDeleteCart(){
+            ConfirmDeleteCart() {
                 this.removeCart(this.course_id).then(() => {
                     this.totalCartPrice()
                     this.showConfirmForm = false
                 })
             },
 
-            closeMessage(){
+            closeMessage() {
                 this.showConfirmForm = false
             },
 
-            duration(duration, _id){
+            duration(duration, _id) {
                 this.changeDurationId = _id
                 this.durationSelected = duration
                 this.showDurationForm = true
             },
 
-            closeDuration(){
+            closeDuration() {
                 this.showDurationForm = false
             },
 
-            choseDuration($event){
+            choseDuration($event) {
                 this.updateDuration({
                     duration: $event,
                     _id: this.changeDurationId
@@ -235,17 +235,17 @@
                 this.showDurationForm = false
             },
 
-            durationCalculate(duration, pricePerMonth, pricePerYear){
+            durationCalculate(duration, pricePerMonth, pricePerYear) {
                 return helper.durationCalculate(duration, pricePerMonth, pricePerYear)
             },
 
-            removeCoupon(){
+            removeCoupon() {
                 this.showRemoveCouponForm = true
             },
-            closeRemoveCoupon(){
+            closeRemoveCoupon() {
                 this.showRemoveCouponForm = false
             },
-            ConfirmDeleteCoupon(){
+            ConfirmDeleteCoupon() {
                 this.deleteCoupon().then(() => {
                     this.getCart().then(() => {
                         this.totalCartPrice()
@@ -255,7 +255,7 @@
                 })
             },
 
-            couponExist($event){
+            couponExist($event) {
                 this.coupon = $event
                 this.getCart().then(() => {
                     this.totalCartPrice()
@@ -263,7 +263,7 @@
                 })
             },
 
-            totalCartPrice(){
+            totalCartPrice() {
                 var total = 0;
 
                 for (let index = 0; index < this.cart.list.length; index++) {
@@ -281,7 +281,7 @@
             }
         },
 
-        created(){
+        created() {
             this.getCart().then(() => {
                 this.totalCartPrice()
             })

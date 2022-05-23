@@ -4,76 +4,77 @@
             <div class="grid grid-cols-5 gap-8">
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('home')">
                     <div v-if="$route.name === 'home'">
-                        <HomeFillIcon :fill="darkMode?`#ffffff`:`#055174`"></HomeFillIcon>
+                        <HomeFillIcon :fill="darkMode?`#ffffff`:`#055174`"/>
                     </div>
                     <div v-else>
-                        <HomeIcon :fill="darkMode?`#909090`:`#055174`"></HomeIcon>
+                        <HomeIcon :fill="darkMode?`#909090`:`#055174`"/>
                     </div>
                     <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'home')">
                         {{ $t('1101') }}
                     </p>
                     <template v-if="$route.name === 'home'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"/>
                     </template>
                 </div>
 
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('video')">
                     <div v-if="$route.name === 'video' || $route.name === 'video-detail'">
-                        <WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#055174`"></WatchVideoFillIcon>
+                        <WatchVideoFillIcon :fill="darkMode?`#ffffff`:`#055174`"/>
                     </div>
                     <div v-else>
-                        <WatchVideoIcon :fill="darkMode?`#909090`:`#055174`"></WatchVideoIcon>
+                        <WatchVideoIcon :fill="darkMode?`#909090`:`#055174`"/>
                     </div>
                     <p class="mt-2 pb-1"
                        :class="darkActive(darkMode,$route.name === 'video' || $route.name === 'video-detail')">
                         {{ $t('2108') }}
                     </p>
                     <template v-if="$route.name === 'video'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"/>
                     </template>
                 </div>
                 <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('library')">
                     <div v-if="$route.name === 'library'">
-                        <LibraryIcon :fill="darkMode?`#ffffff`:`#055174`"></LibraryIcon>
+                        <LibraryIcon :fill="darkMode?`#ffffff`:`#055174`"/>
                     </div>
                     <div v-else>
-                        <LibraryThinIcon :fill="darkMode?`#909090`:`#055174`"></LibraryThinIcon>
+                        <LibraryThinIcon :fill="darkMode?`#909090`:`#055174`"/>
                     </div>
                     <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'library')">
                         {{ $t('2200') }}
                     </p>
                     <template v-if="$route.name === 'library'">
-                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                        <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"/>
                     </template>
                 </div>
                 <template v-if="token">
                     <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
                         <div v-if="$route.name === 'partner'">
-                            <PartnershipFillIcon :fill="darkMode?`#ffffff`:`#055174`"
-                                                 :fillY="darkMode?`#252527`:`#ffffff`"></PartnershipFillIcon>
+                            <PartnershipFillIcon
+                                    :fill="darkMode?`#ffffff`:`#055174`"
+                                    :fillY="darkMode?`#252527`:`#ffffff`"/>
                         </div>
                         <div v-else>
-                            <PartnershipIcon :fill="darkMode?`#909090`:`#055174`"></PartnershipIcon>
+                            <PartnershipIcon :fill="darkMode?`#909090`:`#055174`"/>
                         </div>
                         <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'partner')">
                             {{ $t('1104') }}
                         </p>
                         <template v-if="$route.name === 'partner'">
-                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"/>
                         </template>
                     </div>
                     <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('zoom')">
                         <div v-if="$route.name === 'zoom'">
-                            <ZoomIcon :fill="darkMode?`#ffffff`:`#055174`" :size="24"></ZoomIcon>
+                            <ZoomIcon :fill="darkMode?`#ffffff`:`#055174`" :size="24"/>
                         </div>
                         <div v-else>
-                            <ZoomIcon :fill="darkMode?`#909090`:`#055174`" :size="24"></ZoomIcon>
+                            <ZoomIcon :fill="darkMode?`#909090`:`#055174`" :size="24"/>
                         </div>
                         <p class="mt-2 pb-1" :class="darkActive(darkMode,$route.name === 'zoom')">
                             {{ $t('zoom') }}
                         </p>
                         <template v-if="$route.name === 'zoom'">
-                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"></BorderBottom>
+                            <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"/>
                         </template>
                     </div>
                 </template>
@@ -85,7 +86,8 @@
 
                         <template>
                             <div
-                                    class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs"
+                                    class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center
+                                    text-center text-xs"
                                     :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.carts">
                                 <div style="margin-top:2px">
                                     {{ notify.carts }}
@@ -101,7 +103,8 @@
                          @click="goTo('chat')">
                         <template>
                             <div
-                                    class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs"
+                                    class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center
+                                    text-center text-xs"
                                     :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`" v-if="notify.chats">
                                 <div style="margin-top:2px">
                                     {{ notify.chats }}
@@ -118,7 +121,8 @@
                          @click="() =>{this.$emit('notification')}">
                         <template>
                             <div
-                                    class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center text-center text-xs"
+                                    class="absolute -top-3 left-4 h-5 w-5 rounded-full flex justify-center items-center
+                                    text-center text-xs"
                                     :class="darkMode?`bg-white text-youtube`:`bg-heart text-white`"
                                     v-if="notify.notifications">
                                 <div style="margin-top:2px">
@@ -127,7 +131,7 @@
                             </div>
                         </template>
                         <div>
-                            <NotificationIcon :fill="darkMode?`#909090`:`#181818`"></NotificationIcon>
+                            <NotificationIcon :fill="darkMode?`#909090`:`#181818`"/>
                         </div>
 
                     </div>

@@ -21,7 +21,7 @@
                             <div
                                     class="bg-gradient-to-t pb-2 from-black absolute w-full h-full rounded-full flex items-end justify-center"
                                     v-if="isPic">
-                                <CameraIcon fill="#FFFFFF"></CameraIcon>
+                                <CameraIcon fill="#FFFFFF"/>
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                                 @click="()=>{this.$refs.cover.click()}"
                                 style="background-color: rgba(5,81,116,0.7)"
                                 class="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer right-4 absolute top-2">
-                            <CameraIcon fill="#FFFFFF"></CameraIcon>
+                            <CameraIcon fill="#FFFFFF"/>
                         </div>
                     </div>
                     <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
@@ -58,7 +58,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <ProfileIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></ProfileIcon>
+                                    <ProfileIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                       <span>
@@ -76,7 +76,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <GenderIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></GenderIcon>
+                                    <GenderIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                       <span>
@@ -94,7 +94,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></MarkerIcon>
+                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                     <span v-if="stProfile.province">
@@ -115,7 +115,7 @@
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
+                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2 px-3">
                                     <span v-if="stProfile.school">
@@ -135,7 +135,7 @@
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="social"
                      class="p-5 rounded-lg shadow flex items-center space-x-3 cursor-pointer font-black w-full justify-center">
-                    <SocialIcon :fill="darkMode?`#909090`:`#055174`"></SocialIcon>
+                    <SocialIcon :fill="darkMode?`#909090`:`#055174`"/>
                     <div>
                         {{$t('social')}}
                     </div>
@@ -143,7 +143,7 @@
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="()=>{this.isChangeName = true}"
                      class="p-5 rounded-lg shadow flex items-center space-x-3 cursor-pointer w-full justify-center">
-                    <EditIcon :fill="darkMode?`#909090`:`#055174`"></EditIcon>
+                    <EditIcon :fill="darkMode?`#909090`:`#055174`"/>
                     <div>
                         {{$t('request_change_name')}}
                     </div>
@@ -151,7 +151,7 @@
                 <div :class="darkMode ? `bg-secondary text-gray-300` : `bg-white text-primary`"
                      @click="()=>{this.isChangePhone = true}"
                      class="p-5 rounded-lg shadow flex items-center space-x-3 cursor-pointer w-full justify-center">
-                    <EditIcon :fill="darkMode?`#909090`:`#055174`"></EditIcon>
+                    <EditIcon :fill="darkMode?`#909090`:`#055174`"/>
                     <div>
                         {{$t('request_change_phone')}}
                     </div>
@@ -172,7 +172,7 @@
                     <div
                             class="bg-gradient-to-t pb-2 from-black absolute w-full h-full rounded-full flex items-end justify-center"
                             v-if="isPic">
-                        <CameraIcon fill="#FFFFFF"></CameraIcon>
+                        <CameraIcon fill="#FFFFFF"/>
                     </div>
                 </div>
                 <div class="font-semibold ml-5">
@@ -282,10 +282,10 @@
                                  @click="() => {this.showSchool = !this.showSchool}">
                                 {{ school.name }}
                                 <div class="absolute right-2 top-6" style="margin-top:-4px;">
-                                    <ExpendIcon :size="9" :fill="darkMode?`#fff`:`#000`"></ExpendIcon>
+                                    <ExpendIcon :size="9" :fill="darkMode?`#fff`:`#000`"/>
                                 </div>
                                 <div class="absolute right-2 top-3 transform rotate-180">
-                                    <ExpendIcon :size="9" :fill="darkMode?`#fff`:`#000`"></ExpendIcon>
+                                    <ExpendIcon :size="9" :fill="darkMode?`#fff`:`#000`"/>
                                 </div>
                             </div>
                         </label>

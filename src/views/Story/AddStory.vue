@@ -5,7 +5,7 @@
       <div class="flex justify-between items-center py-2">
         <div class="mb-3 font-semibold" :class="darkMode?`text-gray-300`:``">{{ $t('preview') }}</div>
         <div class="cursor-pointer relative -top-2" @click="closeAddStory">
-          <CloseIcon :fill="darkMode?`#afb0b4`:`#000000`"></CloseIcon>
+          <CloseIcon :fill="darkMode?`#afb0b4`:`#000000`"/>
         </div>
       </div>
       <div class="flex-1 overflow-hidden h-screen">

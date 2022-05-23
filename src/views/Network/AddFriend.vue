@@ -17,7 +17,7 @@
                             <AddIcon :fill="darkMode?`#909090`:`#FFFFFF`" :size="16"></AddIcon>
                         </div>
                         <div v-else @click="cancelFriendRequest(friend)" class="flex items-center justify-center w-10 h-6 rounded-2xl">
-                            <ArrowRight fill="#FFFFFF" :size="16"></ArrowRight>
+                            <ArrowRight fill="#FFFFFF" :size="16"/>
                         </div>
                     </div>
                 </div>

@@ -25,11 +25,11 @@
                                 {{$t('location')}}
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></MarkerIcon>
+                                    <MarkerIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                     {{relative.province}}
@@ -43,11 +43,11 @@
                                 {{$t('2123')}}
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></SchoolIcon>
+                                    <SchoolIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                                 <div class="mt-2">
                                     {{relative.school}}
@@ -61,11 +61,11 @@
                                 {{$t('summary')}}
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <QuizIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></QuizIcon>
+                                    <QuizIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                             </div>
                         </div>
@@ -76,11 +76,11 @@
                             {{$t('1117')}}
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <WatchIcon :fill="darkMode?`#909090`:`#055174`" :width="50" :height="50"></WatchIcon>
+                                    <WatchIcon :fill="darkMode?`#909090`:`#055174`" :width="50" :height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -91,11 +91,11 @@
                             {{$t('1118')}}
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <BookIcon :fill="darkMode?`#909090`:`#055174`" :size="50"></BookIcon>
+                                    <BookIcon :fill="darkMode?`#909090`:`#055174`" :size="50"/>
                                 </div>
                             </div>
                         </div>
@@ -106,11 +106,11 @@
                             {{$t('attendant')}}
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                             <div class="flex w-full h-full flex-col items-center justify-center absolute left-0 top-0">
                                 <div class="mt-8">
-                                    <AttendantIcon :fill="darkMode?`#909090`:`#055174`" :width="50" :height="50"></AttendantIcon>
+                                    <AttendantIcon :fill="darkMode?`#909090`:`#055174`" :width="50" :height="50"/>
                                 </div>
                             </div>
                         </div>
@@ -121,11 +121,11 @@
         <template v-else>
             <div class="mt-5 px-5">
                 <div v-if="loading">
-                    <Loading></Loading>
+                    <Loading/>
                 </div>
                 <div v-else>
                     <div v-if="relatives.length == 0" class="h-screen items-center pb-40">
-                        <Empty></Empty>
+                        <Empty/>
                     </div>
                     <div class="grid md:grid-cols-2 2xl:grid-cols-3 gap-5">
                         <div v-for="(relative, index) in relatives" :key="index" :class="darkMode?`bg-secondary`:`bg-white`" class="rounded-xl e-shadow p-5 flex items-center cursor-pointer" @click="relativeDetail(relative)">
@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="transform -rotate-90">
-                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"></ChevronIcon>
+                                <ChevronIcon :fill="darkMode?`#909090`:`#000000`"/>
                             </div>
                         </div>
                     </div>
