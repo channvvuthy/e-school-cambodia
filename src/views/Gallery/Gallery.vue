@@ -1,13 +1,12 @@
 <template>
     <div>
-        <!-- Popup -->
         <div
                 class="fixed w-full h-full top-0 left-0 z-50 bg-black bg-opacity-80 p-5 overflow-y-scroll flex items-center justify-center"
                 v-if="previewStory">
             <div class="md:w-96 2xl:w-100 text-gray-300 bg-secondary rounded-lg flex flex-col justify-between relative"
                  style="height:90%;">
                 <div class="flex justify-between p-5">
-                    <div class="flex items-center">
+                    <div class="flex items-center">¬
                         <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center"
                              v-if="storyDetail.user && storyDetail.user.photo"
                              :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>
@@ -19,7 +18,7 @@
                         </div>
                     </div>
                     <div class="cursor-pointer" @click="() =>{this.previewStory = false}">
-                        <CloseIcon fill="#FFF"></CloseIcon>
+                        <CloseIcon fill="#FFF"/>
                     </div>
                 </div>
                 <div class="h-5"></div>
@@ -28,15 +27,17 @@
                     <div class="absolute flex justify-between items-center w-full bg-transparent">
                         <!-- Left -->
                         <div
-                                class="transform rotate-90 relative -left-20 cursor-pointer bg-secondary w-8 h-8 rounded-full flex items-center justify-center"
+                                class="transform rotate-90 relative -left-20 cursor-pointer bg-secondary w-8 h-8
+                                rounded-full flex items-center justify-center"
                                 :class="previous?'visible':'invisible'" @click="previousStory">
-                            <ChevronIcon fill="#909090"></ChevronIcon>
+                            <ChevronIcon fill="#909090"/>
                         </div>
                         <!-- Right -->
                         <div
-                                class="transform -rotate-90 relative -right-20 cursor-pointer bg-secondary w-8 h-8 rounded-full flex items-center justify-center"
+                                class="transform -rotate-90 relative -right-20 cursor-pointer bg-secondary w-8 h-8
+                                rounded-full flex items-center justify-center"
                                 :class="next?'visible':'invisible'" @click="nextStory">
-                            <ChevronIcon fill="#ffffff"></ChevronIcon>
+                            <ChevronIcon fill="#ffffff"/>
                         </div>
                     </div>
                 </div>
@@ -48,15 +49,15 @@
                             <span>{{ $t('no_viewers_yet') }}</span>
                         </template>
                         <template v-else>
-                            <span><Eye fill="#ffffff"></Eye></span>
+                            <span><Eye fill="#ffffff"/></span>
                             <span class="px-1"> {{ storyDetail.view }}</span>
                             <span class="pr-1">{{ $t('1004') }}</span>
-                            <span><ChevronIcon fill="#ffffff" :size="18"></ChevronIcon></span>
+                            <span><ChevronIcon fill="#ffffff" :size="18"/></span>
                         </template>
 
                     </div>
                     <div @click="confirmDelete(storyDetail)">
-                        <DeleteIcon fill="#909090"></DeleteIcon>
+                        <DeleteIcon fill="#909090"/>
                     </div>
                 </div>
                 <!-- List viewer -->
@@ -67,14 +68,14 @@
                     <div class="md:w-96 2xl:w-100 top-0 sticky relative flex justify-between px-3 py-9"
                          :class="darkMode?`bg-secondary`:`text-black bg-white`">
                         <div class="flex ml-5 text-xs font-semibold items-center">
-                            <span><Eye :fill="darkMode?'#ffffff':'#000000'"></Eye></span>
+                            <span><Eye :fill="darkMode?'#ffffff':'#000000'"/></span>
                             <span class="px-2"
                                   :class="darkMode?`text-white`:`text-black`"> {{ storyDetail.view }}</span>
                             <span class="pr-1" :class="darkMode?`text-white`:`text-black`">{{ $t('1004') }}</span>
                         </div>
                         <div class="cursor-pointer opacity-70 z-50 relative -top-4"
                              @click="()=>{this.showViewer = false}">
-                            <close-icon :fill="darkMode?'#FFF':'#000000'"></close-icon>
+                            <close-icon :fill="darkMode?'#FFF':'#000000'"/>
                         </div>
                     </div>
                     <div>
@@ -114,7 +115,7 @@
                 </div>
                 <div>
                     <div v-if="galleries.length == 0" class="h-screen pb-10">
-                        <Empty></Empty>
+                        <Empty/>
                     </div>
                     <div :class="window.width <= 1315?`container-4`:`container-5`">
                         <div v-for="(gallery, index) in galleries"

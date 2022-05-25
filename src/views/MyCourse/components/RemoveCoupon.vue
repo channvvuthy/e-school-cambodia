@@ -20,13 +20,16 @@
                 </div>
                 <hr>
                 <div class="sm:flex sm:flex-row text-sm font-khmer_os h-10 justify-center items-center">
-                    <button type="button" @click="closeRemoveCoupon"
-                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                    <button
+                            type="button" @click="closeRemoveCoupon"
+                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700
+                            focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
                         បោះបង់
                     </button>
                     <div class="h-10 border border-gray-300 border-l-0 border-t-0 border-b-0" style="width:0px;"></div>
                     <button type="button" @click="ConfirmDeleteCoupon"
-                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+                            class="w-full inline-flex justify-center  px-4   text-base font-medium text-blue-700
+                            focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
                         បាទ/ចាស់
                     </button>
                 </div>

@@ -2,12 +2,12 @@
   <div class="font-khmer_os font-14px h-screen pb-60 overflow-y-scroll" @scroll="onScroll">
     <div class="flex justify-center items-center h-90" v-if="loadingPartner">
       <div>
-        <loading></loading>
+        <loading/>
       </div>
     </div>
     <div v-else>
       <div v-if="partners.length == 0" class="h-screen pb-10" style="display:block;">
-        <Empty></Empty>
+        <Empty/>
       </div>
       <div class="grid gap-6 md:grid-cols-3 2xl:grid-cols-4 px-5 mt-5" v-if="(partners && partners.length)">
         <div v-for="(partner, index) in partners" :key="index" class="rounded-xl shadow-md"
@@ -29,7 +29,9 @@
                       <del class="mx-2 font-semibold">${{ pk.price.discount }}</del>
                       <span>${{ pk.price.year }}</span></div>
                     <div class="cursor-pointer" v-if="pk.is_buy === 0" @click="addToCart(partner,pk)">
-                      <CartIcon :fill="darkMode?`#909090`:`#000000`" v-if="pk.is_in_cart === 0"></CartIcon>
+                      <CartIcon
+                              :fill="darkMode?`#909090`:`#000000`"
+                              v-if="pk.is_in_cart === 0"/>
                     </div>
                   </div>
                 </section>
@@ -38,8 +40,10 @@
             <template v-else>
               <div v-for="(pk, key) in partner.packages" :key="key" class="px-3 pb-3">
                 <div v-if="key === 0">
-                  <img :src="pk.thumbnail" class="rounded cursor-pointer match-height m-auto" @click="openWebView(pk)"
-                       :style="minHeight?{height:`${minHeight}px`}:{}">
+                  <img
+                          :src="pk.thumbnail" class="rounded cursor-pointer match-height m-auto"
+                          @click="openWebView(pk)"
+                          :style="minHeight?{height:`${minHeight}px`}:{}">
                 </div>
               </div>
               <div class="flex px-3 items-center h-14 justify-between">
@@ -48,7 +52,9 @@
                   <span>${{ partner.packages[0].price.year }}</span></div>
                 <div class="cursor-pointer" v-if="partner.packages[0].is_buy === 0"
                      @click="addToCart(partner,partner.packages[0])">
-                  <CartIcon :fill="darkMode?`#909090`:`#000000`" v-if="partner.packages[0].is_in_cart === 0"></CartIcon>
+                  <CartIcon
+                          :fill="darkMode?`#909090`:`#000000`"
+                          v-if="partner.packages[0].is_in_cart === 0"/>
                 </div>
               </div>
             </template>
@@ -57,8 +63,14 @@
       </div>
 
     </div>
-    <Cart v-if="showCartForm" @closeCart="closeCart"></Cart>
-    <BuyMsg v-if="errMessage" :msg="errMessage" @cancelModal="() =>{this.errMessage = ``}" @yes="yes"></BuyMsg>
+    <Cart
+            v-if="showCartForm"
+            @closeCart="closeCart"/>
+    <BuyMsg
+            v-if="errMessage"
+            :msg="errMessage"
+            @cancelModal="() =>{this.errMessage = ``}"
+            @yes="yes"/>
   </div>
 </template>
 <script>

@@ -2,7 +2,7 @@
     <div class="bg-white h-screen">
         <div v-if="loadingGroup" class="flex justify-center items-center h-screen relative -top-5">
             <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
-                <loading></loading>
+                <loading/>
             </h1>
         </div>
         <div v-else>
@@ -13,7 +13,8 @@
                 <ul class="w-1/3 border border-gray-200 border-b-0 border-l-0 border-t-0 h-screen overflow-y-scroll">
                     <li v-for="(group, key) in groups" :key="key" @click="readChat(key, group._id)"
                         :class="(active===key || active=== group._id)?'bg-gray-50':''"
-                        class="text-14px cursor-pointer flex justify-start items-center px-5 border border-gray-100 border-t-0 border-l-0 border-r-0 py-3">
+                        class="text-14px cursor-pointer flex justify-start items-center px-5 border border-gray-100
+                        border-t-0 border-l-0 border-r-0 py-3">
                         <div class="w-14 h-14 rounded-full mr-3 shadow"
                              :style="{backgroundImage:`url(${group.thumbnail})`,backgroundSize:'cover',backgroundRepeat:'no-repeat'}"></div>
                         <div class="flex-cols">
@@ -38,8 +39,8 @@
                             <div v-if="chats && chats.length > 0">
                                 <div v-for="(chat, key) in chats"
                                      :key="key">
-                                    <MediaLeft :chat="chat" v-if="chat.sender._id !== stProfile._id"></MediaLeft>
-                                    <MediaRight :chat="chat" v-if="chat.sender._id === stProfile._id"></MediaRight>
+                                    <MediaLeft :chat="chat" v-if="chat.sender._id !== stProfile._id"/>
+                                    <MediaRight :chat="chat" v-if="chat.sender._id === stProfile._id"/>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <ImgFull v-if="showImgFull" :Url="img" @hideFullImage="hideFullImage"></ImgFull>
+        <ImgFull v-if="showImgFull" :Url="img" @hideFullImage="hideFullImage"/>
 
     </div>
 </template>

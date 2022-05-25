@@ -1,17 +1,19 @@
 <template>
     <div>
-        <div class="fixed z-50 bg-black bg-opacity-90 inset-0 overflow-y-auto flex items-center justify-center w-full h-full left-0 top-0 " v-if="!err">
+        <div class="fixed z-50 bg-black bg-opacity-90 inset-0 overflow-y-auto flex items-center justify-center w-full h-full left-0 top-0 "
+             v-if="!err">
                 <div class="">
                     <div class="bg-opacity-0">
-                        <div class="flex-cols justify-center items-center overflow-y-scroll font-siemreab text-14px rounded-xl" :class="darkMode?`bg-secondary`:`bg-white`">
+                        <div class="flex-cols justify-center items-center overflow-y-scroll font-siemreab text-14px rounded-xl"
+                             :class="darkMode?`bg-secondary`:`bg-white`">
                             <div class="p-5">
                                 <div class="header flex justify-between items-center mb-3 relative">
                                     <div class="font-semibold text-base text-center w-full pt-10 pb-2">
                                         <div>{{$t('fill_info')}}</div>
                                     </div>
                                     <div @click="closeAdd" class="cursor-pointer absolute top-0 -right-2">
-                                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
-                                    </div>
+                                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"/>
+                                    </div>¬
                                 </div>
 
                             </div>
@@ -34,7 +36,7 @@
                                         :disabled="loadingAdd"
                                         @click="addGuardian">
                                     <span>{{$t('1008')}}</span>
-                                    <Loader :size="14" v-if="loadingAdd"></Loader>
+                                    <Loader :size="14" v-if="loadingAdd"/>
                                 </button>
                                 <div class="h-3"></div>
                             </div>
@@ -42,7 +44,10 @@
                     </div>
                 </div>
             </div>
-        <Message v-if="err" :message="message" @closeMessage="closeMessage"></Message>
+        <Message
+                v-if="err"
+                :message="message"
+                @closeMessage="closeMessage"/>
     </div>
 </template>
 

@@ -20,12 +20,12 @@
                         @click="createPost"
                         class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
                         :class="darkMode ? `bg-button`: `bg-softGray`">
-                    <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`"></PostVideoIcon>
+                    <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`"/>
                 </div>
                 <div class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
                      @click="createPost"
                      :class="darkMode ? `bg-button`: `bg-softGray`">
-                    <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"></ImageIcon>
+                    <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"/>
                 </div>
                 <div class="w-10 h-10 rounded-full flex items-center justify-center  text-sm fot-semibold cursor-pointer"
                      :class="darkMode ? `bg-button text-lightGray `: `bg-softGray text-primary`">
@@ -35,7 +35,7 @@
             <template v-if="isPost">
                 <CreatePost
                         @dismissPost="()=>{this.isPost = false}"
-                        @closeCreate="closeCreate"></CreatePost>
+                        @closeCreate="closeCreate"/>
             </template>
         </div>
         <div class="flex p-5">
@@ -100,14 +100,15 @@
                                     <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                                         <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
                                             <div v-if="post.caption && post.caption.length > 200">
-                  <span class="less"
-                        @click="seeMore"
-                  >{{ cutString(post.caption, 200) }} <span
-                          class="capitalize cursor-pointer font-bold">{{ $t('see_more') }}</span>
-                  </span>
+                                                <span class="less" @click="seeMore">
+                                                    {{ cutString(post.caption, 200) }}
+                                                    <span class="capitalize cursor-pointer font-bold">
+                                                        {{ $t('see_more') }}
+                                                    </span>
+                                                </span>
                                                 <span class="more hidden">
-                    {{ post.caption }}
-                  </span>
+                                                    {{ post.caption }}
+                                                </span>
                                             </div>
                                             <div v-else>
                                                 {{ post.caption }}
@@ -147,7 +148,7 @@
                                 <div v-if="post.video" class="mt-4 overflow-hidden">
                                     <MediaPlayer
                                             @fullScreen="fullScreen($event)"
-                                            :video-url="post.video.url" :post="post"></MediaPlayer>
+                                            :video-url="post.video.url" :post="post"/>
                                 </div>
                                 <!-- Background -->
                                 <div></div>
@@ -159,11 +160,11 @@
                                             <div class="cursor-pointer">
                                                 <div v-if="post.is_like" @click="disLikePost(post)">
                                                     <LikeFillIcon :size="22"
-                                                                  :fill="darkMode ? `#909090`: `#055174`"></LikeFillIcon>
+                                                                  :fill="darkMode ? `#909090`: `#055174`"/>
                                                 </div>
                                                 <div @click="likePost(post)" v-else>
                                                     <LikeIcon :size="22"
-                                                              :fill="darkMode ? `#909090`: `#4A4A4A`"></LikeIcon>
+                                                              :fill="darkMode ? `#909090`: `#4A4A4A`"/>
                                                 </div>
 
                                             </div>
@@ -202,7 +203,7 @@
                                  v-if="commentDetailId !== post._id"
                                  @click="showCommentDetail(post._id)"
                                  :class="darkMode ? `border-button text-lightGray` : ``">
-                                <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
+                                <Avatar :avatar-url="stProfile.photo" :size="10"/>
                                 <textarea
                                         disabled
                                         readonly
@@ -214,7 +215,7 @@
                                 </div>
                             </div>
                             <div v-if="commentDetailId === post._id">
-                                <CommentDetail :id="commentDetailId" :social="post"></CommentDetail>
+                                <CommentDetail :id="commentDetailId" :social="post"/>
                             </div>
                         </div>
                     </div>
@@ -224,7 +225,7 @@
                             v-for="i in 2" :key="i + Math.random()"
                             class="border mb-5 p-5"
                             :class="darkMode ? `border-button text-lightGray` : ``">
-                        <Loading :grid="true" :number-of-columns="1"></Loading>
+                        <Loading :grid="true" :number-of-columns="1"/>
                     </div>
                 </template>
             </div>
@@ -238,7 +239,7 @@
                         v-if="loadingRecomment"
                         class="border py-3 px-4 mb-4"
                         :class="darkMode ? `border-button text-lightGray` : ``">
-                    <Loading :grid="true" :number-of-columns="1"></Loading>
+                    <Loading :grid="true" :number-of-columns="1"/>
                 </div>
                 <div v-if="!loadingRecomment"
                      class="border py-3 px-4 mb-4"
@@ -277,31 +278,31 @@
                                              :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                                         <div class="ml-5 text-white pb-2">{{ video.teacher.name }}</div>
                                     </div>
-                                    <div class="text-base font-semibold mt-3 text-center">{{ cutString(video.title, 30)
-                                        }}
+                                    <div class="text-base font-semibold mt-3 text-center">
+                                        {{ cutString(video.title, 30)}}
                                     </div>
                                     <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
                                         <div class="cursor-pointer" :title="$t('2108')">
-                                            <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></YoutubeIcon>
+                                            <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
                                             <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                                 {{ video.total_video ? video.total_video : 0 }}
                                             </div>
                                         </div>
                                         <div class="cursor-pointer" :title="$t('pdf')">
-                                            <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></PdfIcon>
+                                            <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
                                             <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                                                 {{ video.total_pdf ? video.total_pdf : 0 }}
                                             </div>
                                         </div>
                                         <div class="cursor-pointer" :title="$t('support')">
-                                            <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></ChatIcon>
+                                            <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
                                             <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
                                                  :class="darkMode?`text-skyBlue`:`text-primary`">
                                                 {{ video.has_support ? $t('1008') : $t('1009') }}
                                             </div>
                                         </div>
                                         <div class="cursor-pointer" :title="$t('2111')">
-                                            <TestIcon :fill="darkMode?`#909090`:`#000000`" :size="42"></TestIcon>
+                                            <TestIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
                                             <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
                                                  :class="darkMode?`text-skyBlue`:`text-primary`">
                                                 {{ video.has_quiz }}
@@ -327,7 +328,7 @@
                                         <div @click="addToCart(video)">
                                             <div v-if="!video.is_in_cart" style="background-color:rgba(5,81,116,0.24)"
                                                  class="rounded-full w-10 h-10 flex items-center justify-center">
-                                                <CartIcon :fill="darkMode?`#909090`:`#055174`"></CartIcon>
+                                                <CartIcon :fill="darkMode?`#909090`:`#055174`"/>
                                             </div>
                                         </div>
                                     </template>
@@ -345,27 +346,25 @@
             <PostDetail
                     @dismiss="()=>{this.isPostDetail = false}"
                     :post="postDetail"
-                    v-if="isPostDetail">
-            </PostDetail>
+                    v-if="isPostDetail"/>
             <!-- Video detail -->
             <VideoDetail
                     @dismiss="()=>{this.isVideo = false}"
                     :post="postDetail"
-                    v-if="isVideo">
-            </VideoDetail>
+                    v-if="isVideo"/>
             <!-- Edit post -->
             <template v-if="isEdit">
                 <CreatePost
                         :edit-detail="postDetail"
                         :is-edit="true"
                         @dismissPost="()=>{this.isEdit = false}"
-                        @closeCreate="closeCreate"></CreatePost>
+                        @closeCreate="closeCreate"/>
             </template>
             <!-- Report post -->
             <template v-if="isReport">
                 <Report
                         :social="reportSocial"
-                        @closeReport="()=>{this.isReport = false}"></Report>
+                        @closeReport="()=>{this.isReport = false}"/>
             </template>
             <!-- Copy link -->
             <input type="text" class="absolute" v-model="link" id="copyLink" style="z-index:-1">
@@ -435,6 +434,7 @@
     import ChatIcon from "@/components/ChatIcon";
     import TestIcon from "@/components/TestIcon";
     import BuyMsg from "@/views/Component/BuyMsg";
+    import timeSince from "../../helper/timeSince";
 
     Vue.use(VueObserveVisibility)
 
@@ -520,6 +520,7 @@
                             user_id: user._id
                         }
                     })
+                    return
                 }
                 this.isLoginRequire = true
 
@@ -672,9 +673,6 @@
                 }
                 this.commentDetailId = id
             },
-            postComment() {
-
-            },
             commentText(comment) {
                 let text = this.$i18n.t('2114')
 
@@ -753,15 +751,7 @@
                 })
             },
             formatDate(day) {
-                let currentDate = new Date()
-                let today = moment(currentDate)
-                let postDay = moment(day)
-                let result = today.diff(postDay, 'days')
-                if (result === 1 || result === 0) {
-                    return moment(day).startOf('hour').fromNow()
-                } else {
-                    return moment(day).format('LLL')
-                }
+                return timeSince.timeSince(day)
             },
             closeCreate() {
                 this.isEdit = false

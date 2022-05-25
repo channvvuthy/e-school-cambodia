@@ -31,6 +31,9 @@ export default {
                     resolve(res.data)
                 }).catch(err => {
                     commit("loading", false)
+                    if (err.response.status == 504 || err.response.status == 502) {
+                        helper.errorMessage(err.response.status)
+                    }
                     reject(err)
                 })
             })
@@ -50,6 +53,9 @@ export default {
                 }).catch(err => {
                     commit("loading", false)
                     reject(err)
+                    if (err.response.status == 504 || err.response.status == 502) {
+                        helper.errorMessage(err.response.status)
+                    }
                 })
             })
         },
@@ -59,6 +65,9 @@ export default {
                 onUploadProgress: function (progressEvent) {
                     let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
                     commit("progress", percentCompleted)
+                    if (err.response.status == 504 || err.response.status == 502) {
+                        helper.errorMessage(err.response.status)
+                    }
                 }
             }
             return new Promise((resolve, reject) => {
@@ -66,7 +75,7 @@ export default {
                     resolve(res.data)
                 }).catch(err => {
                     commit("loading", false)
-                    if (err.response.status == 504) {
+                    if (err.response.status == 504 || err.response.status == 502) {
                         helper.errorMessage(err.response.status)
                     }
                     reject(err)

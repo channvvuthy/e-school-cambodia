@@ -13,7 +13,7 @@
 
                             <div class="flex-1 text-center">{{view.title}}</div>
                             <div class="cursor-pointer opacity-60" @click="closeView">
-                                <CloseIcon :width="20" :height="20"></CloseIcon>
+                                <CloseIcon :width="20" :height="20"/>
                             </div>
                         </div>
                         <div class="relative pb-10" style="max-height: 600px;overflow-y: scroll">
@@ -22,7 +22,7 @@
                                 <template v-if="!alreadyInCart(view._id ) && !view.is_in_cart">
                                     <div class="absolute bottom-5 right-5 bg-white rounded py-1 px-2 cursor-pointer opacity-80 hover:opacity-100"
                                          v-if="view.is_buy !==0" @click="addToCart(view._id)">
-                                        <CartIcon :width="20" :height="20"></CartIcon>
+                                        <CartIcon :width="20" :height="20"/>
                                     </div>
                                 </template>
                             </div>
@@ -43,8 +43,10 @@
                     <button class="fixed bottom-0 bg-blue w-full p-3 bg-custom text-center text-white cursor-pointer focus:outline-none"
                             :disabled="loadingCart"
                             @click="addToCart(view._id)" v-if="view.price.year">
-                        <span v-text="view.is_buy?'បន្តសុពលភាព':'ទិញ'"></span> <span v-if="loadingCart"><Loader
-                            :size="10"></Loader></span>
+                        <span v-text="view.is_buy?'បន្តសុពលភាព':'ទិញ'"></span>
+                        <span v-if="loadingCart">
+                            <Loader :size="10"/>
+                        </span>
                     </button>
                 </div>
             </div>
@@ -53,13 +55,13 @@
 </template>
 
 <script>
-    import CloseIcon  from "./../../../components/CloseIcon.vue"
+    import CloseIcon from "./../../../components/CloseIcon.vue"
     import CartIcon from "./../../../components/CartIcon.vue"
     import {mapActions, mapState} from "vuex"
     import Loader from "./../../../components/Loader.vue"
 
 
-    export default{
+    export default {
         name: "ViewBook",
         components: {
             CloseIcon,
@@ -102,23 +104,23 @@
         methods: {
             ...mapActions('cart', ['addCart', 'getCart']),
 
-            addToCart(course_id){
+            addToCart(course_id) {
                 this.addCart(course_id).then(() => {
                     this.$emit('buyingRead', course_id)
                     this.getCart()
                 })
             },
-            closeView($event){
+            closeView($event) {
                 this.$emit("closeView", $event);
             },
-            read(id, title){
+            read(id, title) {
                 this.$emit('read', {id, title})
             },
 
-            showCart($event){
+            showCart($event) {
                 this.$emit("showCart", $event);
             },
-            alreadyInCart(course_id){
+            alreadyInCart(course_id) {
                 for (let i = 0; i < this.cart.list.length; i++) {
                     if (this.cart.list[i]._id === course_id) {
                         return true
@@ -127,7 +129,7 @@
                 return false
             }
         },
-        created(){
+        created() {
             this.getCart()
         }
     }

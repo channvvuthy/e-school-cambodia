@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="cursor-pointer" @click="()=>{this.$emit('close')}">
-                    <CloseIcon></CloseIcon>
+                    <CloseIcon/>
                 </div>
             </div>
             <div class="mt-5">

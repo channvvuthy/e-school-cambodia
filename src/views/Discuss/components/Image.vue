@@ -3,7 +3,7 @@
         <div class="overflow-hidden cursor-pointer flex w-72" @click="imageDetail()" :class="`justify-${justify}`">
             <img :src="imgUrl+chat.content.value" class="max-w-full max-h-36 shadow rounded"/>
         </div>
-        <ImageFull v-if="showImageFull" :Url="imgUrl+chat.content.value" @hideFullImage="hideFullImage"></ImageFull>
+        <ImageFull v-if="showImageFull" :Url="imgUrl+chat.content.value" @hideFullImage="hideFullImage"/>
     </div>
 </template>
 <script>

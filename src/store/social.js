@@ -17,9 +17,18 @@ export default {
         actionId: null,
         socialComment: {},
         favorites: [],
-        recomments:[],
+        recomments: [],
     },
     mutations: {
+        getMoreComment(state, payload) {
+            if (payload.comments) {
+                if (payload.comments.length) {
+                    for (let i = 0; i < payload.comments.length; i++) {
+                        state.comments.comments.push(payload.comments[i])
+                    }
+                }
+            }
+        },
         getRecomment(state, payload) {
             state.recomments = payload
         },
@@ -304,7 +313,9 @@ export default {
         addComment({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `social/comment`, payload).then(res => {
-                    commit("addComment", res.data.data)
+                    if (res.data.msg == undefined) {
+                        commit("addComment", res.data.data)
+                    }
                     resolve(res.data)
                 }).catch(err => {
                     reject(err)
@@ -314,7 +325,9 @@ export default {
         replyComment({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `social/comment/reply`, payload).then(res => {
-                    commit("replyComment", res.data.data)
+                    if (res.data.msg == undefined) {
+                        commit("replyComment", res.data.data)
+                    }
                     resolve(res.data)
                 }).catch(err => {
                     reject(err)
@@ -325,7 +338,9 @@ export default {
             commit("loadingComment", true)
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social/comment?${helper.q(payload)}`).then(res => {
-                    commit("getComment", res.data.data)
+                    if (res.data.msg == undefined) {
+                        commit("getComment", res.data.data)
+                    }
                     commit("loadingComment", false)
                     resolve(res.data.data)
                 }).catch(err => {
@@ -334,10 +349,25 @@ export default {
                 })
             })
         },
+        getMoreComment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/comment?${helper.q(payload)}`).then(res => {
+                    if (res.data.msg == undefined) {
+                        commit("getMoreComment", res.data.data)
+                    }
+                    resolve(res.data.data)
+                }).catch(err => {
+
+                    reject(err)
+                })
+            })
+        },
         getReply({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `social/comment/reply?${helper.q(payload)}`).then(res => {
-                    commit("getReply", res.data.data)
+                    if (res.data.msg == undefined) {
+                        commit("getReply", res.data.data)
+                    }
                     resolve(res.data.data)
                 }).catch(err => {
                     reject(err)

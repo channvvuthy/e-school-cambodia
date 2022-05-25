@@ -1,8 +1,11 @@
 <template>
     <div class="p-5 mb-1 shadow" :class="darkMode?`bg-youtube text-gray-300`:`bg-white `">
         <div class="flex">
-            <div class="mr-3"><SmileIcon :fill="darkMode?`#ffffff`:`#055174`"></SmileIcon></div>
-            <div class="text-base font-medium uppercase" :class="darkMode?`text-white`:`text-primary`">{{$t('2003')}}</div>
+            <div class="mr-3">
+                <SmileIcon :fill="darkMode?`#ffffff`:`#055174`"/>
+            </div>
+            <div class="text-base font-medium uppercase" :class="darkMode?`text-white`:`text-primary`">{{$t('2003')}}
+            </div>
         </div>
         <div class="flex justify-center text-lg">
             <div>{{$t('2006')}}</div>
@@ -10,12 +13,14 @@
         <div class="h-10"></div>
         <div class="flex justify-center items-center">
             <div @click="goTo('login')" class="mr-5">
-                <button class="px-10 h-10 focus:outline-none rounded-lg text-sm flex justify-center items-center text-white" :class="darkMode?`bg-button`:`box-shadow bg-primary`">
+                <button class="px-10 h-10 focus:outline-none rounded-lg text-sm flex justify-center items-center text-white"
+                        :class="darkMode?`bg-button`:`box-shadow bg-primary`">
                     <span>{{$t('2007')}}</span>
                 </button>
             </div>
             <div @click="goTo('register')">
-                <button class="px-10 h-10 focus:outline-none rounded-lg text-sm flex justify-center items-center" :class="darkMode?`bg-button text-white`:`bg-white text-black box-shadow `">
+                <button class="px-10 h-10 focus:outline-none rounded-lg text-sm flex justify-center items-center"
+                        :class="darkMode?`bg-button text-white`:`bg-white text-black box-shadow `">
                     <span>{{$t('2008')}}</span>
                 </button>
             </div>
@@ -27,15 +32,15 @@
     import {mapState} from "vuex"
     import SmileIcon from "./../../components/SmileIcon.vue"
 
-    export default{
-        components:{
+    export default {
+        components: {
             SmileIcon
         },
-        computed:{
+        computed: {
             ...mapState('setting', ['darkMode'])
         },
         methods: {
-            goTo(page){
+            goTo(page) {
                 this.$router.push({name: page})
             }
         }

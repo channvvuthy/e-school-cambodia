@@ -41,19 +41,19 @@
                         <div class="h-5"></div>
                         <div class="flex justify-between items-center mb-3">
                             <div class="flex text-sm">
+<!--                                <div class="flex items-center">-->
+<!--                                    <div class="cursor-pointer"-->
+<!--                                         @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">-->
+<!--                                        <FavoriteFill v-if="video.is_favorite" :size="24"-->
+<!--                                                      :fill="darkMode?`#E5E7EB`:`#c0272d`"/>-->
+<!--                                        <FavoriteIcon v-else :size="24"-->
+<!--                                                      :fill="darkMode?`#E5E7EB`:`#4A4A4A`"/>-->
+<!--                                    </div>-->
+<!--                                    <div class="mx-3">-->
+<!--                                        {{ $t('1109') }}-->
+<!--                                    </div>-->
+<!--                                </div>-->
                                 <div class="flex items-center">
-                                    <div class="cursor-pointer"
-                                         @click="video.is_favorite?removeMyFavorite(video._id):addFavorite(video._id)">
-                                        <FavoriteFill v-if="video.is_favorite" :size="24"
-                                                      :fill="darkMode?`#E5E7EB`:`#c0272d`"/>
-                                        <FavoriteIcon v-else :size="24"
-                                                      :fill="darkMode?`#E5E7EB`:`#4A4A4A`"/>
-                                    </div>
-                                    <div class="mx-3">
-                                        {{ $t('1109') }}
-                                    </div>
-                                </div>
-                                <div class="flex mx-20 items-center">
                                     <div>
                                         <Eye :fill="darkMode?`#E5E7EB`:`#4A4A4A`"/>
                                     </div>

@@ -2,7 +2,7 @@
     <div class="bg-white overflow-y-scroll">
         <div v-if="loadingOther" class="flex justify-center items-center h-screen relative -top-5">
             <h1 class="text-sm font-semibold font-khmer_os relative top-0">
-                <loading></loading>
+                <loading/>
             </h1>
         </div>
         <div v-else class="relative">

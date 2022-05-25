@@ -1,6 +1,6 @@
 <template>
   <div>
-    <eHeader :title="'all_story'" :ml="3"></eHeader>
+    <eHeader :title="'all_story'" :ml="3"/>
     <div class="p-5">
       <div v-if="loadingStory">
         <Loading></Loading>
@@ -54,19 +54,18 @@
     </div>
     <StoryDetail
         v-if="showStory"
-        @closeStory="closeStory">
-    </StoryDetail>
+        @closeStory="closeStory"/>
     <!-- Post detail -->
     <PostDetail
         @dismiss="()=>{this.isPostDetail = false}"
         :post="postDetail"
-        v-if="isPostDetail"></PostDetail>
+        v-if="isPostDetail"/>
     <!-- Video detail -->
     <VideoDetail
         @dismiss="()=>{this.isVideo = false}"
         :post="postDetail"
         v-if="isVideo"
-    ></VideoDetail>
+    />
   </div>
 </template>
 <script>

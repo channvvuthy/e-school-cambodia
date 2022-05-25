@@ -10,9 +10,14 @@
                 <div>
                     <div v-if="s" class="absolute left-0 top-2 cursor-pointer" style="margin-top:5px;"
                          :title="$t('clear')" @click="clear">
-                        <CloseIcon :width="20" :height="20" :fill="darkMode?`#D1D5DB`:`#000000`"></CloseIcon>
+                        <CloseIcon
+                                :width="20"
+                                :height="20"
+                                :fill="darkMode?`#D1D5DB`:`#000000`"/>
                     </div>
-                    <div class="absolute left-0 top-3" v-else><SearchIcon :fill="darkMode?`#D1D5DB`:`#000000`"></SearchIcon></div>
+                    <div class="absolute left-0 top-3" v-else>
+                        <SearchIcon :fill="darkMode?`#D1D5DB`:`#000000`"/>
+                    </div>
                 </div>
                 <div class="flex absolute right-0 cursor-pointer justify-center items-center h-12 leading-12 top-0"
                      @click="showFilter">
@@ -24,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <List :filter="filter" v-if="showFilterForm" @closeFilter="closeFilter"></List>
+        <List :filter="filter" v-if="showFilterForm" @closeFilter="closeFilter"/>
     </div>
 </template>
 <script>

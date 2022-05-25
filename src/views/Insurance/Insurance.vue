@@ -1,34 +1,46 @@
 <template>
     <div>
-        <div class="h-screen flex" :class="darkMode?`text-gray-400 ${insuranceStatus === 0?`justify-center items-center flex-col`:``}`:`${insuranceStatus === 0?`justify-center items-center flex-col`:``}`">
+        <div class="h-screen flex"
+             :class="darkMode?`text-gray-400 ${insuranceStatus === 0?`justify-center items-center flex-col`:``}`:
+             `${insuranceStatus === 0?`justify-center items-center flex-col`:``}`">
             <div v-if="checkingInsurance"  class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_siemreap relative -top-10">
-                    <loading></loading>
+                    <loading/>
                 </h1>
             </div>
             <template v-if="insuranceStatus === 0">
-                <div><Icon></Icon></div>
+                <div><Icon/></div>
                 <div class="max-w-sm mt-10 text-center">
                     {{$t('insurance_note')}}
                     <div class="flex justify-between items-center mt-10">
-                        <button class="rounded-lg bg-primary py-3 w-full mr-3 text-white focus:outline-none" @click="() => {this.$router.push('/video')}">{{$t('2108')}}</button>
-                        <button class="rounded-lg bg-primary py-3 w-full ml-3 text-white focus:outline-none" @click="() => {this.$router.push('/library')}">{{$t('2202')}}</button>
+                        <button class="rounded-lg bg-primary py-3 w-full mr-3 text-white focus:outline-none"
+                                @click="() => {this.$router.push('/video')}">
+                            {{$t('2108')}}
+                        </button>
+                        <button class="rounded-lg bg-primary py-3 w-full ml-3 text-white focus:outline-none"
+                                @click="() => {this.$router.push('/library')}">
+                            {{$t('2202')}}
+                        </button>
                     </div>
                 </div>
             </template>
             <template v-else>
-                <div class="max-w-2xl rounded-xl p-10 m-5 h-screen overflow-y-scroll pb-40" :class="darkMode?`bg-secondary`:`bg-white shadow-md`">
+                <div class="max-w-2xl rounded-xl p-10 m-5 h-screen overflow-y-scroll pb-40"
+                     :class="darkMode?`bg-secondary`:`bg-white shadow-md`">
                     <div class="text-center">{{$t('get_insurance_note')}}</div>
                     <div class="h-7"></div>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div>
                             <div class="mb-3">{{$t('2014')}}<span class="text-heart">*</span></div>
-                            <input type="text"  class="border-b w-full focus:outline-none" name="last_name" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.first_name">
+                            <input type="text"  class="border-b w-full focus:outline-none" name="last_name"
+                                   :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.first_name">
 
                         </div>
                         <div>
                             <div class="mb-3">{{$t('2013')}}<span class="text-heart">*</span></div>
-                            <input type="text"  class="border-b w-full focus:outline-none" name="first_name" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.last_name">
+                            <input type="text"  class="border-b w-full focus:outline-none" name="first_name"
+                                   :class="darkMode?`bg-transparent border-button`:`border-gray-300`"
+                                   v-model="stProfile.last_name">
                         </div>
                     </div>
                     <!-- Sex -->
@@ -37,7 +49,8 @@
                         <div class="mr-20">
                             <label for="female">
                                 <div class="flex items-center">
-                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center cursor-pointer" :class="darkMode?``:`border-gray-300`">
+                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center cursor-pointer"
+                                         :class="darkMode?``:`border-gray-300`">
                                         <div class="h-2 w-2" :class="darkMode?``:`bg-primary`" style="border-radius:100%"></div>
                                     </div>
                                     <input type="radio" name="gender"  id="female" class="hidden"> 
@@ -48,7 +61,8 @@
                         <div>
                             <label for="male">
                                 <div class="flex items-center">
-                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center cursor-pointer" :class="darkMode?``:`border-gray-300`">
+                                    <div class="w-4 h-4 rounded-full border flex items-center justify-center cursor-pointer"
+                                         :class="darkMode?``:`border-gray-300`">
                                         <div class="h-2 w-2" :class="darkMode?``:`bg-primary`" style="border-radius:100%"></div>
                                     </div>
                                     <input type="radio" name="gender"  id="male" class="hidden">
@@ -64,7 +78,8 @@
 
                     <div class="grid">
                         <div>
-                            <input type="date" class="w-full bg-transparent focus:outline-none border-b" v-model="stProfile.date_of_birth" :class="darkMode?`bg-transparent border-button`:`border-gray-300`">
+                            <input type="date" class="w-full bg-transparent focus:outline-none border-b"
+                                   v-model="stProfile.date_of_birth" :class="darkMode?`bg-transparent border-button`:`border-gray-300`">
                         </div>
                     </div>
                     <div class="h-7"></div>
@@ -72,20 +87,26 @@
                     <div class="grid grid-cols-2 gap-4">
                          <div>
                             <div class="mb-3 text-sm">{{$t('2009')}}<span class="text-heart">*</span></div>
-                            <input type="text"  class="border-b w-full focus:outline-none" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="stProfile.phone">
+                            <input type="text"  class="border-b w-full focus:outline-none"
+                                   :class="darkMode?`bg-transparent border-button`:`border-gray-300`"
+                                   v-model="stProfile.phone">
 
                         </div>
                         <div class="relative">
                             <div class="mb-3 text-sm">{{$t('2124')}}<span class="text-heart">*</span></div>
-                            <select class="province w-full focus:outline-none relative z-50 bg-transparent text-sm" :class="darkMode?`border-button`:`border-gray-300`"  @change="selectProvince" v-model="selectedValue">
+                            <select class="province w-full focus:outline-none relative z-50 bg-transparent text-sm"
+                                    :class="darkMode?`border-button`:`border-gray-300`"
+                                    @change="selectProvince"
+                                    v-model="selectedValue">
                                 <option v-for="(province,index) in provinces" :key="index" :value="province._id">
                                     {{province.name}}
                                 </option>
                                 
                             </select>
-                            <div class="h-1 w-full border-b"  :class="darkMode?`border-button`:`border-gray-300 absolute left-0 bottom-0`"></div>
+                            <div class="h-1 w-full border-b"
+                                 :class="darkMode?`border-button`:`border-gray-300 absolute left-0 bottom-0`"></div>
                             <div class="absolute right-0 bottom-2 cursor-pointer z-10">
-                                <ChevronIcon></ChevronIcon>
+                                <ChevronIcon/>
                             </div>
                         </div>
                     </div>
@@ -96,19 +117,25 @@
                             <div class="absolute left-5 top-3 w-full flex justify-end  pr-20" v-if="loading">
                                 <div class="loader "></div>
                             </div>
-                            <select class="province w-full text-sm focus:outline-none relative z-50 bg-transparent" :class="darkMode?`border-button`:`border-gray-300`" :disabled="loading">
-                                <option v-for="(school, index) in schools" :key="index" :value="school._id">
+                            <select class="province w-full text-sm focus:outline-none relative z-50 bg-transparent"
+                                    :class="darkMode?`border-button`:`border-gray-300`"
+                                    :disabled="loading">
+                                <option v-for="(school, index) in schools"
+                                        :key="index"
+                                        :value="school._id">
                                     {{school.name}}
                                 </option>
                             </select>
-                            <div class="h-1 w-full border-b"  :class="darkMode?`border-button`:`border-gray-300 absolute left-0 bottom-0`"></div>
+                            <div class="h-1 w-full border-b"
+                                 :class="darkMode?`border-button`:`border-gray-300 absolute left-0 bottom-0`"></div>
                             <div class="absolute right-0 bottom-2 cursor-pointer z-10">
-                                <ChevronIcon></ChevronIcon>
+                                <ChevronIcon/>
                             </div>
                         </div>
                     </div>
                     <div class="h-7"></div>
-                    <div :class="darkMode?`bg-button text-gray-300`:`bg-softGray`" class="h-12 rounded flex items-center px-3">
+                    <div :class="darkMode?`bg-button text-gray-300`:`bg-softGray`"
+                         class="h-12 rounded flex items-center px-3">
                         <div class="text-sm">
                             {{$t('parent_info')}}
                         </div>
@@ -117,19 +144,24 @@
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div>
                             <div class="mb-3 text-sm">{{$t('2009')}}<span class="text-heart">*</span></div>
-                            <input type="text"  class="border-b w-full focus:outline-none" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="yourGuardian.phone">
+                            <input type="text"  class="border-b w-full focus:outline-none"
+                                   :class="darkMode?`bg-transparent border-button`:`border-gray-300`"
+                                   v-model="yourGuardian.phone">
 
                         </div>
                         <div>
                             <div class="mb-3 text-sm">{{$t('as')}}<span class="text-heart">*</span></div>
-                            <input type="text"  class="border-b w-full focus:outline-none" :class="darkMode?`bg-transparent border-button`:`border-gray-300`" v-model="yourGuardian.type">
+                            <input type="text"  class="border-b w-full focus:outline-none"
+                                   :class="darkMode?`bg-transparent border-button`:`border-gray-300`"
+                                   v-model="yourGuardian.type">
                         </div>
                     </div>
                     <div class="h-7"></div>
                     <div class="text-sm">{{$t('insurance_term')}}</div>
                     <div class="h-7"></div>
                     <div class="flex items-center justify-center">
-                        <button class="bg-primary text-white px-40 h-12 rounded-md focus:outline-none" @click="confirm">
+                        <button class="bg-primary text-white px-40 h-12 rounded-md focus:outline-none"
+                                @click="confirm">
                             {{$t('submit')}}
                         </button>
                     </div>
@@ -137,11 +169,10 @@
 
                 </div>
             </template>
-            <Message v-if="err" :message="message" @closeMessage="closeMessage"></Message>
-            <!-- <Province v-if="showProvince" :provinces="provinces" @selectProvince="selectProvince"
-                    @closeProvince="closeProvince"></Province>
-            <School v-if="showSchool" :schools="schools" @selectSchool="selectSchool"
-                    @closeSchool="closeSchool"></School> -->
+            <Message
+                    v-if="err"
+                    :message="message"
+                    @closeMessage="closeMessage"/>
         </div>
     </div>
 </template>

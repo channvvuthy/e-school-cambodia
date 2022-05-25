@@ -30,7 +30,7 @@
                     <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer"
                          :class="darkMode?`bg-button`:`bg-primary text-white`" @click="openLink(messanger)">
                         <div class="mr-3">
-                            <MessagerIcon></MessagerIcon>
+                            <MessagerIcon/>
                         </div>
                         <div>
                             {{ $t('messenger') }}
@@ -39,7 +39,7 @@
                     <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer"
                          :class="darkMode?`bg-button`:`bg-primary text-white`" @click="openLink(telegram)">
                         <div class="mr-3">
-                            <TelegramIcon></TelegramIcon>
+                            <TelegramIcon/>
                         </div>
                         <div>
                             {{ $t('telegram') }}
@@ -48,7 +48,7 @@
                     <div class="flex items-center rounded-xl w-40 justify-center h-13 mr-5 shadow-lg cursor-pointer"
                          :class="darkMode?`bg-button`:`bg-primary text-white`" @click="()=>{$router.push('help')}">
                         <div class="mr-3">
-                            <VideoIcon></VideoIcon>
+                            <VideoIcon/>
                         </div>
                         <div>
                             {{ $t('video') }}
@@ -88,8 +88,8 @@
                                          class="items-center mb-1">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                              class="text-xs whitespace-nowrap uppercase">
-                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen
-                                                :isRead="message.is_read"></isSeen></span>
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin">
+                                            <isSeen :isRead="message.is_read"/></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"
@@ -98,8 +98,9 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div>
-                                                        <ReplyIcon :size="16"
-                                                                   :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon>
+                                                        <ReplyIcon
+                                                                :size="16"
+                                                                :fill="darkMode?`#6B7280`:`#4B5563`"/>
                                                     </div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                                          class="text-xs ml-1">
@@ -107,24 +108,31 @@
                                                         {{replyName(message)}}
                                                     </div>
                                                 </div>
-                                                <TextReply :message="message"
-                                                           v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"
-                                                            @previewImage="previewImage($event)"></ImageReply>
-                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
-                                                <VoiceReply :message="message"
-                                                            v-if="message.reply.type === 4"></VoiceReply>
+                                                <TextReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 1"/>
+                                                <ImageReply :message="message"
+                                                            v-if="message.reply.type === 3"
+                                                            @previewImage="previewImage($event)"/>
+                                                <PdfReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 2"/>
+                                                <VoiceReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 4"/>
                                                 <div class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 mb-5 max-w-sm"
                                                      :class="darkMode?`bg-button text-gray-100`:`bg-white text-black`">
-                                                    <MessageText :message="message"
-                                                                 :isMind="message.is_admin == 0"></MessageText>
+                                                    <MessageText
+                                                            :message="message"
+                                                            :isMind="message.is_admin == 0"/>
                                                 </div>
                                             </div>
                                             <div v-else
                                                  class="relative rounded-xl py-3 e-shadow inline-flex items-center px-3 mb-5 max-w-sm"
                                                  :class="darkMode?`bg-button text-gray-100`:`bg-white text-black`">
-                                                <MessageText :message="message"
-                                                             :isMind="message.is_admin == 0"></MessageText>
+                                                <MessageText
+                                                        :message="message"
+                                                        :isMind="message.is_admin == 0"/>
                                             </div>
                                         </div>
                                     </div>
@@ -136,8 +144,8 @@
                                          class="items-center mb-1">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                              class="text-xs whitespace-nowrap uppercase">
-                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen
-                                                :isRead="message.is_read"></isSeen></span>
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin">
+                                            <isSeen :isRead="message.is_read"/></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"
@@ -182,8 +190,8 @@
                                          class="items-center">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                              class="text-xs whitespace-nowrap mb-1">
-                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen
-                                                :isRead="message.is_read"></isSeen></span>
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin">
+                                            <isSeen :isRead="message.is_read"/></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"
@@ -192,30 +200,34 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div>
-                                                        <ReplyIcon :size="16"
-                                                                   :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon>
+                                                        <ReplyIcon
+                                                                :size="16"
+                                                                :fill="darkMode?`#6B7280`:`#4B5563`"/>
                                                     </div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                                          class="text-xs ml-1">
-                                                        {{senderName(message)}} {{$t('reply_to')}}
-                                                        {{replyName(message)}}
+                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
-                                                <TextReply :message="message"
-                                                           v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"
-                                                            @previewImage="previewImage($event)"></ImageReply>
-                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
-                                                <VoiceReply :message="message"
-                                                            v-if="message.reply.type === 4"></VoiceReply>
+                                                <TextReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 1"/>
+                                                <ImageReply
+                                                        :message="message" v-if="message.reply.type === 3"
+                                                        @previewImage="previewImage($event)"/>
+                                                <PdfReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 2"/>
+                                                <VoiceReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 4"/>
                                             </div>
                                             <div class="relative rounded-xl inline-flex items-center text-gray-700 max-w-sm mb-1">
                                                 <div :class="darkMode?`bg-button text-gray-300`:`bg-white e-shadow`"
                                                      @click="readPdf(message.content.file.url)"
                                                      class="cursor-pointer px-5 py-2 rounded-xl text-base flex items-center">
                                                     <div class="mr-2">
-                                                        <DocumentIcon
-                                                                :fill="darkMode?`#FFFFFF`:`#000000`"></DocumentIcon>
+                                                        <DocumentIcon :fill="darkMode?`#FFFFFF`:`#000000`"/>
                                                     </div>
                                                     <div>
                                                         <span v-if="message.content.text">
@@ -237,8 +249,8 @@
                                          class="items-center">
                                         <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                              class="text-xs whitespace-nowrap mb-1">
-                                            {{getDay(message.date)}} <span v-if="!message.is_admin"><isSeen
-                                                :isRead="message.is_read"></isSeen></span>
+                                            {{getDay(message.date)}} <span v-if="!message.is_admin">
+                                            <isSeen :isRead="message.is_read"/></span>
                                         </div>
                                     </div>
                                     <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"
@@ -247,22 +259,28 @@
                                             <div v-if="message.reply !== undefined">
                                                 <div class="flex">
                                                     <div>
-                                                        <ReplyIcon :size="16"
-                                                                   :fill="darkMode?`#6B7280`:`#4B5563`"></ReplyIcon>
+                                                        <ReplyIcon
+                                                                :size="16"
+                                                                :fill="darkMode?`#6B7280`:`#4B5563`"/>
                                                     </div>
                                                     <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                                                          class="text-xs ml-1">
-                                                        {{senderName(message)}} {{$t('reply_to')}}
-                                                        {{replyName(message)}}
+                                                        {{senderName(message)}} {{$t('reply_to')}} {{replyName(message)}}
                                                     </div>
                                                 </div>
-                                                <TextReply :message="message"
-                                                           v-if="message.reply.type === 1"></TextReply>
-                                                <ImageReply :message="message" v-if="message.reply.type === 3"
-                                                            @previewImage="previewImage($event)"></ImageReply>
-                                                <PdfReply :message="message" v-if="message.reply.type === 2"></PdfReply>
-                                                <VoiceReply :message="message"
-                                                            v-if="message.reply.type === 4"></VoiceReply>
+                                                <TextReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 1"/>
+                                                <ImageReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 3"
+                                                        @previewImage="previewImage($event)"/>
+                                                <PdfReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 2"/>
+                                                <VoiceReply
+                                                        :message="message"
+                                                        v-if="message.reply.type === 4"/>
                                             </div>
                                             <div class="relative rounded-xl inline-flex items-center text-gray-700 max-w-sm">
                                                 <audio controls class="focus:outline-none"
@@ -312,7 +330,7 @@
                                 <div :class="darkMode?`bg-button`:`bg-gray-300`"
                                      class="cursor-pointer rounded-full w-7 h-7 flex items-center justify-center"
                                      @click="()=> {this.replyContact = ``}">
-                                    <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
+                                    <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"/>
                                 </div>
                             </div>
                         </div>
@@ -351,14 +369,14 @@
                     <div :class="darkMode?`bg-button`:`bg-gray-300`"
                          class="cursor-pointer rounded-full w-7 h-7 flex items-center justify-center"
                          @click="()=> {this.replyContact = ``}">
-                        <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"></CloseIcon>
+                        <CloseIcon :width="20" :fill="darkMode?`#D1D5DB`:`#000`"/>
                     </div>
                 </div>
             </div>
             <div class="flex h-24 items-center mb-36 px-5" :class="darkMode?`bg-secondary`:`bg-white e-shadow`"
                  style="position:relative;z-index:10" v-if="auth">
                 <div class="cursor-pointer" @click="() => {this.$refs.file.click()}">
-                    <ImageIcon :fill="darkMode?`#909090`:`#979797`"></ImageIcon>
+                    <ImageIcon :fill="darkMode?`#909090`:`#979797`"/>
                 </div>
                 <input type="file" ref="file" class="hidden" accept="application/pdf, image/*" @change="onSelectFile">
                 <textarea class="w-full h-14 border-2 text-gray-700 rounded-full focus:outline-none mx-5 py-4 px-5"
@@ -371,19 +389,19 @@
                         <VueRecord class="record" @result="onResult">
                             <div class="w-13 h-13 rounded-full flex items-center justify-center"
                                  :class="darkMode?`bg-youtube`:`bg-primary`">
-                                <mic-icon :size="28" :fill="darkMode?`#4B5563`:`#FFFFFF`"></mic-icon>
+                                <mic-icon :size="28" :fill="darkMode?`#4B5563`:`#FFFFFF`"/>
                             </div>
                             <template slot="isInitiating">
                                 Voice
                             </template>
                             <template slot="isRecording">
                                 <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
-                                    <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`FFFFFF`"></mic-icon>
+                                    <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`FFFFFF`"/>
                                 </div>
                             </template>
                             <template slot="isCreating">
                                 <div class="w-13 h-13 rounded-full flex items-center justify-center pulse">
-                                    <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"></mic-icon>
+                                    <mic-icon :size="28" :fill="darkMode?`#FFFFFF`:`#FFFFFF`"/>
                                 </div>
                             </template>
                         </VueRecord>
@@ -400,7 +418,7 @@
                         {{$t('please_enter_your_info')}}
                     </div>
                     <div class="cursor-pointer" @click="() => {this.isInfo = false}">
-                        <CloseIcon :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        <CloseIcon :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                 </div>
                 <div class="border-t" :class="darkMode?`border-youtube`:``"></div>
@@ -451,13 +469,13 @@
                 <div class="py-4 px-5 relative">
                     {{$t('preview')}}
                     <div class="absolute right-3 top-3 cursor-pointer" @click="() => {this.isPreview = false}">
-                        <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+                        <CloseIcon :width="18" :fill="darkMode?`#909090`:`#000000`"/>
                     </div>
                 </div>
                 <div class="flex items-center justify-center px-3">
                     <img :src="imgUrl" v-if="type === 1" class="rounded">
                     <div v-else class="flex items-center">
-                        <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"></PdfIcon>
+                        <PdfIcon :size="80" :fill="darkMode?`#909090`:`#212121`"/>
                         <div class="ml-3 text-lg">{{this.file.name}}</div>
                     </div>
                 </div>
@@ -473,7 +491,7 @@
                     </div>
                     <button class="transform rotate-45 mr-5 cursor-pointer focus:outline-none relative -top-2"
                             @click="sendFile()" :disabled="sending">
-                        <SendMessageIcon :size="30" :fill="darkMode?`#1977f2`:`#3498db`"></SendMessageIcon>
+                        <SendMessageIcon :size="30" :fill="darkMode?`#1977f2`:`#3498db`"/>
                     </button>
                 </div>
             </div>
@@ -484,21 +502,26 @@
             <div class="bg-white w-2/5 h-5/6 overflow-y-hidden">
                 <div class="flex justify-between items-center p-4" :class="darkMode?`bg-fb`:`bg-primary`">
                     <div class="border border-white cursor-pointer" style="padding:1px;" @click="openFullscreen">
-                        <EnlargeIcon :size="16"></EnlargeIcon>
+                        <EnlargeIcon :size="16"/>
                     </div>
                     <div class="cursor-pointer" @click="() => {this.isRead = false}">
-                        <CloseIcon fill="#ffffff" :width="22"></CloseIcon>
+                        <CloseIcon fill="#ffffff" :width="22"/>
                     </div>
                 </div>
                 <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
-                    <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"></SinglePdf>
+                    <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"/>
                 </div>
 
             </div>
         </div>
-        <BuyMsg v-if="isDelete" :msg="`remove_message`" @cancelModal="() => {this.isDelete = false}"
-                @yes="confirmDelete"></BuyMsg>
-        <PreviewImage v-if="viewChat" :URL="previewUrl" @closePreviewImage="()=>{this.viewChat = false}"></PreviewImage>
+        <BuyMsg
+                v-if="isDelete" :msg="`remove_message`"
+                @cancelModal="() => {this.isDelete = false}"
+                @yes="confirmDelete"/>
+        <PreviewImage
+                v-if="viewChat"
+                :URL="previewUrl"
+                @closePreviewImage="()=>{this.viewChat = false}"/>
     </div>
 </template>
 <script>

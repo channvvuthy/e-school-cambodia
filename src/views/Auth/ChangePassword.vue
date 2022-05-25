@@ -1,9 +1,10 @@
 <template>
-    <div class="fixed w-full h-full left-0 top-0 flex justify-center items-center" :class="darkMode?`bg-youtube`:`bg-white`">
+    <div class="fixed w-full h-full left-0 top-0 flex justify-center items-center"
+         :class="darkMode?`bg-youtube`:`bg-white`">
         <div class="flex-col rounded-3xl w-100 p-6 e-shadow" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
             <div class="flex justify-between items-center">
                 <div class="transform rotate-90 cursor-pointer" @click="()=>{$router.go(-1)}">
-                    <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"></ChevronIcon>
+                    <ChevronIcon :fill="darkMode?`#D1D5DB`:`#000000`"/>
                 </div>
             </div>
             <div class="h-10"></div>
@@ -14,35 +15,49 @@
             <div class="h-5"></div>
             <form class="flex-col text-sm font-khmer_os w-full">
                 <div class="relative">
-                    <input type="password" :placeholder="$t('old_password')" autocomplete="off" v-model="payload.old_password"
-                        ref="old_password"
-                        :class="darkMode?`pl-3 caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
-                        class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4"/>
+                    <input type="password" :placeholder="$t('old_password')" autocomplete="off"
+                           v-model="payload.old_password"
+                           ref="old_password"
+                           :class="darkMode?`pl-3 caret-white text-gray-300 rounded-md bg-black
+                            bg-opacity-40 border border-youtube`:`border border-solid border-1
+                            border-gray-400 border-t-0 border-r-0 border-l-0`"
+                           class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4"/>
                 </div>
                 <div class="relative">
-                    
-                    <input type="password" :placeholder="$t('new_password')" autocomplete="off" v-model="payload.password"
-                        ref="password"
-                        :class="darkMode?`pl-3 caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
-                        class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4"/>
+
+                    <input type="password" :placeholder="$t('new_password')" autocomplete="off"
+                           v-model="payload.password"
+                           ref="password"
+                           :class="darkMode?`pl-3 caret-white text-gray-300 rounded-md bg-black
+                           bg-opacity-40 border border-youtube`:`border border-solid border-1
+                           border-gray-400 border-t-0 border-r-0 border-l-0`"
+                           class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4"/>
                 </div>
                 <div class="relative">
-                    <input type="password" :placeholder="$t('2017')" autocomplete="off" v-model="payload.confirm_password"
-                        ref="confirmPassword"
-                        :class="darkMode?`pl-3 caret-white text-gray-300 rounded-md bg-black  bg-opacity-40 border border-youtube`:`border border-solid border-1 border-gray-400 border-t-0 border-r-0 border-l-0`" 
-                        class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4"/>
+                    <input type="password" :placeholder="$t('2017')" autocomplete="off"
+                           v-model="payload.confirm_password"
+                           ref="confirmPassword"
+                           :class="darkMode?`pl-3 caret-white text-gray-300 rounded-md bg-black
+                           bg-opacity-40 border border-youtube`:`border border-solid border-1
+                           border-gray-400 border-t-0 border-r-0 border-l-0`"
+                           class="py-3 placeholder-gray-500 w-full focus:outline-none mb-4"/>
                 </div>
             </form>
-            <button class="relative focus:outline-none p-3 mt-4 text-center text-white rounded-lg h-11 w-full text-sm outline-none text-sm cursor-pointer font-khmer_os" :class="darkMode?`bg-button`:`bg-primary`" @click="modifyPassword" :disabled="loadingRegister" v-if="!showReset">
+            <button
+                    class="relative focus:outline-none p-3 mt-4 text-center text-white rounded-lg h-11 w-full
+                    text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                    :class="darkMode?`bg-button`:`bg-primary`" @click="modifyPassword"
+                    :disabled="loadingRegister"
+                    v-if="!showReset">
                 <span v-if="!loadingRegister">{{$t('set_password')}}</span>
                 <div class="absolute flex justify-center items-center -top-2 w-full" v-else>
                     <div class="loader"></div>
                 </div>
             </button>
         </div>
-        <ErrMessage v-if="err" :message="message" @closeErr="closeErr"></ErrMessage>
+        <ErrMessage v-if="err" :message="message" @closeErr="closeErr"/>
         <div class="absolute w-full left-0 bottom-0">
-           <img src="e-footer.png" class="w-full" v-if="!darkMode">
+            <img src="e-footer.png" class="w-full" v-if="!darkMode">
         </div>
     </div>
 </template>
@@ -54,7 +69,8 @@
     import ChevronIcon from "./../../components/ChevronIcon.vue"
     import PhoneIcon from "./../../components/PhoneIcon.vue"
     import LockIcon from "./../../components/LockIcon.vue"
-    export default{
+
+    export default {
         name: "Create",
         components: {
             ErrMessage,
@@ -62,11 +78,11 @@
             ChevronIcon,
             LockIcon
         },
-        data(){
+        data() {
             return {
                 err: false,
                 message: null,
-                phone:null,
+                phone: null,
                 showReset: false,
                 resetingPassword: false,
                 payload: {
@@ -80,7 +96,7 @@
             ...mapState('auth', ['loadingRegister']),
             ...mapState('setting', ['darkMode'])
         },
-        mounted(){
+        mounted() {
             this.$refs.old_password.focus()
             this.payload.device_id = helper.deviceId()
             this.payload.device_os = helper.deviceOs()
@@ -88,16 +104,16 @@
             this.payload.app_version = process.env.VUE_APP_VERSION
         },
         methods: {
-            ...mapActions('auth', ['userChangePassword','changeForgotPassword','getToken']),
-            isNumber(evt){
+            ...mapActions('auth', ['userChangePassword', 'changeForgotPassword', 'getToken']),
+            isNumber(evt) {
                 return helper.isNumber(evt)
             },
-            closeErr(){
+            closeErr() {
                 this.err = false
             },
-            storeUserData(data){
+            storeUserData(data) {
                 localStorage.setItem('token', data.token)
-                this.$store.commit('auth/studentProfile',data)
+                this.$store.commit('auth/studentProfile', data)
                 this.getToken(data.token)
                 this.$store.commit('auth/receivingToken', data.token)
                 this.$store.commit("setting/toggleSidebar", false)
@@ -105,8 +121,8 @@
                     name: "home"
                 })
             },
-            modifyPassword(){
-                if(!this.payload.old_password){
+            modifyPassword() {
+                if (!this.payload.old_password) {
                     helper.errorMessage('please_enter_old_password')
                     this.$refs.forgetPassword.focus()
                     return false
@@ -122,13 +138,13 @@
                     this.$refs.confirmPassword.focus()
                     return false
                 }
-                
+
                 this.resetingPassword = true
 
-                this.userChangePassword(this.payload).then(response =>{
-                    if(response.status && response.status === 1){
+                this.userChangePassword(this.payload).then(response => {
+                    if (response.status && response.status === 1) {
                         helper.errorMessage(response.msg)
-                    }else{
+                    } else {
                         helper.success('password_updated')
                         this.$router.go(-1)
 

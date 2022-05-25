@@ -5,7 +5,7 @@
             <div class="flex text-primary  text-md gap-4">
                 <div>
                     <div class="mr-3">
-                        <SmileIcon :fill="darkMode?`#ffffff`:`#055174`"></SmileIcon>
+                        <SmileIcon :fill="darkMode?`#ffffff`:`#055174`"/>
                     </div>
                 </div>
                 <div class="text-base font-PoppinsMedium" :class="darkMode?'text-white':''">
@@ -17,13 +17,14 @@
                 <div class="absolute -right-3  h-full flex items-center justify-center z-40 text-white">
                     <div class="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-button"
                          :title="$t('see_all_story')" @click="listOfStory" :class="darkMode?`bg-button`:`bg-secondary`">
-                        <ArrowRight :size="16" fill="#F3F4F6"></ArrowRight>
+                        <ArrowRight :size="16" fill="#F3F4F6"/>
                     </div>
                 </div>
                 <div class="w-full overflow-x-auto flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative">
                         <div
-                                class="box-story relative h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center justify-center relative">
+                                class="box-story relative h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center
+                                justify-center relative">
                             <div
                                     @click="goToGallery('gallery')"
                                     :style="{backgroundImage:`url(${currentStory.photo.url})`}"
@@ -36,7 +37,8 @@
                                     :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
                             <div
                                     @click="addStory()"
-                                    class="w-7 h-7 rounded-full flex justify-center items-center absolute right-1 bottom-1 cursor-pointer"
+                                    class="w-7 h-7 rounded-full flex justify-center items-center absolute right-1
+                                    bottom-1 cursor-pointer"
                                     :class="darkMode?`bg-secondary`:`bg-primary`">
                                 <AddIcon :size="16"/>
                             </div>
@@ -51,38 +53,44 @@
                     <div class="text-center text-sm mr-5 relative" v-for="(my_story,index) in story" :key="index"
                          @click="getStoryDetail(my_story,index)">
                         <div
-                                class="w-10 h-10 border-3 rounded-full bg-center bg-cover absolute z-40 left-2 top-2 bg-white flex justify-center items-center"
+                                class="w-10 h-10 border-3 rounded-full bg-center bg-cover absolute z-40 left-2 top-2
+                                bg-white flex justify-center items-center"
                                 :class="darkMode?`border-fb`:`border-fb`"
                                 :style="{backgroundImage:`url(${my_story.user.photo})`}"
                         >
                         </div>
                         <div
-                                class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer flex flex-col items-center justify-center overflow-hidden relative"
-
-                        >
+                                class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer
+                                flex flex-col items-center justify-center overflow-hidden relative">
                             <img :src="my_story.photo.url" alt="" :id="my_story._id">
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                         </div>
-                        <p class="mt-3 whitespace-nowrap flex justify-between space-x-4" :title="my_story.user.name">
-                            <span v-if="(my_story.type === 51 || my_story.type === 52)">{{ cutString(my_story.user.name, 10) }}</span>
+                        <p class="mt-3 whitespace-nowrap flex justify-between space-x-4"
+                           :title="my_story.user.name">
+                            <span
+                                    v-if="(my_story.type === 51 || my_story.type === 52)">
+                                {{ cutString(my_story.user.name, 10) }}
+                            </span>
                             <span v-else>{{ cutString(my_story.user.name, 15) }}</span>
                             <span
                                     class="text-xs font-black text-center h-5 w-6 rounded"
                                     style="padding-top: 2px;"
                                     :class="darkMode ? `bg-iconColor` : `bg-forum`"
                                     v-if="(my_story.type === 51 || my_story.type === 52)">
-                <span>AD</span>
-              </span>
+                                <span>AD</span>
+                            </span>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-        <StoryDetail v-if="showStory" @closeStory="closeStory"></StoryDetail>
+        <StoryDetail
+                v-if="showStory"
+                @closeStory="closeStory"/>
         <AddStory
                 @closeAddStory="closeAddStory"
                 v-if="showAddStory"
-                @shareStory="shareStory"></AddStory>
+                @shareStory="shareStory"/>
     </div>
 </template>
 

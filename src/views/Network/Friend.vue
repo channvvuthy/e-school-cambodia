@@ -22,7 +22,7 @@
                          :class="darkMode?`bg-button`:`bg-primary`" v-if="$route.name != 'friend'">
                         <div @click="unFriendFromList(friend)"
                              class="flex items-center justify-center w-10 h-6 rounded-2xl">
-                            <CloseIcon :fill="darkMode?`#909090`:`#FFFFFF`" :width="16"></CloseIcon>
+                            <CloseIcon :fill="darkMode?`#909090`:`#FFFFFF`" :width="16"/>
                         </div>
                     </div>
                 </div>

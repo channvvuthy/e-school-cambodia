@@ -1,55 +1,63 @@
 <template>
   <div>
-    <ViewBook v-if="preview" @close="close" @readingBook="readingBook" @listenAudio="listenAudio" @listVideo="listVideo"
-              @shopNow="shopNow" :is_favorite="true"></ViewBook>
-    <ReadingBook v-if="reading" @closeReading="closeReading"></ReadingBook>
-    <LibraryAudio v-if="showAudio"></LibraryAudio>
+    <ViewBook
+            v-if="preview" @close="close"
+            @readingBook="readingBook"
+            @listenAudio="listenAudio"
+            @listVideo="listVideo"
+            @shopNow="shopNow"
+            :is_favorite="true"/>
+    <ReadingBook
+            v-if="reading"
+            @closeReading="closeReading"/>
+    <LibraryAudio v-if="showAudio"/>
+
     <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
       <div class="px-5 pt-7 shadow-md"
            :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
-        <FilterData></FilterData>
+        <FilterData/>
         <div class="mt-7" v-if="!showList">
           <div class="flex justify-start">
             <div @click="changeType('pdf')" class="cursor-pointer  w-12 text-center"
                  :class="type==`pdf`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
               <div class="pb-2">{{ $t('2202') }}</div>
               <div v-if="type === `pdf`">
-                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"/>
               </div>
             </div>
             <div @click="changeType('sound')" class="cursor-pointer ml-20 w-24 text-center"
                  :class="type==`sound`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
               <div class="pb-2">{{ $t('2204') }}</div>
               <div v-if="type === `sound`">
-                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"/>
               </div>
             </div>
             <div @click="changeType('video')" class="cursor-pointer ml-20 w-24 text-center"
                  :class="type==`video`?`font-bold text-primary ${darkMode?'text-white':''}`:``">
               <div class="pb-2">{{ $t('2205') }}</div>
               <div v-if="type === `video`">
-                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"></BorderBottom>
+                <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`" :h="2"/>
               </div>
             </div>
           </div>
         </div>
       </div>
       <div class="mx-5">
-        <FilterList v-if="showList" @filterLibrary="filterLibrary($event)"></FilterList>
+        <FilterList v-if="showList" @filterLibrary="filterLibrary($event)"/>
       </div>
       <div class="mt-5" :class="darkMode?`bg-youtube`:`transparent`">
         <div class="mt-10">
-          <Membership @getDetail="getPackage($event)"></Membership>
+          <Membership @getDetail="getPackage($event)"/>
         </div>
       </div>
       <div class="border-t border-dashed w-full my-10" :class="darkMode?`border-button`:`border-gray-300`"
            v-if="libraries.package && libraries.package.length"></div>
       <div class="px-5" v-if="loading">
-        <Loading></Loading>
+        <Loading/>
       </div>
       <div class="mx-5" v-else>
         <div v-if="libraries.list.length == 0" class="h-screen pb-80">
-          <Empty></Empty>
+          <Empty/>
         </div>
         <div class="grid gap-6"
              :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-3 2xl:grid-cols-6`">
@@ -78,7 +86,7 @@
                 <div class="flex flex-col justify-end flex-1 items-end">
                   <div @click="addToCart(book)" class="cursor-pointer">
                     <div v-if="!book.is_in_cart">
-                      <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"></CartIcon>
+                      <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"/>
                     </div>
                   </div>
                 </div>
@@ -100,7 +108,7 @@
                       </div>
                       <div @click="addToCart(book)" class="cursor-pointer">
                         <div>
-                          <CartIcon :fill="darkMode?`#909090`:`#000000`"></CartIcon>
+                          <CartIcon :fill="darkMode?`#909090`:`#000000`"/>
                         </div>
                       </div>
                     </template>

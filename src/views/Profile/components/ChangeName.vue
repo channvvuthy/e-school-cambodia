@@ -6,7 +6,7 @@
                     ទម្រង់ស្នើរសុំប្តូរឈ្មោះ
                 </div>
                 <div class="cursor-pointer" @click="()=>{this.$emit('close')}">
-                    <CloseIcon></CloseIcon>
+                    <CloseIcon/>
                 </div>
             </div>
             <div class="mt-2">

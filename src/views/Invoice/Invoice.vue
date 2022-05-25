@@ -1,24 +1,29 @@
 <template>
     <div>
-        <div class="px-5 h-screen py-5 overflow-y-scroll pb-40" :class="darkMode?`bg-youtube text-gray-300`:``" @scroll="onScroll">
+        <div
+                class="px-5 h-screen py-5 overflow-y-scroll pb-40" :class="darkMode?`bg-youtube text-gray-300`:``"
+                @scroll="onScroll">
             <div v-if="receipts && receipts.length<=0" class="flex justify-center h-screen">
-                 <Empty></Empty>
+                 <Empty/>
             </div>
             <div v-if="takingReceipt" class="flex justify-center items-center h-screen relative -top-5">
                 <h1 class="text-sm font-semibold font-khmer_os relative -top-10">
-                    <loading></loading>
+                    <loading/>
                 </h1>
             </div>
             <div v-else>
                 <div class="grid gap-4" :class="isHide?`md:grid-cols-2 2xl:grid-cols-2`:`md:grid-cols-2 2xl:grid-cols-2`">
-                    <div v-for="(receipt,key) in receipts" :key="key" :class="darkMode?`bg-secondary rounded-xl py-5`:`bg-white rounded-xl py-5 shadow-md`">
+                    <div v-for="(receipt,key) in receipts" :key="key"
+                         :class="darkMode?`bg-secondary rounded-xl py-5`:`bg-white rounded-xl py-5 shadow-md`">
                         <div class="flex items-center px-7">
                             <div class="flex flex-1 z-40  cursor-pointer" @click="viewReceipt(receipt)">
-                                <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center bg-pass" v-if="receipt.status == 1">
-                                    <InvoiceIcon size="40" fill="#FFFFFF"></InvoiceIcon>
+                                <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center bg-pass"
+                                     v-if="receipt.status == 1">
+                                    <InvoiceIcon size="40" fill="#FFFFFF"/>
                                 </div>
-                                 <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center" :class="darkMode?`bg-primary`:`bg-softGray`" v-else>
-                                    <InvoiceIcon size="40" :fill="darkMode?`#FFFFFF`:`#055174`"></InvoiceIcon>
+                                 <div class="mr-3 rounded-full w-20 h-20 flex items-center justify-center"
+                                      :class="darkMode?`bg-primary`:`bg-softGray`" v-else>
+                                    <InvoiceIcon size="40" :fill="darkMode?`#FFFFFF`:`#055174`"/>
                                 </div>
                                 <div></div>
                                 <div class="py-3">
@@ -43,7 +48,7 @@
                             <div class="flex-1">
                                 <div class="cursor-pointer" style="margin-top:3px;" @click="removeReceipt(receipt._id)"
                                     v-if="receipt.status !==1">
-                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"></DeleteIcon>
+                                    <DeleteIcon :fill="darkMode?`#909090`:`#c0272d`"/>
                                 </div>
                             </div>
                             <div class="flex justify-between items-center">
@@ -53,9 +58,16 @@
                     </div>
                 </div>
             </div>
-            <ReceiptInfo v-if="showInfo" :receiptDetail="receiptDetail" @closeInfo="closeInfo"
-                        :message="message" :success="success"></ReceiptInfo>
-            <ConfirmDelete v-if="showConfirm" @cancelModal="closeMessage" @yes="ConfirmDelete" :msg="msg"></ConfirmDelete>
+            <ReceiptInfo
+                    v-if="showInfo"
+                    :receiptDetail="receiptDetail"
+                    @closeInfo="closeInfo"
+                    :message="message"
+                    :success="success"/>
+            <ConfirmDelete
+                    v-if="showConfirm"
+                    @cancelModal="closeMessage"
+                    @yes="ConfirmDelete" :msg="msg"/>
             </div>
     </div>
 </template>

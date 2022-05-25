@@ -1,130 +1,130 @@
 <template>
-  <div>
-    <div class="flex items-center space-x-3">
-      <Avatar :avatar-url="stProfile.photo" :size="10"></Avatar>
-      <div
-          :class="darkMode ? `bg-youtube` : `bg-forum`"
-          class="flex items-center w-full space-x-3 rounded-full px-4 h-12">
+    <div>
+        <div class="flex items-center space-x-3">
+            <Avatar :avatar-url="stProfile.photo" :size="10"/>
+            <div
+                    :class="darkMode ? `bg-youtube` : `bg-forum`"
+                    class="flex items-center w-full space-x-3 rounded-full px-4 h-12">
         <textarea
-            v-model="comment.text"
-            :placeholder="$t('reply')"
-            class="outline-none w-full bg-transparent h-12 pt-3" style="resize: none"></textarea>
-        <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
-          <SmileEmoji :size="28" :fill="darkMode ?`#909090`: `#979797`"></SmileEmoji>
+                v-model="comment.text"
+                :placeholder="$t('reply')"
+                class="outline-none w-full bg-transparent h-12 pt-3" style="resize: none"/>
+                <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
+                    <SmileEmoji :size="28" :fill="darkMode ?`#909090`: `#979797`"/>
+                </div>
+                <div style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-8 w-8 cursor-pointer">
+                    <input type="file" ref="replyPhoto" @change="selectPhoto" accept="image/*" class="hidden">
+                    <div class="rounded-full h-8 w-8 flex items-center justify-center"
+                         @click="()=>{this.$refs.replyPhoto.click()}">
+                        <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"/>
+                    </div>
+                </div>
+                <div
+                        @click="replyComment"
+                        style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
+                    <div class="rounded-full h-9 w-9 flex items-center justify-center">
+                        <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"/>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-8 w-8 cursor-pointer">
-          <input type="file" ref="replyPhoto" @change="selectPhoto" accept="image/*" class="hidden">
-          <div class="rounded-full h-8 w-8 flex items-center justify-center"
-               @click="()=>{this.$refs.replyPhoto.click()}">
-            <ImageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></ImageIcon>
-          </div>
-        </div>
-        <div
-            @click="replyComment"
-            style="background-color: rgba(5,81,116,0.2)" class="rounded-full h-9 w-9 cursor-pointer">
-          <div class="rounded-full h-9 w-9 flex items-center justify-center">
-            <SendMessageIcon :fill="darkMode?`#909090`:`#055174`" :size="18"></SendMessageIcon>
-          </div>
-        </div>
-      </div>
-    </div>
-    <StickerView
-        @removeSticker="removeSticker"
-        v-if="comment.sticker" :sticker-url="stickerUrl"></StickerView>
-    <!-- Sticker -->
-    <Sticker v-if="isSticker"
-             :sticker-grid="4"
-             :parent-class="className"
-             @closeSticker="()=>{this.isSticker = false}"
-             @selectSticker="selectSticker($event)"
-             :is-parent-class="true"
-             default-position="border w-96 h-1/2 z-50 rounded-xl shadow-lg flex flex-col justify-between"></Sticker>
+        <StickerView
+                @removeSticker="removeSticker"
+                v-if="comment.sticker" :sticker-url="stickerUrl"/>
+        <!-- Sticker -->
+        <Sticker v-if="isSticker"
+                 :sticker-grid="4"
+                 :parent-class="className"
+                 @closeSticker="()=>{this.isSticker = false}"
+                 @selectSticker="selectSticker($event)"
+                 :is-parent-class="true"
+                 default-position="border w-96 h-1/2 z-50 rounded-xl shadow-lg flex flex-col justify-between"/>
 
-    <!-- Photo -->
-    <PhotoView
-        :is-reply="true"
-        :id="id"
-        @closePhoto="()=>{this.isPhoto = false}"
-        :photo="photo"
-        v-if="isPhoto"></PhotoView>
-  </div>
+        <!-- Photo -->
+        <PhotoView
+                :is-reply="true"
+                :id="id"
+                @closePhoto="()=>{this.isPhoto = false}"
+                :photo="photo"
+                v-if="isPhoto"/>
+    </div>
 </template>
 
 <script>
-import {mapState} from "vuex";
-import ImageIcon from "@/components/ImageIcon";
-import SmileEmoji from "@/views/Video/components/SmileEmoji";
-import Avatar from "@/Avatar";
-import PhotoView from "@/views/Video/components/PhotoView";
-import Sticker from "@/views/Video/components/Sticker";
-import mode from "@/mixins/mode";
-import StickerView from "@/views/Video/components/StickerView";
-import SendMessageIcon from "@/components/SendMessageIcon";
+    import {mapState} from "vuex";
+    import ImageIcon from "@/components/ImageIcon";
+    import SmileEmoji from "@/views/Video/components/SmileEmoji";
+    import Avatar from "@/Avatar";
+    import PhotoView from "@/views/Video/components/PhotoView";
+    import Sticker from "@/views/Video/components/Sticker";
+    import mode from "@/mixins/mode";
+    import StickerView from "@/views/Video/components/StickerView";
+    import SendMessageIcon from "@/components/SendMessageIcon";
 
-export default {
-  computed: {
-    ...mapState('auth', ['stProfile']),
-    ...mapState('setting', ['darkMode'])
-  },
-  components: {
-    StickerView,
-    Sticker,
-    PhotoView,
-    SmileEmoji,
-    ImageIcon,
-    Avatar,
-    SendMessageIcon
-  },
-  mixins: [mode],
-  props: {
-    id: {
-      default: () => null
-    },
-  },
-  data() {
-    return {
-      isPhoto: false,
-      isSticker: false,
-      stickerUrl: null,
-      photo: {
-        photoUrl: null,
-        file: null
-      },
-      comment: {
-        id: '',
-        text: ''
-      }
+    export default {
+        computed: {
+            ...mapState('auth', ['stProfile']),
+            ...mapState('setting', ['darkMode'])
+        },
+        components: {
+            StickerView,
+            Sticker,
+            PhotoView,
+            SmileEmoji,
+            ImageIcon,
+            Avatar,
+            SendMessageIcon
+        },
+        mixins: [mode],
+        props: {
+            id: {
+                default: () => null
+            },
+        },
+        data() {
+            return {
+                isPhoto: false,
+                isSticker: false,
+                stickerUrl: null,
+                photo: {
+                    photoUrl: null,
+                    file: null
+                },
+                comment: {
+                    id: '',
+                    text: ''
+                }
+            }
+        },
+        methods: {
+            removeSticker() {
+                this.stickerUrl = null
+                this.$delete(this.comment, 'sticker')
+            },
+            selectSticker(sticker) {
+                this.comment.sticker = sticker._id
+                this.isSticker = false
+                this.stickerUrl = sticker.sticker.name
+            },
+            selectPhoto(e) {
+                if (e.target.files && e.target.files.length) {
+                    this.photo.file = e.target.files[0]
+                    this.photo.photoUrl = URL.createObjectURL(e.target.files[0])
+                    this.isPhoto = true
+                }
+            },
+            replyComment() {
+                this.$store.dispatch('social/replyComment', this.comment).then(res => {
+                    this.comment.text = ''
+                    this.$delete(this.comment, 'sticker')
+                    this.$delete(this.comment, 'photo')
+                })
+            }
+        },
+        created() {
+            this.comment.id = this.id
+        }
     }
-  },
-  methods: {
-    removeSticker() {
-      this.stickerUrl = null
-      this.$delete(this.comment, 'sticker')
-    },
-    selectSticker(sticker) {
-      this.comment.sticker = sticker._id
-      this.isSticker = false
-      this.stickerUrl = sticker.sticker.name
-    },
-    selectPhoto(e) {
-      if (e.target.files && e.target.files.length) {
-        this.photo.file = e.target.files[0]
-        this.photo.photoUrl = URL.createObjectURL(e.target.files[0])
-        this.isPhoto = true
-      }
-    },
-    replyComment() {
-      this.$store.dispatch('social/replyComment', this.comment).then(res => {
-        this.comment.text = ''
-        this.$delete(this.comment, 'sticker')
-        this.$delete(this.comment, 'photo')
-      })
-    }
-  },
-  created() {
-    this.comment.id = this.id
-  }
-}
 </script>
 
 <style scoped>

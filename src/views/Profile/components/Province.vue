@@ -9,7 +9,7 @@
                  :class="`w-${size}`" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
                 <div class="bg-white py-5 pl-5 relative">
                     <div class="absolute right-0 top-0 mt-2 mr-2 cursor-pointer opacity-50" @click="closeProvince">
-                        <CloseIcon :width="15" :height="15"></CloseIcon>
+                        <CloseIcon :width="15" :height="15"/>
                     </div>
                     <div class="flex justify-left">
                         <div class="text-sm text-black text-sm font-khmer_os flex-1"

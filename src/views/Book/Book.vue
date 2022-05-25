@@ -16,7 +16,7 @@
         </div>
         <div v-if="loadingEbookCourse" class="flex justify-center items-center h-screen relative -top-5">
             <h1 class="text-sm font-semibold font-khmer_os relative -top-28">
-                <loading></loading>
+                <loading/>
             </h1>
         </div>
 
@@ -44,17 +44,27 @@
                                     <CartIcon :width="18" :height="18" fill="#F3F4F6"/>
                                 </div>
                             </template>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <ViewBook v-if="showView" :view="bookView" @closeView="closeView" @read="read($event)"
-                  :loading="loading" :cartId="cartId" @buyingRead="buyingRead($event)"></ViewBook>
-        <ReadingBook v-if="showReading" :books="bookReading" @closeReading="closeReading"
-                     @buyingRead="buyingRead($event)"></ReadingBook>
-        <Cart v-if="showingCart" @closeCart="closeCart"></Cart>
+        <ViewBook
+                v-if="showView"
+                :view="bookView"
+                @closeView="closeView"
+                @read="read($event)"
+                :loading="loading"
+                :cartId="cartId"
+                @buyingRead="buyingRead($event)"/>
+        <ReadingBook
+                v-if="showReading"
+                :books="bookReading"
+                @closeReading="closeReading"
+                @buyingRead="buyingRead($event)"/>
+        <Cart
+                v-if="showingCart"
+                @closeCart="closeCart"/>
     </div>
 </template>
 
