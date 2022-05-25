@@ -19,14 +19,16 @@
                 <div
                         v-if="isDelete"
                         @click="deletePhoto"
-                        class="absolute right-4 top-4 rounded-full flex items-center justify-center bg-black bg-opacity-60 cursor-pointer w-8 h-8">
+                        class="absolute right-4 top-4 rounded-full flex items-center justify-center bg-black
+                        bg-opacity-60 cursor-pointer w-8 h-8">
                     <CloseIcon fill="#EAF3FF"/>
                 </div>
                 <img :src="socialComment.content.photo.url" alt="">
             </div>
             <StickerView
                     @removeSticker="removeSticker"
-                    v-if="(socialComment.content.sticker && isViewSticker)" :sticker-url="stickerUrl"/>
+                    v-if="(socialComment.content.sticker && isViewSticker)"
+                    :sticker-url="stickerUrl"/>
             <div>
                 <div class="flex h-20 flex items-center w-full mt-4 px-5 space-x-5"
                 >
@@ -35,7 +37,7 @@
                             ref="edit"
                             v-model="socialComment.content.text"
                             :placeholder="$t('2113')"
-                            class="outline-none w-full pt-6 bg-transparent" style="resize: none"></textarea>
+                            class="outline-none w-full pt-6 bg-transparent" style="resize: none"/>
                     <div class="cursor-pointer" @click="()=>{this.isSticker = !this.isSticker}">
                         <SmileEmoji :size="30" :fill="darkMode ?`#909090`: `#979797`"/>
                     </div>
@@ -84,7 +86,6 @@
     import StickerView from "./StickerView";
     import LoadingWhite from "@/components/LoadingWhite";
     import SendMessageIcon from "@/components/SendMessageIcon";
-
 
     export default {
         components: {
@@ -163,15 +164,18 @@
                 if (this.socialComment.content.photo && this.isPhoto) {
                     this.payload.photo = this.socialComment.content.photo
                 }
+
                 if (!this.isPhoto) {
                     this.payload.photo = ""
                 }
+
                 if (this.socialComment.content.sticker) {
                     this.payload.sticker = this.stickerId
                 }
 
                 this.loading = true
-                if (this.isPhotoUpdate) {
+
+                if (this.isPhotoUpdate && this.isPhoto) {
                     let photo = new FormData()
                     photo.append("photo", this.photo)
                     this.multiUpload(photo).then(res => {
@@ -188,6 +192,7 @@
                     return
                 }
 
+
                 if (this.isStickerUpdate) {
                     this.payload.sticker = this.stickerId
                     this.payload.photo = ""
@@ -201,17 +206,19 @@
                     }
                 }
 
-                if (!this.isStickerUpdate && !this.isPhotoUpdate) {
-                    this.$delete(this.payload, 'photo')
+                if (!this.isStickerUpdate) {
                     this.$delete(this.payload, 'sticker')
                 }
 
                 this.editComment(this.payload).then(res => {
-                    this.socialComment.content.photo = null
-                    this.socialComment.content.sticker = res.content.sticker
+                    if (res != undefined) {
+                        this.socialComment.content.photo = res.content.photo
+                        this.socialComment.content.sticker = res.content.sticker
+                    }
                     this.$emit("closeComment")
                 }).finally(() => {
                     this.loading = false
+                    this.isViewSticker = false
                 })
 
             },
@@ -245,7 +252,10 @@
                 this.setFocus()
             },
             removeSticker() {
+                this.payload.sticker = ""
+                this.isStickerUpdate = true
                 this.isViewSticker = false
+                this.isEditable = true
             },
         },
         mounted() {
@@ -255,6 +265,11 @@
         created() {
             if (this.replyId) {
                 this.payload.replyId = this.replyId
+            }
+
+            if (this.socialComment.content.sticker == undefined
+                || !this.socialComment.content.sticker.hasOwnProperty('url')) {
+                this.isViewSticker = false
             }
         },
         watch: {

@@ -11,9 +11,11 @@
                 <div v-for="(cer, index) in certificate" :key="index">
                     <div class="rounded-xl relative shadow overflow-hidden" @click="viewCertificate(cer)">
                         <img :src="cer.url" class="rounded-xl cursor-pointer">
-                        <div class="absolute h-20 w-full left-0 bottom-0   shadow rounded-b-xl bg-opacity-90 flex  flex-col justify-center px-5 text-lg"
-                             :class="darkMode?`bg-secondary text-gray-300`:`bg-white text-primary`"
-                             style="box-shadow: 0px -4px 3px rgba(50, 50, 50, 0.1);">
+                        <div
+                                class="absolute h-20 w-full left-0 bottom-0   shadow rounded-b-xl bg-opacity-90 flex
+                                flex-col justify-center px-5 text-lg"
+                                :class="darkMode?`bg-secondary text-gray-300`:`bg-white text-primary`"
+                                style="box-shadow: 0px -4px 3px rgba(50, 50, 50, 0.1);">
                             <div class="font-black">
                                 {{$t('certificate_of_education')}}
                             </div>
@@ -25,8 +27,10 @@
                 </div>
             </div>
         </div>
-        <div class="fixed w-full h-full top-0 left-0 p-10 overflow-y-scroll flex items-center justify-center bg-black z-50 text-gray-300"
-             v-if="imgUrl">
+        <div
+                class="fixed w-full h-full top-0 left-0 p-10 overflow-y-scroll flex items-center justify-center bg-black
+                z-50 text-gray-300"
+                v-if="imgUrl">
             <div class="absolute top-5 right-5 cursor-pointer" @click="() => {this.imgUrl = ''}">
                 <CloseIcon :fill="`#FFF`"></CloseIcon>
             </div>

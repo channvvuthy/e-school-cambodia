@@ -423,6 +423,7 @@
   "course": "Course",
   "504": "Gateway Timeout",
   "502": "Gateway Timeout",
+  "view_more_comment": "View More Comment",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",

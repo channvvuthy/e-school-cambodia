@@ -1,5 +1,11 @@
 <template>
     <div class="mt-5" :class="darkMode?`text-gray-300`:``">
+        <a
+                :class="darkMode ? `text-gray-300`: `text-primary`"
+                @click="()=>{this.$router.go(-1)}"
+                href="#" class="absolute right-2 bottom-2">
+            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"/>
+        </a>
         <div v-if="request.list && request.list.length">
             <div v-for="(friend, index) in request.list" :key="index" class="mb-3">
                 <div class="flex justify-between items-center">
@@ -35,6 +41,7 @@
 <script>
     import CloseIcon from "./../../components/CloseIcon.vue"
     import {mapState, mapActions} from "vuex"
+    import BackMenuIcon from "../../components/BackMenuIcon";
 
     export default {
         props: {
@@ -58,6 +65,7 @@
             }
         },
         components: {
+            BackMenuIcon,
             CloseIcon,
         },
         methods: {

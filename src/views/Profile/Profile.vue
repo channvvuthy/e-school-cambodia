@@ -475,20 +475,22 @@
                 }
             },
             onSelectedPhoto(event) {
+
                 if (event.target.value) {
                     this.loading = true
                     const file = event.target.files[0];
                     let formData = new FormData();
                     formData.append("photo", file)
                     this.singleUpload(formData).then(res => {
-                        if (res.data && res.length) {
+                        if (res.data) {
                             let photo = new FormData()
-                            photo.append("photo", res.data[0].url)
-                            this.changeProfilePhotoPhoto(photo).then(response => {
-                                if (res.data && res.length) {
+                            photo.append("photo", res.data.url)
+
+                            this.changeProfilePhotoPhoto(photo).then(res => {
+                                if (res.data) {
                                     let stProfile = localStorage.getItem("stProfile")
                                     stProfile = JSON.parse(stProfile)
-                                    stProfile.photo = response.data.photo
+                                    stProfile.photo = res.data.photo
                                     this.$store.commit("auth/studentProfile", stProfile)
                                     localStorage.setItem("stProfile", JSON.stringify(stProfile))
                                 }
@@ -598,8 +600,8 @@
 
                 formData.append("image", e.target.files[0]);
 
-                this.changeProfilePhotoPhoto(formData).then(response => {
-                    this.stProfile.photo = response.data.photo
+                this.changeProfilePhotoPhoto(formData).then(res => {
+                    this.stProfile.photo = res.data.photo
                     this.getStudentProfile(this.stProfile)
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
 
@@ -621,15 +623,15 @@
         created() {
             this.getProvinces().then(() => {
                 if (this.stProfile.province)
-                    this.getSchool(this.stProfile.province._id).then((response) => {
-                        if (response.msg == undefined) {
-                            for (let index = 0; index < response.data.length; index++) {
-                                if (this.stProfile.school._id == response.data[index]._id) {
-                                    this.school = response.data[index]
+                    this.getSchool(this.stProfile.province._id).then((res) => {
+                        if (res.msg == undefined) {
+                            for (let index = 0; index < res.data.length; index++) {
+                                if (this.stProfile.school._id == res.data[index]._id) {
+                                    this.school = res.data[index]
                                 }
                             }
                         } else {
-                            helper.errorMessage(response.msg)
+                            helper.errorMessage(res.msg)
                         }
                     })
             })

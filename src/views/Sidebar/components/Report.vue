@@ -7,11 +7,15 @@
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('activity')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
-                         :class="activeClass('activity')">
+                         :class="activeClass('activity activity-detail')">
                         <div>
-                            <ActivityIcon fill="#FFFFFF" :size="24"
-                                          v-if="$route.name === `activity` || $route.name === `activity-detail`"/>
-                            <ActivityIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24" v-else/>
+                            <ActivityIcon
+                                    fill="#FFFFFF"
+                                    :size="24"
+                                    v-if="$route.name === `activity` || $route.name === `activity-detail`"/>
+                            <ActivityIcon
+                                    :fill="darkMode?`#FFFFFF`:`#4A4A4A`" :size="24"
+                                    v-else/>
                         </div>
 
                     </div>
@@ -21,11 +25,14 @@
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('watch-video')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
-                         :class="activeClass('watch-video')">
+                         :class="activeClass('watch-video watch-detail')">
                         <div>
-                            <WatchVideoIcon fill="#FFFFFF"
-                                            v-if="$route.name === `watch-video` || $route.name === `watch-detail`"/>
-                            <WatchVideoIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
+                            <WatchVideoIcon
+                                    fill="#FFFFFF"
+                                    v-if="$route.name === `watch-video` || $route.name === `watch-detail`"/>
+                            <WatchVideoIcon
+                                    :fill="darkMode?`#FFFFFF`:`#4A4A4A`"
+                                    v-else/>
                         </div>
 
                     </div>
@@ -37,7 +44,10 @@
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('read-book')">
                         <div>
-                            <BookIcon fill="#FFFFFF" :size="24" v-if="$route.name === `read-book`"/>
+                            <BookIcon
+                                    fill="#FFFFFF"
+                                    :size="24"
+                                    v-if="$route.name === `read-book`"/>
                             <BookIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
                         </div>
 
@@ -50,8 +60,13 @@
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('relative')">
                         <div>
-                            <RelativeIcon fill="#FFFFFF" :size="24" v-if="$route.name === `relative`"/>
-                            <RelativeIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>
+                            <RelativeIcon
+                                    fill="#FFFFFF"
+                                    :size="24"
+                                    v-if="$route.name === `relative`"/>
+                            <RelativeIcon
+                                    :fill="darkMode?`#FFFFFF`:`#4A4A4A`"
+                                    v-else/>
                         </div>
 
                     </div>
@@ -90,11 +105,14 @@
                 });
             },
             activeClass(currentRoute) {
-                if (this.$route.name === currentRoute) {
-                    if (this.darkMode) {
-                        return "bg-button"
+                let arr = currentRoute.split(' ')
+                for (let i = 0; i < arr.length; i++) {
+                    if (this.$route.name === arr[i]) {
+                        if (this.darkMode) {
+                            return "bg-button"
+                        }
+                        return "bg-primary"
                     }
-                    return "bg-primary"
                 }
                 if (this.darkMode) {
                     return "border border-roundBorder"

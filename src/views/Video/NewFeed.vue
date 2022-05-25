@@ -100,14 +100,15 @@
                                     <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                                         <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
                                             <div v-if="post.caption && post.caption.length > 200">
-                  <span class="less"
-                        @click="seeMore"
-                  >{{ cutString(post.caption, 200) }} <span
-                          class="capitalize cursor-pointer font-bold">{{ $t('see_more') }}</span>
-                  </span>
+                                                <span class="less" @click="seeMore">
+                                                    {{ cutString(post.caption, 200) }}
+                                                    <span class="capitalize cursor-pointer font-bold">
+                                                        {{ $t('see_more') }}
+                                                    </span>
+                                                </span>
                                                 <span class="more hidden">
-                    {{ post.caption }}
-                  </span>
+                                                    {{ post.caption }}
+                                                </span>
                                             </div>
                                             <div v-else>
                                                 {{ post.caption }}
@@ -277,8 +278,8 @@
                                              :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                                         <div class="ml-5 text-white pb-2">{{ video.teacher.name }}</div>
                                     </div>
-                                    <div class="text-base font-semibold mt-3 text-center">{{ cutString(video.title, 30)
-                                        }}
+                                    <div class="text-base font-semibold mt-3 text-center">
+                                        {{ cutString(video.title, 30)}}
                                     </div>
                                     <div class="flex items-center w-full justify-between mt-3 text-center text-sm">
                                         <div class="cursor-pointer" :title="$t('2108')">
@@ -433,6 +434,7 @@
     import ChatIcon from "@/components/ChatIcon";
     import TestIcon from "@/components/TestIcon";
     import BuyMsg from "@/views/Component/BuyMsg";
+    import timeSince from "../../helper/timeSince";
 
     Vue.use(VueObserveVisibility)
 
@@ -518,6 +520,7 @@
                             user_id: user._id
                         }
                     })
+                    return
                 }
                 this.isLoginRequire = true
 
@@ -748,15 +751,7 @@
                 })
             },
             formatDate(day) {
-                let currentDate = new Date()
-                let today = moment(currentDate)
-                let postDay = moment(day)
-                let result = today.diff(postDay, 'days')
-                if (result === 1 || result === 0) {
-                    return moment(day).startOf('hour').fromNow()
-                } else {
-                    return moment(day).format('LLL')
-                }
+                return timeSince.timeSince(day)
             },
             closeCreate() {
                 this.isEdit = false

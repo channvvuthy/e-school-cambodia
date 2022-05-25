@@ -1,43 +1,50 @@
 <template>
     <div>
-        <div class="flex items-center h-14 text-sm px-5 mt-3"
-             :class="darkMode?`text-gray-300 bg-secondary`:`bg-white shadow`">
-            <div class="cursor-pointer" :class="active === `friend`?`font-bold ${darkMode?`text-fb`:`text-primary`}`:``"
-                 @click="switchMenu('friend')">{{$t('friend')}}
-            </div>
-        </div>
-        <div class="p-5 h-screen pb-40">
-            <div class="w-4/6 rounded-xl p-5 overflow-y-scroll" :class="darkMode?`bg-secondary`:`bg-white shadow`"
-                 style="height:93%" @scroll="onScroll">
-                <div class="relative w-3/4 sticky top-0">
-                    <input type="text" class="focus:outline-none h-10 rounded-md bg-softGray pl-3 text-sm w-full"
-                           :placeholder="$t('1001')" :class="darkMode?`bg-button text-gray-300`:``"
-                           v-on:keyup.enter="search" v-model="s">
-                    <div class="absolute right-3 top-2">
-                        <SearchIcon :fill="darkMode?`#FFFFFF`:`#000000`"/>
-                    </div>
+        <a
+                :class="darkMode ? `text-gray-300`: `text-primary`"
+                @click="()=>{this.$router.go(-1)}"
+                href="#" class="absolute right-2 bottom-2">
+            <BackMenuIcon :fill="darkMode?`#ffffff`:`#055174`" :width="30"/>
+        </a>
+            <div class="flex items-center h-14 text-sm px-5 mt-3"
+                 :class="darkMode?`text-gray-300 bg-secondary`:`bg-white shadow`">
+                <div class="cursor-pointer"
+                     :class="active === `friend`?`font-bold ${darkMode?`text-fb`:`text-primary`}`:``"
+                     @click="switchMenu('friend')">{{$t('friend')}}
                 </div>
-                <!-- Loading -->
-                <div v-if="loading">
-                    <div class="mt-5" v-for="i in 5" :key="i">
-                        <div class="animate-pulse flex space-x-4 items-center">
-                            <div class="rounded-full h-12 w-12" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
-                            <div class="flex-1 space-y-2 py-1">
-                                <div class="h-3 w-3/4" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
-                                <div class="space-y-2">
-                                    <div class="h-3" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
-                                    <div class="h-3 w-5/6" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
+            </div>
+            <div class="p-5 h-screen pb-40">
+                <div class="w-4/6 rounded-xl p-5 overflow-y-scroll" :class="darkMode?`bg-secondary`:`bg-white shadow`"
+                     style="height:93%" @scroll="onScroll">
+                    <div class="relative w-3/4 sticky top-0">
+                        <input type="text" class="focus:outline-none h-10 rounded-md bg-softGray pl-3 text-sm w-full"
+                               :placeholder="$t('1001')" :class="darkMode?`bg-button text-gray-300`:``"
+                               v-on:keyup.enter="search" v-model="s">
+                        <div class="absolute right-3 top-2">
+                            <SearchIcon :fill="darkMode?`#FFFFFF`:`#000000`"/>
+                        </div>
+                    </div>
+                    <!-- Loading -->
+                    <div v-if="loading">
+                        <div class="mt-5" v-for="i in 5" :key="i">
+                            <div class="animate-pulse flex space-x-4 items-center">
+                                <div class="rounded-full h-12 w-12" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
+                                <div class="flex-1 space-y-2 py-1">
+                                    <div class="h-3 w-3/4" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
+                                    <div class="space-y-2">
+                                        <div class="h-3" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
+                                        <div class="h-3 w-5/6" :class="darkMode?`bg-byline`:`bg-gray-300`"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <template v-else>
+                        <!-- Friend -->
+                        <Friend :friends="friends" v-if="active === `friend`"/>
+                    </template>
                 </div>
-                <template v-else>
-                    <!-- Friend -->
-                    <Friend :friends="friends" v-if="active === `friend`"/>
-                </template>
             </div>
-        </div>
     </div>
 </template>
 <script>
@@ -45,9 +52,11 @@
     import {mapState, mapActions} from "vuex"
     import SearchIcon from "./../../components/SearchIcon.vue"
     import Friend from "./Friend.vue"
+    import BackMenuIcon from "../../components/BackMenuIcon";
 
     export default {
         components: {
+            BackMenuIcon,
             eHeader,
             SearchIcon,
             Friend,

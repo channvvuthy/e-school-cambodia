@@ -20,7 +20,8 @@
                         </div>
                     </div>
                     <div class="w-full bg-red-100 bg-cover h-40"
-                         style="background-image:url('cover.jpg');background-repeat:no-repeat;background-position:0px -5px;"></div>
+                         :style="{backgroundImage:`url(${stProfile.photo_cover || 'cover.jpg'})`}"
+                         style="background-repeat:no-repeat;background-position:0px -5px;"></div>
                     <div class="h-36 pt-14" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
                         <div class="text-base pt-5 text-center font-bold" :class="darkMode?``:`text-primary`">
                         </div>

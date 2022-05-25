@@ -14,9 +14,12 @@
             </div>
             <div v-else>
                 <div class="overflow-y-scroll" style="height:28rem;" @scroll="onScroll">
-                    <div v-for="(member, index) in admin" :key="index" class="flex items-center py-3 px-4 cursor-pointer" @click="selectedChat(member)">
+                    <div v-for="(member, index) in admin" :key="index" class="flex items-center py-3 px-4 cursor-pointer"
+                         @click="selectedChat(member)">
                         <div>
-                            <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-3" :style="{backgroundImage:`url(${member.photo})`}"></div>
+                            <div class="h-13 w-13 rounded-full shadow bg-cover bg-gray-300 mr-3"
+                                 :style="{backgroundImage:`url(${member.photo})`}">
+                            </div>
                         </div>
                         <div>
                             <div class="text-sm fon-medium" :class="darkMode?`text-gray-300`:``">
@@ -24,7 +27,10 @@
                                     <div>
                                         {{member.name}}
                                     </div>
-                                    <div v-if="member.type===0" class="h-4 w-4 rounded-full ml-3 flex items-center justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400 text-gray-200`">
+                                    <div
+                                            v-if="member.type===0" class="h-4 w-4 rounded-full ml-3 flex items-center
+                                            justify-center" :class="darkMode?`bg-youtube text-gray-500`:`bg-gray-400
+                                            text-gray-200`">
                                        <span style="font-size:10px;">&#10003;</span>
                                     </div>
                                 </div>
@@ -36,9 +42,14 @@
                         <div class="flex flex-1 justify-end items-end h-full">
                             <div>
                                 <div class="flex justify-center" v-if="member.unread">
-                                    <div class="h-4 w-4 rounded-full flex items-center justify-center text-xs" :class="darkMode?`bg-white text-black`:`bg-heart text-white`">{{member.unread}}</div>
+                                    <div
+                                            class="h-4 w-4 rounded-full flex items-center justify-center text-xs"
+                                            :class="darkMode?`bg-white text-black`:`bg-heart text-white`">
+                                        {{member.unread}}
+                                    </div>
                                 </div>
-                                <div class="text-xs mt-1 whitespace-nowrap" :class="darkMode?`text-gray-500`:`text-gray-400`">
+                                <div class="text-xs mt-1 whitespace-nowrap"
+                                     :class="darkMode?`text-gray-500`:`text-gray-400`">
                                     {{member.last == undefined?$t('unread') + ' ' + member.unread:getDay(member.last.date)}}
                                 </div>
                             </div>

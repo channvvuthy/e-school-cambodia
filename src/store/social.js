@@ -20,6 +20,15 @@ export default {
         recomments: [],
     },
     mutations: {
+        getMoreComment(state, payload) {
+            if (payload.comments) {
+                if (payload.comments.length) {
+                    for (let i = 0; i < payload.comments.length; i++) {
+                        state.comments.comments.push(payload.comments[i])
+                    }
+                }
+            }
+        },
         getRecomment(state, payload) {
             state.recomments = payload
         },
@@ -336,6 +345,19 @@ export default {
                     resolve(res.data.data)
                 }).catch(err => {
                     commit("loadingComment", false)
+                    reject(err)
+                })
+            })
+        },
+        getMoreComment({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `social/comment?${helper.q(payload)}`).then(res => {
+                    if (res.data.msg == undefined) {
+                        commit("getMoreComment", res.data.data)
+                    }
+                    resolve(res.data.data)
+                }).catch(err => {
+
                     reject(err)
                 })
             })

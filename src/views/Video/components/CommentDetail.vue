@@ -73,7 +73,23 @@
                         <ReplyComment :id="commentId"/>
                     </div>
                 </div>
+                <div v-if="enablePagination">
+                    <button
+                            @click="getPaginationComment"
+                            :disabled="loadingPagination"
+                            v-if="comments.comments && comments.comments.length >= 10"
+                            :class="darkMode ?`text-textSecondary`: `text-primary`"
+                            class="mt-3 text-lg capitalize outline-none">
+                        <template v-if="loadingPagination">
+                            <LoadingWhite/>
+                        </template>
+                        <template v-else>
+                            {{$t('view_more_comment')}}
+                        </template>
+                    </button>
+                </div>
             </div>
+
         </div>
         <!-- Sticker -->
         <Sticker v-if="isSticker"
@@ -144,6 +160,8 @@
         },
         data() {
             return {
+                loadingPagination: false,
+                enablePagination: true,
                 loadingReply: false,
                 commentId: null,
                 stickerUrl: null,
@@ -166,7 +184,18 @@
             }
         },
         methods: {
-            ...mapActions('social', ['getComment', 'addComment']),
+            ...mapActions('social', ['getComment', 'addComment', 'getMoreComment']),
+            getPaginationComment() {
+                this.payload.p++
+                this.loadingPagination = true
+                this.getMoreComment(this.payload).then(res => {
+                    if (res.comments && !res.comments.length) {
+                        this.enablePagination = false
+                    }
+                }).finally(() => {
+                    this.loadingPagination = false
+                })
+            },
             reply(comment) {
                 this.commentId = comment._id
             },

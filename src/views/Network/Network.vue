@@ -1,11 +1,5 @@
 <template>
     <div>
-        <a
-                :class="darkMode ? `text-gray-300`: `text-primary`"
-                @click="()=>{this.$router.go(-1)}"
-                href="#" class="absolute right-2 bottom-2">
-            {{$t('back')}}
-        </a>
         <div class="flex items-center h-14 text-sm px-5 mt-3"
              :class="darkMode?`text-gray-300 bg-secondary`:`bg-white shadow`">
             <div class="cursor-pointer" :class="active === `friend`?`font-bold ${darkMode?`text-fb`:`text-primary`}`:``"

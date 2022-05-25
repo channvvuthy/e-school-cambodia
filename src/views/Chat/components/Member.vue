@@ -37,7 +37,8 @@
                                      :class="darkMode?`bg-gray-500`:`bg-primary`"></div>
                                 <div class="w-1 h-1 rounded-full" :class="darkMode?`bg-gray-500`:`bg-primary`"></div>
                                 <div class="absolute right-0 w-56 rounded-lg top-6 z-50 box-active"
-                                     :class="darkMode?`box-active bg-secondary text-gray-300 border border-button`:`box-active-white bg-white border border-gray-200`"
+                                     :class="darkMode?`box-active bg-secondary text-gray-300 border border-button`
+                                     :`box-active-white bg-white border border-gray-200`"
                                      v-if="event === member._id">
                                     <div class="py-3 mx-3"
                                          :class="darkMode?`border-b border-button`:`border-b border-gray-200`"
@@ -74,7 +75,8 @@
                                      :class="darkMode?`bg-gray-500`:`bg-primary`"></div>
                                 <div class="w-1 h-1 rounded-full" :class="darkMode?`bg-gray-500`:`bg-primary`"></div>
                                 <div class="absolute right-0 w-56 rounded-lg top-6 z-50"
-                                     :class="darkMode?`box-active bg-secondary text-gray-300 border border-button`:`box-active-white bg-white border border-gray-200`"
+                                     :class="darkMode?`box-active bg-secondary text-gray-300 border border-button`
+                                     :`box-active-white bg-white border border-gray-200`"
                                      v-if="event === member._id">
                                     <div class="py-3 mx-3"
                                          :class="darkMode?`border-b border-button`:`border-b border-gray-200`"
@@ -88,7 +90,10 @@
                 </div>
             </div>
         </div>
-        <BuyMsg v-if="isConfirm" :msg="msg" @cancelModal="() => {this.isConfirm = false;}" @yes="yes"></BuyMsg>
+        <BuyMsg
+                v-if="isConfirm"
+                :msg="msg" @cancelModal="() => {this.isConfirm = false;}"
+                @yes="yes"/>
     </div>
 </template>
 <script>

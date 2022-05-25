@@ -46,7 +46,8 @@
             <button
                     class="relative focus:outline-none p-3 mt-4 text-center text-white rounded-lg h-11 w-full
                     text-sm outline-none text-sm cursor-pointer font-khmer_os"
-                    :class="darkMode?`bg-button`:`bg-primary`" @click="modifyPassword" :disabled="loadingRegister"
+                    :class="darkMode?`bg-button`:`bg-primary`" @click="modifyPassword"
+                    :disabled="loadingRegister"
                     v-if="!showReset">
                 <span v-if="!loadingRegister">{{$t('set_password')}}</span>
                 <div class="absolute flex justify-center items-center -top-2 w-full" v-else>

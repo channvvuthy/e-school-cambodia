@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="cursor-pointer" @click="() =>{this.previewStory = false}">
-                        <CloseIcon fill="#FFF"></CloseIcon>
+                        <CloseIcon fill="#FFF"/>
                     </div>
                 </div>
                 <div class="h-5"></div>
@@ -57,7 +57,7 @@
 
                     </div>
                     <div @click="confirmDelete(storyDetail)">
-                        <DeleteIcon fill="#909090"></DeleteIcon>
+                        <DeleteIcon fill="#909090"/>
                     </div>
                 </div>
                 <!-- List viewer -->
@@ -115,7 +115,7 @@
                 </div>
                 <div>
                     <div v-if="galleries.length == 0" class="h-screen pb-10">
-                        <Empty></Empty>
+                        <Empty/>
                     </div>
                     <div :class="window.width <= 1315?`container-4`:`container-5`">
                         <div v-for="(gallery, index) in galleries"

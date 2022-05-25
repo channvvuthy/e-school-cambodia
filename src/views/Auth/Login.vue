@@ -67,10 +67,15 @@
                 </div>
             </div>
             <template>
-                <Message v-if="errorMessage" :message="errorMessage" @closeMessage="closeMessage"/>
+                <Message
+                        v-if="errorMessage"
+                        :message="errorMessage"
+                        @closeMessage="closeMessage"/>
             </template>
         </div>
-        <img src="e-footer.png" class="w-full" v-if="!darkMode">
+        <img src="e-footer.png"
+             class="w-full"
+             v-if="!darkMode"/>
     </div>
 </template>
 

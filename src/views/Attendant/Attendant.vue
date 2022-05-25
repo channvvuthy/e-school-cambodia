@@ -3,7 +3,9 @@
         <eHeader :user="attendant.user"/>
         <div class="flex items-center mt-5 mx-5 overflow-y-scroll months pb-5">
             <div v-for="(month, index) in months" :key="index + Math.random()">
-                <button :class="darkMode?`${currentMonth == month?`bg-pass text-white`:` bg-button text-gray-300`}`:`${currentMonth == month?`bg-primary text-white`:`bg-white`}`"
+                <button
+                        :class="darkMode?`${currentMonth == month?`bg-pass text-white`:` bg-button text-gray-300`}`
+                        :`${currentMonth == month?`bg-primary text-white`:`bg-white`}`"
                         @click="filterMonth(month)"
                         v-if="month <= getMonth()"
                         class="rounded-md whitespace-nowrap px-10 text-sm py-3 shadow-md mr-5 focus:outline-none font-semibold">
@@ -23,9 +25,11 @@
                 </div>
                 <div v-for="(day, key) in days" :key="key + Math.random()">
                     <div class="text-base"
-                         :class="attendantActive(day)?`${darkMode?`text-pass`:`text-primary`} font-black`:`${darkMode?`text-gray-600`:`text-gray-400`}`">
+                         :class="attendantActive(day)?`${darkMode?`text-pass`:`text-primary`} font-black`
+                         :`${darkMode?`text-gray-600`:`text-gray-400`}`">
                         <div class="text-center rounded py-3"
-                             :class="getCurrentDay(day,currentMonth)?`${darkMode?`bg-pass`:`bg-primary`} text-white font-black`:``">
+                             :class="getCurrentDay(day,currentMonth)?`${darkMode?`bg-pass`
+                             :`bg-primary`} text-white font-black`:``">
                             {{day}}
                         </div>
 
