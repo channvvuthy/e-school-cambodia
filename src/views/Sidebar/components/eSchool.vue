@@ -7,7 +7,7 @@
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('hot-chat')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
-                         :class="activeClass('hot-c¬hat')">
+                         :class="activeClass('hot-chat')">
                         <div>
                             <ChatIcon fill="#FFFFFF" v-if="$route.name === `hot-chat`"/>
                             <ChatIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else/>

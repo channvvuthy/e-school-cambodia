@@ -65,9 +65,6 @@ export default {
                 onUploadProgress: function (progressEvent) {
                     let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
                     commit("progress", percentCompleted)
-                    if (err.response.status == 504 || err.response.status == 502) {
-                        helper.errorMessage(err.response.status)
-                    }
                 }
             }
             return new Promise((resolve, reject) => {
