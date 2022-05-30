@@ -109,14 +109,16 @@
                                         <figure v-for="(pic, key) in editPost.photo"
                                                 @mouseover="activeRemove(key)"
                                                 class="relative cursor-pointer figure"
-                                                :class="((key === 0 && editPost.photo.length === 1) || (key === 0 && editPost.photo.length > 2)) ? `span-2` : `matched`"
+                                                :class="((key === 0 && editPost.photo.length === 1) || (key === 0 &&
+                                                editPost.photo.length > 2)) ? `span-2` : `matched`"
                                         >
                                             <img :src="`${pic.url}`" :alt="key" @click="previewPhoto(pic.url)"/>
                                             <div
                                                     v-if="currentHoverPhoto === key"
                                                     @click="removePicture(key)"
                                                     :class="darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`"
-                                                    class="w-8 h-8 flex items-center justify-center absolute right-2 top-2 rounded-full cursor-pointer z-50 shadow">
+                                                    class="w-8 h-8 flex items-center justify-center absolute right-2
+                                                    top-2 rounded-full cursor-pointer z-50 shadow">
                                                 <CloseIcon :fill="darkMode ? `#909090`: `#000000`"/>
                                             </div>
                                         </figure>
@@ -138,13 +140,15 @@
                                     <figure v-for="(picture, index) in multiPhotoPreview"
                                             @mouseover="activeRemove(index)"
                                             class="relative cursor-pointer figure"
-                                            :class="((index === 0 && multiPhotoPreview.length === 1) || (index === 0 && multiPhotoPreview.length > 2)) ? `span-2` : `matched`">
+                                            :class="((index === 0 && multiPhotoPreview.length === 1) || (index === 0
+                                            && multiPhotoPreview.length > 2)) ? `span-2` : `matched`">
                                         <img :src="`file://${picture}`" :alt="index" @click="previewPhoto(picture)"/>
                                         <div
                                                 v-if="currentHoverPhoto === index"
                                                 @click="removePicture(index)"
                                                 :class="darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`"
-                                                class="w-8 h-8 flex items-center justify-center absolute right-2 top-2 rounded-full cursor-pointer z-50 shadow">
+                                                class="w-8 h-8 flex items-center justify-center absolute right-2 top-2
+                                                rounded-full cursor-pointer z-50 shadow">
                                             <CloseIcon :fill="darkMode ? `#909090`: `#000000`"/>
                                         </div>
                                     </figure>
@@ -188,7 +192,8 @@
                     <div class="flex overflow-x-scroll preview space-x-3 w-full flex-nowrap">
                         <div class="h-16 w-16">
                             <div class="cursor-pointer flex items-center justify-center h-16 w-16 rounded-full"
-                                 :class="darkMode ? `bg-black` : `bg-none text-iconColor`" @click="closeBackground">None
+                                 :class="darkMode ? `bg-black` : `bg-none text-iconColor`"
+                                 @click="closeBackground">None
                             </div>
                         </div>
                         <div v-for="(bg,index) in background" :key="index"
@@ -261,10 +266,14 @@
             </div>
         </div>
         <template v-if="isCamera">
-            <Camera @closeCamera="()=>{this.isCamera = false}" @pictureTaken="pictureTaken($event)"/>
+            <Camera
+                    @closeCamera="()=>{this.isCamera = false}"
+                    @pictureTaken="pictureTaken($event)"/>
         </template>
         <template v-if="isMessage">
-            <Message :message="$t('limit_photo')" @closeMessage="()=>{this.isMessage = false}"/>
+            <Message
+                    :message="$t('limit_photo')"
+                    @closeMessage="()=>{this.isMessage = false}"/>
         </template>
         <template v-if="isConfirm">
             <ConfirmDelete
@@ -274,7 +283,9 @@
             </ConfirmDelete>
         </template>
         <template v-if="isPreviewPhoto">
-            <PreviewPhoto :img-url="imgUrl" @closeIcon="()=>{this.isPreviewPhoto = false}"/>
+            <PreviewPhoto
+                    :img-url="imgUrl"
+                    @closeIcon="()=>{this.isPreviewPhoto = false}"/>
         </template>
 
     </div>
@@ -728,8 +739,13 @@
                 }
 
 
-                if (!this.singlePhotoPreview && !this.multiPhotoPreview.length && !this.isBackground && !this.videoPreview) {
-                    this.postSocial(this.payload).then(() => {
+                if (!this.singlePhotoPreview
+                    && !this.multiPhotoPreview.length
+                    && !this.isBackground && !this.videoPreview) {
+                    this.postSocial(this.payload).then((res) => {
+                        if (res.caption) {
+                            helper.success('0012')
+                        }
                         this.loading = false
                         this.resetCaption()
                         this.closeCreate()

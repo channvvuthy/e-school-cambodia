@@ -10,7 +10,7 @@ function timeSince(timeStamp) {
     let now = new Date(),
         secondsPast = (now.getTime() - timeStamp.getTime()) / 1000;
 
-    let formatDate = function(date, format, utc) {
+    let formatDate = function (date, format, utc) {
         let MMMM = ["\x00", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         let MMM = ["\x01", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         let dddd = ["\x02", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -93,29 +93,29 @@ function timeSince(timeStamp) {
         return format;
     };
 
-    if(secondsPast < 0){ // Future date
+    if (secondsPast < 0) { // Future date
         return timeStamp;
     }
-    if(secondsPast < 60){ // Less than a minute
-        return parseInt(secondsPast) + ' just now';
+    if (secondsPast < 60) { // Less than a minute
+        return 'Just now';
     }
-    if(secondsPast < 3600){ // Less than an hour
-        return parseInt(secondsPast/60) + ' mins ago';
+    if (secondsPast < 3600) { // Less than an hour
+        return parseInt(secondsPast / 60) + ' mins ago';
     }
-    if(secondsPast <= 86400){ // Less than a day
-        return parseInt(secondsPast/3600) + ' hours ago';
+    if (secondsPast <= 86400) { // Less than a day
+        return parseInt(secondsPast / 3600) + ' hours ago';
     }
-    if(secondsPast <= 172800){ // Less than 2 days
+    if (secondsPast <= 172800) { // Less than 2 days
         return 'Yesderday at ' + formatDate(timeStamp, "h:mm TT");
     }
-    if(secondsPast > 172800){ // After two days
+    if (secondsPast > 172800) { // After two days
         let timeString;
 
-        if(secondsPast <= 604800)
+        if (secondsPast <= 604800)
             timeString = formatDate(timeStamp, "dddd") + " at " + formatDate(timeStamp, "h:mm TT") // with in a week
-        else if(now.getFullYear() > timeStamp.getFullYear())
+        else if (now.getFullYear() > timeStamp.getFullYear())
             timeString = formatDate(timeStamp, "MMMM d, yyyy") // a year ago
-        else if(now.getMonth() > timeStamp.getMonth())
+        else if (now.getMonth() > timeStamp.getMonth())
             timeString = formatDate(timeStamp, "MMMM d") // months ago
         else
             timeString = formatDate(timeStamp, "MMMM d") + " at " + formatDate(timeStamp, "h:mm TT") // with in a month
@@ -124,6 +124,6 @@ function timeSince(timeStamp) {
     }
 }
 
-export default{
+export default {
     timeSince
 }

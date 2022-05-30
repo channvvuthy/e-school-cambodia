@@ -82,8 +82,9 @@
                         <div v-for="(viewer,index) in storyDetail.viewer" :key="index"
                              class="text-black text-xs font-semibold">
                             <div class="flex items-center mb-5 px-5">
-                                <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center"
+                                <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center cursor-pointer"
                                      v-if="viewer.photo"
+                                     @click="getUser(viewer._id)"
                                      :style="{backgroundImage:`url(${viewer.photo})`}"></div>
                                 <div :class="darkMode?'text-textSecondary':''" v-if="viewer.name">{{ viewer.name }}
                                 </div>
@@ -189,6 +190,9 @@
         methods: {
             ...mapActions('gallery', ['getGallery']),
             ...mapActions('auth', ['viewStory']),
+            getUser(user_id) {
+                this.$router.push({name: 'user', params: {user_id}})
+            },
             deleteMyStory() {
                 if (this.currentStory.hasOwnProperty('photo')) {
                     if (this.deletedStory.photo.url == this.currentStory.photo.url) {

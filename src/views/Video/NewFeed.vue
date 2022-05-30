@@ -648,7 +648,7 @@
                                 copyText.select()
                                 copyText.setSelectionRange(0, 99999)
                                 document.execCommand("copy")
-                                helper.success("Copied")
+                                helper.success("0013")
                                 this.actionId = null
                             }, 100)
                         }

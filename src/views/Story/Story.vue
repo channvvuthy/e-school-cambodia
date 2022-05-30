@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="text-base font-PoppinsMedium" :class="darkMode?'text-white':''">
-                    <span class="uppercase">{{ $t('2003') }}</span>
+                    <span class="uppercase">{{ $t('2003') }}​​ </span>
                     <span>{{ token ? stProfile.first_name + " " + stProfile.last_name : $t('1127') }}</span>
                 </div>
             </div>
@@ -62,7 +62,10 @@
                         <div
                                 class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer
                                 flex flex-col items-center justify-center overflow-hidden relative">
-                            <img :src="my_story.photo.url" alt="" :id="my_story._id">
+                            <img
+
+                                    :src="my_story.photo.url?my_story.photo.url:'/poster.png'" alt=""
+                                    :id="my_story._id">
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                         </div>
                         <p class="mt-3 whitespace-nowrap flex justify-between space-x-4"
