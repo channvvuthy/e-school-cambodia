@@ -1,7 +1,7 @@
 <template>
   <div>
     <ModalVue @dismiss="dismiss">
-      <div class="p-5">
+      <div class="p-5 overflow-y-scroll" style="max-height: 80%">
         <div class="flex pb-5 justify-between">
           <div class="font-black">{{ $t(title) }}</div>
           <div class="cursor-pointer" @click="dismiss">

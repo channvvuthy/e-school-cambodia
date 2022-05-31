@@ -3,7 +3,7 @@
     <div class="relative w-28">
       <div
         @click="removeSticker"
-        :class="darkMode ? `bg-button` : `bg-forum`"
+        :class="darkMode ? `bg-button` : `bg-primary`"
         class="
           absolute
           right-4
@@ -18,7 +18,7 @@
           shadow-md
         "
       >
-        <CloseIcon :fill="darkMode ? `#909090` : `#000000`" :width="18" />
+        <CloseIcon :fill="darkMode ? `#909090` : `#FFFFFF`" :width="18" />
       </div>
       <img :class="`w-${stickerHeight}`" :src="stickerUrl"/>
     </div>
