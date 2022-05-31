@@ -6,7 +6,7 @@
             <div class="md:w-96 2xl:w-100 text-gray-300 bg-secondary rounded-lg flex flex-col justify-between relative"
                  style="height:90%;">
                 <div class="flex justify-between p-5">
-                    <div class="flex items-center">¬
+                    <div class="flex items-center">
                         <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center"
                              v-if="storyDetail.user && storyDetail.user.photo"
                              :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>

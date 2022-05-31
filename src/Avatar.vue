@@ -38,4 +38,4 @@ export default {
     this.defaultAvatarUrl = this.avatarUrl
   }
 }
-</script>¬
+</script>

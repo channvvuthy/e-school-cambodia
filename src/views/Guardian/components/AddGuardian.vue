@@ -13,7 +13,7 @@
                                     </div>
                                     <div @click="closeAdd" class="cursor-pointer absolute top-0 -right-2">
                                         <CloseIcon :width="20" :height="20" :fill="darkMode?`#909090`:`#000000`"/>
-                                    </div>¬
+                                    </div>
                                 </div>
 
                             </div>

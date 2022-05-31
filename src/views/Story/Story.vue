@@ -23,7 +23,7 @@
                 <div class="w-full overflow-x-auto flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative">
                         <div
-                                class="box-story relative h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center
+                                class="box-story h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center
                                 justify-center relative">
                             <div
                                     @click="goToGallery('gallery')"
@@ -31,7 +31,7 @@
                                     class="h-full w-full bg-cover bg-center rounded-lg"
                                     v-if="currentStory.hasOwnProperty('photo')"></div>
                             <div
-                                    @click="addStory()"
+                                    @click="goToGallery('gallery')"
                                     v-else
                                     class="h-full w-full bg-cover bg-center rounded-lg"
                                     :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
