@@ -65,7 +65,7 @@
                      class="absolute z-50 left-0 w-full h-full overflow-y-scroll  rounded-xl shadow-md"
                      @scroll="onScroll"
                      v-if="showViewer">
-                    <div class="md:w-96 2xl:w-100 top-0 sticky relative flex justify-between px-3 py-9"
+                    <div class="md:w-96 2xl:w-100 top-0 sticky flex justify-between px-3 py-9"
                          :class="darkMode?`bg-secondary`:`text-black bg-white`">
                         <div class="flex ml-5 text-xs font-semibold items-center">
                             <span><Eye :fill="darkMode?'#ffffff':'#000000'"/></span>
@@ -123,7 +123,7 @@
                              :key="index" class="cursor-pointer"
                              :id="gallery._id"
                              @click="viewImg(gallery,index)">
-                            <img :src="gallery.photo.url" v-if="gallery.photo">
+                            <img :src="gallery.photo.url?gallery.photo.url:'/poster.png'" v-if="gallery.photo">
                         </div>
                     </div>
                 </div>
