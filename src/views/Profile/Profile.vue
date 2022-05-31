@@ -18,6 +18,13 @@
                                 :style="{backgroundImage:`url(${stProfile.photo})`}"
                                 @mouseover="() =>{this.isPic = true}" @mouseleave="() => {this.isPic = false}"
                                 @click="()=>{this.$refs.photo.click()}">
+                            <div 
+                                v-if="loading"
+                                class="w-32 h-32 rounded-full bg-gradient-to-t from-black bg-cover bg-center flex items-center justify-center">
+                                <div>
+                                        <div class="loader text-white"></div>
+                                </div>
+                            </div>
                             <div
                                     class="bg-gradient-to-t pb-2 from-black absolute w-full h-full rounded-full flex items-end justify-center"
                                     v-if="isPic">
@@ -30,7 +37,7 @@
                     <div class="w-full bg-red-100 bg-cover h-40"
                          :style="{backgroundImage:`url(${cover})`}"
                          style="background-repeat:no-repeat;background-position:0 -5px;">
-                        <div class="right-10 absolute top-2 absolute z-50" v-if="changingCover">
+                        <div class="right-10 absolute top-2 z-50" v-if="changingCover">
                             <div class="loader"></div>
                         </div>
                         <div
@@ -328,6 +335,11 @@
                 v-if="isChangePhone"
                 @close="()=>{this.isChangePhone = false}"
         />
+        <Cropper 
+                @dismiss="dismiss"
+                @cropped="cropped($event)"
+                :imgSrc="imgSrc"
+                v-if="isCropper"/>
     </div>
 </template>
 
@@ -357,7 +369,9 @@
     import ChangeName from "./components/ChangeName";
     import ChangePhone from "./components/ChangePhone";
     import SocialIcon from "../../components/SocialIcon";
-    import BackMenuIcon from "../../components/BackMenuIcon";
+    import BackMenuIcon from "../../components/BackMenuIcon.vue";
+    import Cropper from "./../Component/Cropper/Cropper.vue"
+    
 
     export default {
         components: {
@@ -384,11 +398,13 @@
             MarkerIcon,
             QuizIcon,
             BookIcon,
-            EditIcon
+            EditIcon,
+            Cropper
 
         },
         data() {
             return {
+                isCropper: false,
                 isChangePhone: false,
                 isChangePassword: false,
                 isChangeName: false,
@@ -412,6 +428,8 @@
                     name: "",
                 },
                 updating: false,
+                imgSrc: null,
+                file: null,
             }
         },
         computed: {
@@ -422,6 +440,47 @@
             ...mapActions('setting', ['getProvinces', 'getSchool']),
             ...mapActions('auth', ['changeProfile', 'getStudentProfile', 'changeProfilePhotoPhoto', 'updateCover']),
             ...mapActions('upload', ['singleUpload']),
+            cropped(data){
+                this.dismiss()
+                let formData = new FormData();
+                if(data == null){
+                    formData.append("photo", this.file)
+                }else{
+
+                    formData.append("photo", this.dataURLtoBlob(data))
+                }
+                this.loading = true
+                this.singleUpload(formData).then(res => {
+                    if (res.data) {
+                        let photo = new FormData()
+                        photo.append("photo", res.data.url)
+                        this.changeProfilePhotoPhoto(photo).then(res => {
+                            if (res.data) {
+                                let stProfile = localStorage.getItem("stProfile")
+                                stProfile = JSON.parse(stProfile)
+                                stProfile.photo = res.data.photo
+                                this.$store.commit("auth/studentProfile", stProfile)
+                                localStorage.setItem("stProfile", JSON.stringify(stProfile))
+                            }
+                            this.loading = false
+                        })
+                    }
+                    this.loading = false
+
+                })
+            
+            },
+            dataURLtoBlob(dataurl) {
+                let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+                while (n--) {
+                    u8arr[n] = bstr.charCodeAt(n);
+                }
+                return new Blob([u8arr], {type: mime});
+            },
+            dismiss(){
+                this.isCropper = false
+            },
             reportDetail(page, user_id) {
                 this.$router.push({name: page, params: {user_id}})
             },
@@ -475,32 +534,11 @@
                 }
             },
             onSelectedPhoto(event) {
-
+            
                 if (event.target.value) {
-                    this.loading = true
-                    const file = event.target.files[0];
-                    let formData = new FormData();
-                    formData.append("photo", file)
-                    this.singleUpload(formData).then(res => {
-                        if (res.data) {
-                            let photo = new FormData()
-                            photo.append("photo", res.data.url)
-
-                            this.changeProfilePhotoPhoto(photo).then(res => {
-                                if (res.data) {
-                                    let stProfile = localStorage.getItem("stProfile")
-                                    stProfile = JSON.parse(stProfile)
-                                    stProfile.photo = res.data.photo
-                                    this.$store.commit("auth/studentProfile", stProfile)
-                                    localStorage.setItem("stProfile", JSON.stringify(stProfile))
-                                }
-                                this.loading = false
-                            })
-                        }
-                        this.loading = false
-
-                    })
-
+                    this.file= event.target.files[0];
+                    this.imgSrc = URL.createObjectURL(this.file);
+                    this.isCropper = true
                 }
             },
             updateProfile() {
@@ -543,9 +581,6 @@
                     this.errMessage = "ការកែប្រែពត៍មានត្រូវបានបរាជ័យ"
                     this.updating = false
                 })
-
-            },
-            filterSchool(event) {
 
             },
             closeMessage() {
@@ -606,6 +641,7 @@
                     localStorage.setItem('stProfile', JSON.stringify(this.stProfile))
 
                 }).catch(() => {
+
                 })
             },
             social() {

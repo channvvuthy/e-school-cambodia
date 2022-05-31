@@ -27,10 +27,6 @@
                      :class="darkMode ? `bg-button`: `bg-softGray`">
                     <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"/>
                 </div>
-                <div class="w-10 h-10 rounded-full flex items-center justify-center  text-sm fot-semibold cursor-pointer"
-                     :class="darkMode ? `bg-button text-lightGray `: `bg-softGray text-primary`">
-                    Live
-                </div>
             </div>
             <template v-if="isPost">
                 <CreatePost

@@ -426,6 +426,7 @@
   "view_more_comment": "View More Comment",
   "0012": "Your post has been created with success",
   "0013": "Copied",
+  "0014":"Crop Image",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",
