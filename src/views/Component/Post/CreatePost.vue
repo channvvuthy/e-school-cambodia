@@ -251,10 +251,6 @@
                                ref="upload-video" class="hidden"
                                @change="selectVideo">
                     </div>
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center  text-sm fot-semibold cursor-pointer"
-                         :class="darkMode ? `bg-button text-textSecondary `: `bg-softGray text-primary`">
-                        Live
-                    </div>
                     <div
                             @click="showBackground"
                             class="w-10 h-10 rounded-full flex items-center justify-center cursor-pointer"
@@ -602,14 +598,6 @@
                     }
                 }
             },
-            dataURLtoBlob(dataurl) {
-                let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
-                return new Blob([u8arr], {type: mime});
-            },
             closeCreate() {
                 this.$emit("closeCreate")
             },
@@ -777,7 +765,7 @@
                 this.singlePhotoPreview = picture
                 this.resetVideo()
                 this.deletePayload()
-                payload.append("photo", this.dataURLtoBlob(picture))
+                payload.append("photo", helper.dataURLtoBlob(picture))
                 this.isCamera = false
             },
             onFocus() {

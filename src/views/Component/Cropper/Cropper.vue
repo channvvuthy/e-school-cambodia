@@ -3,12 +3,13 @@
     <ModalVue @dismiss="dismiss">
       <div class="p-5">
         <div class="flex pb-5 justify-between">
-          <div class="font-black">{{ $t("0014") }}</div>
+          <div class="font-black">{{ $t(title) }}</div>
           <div class="cursor-pointer" @click="dismiss">
-            <CloseIcon :fill="darkMode ? `#909090`: `#000000`"></CloseIcon>
+            <CloseIcon :fill="darkMode ? `#909090` : `#000000`"></CloseIcon>
           </div>
         </div>
         <vue-cropper
+          :autoCropArea="1"
           ref="cropper"
           :src="imgSrc"
           alt="Source Image"
@@ -29,7 +30,7 @@
               font-black
             "
           >
-            {{ $t("0014") }}
+            {{ $t(buttonText) }}
           </button>
         </div>
       </div>
@@ -53,6 +54,16 @@ export default {
   props: {
     imgSrc: {
       default: () => null,
+    },
+    title: {
+      default: () => {
+        return "0014";
+      },
+    },
+    buttonText: {
+      default: () => {
+        return "update";
+      },
     },
   },
   data() {

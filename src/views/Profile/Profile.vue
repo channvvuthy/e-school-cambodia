@@ -447,7 +447,7 @@
                     formData.append("photo", this.file)
                 }else{
 
-                    formData.append("photo", this.dataURLtoBlob(data))
+                    formData.append("photo", helper.dataURLtoBlob(data))
                 }
                 this.loading = true
                 this.singleUpload(formData).then(res => {
@@ -469,14 +469,6 @@
 
                 })
             
-            },
-            dataURLtoBlob(dataurl) {
-                let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
-                }
-                return new Blob([u8arr], {type: mime});
             },
             dismiss(){
                 this.isCropper = false
