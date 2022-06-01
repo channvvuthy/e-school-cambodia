@@ -357,7 +357,7 @@ export default {
               helper.errorMessage(res.msg);
             } else {
               this.comment.photo = {
-                url: res.data.url
+                url: res.data.url,
               };
               this.addComment(this.comment).then(() => {
                 this.comment.text = "";

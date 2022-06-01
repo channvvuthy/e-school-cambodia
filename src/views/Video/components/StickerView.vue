@@ -20,7 +20,7 @@
       >
         <CloseIcon :fill="darkMode ? `#909090` : `#FFFFFF`" :width="18" />
       </div>
-      <img :class="`w-${stickerHeight}`" :src="stickerUrl"/>
+      <img :class="`w-${stickerHeight}`" :src="stickerUrl" class="rounded" />
     </div>
   </div>
 </template>

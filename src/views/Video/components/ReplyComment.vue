@@ -131,6 +131,7 @@ import StickerView from "@/views/Video/components/StickerView";
 import SendMessageIcon from "@/components/SendMessageIcon";
 import Cropper from "@/views/Component/Cropper/Cropper";
 import LoadingWhite from "@/components/LoadingWhite";
+import helper from "@/helper/helper";
 export default {
   computed: {
     ...mapState("auth", ["stProfile"]),
@@ -222,6 +223,7 @@ export default {
                 this.$delete(this.comment, "sticker");
                 this.$delete(this.comment, "photo");
                 this.isCommentPhoto = false;
+                this.posting = false;
               });
           }
         });
@@ -233,6 +235,7 @@ export default {
             this.$delete(this.comment, "sticker");
             this.$delete(this.comment, "photo");
             this.isCommentPhoto = false;
+            this.posting = false;
           });
       }
     },
