@@ -42,9 +42,9 @@ const downloadFile = async (fileUrl, info) => {
             const output = fs.createWriteStream(`${myInstalledDir}.enc`);
             input.pipe(cipher).pipe(output);
 
-            output.on("finish", ()=>{
-                fs.unlink(myInstalledDir,(err)=>{
-                    if(err) throw err
+            output.on("finish", () => {
+                fs.unlink(myInstalledDir, (err) => {
+                    if (err) throw err
                 })
                 info.url = path.join(app.getAppPath(), "..", "..", "electronjs")
                 mainWindow.webContents.send("downloaded", info)
@@ -68,20 +68,20 @@ protocol.registerSchemesAsPrivileged([{
         standard: true
     }
 }]);
-ipcMain.on("update", async(event, arg)=>{
+ipcMain.on("update", async (event, arg) => {
     shell.openExternal(arg)
 });
 
-ipcMain.on("decypt", async(event, arg)=>{
+ipcMain.on("decypt", async (event, arg) => {
     const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", arg);
     let input = fs.createReadStream(`${myInstalledDir}.enc`);
     let output = fs.createWriteStream(myInstalledDir);
     input.pipe(decipheriv).pipe(output);
 
-    output.on('finish',()=> {
-       console.log("File has been decipher")
-       event.reply("decypted", true)
-       output.close()
+    output.on('finish', () => {
+        console.log("File has been decipher")
+        event.reply("decypted", true)
+        output.close()
     })
 });
 
@@ -93,7 +93,7 @@ ipcMain.on("downloadLocation", (event, arg) => {
 })
 
 ipcMain.on("download", (event, arg) => {
-    
+
     downloadFile(arg.videoUrl, arg).catch(err => {
         event.reply("downloadFailed", arg)
         throw new Error(err);
@@ -117,8 +117,8 @@ ipcMain.on("openLink", async (event, arg) => {
     shell.openExternal(arg)
 })
 
-ipcMain.on("deeplink", (event, arg) =>{
-    event.reply("deeplink",{deeplink})
+ipcMain.on("deeplink", (event, arg) => {
+    event.reply("deeplink", { deeplink })
 })
 
 
@@ -156,7 +156,6 @@ async function createWindow() {
     if (process.platform == 'win32') {
         deeplink = process.argv.slice(1)[0]
     }
-
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode
         await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
@@ -176,7 +175,7 @@ if (!gotTheLock) {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
         let lastElement = commandLine[commandLine.length - 1];
-        if(lastElement.indexOf('eschool'))
+        if (lastElement.indexOf('eschool'))
             deeplink = lastElement
 
         if (mainWindow) {
@@ -214,9 +213,9 @@ app.name = "E-SCHOOL"
 // Trigger event 'open-url' on mac OS
 app.on("open-url", (event, data) => {
     event.preventDefault();
-    mainWindow.webContents.send('deeplink', {deeplink:data});
+    mainWindow.webContents.send('deeplink', { deeplink: data });
 });
-  
+
 app.setAsDefaultProtocolClient("eschool");
 
 // Exit cleanly on request from parent process in development mode.

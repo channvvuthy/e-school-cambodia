@@ -438,29 +438,6 @@
         </template>
         <template v-else>
           <div
-            @click="
-              () => {
-                if (!this.isEdit) this.isCamera = true;
-              }
-            "
-            class="
-              w-10
-              h-10
-              rounded-full
-              flex
-              items-center
-              justify-center
-              cursor-pointer
-            "
-            :class="darkMode ? `bg-button` : `bg-softGray`"
-          >
-            <CameraIcon
-              :width="20"
-              :height="22"
-              :fill="darkMode ? `#909090` : `#055174`"
-            />
-          </div>
-          <div
             class="
               w-10
               h-10
@@ -577,7 +554,6 @@
 import { mapActions, mapState } from "vuex";
 import CloseIcon from "@/components/CloseIcon";
 import Avatar from "@/Avatar";
-import CameraIcon from "@/components/CameraIcon";
 import ImageIcon from "@/components/ImageIcon";
 import PostVideoIcon from "@/components/PostVideoIcon";
 import ChevronDown from "@/views/MyCourse/components/Chevron";
@@ -609,7 +585,6 @@ export default {
     ChevronDown,
     PostVideoIcon,
     ImageIcon,
-    CameraIcon,
     Avatar,
     CloseIcon,
     Camera,
