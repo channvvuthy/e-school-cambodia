@@ -2,7 +2,7 @@
     <div @mouseleave="clearAction">
         <div class="mt-4 flex space-x-5" :id="comment._id">
             <div @click="userDetail(comment.user)">
-                <Avatar :avatar-url="comment.user.photo" :size="avataSize"/>
+                <Avatar :avatar-url="comment.user.photo" :size="avataSize" :avatarId="comment._id"/>
             </div>
             <div
                     class="rounded-xl py-4 px-3 relative" :class="darkMode ? `bg-youtube`: `bg-forum`">

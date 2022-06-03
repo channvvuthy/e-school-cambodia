@@ -97,6 +97,7 @@
           <div v-if="comment.reply_comment" class="pl-20">
             <div v-if="replies.comment && replies.comment._id === comment._id">
               <div v-for="(list, index) in replies.list" :key="index">
+      
                 <Comment
                   :avata-size="12"
                   :parent-comment-id="comment._id"

@@ -193,7 +193,11 @@
             ...mapActions('auth', ['getNotify']),
             goTo(page) {
                 this.$store.commit("etalk/setActive", 0)
-                this.$router.push({name: page}).catch((err) => err);
+                this.$router.push({name: page}).catch((err) => {
+                    if (this.$route.name == "home") {
+                        this.$router.push({ name: "refr" });
+                    }
+                });
             },
             darkActive(darkMode, active) {
                 if (darkMode && active) {

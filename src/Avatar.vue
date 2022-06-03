@@ -1,11 +1,22 @@
 <template>
   <div>
-    <input class="hidden" type="file" ref="avatar"
-           accept="image/*"
-           @change="onSelectFile">
-    <div :class="`w-${size} h-${size}`"
-         class="rounded-full bg-gray-100 bg-cover bg-center cursor-pointer"
-         :style="{backgroundImage:`url(${defaultAvatarUrl})`}"
+    <input
+      class="hidden"
+      type="file"
+      ref="avatar"
+      accept="image/*"
+      @change="onSelectFile"
+    />
+    <div
+      :class="`w-${size} h-${size}`"
+      class="rounded-full bg-gray-100 bg-cover bg-center cursor-pointer"
+      :style="{
+        backgroundImage: `url(${
+          avatarUrl.includes('?')
+            ? avatarUrl + '&' + Math.random()
+            : avatarUrl + '?' + Math.random()
+        })`,
+      }"
     ></div>
   </div>
 </template>
@@ -15,27 +26,24 @@ export default {
   props: {
     avatarUrl: {
       default: () => {
-        return '/profile.png'
-      }
+        return "/profile.png";
+      },
     },
     size: {
-      default: () => 20
-    }
+      default: () => 20,
+    },
   },
   data() {
     return {
-      defaultAvatarUrl: null
-    }
+      defaultAvatarUrl: null,
+    };
   },
   methods: {
     onSelectFile(event) {
-      const file = event.target.files[0]
-      this.defaultAvatarUrl = URL.createObjectURL(file)
-      this.$emit('onSelectFile', file)
-    }
+      const file = event.target.files[0];
+      this.defaultAvatarUrl = URL.createObjectURL(file);
+      this.$emit("onSelectFile", file);
+    },
   },
-  created() {
-    this.defaultAvatarUrl = this.avatarUrl
-  }
-}
+};
 </script>
