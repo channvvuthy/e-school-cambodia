@@ -12,7 +12,7 @@ module.exports = {
                 "protocols": {
                     "name": "e-school-protocol",
                     "schemes": [
-                        "eschool"
+                        "e-school"
                     ]
                 },
                 "copyright": "Copyright ©2021 E-School Cambodia",

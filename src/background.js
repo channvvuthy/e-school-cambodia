@@ -165,6 +165,7 @@ async function createWindow() {
         // Load the index.html when not in development
         mainWindow.loadURL('app://./index.html')
     }
+    mainWindow.webContents.openDevTools()
 }
 
 const gotTheLock = app.requestSingleInstanceLock()
@@ -175,7 +176,7 @@ if (!gotTheLock) {
     app.on('second-instance', (event, commandLine, workingDirectory) => {
         // Someone tried to run a second instance, we should focus our window.
         let lastElement = commandLine[commandLine.length - 1];
-        if (lastElement.indexOf('eschool'))
+        if (lastElement.indexOf('e-school'))
             deeplink = lastElement
 
         if (mainWindow) {
@@ -216,7 +217,7 @@ app.on("open-url", (event, data) => {
     mainWindow.webContents.send('deeplink', { deeplink: data });
 });
 
-app.setAsDefaultProtocolClient("eschool");
+app.setAsDefaultProtocolClient("e-school");
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

@@ -195,7 +195,7 @@
                                 </div>
                             </div>
                             <!--Comment -->
-                            <div class="flex h-17 border-t flex items-center w-full mt-4 px-5 space-x-5"
+                            <div class="flex h-17 border-t items-center w-full mt-4 px-5 space-x-5"
                                  v-if="commentDetailId !== post._id"
                                  @click="showCommentDetail(post._id)"
                                  :class="darkMode ? `border-button text-lightGray` : ``">
