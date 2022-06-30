@@ -432,6 +432,8 @@
   "share_video":"Share video",
   "share_photo_and_status":"Share photo and status",
   "share_video_and_status":"Share video and status",
+  "join":"Exam Now",
+  "upload":"Upload",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",

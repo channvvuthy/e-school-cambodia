@@ -165,7 +165,6 @@ async function createWindow() {
         // Load the index.html when not in development
         mainWindow.loadURL('app://./index.html')
     }
-    mainWindow.webContents.openDevTools()
 }
 
 const gotTheLock = app.requestSingleInstanceLock()
@@ -214,7 +213,10 @@ app.name = "E-SCHOOL"
 // Trigger event 'open-url' on mac OS
 app.on("open-url", (event, data) => {
     event.preventDefault();
-    mainWindow.webContents.send('deeplink', { deeplink: data });
+    setTimeout(() => {
+        mainWindow.webContents.send('deeplink', { deeplink: data });
+    }, 3000)
+   
 });
 
 app.setAsDefaultProtocolClient("e-school");
