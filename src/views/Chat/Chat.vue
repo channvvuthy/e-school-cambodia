@@ -157,7 +157,7 @@
               <div>
                 <div class="font-PoppinsMedium flex space-x-1">
                   <div>
-                    {{ contactName(contact) }}
+                    {{ cutString(contactName(contact),20) }}
                   </div>
                   <span
                     v-if="contact.type == 'ads'"
@@ -180,7 +180,7 @@
                     {{ cutString(contact.ads.text, 20) }}
                   </div>
                   <div v-else-if="contact.type == 'exam'">
-                    វិញ្ញាសារត្រៀមប្រលង
+                      {{ getStatus(contact.exam.exam_status) }}
                   </div>
                   <div v-else>
                     {{ lastChat(contact) }}
@@ -311,7 +311,9 @@
                 <span v-if="!isTypeExam">
                   {{ $t("online") }}
                 </span>
-                <span v-else> វិញ្ញាសារត្រៀមប្រលង </span>
+                <span v-else>
+                  {{ getStatus(this.contact.exam_status) }}  
+                </span>
               </template>
             </div>
           </div>
@@ -1843,6 +1845,17 @@ export default {
       "unblockUser",
       "readMessage",
     ]),
+    getStatus(status){
+      if(status == 0){
+        return this.$i18n.t('exam_start_yet')
+      }
+      if(status == 1){
+        return this.$i18n.t('exam_has_started')
+      }
+      if(status == 2){
+        return this.$i18n.t('exam_has_ended')
+      }
+    },
     userDetail(user) {
       this.$router.push({
         name: "user",
