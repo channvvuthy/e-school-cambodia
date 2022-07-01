@@ -193,7 +193,7 @@ module.exports = {
             serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
             mono: ['Poppins', 'Kantumruy-Regular',],
             khmer_os: ['Poppins', 'Kantumruy-Light', 'Kantumruy-Regular'],
-            PoppinsMedium: ['Poppins-Medium', 'Kantumruy-Light', 'Kantumruy-Regular'],
+            PoppinsMedium: ['Poppins-Medium', 'Kantumruy-Regular'],
 
 
         },
