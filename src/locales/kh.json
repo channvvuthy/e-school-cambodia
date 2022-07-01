@@ -433,8 +433,9 @@
   "share_video":"ចែករំលែកវីដេអូ",
   "share_photo_and_status":"ចែករំលែករូបថត និងស្ថានភាព",
   "share_video_and_status":"ចែករំលែកវីដេអូ និងស្ថានភាព",
-  "join":"ចូលប្រលង",
+  "join":"ចាប់ផ្តើម",
   "upload":"បញ្ជូន",
+  "expired":"ផុតកំណត់",
   "actions": {
     "delete": "លុប",
     "edit": "កែ",
