@@ -230,7 +230,7 @@
                 <div class="loading"></div>
               </div>
               <div class="font-PoppinsMedium" v-else>
-                {{ countDownTime(examMilliseconds,'expired') }}
+                {{ countDownTime(examMilliseconds, 'expired') }}
               </div>
             </div>
           </div>
@@ -536,12 +536,14 @@
                 </template>
                 <!-- Photo -->
                 <template v-if="message.content.type === 3">
+
                   <div :class="
                     auth === sender(message)
                       ? `flex justify-end`
                       : `flex justify-start`
                   " class="items-center relative mb-2">
-                    <div class="
+                    <div v-if="!isTypeExam">
+                      <div class="
                         h-13
                         w-13
                         rounded-full
@@ -552,6 +554,7 @@
                       " :style="{
                         backgroundImage: `url(${senderPhoto(message)})`,
                       }" v-if="auth !== sender(message)"></div>
+                    </div>
                     <div>
                       <div class="flex items-center mb-2" v-if="auth === sender(message)">
                         <div :class="darkMode ? `text-gray-500` : `text-gray-700`" class="text-xs whitespace-nowrap">
@@ -653,7 +656,6 @@
                           ? `bg-button text-gray-300`
                           : `bg-white e-shadow`
                       " @click="readPdf(message.content.file.url)" class="
-                          border-4 border-red-50
                           cursor-pointer
                           px-5
                           py-2
@@ -1597,7 +1599,7 @@ export default {
         if (!this.isCanExam) {
           return;
         }
-        
+
         contact = contact.exam;
         this.isTyping = false;
         this.active = index;
