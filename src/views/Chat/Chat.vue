@@ -1317,7 +1317,7 @@
                   font-PoppinsMedium
                 "
               >
-                {{ $t("upload") }}
+                {{ $t("submit") }}
               </button>
               <input
                 type="file"
@@ -1682,6 +1682,7 @@ import Modal from "@/components/Modal";
 import LoadingWhite from "@/components/LoadingWhite";
 import Dot from "./components/Dot.vue";
 import "./style.css";
+
 
 Vue.use(
   new VueSocketIO({
