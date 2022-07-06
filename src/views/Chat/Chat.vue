@@ -212,7 +212,10 @@
                     <div class="loading"></div>
                   </div>
                   <div class="font-PoppinsMedium" v-else>
-                    {{ countDownTime(milliseconds) }}
+                    <span v-if="contact.exam.exam_status == 2">
+                      {{$t('ended')}}
+                    </span>
+                    <span v-else>{{ countDownTime(milliseconds) }}</span>
                   </div>
                 </div>
               </div>
@@ -1317,7 +1320,7 @@
                   font-PoppinsMedium
                 "
               >
-                {{ $t("submit") }}
+                {{ $t("submit_exam") }}
               </button>
               <input
                 type="file"
@@ -1807,7 +1810,7 @@ export default {
       counting: null,
       isCanExam: false,
       isTypeExam: false,
-      isExpired: false,
+      isExpired: true,
     };
   },
   computed: {
@@ -2200,6 +2203,8 @@ export default {
               if (this.examMilliseconds <= 0) {
                 this.isExpired = true;
                 clearInterval(this.startingExam);
+              }else{
+                this.isExpired = false
               }
             }, 1000);
           }
@@ -2514,6 +2519,7 @@ export default {
       document.getElementById("message-sound").play();
     },
     showReply(message) {
+      message.type = this.contact.type
       this.chatText = message.content.text;
       if (message.content.file != undefined) {
         this.fileUrl = message.content.file.url;
