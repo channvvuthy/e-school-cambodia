@@ -79,8 +79,12 @@ export default {
         gettingMorePlaylist(state, payload) {
             if (payload.length) {
                 for (let i = 0; i < payload.length; i++) {
-                    state.playlist.list.push(payload[i]);
+                    const index = state.playlist.list.findIndex(object => object._id === payload[i]._id);
+                    if (index === -1) {
+                        state.playlist.list.push(payload[i]);
+                    }
                 }
+
             }
 
         }

@@ -25,7 +25,7 @@ module.exports = {
                 },
                 "mac": {
                     "category": "public.app-category.education",
-                    "target": ["pkg", "dmg"],
+                    "target": ["pkg"],
                     "icon": "build/icons/icon.icns",
                 },
                 "win": {

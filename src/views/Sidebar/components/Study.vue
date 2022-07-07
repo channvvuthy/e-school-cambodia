@@ -38,17 +38,6 @@
                         {{$t('1109')}}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center" @click="goTo('download')">
-                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"  :class="activeClass(`download`) + ' ' + activeClass(`download-detail`)">
-                        <div>
-                            <DownloadIcon :size="24" fill="#FFFFFF" v-if="$route.name === `download` || $route.name === `download-detail`"></DownloadIcon>
-                            <DownloadIcon :size="24" :fill="darkMode?`#FFFFFF`:`#4A4A4A`" v-else></DownloadIcon>
-                        </div>
-                    </div>
-                    <div class="text-xs whitespace-nowrap mt-3">
-                        {{$t('1110')}}
-                    </div>
-                </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('network')">
                     <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full" :class="activeClass(`network`)">
                         <div>
