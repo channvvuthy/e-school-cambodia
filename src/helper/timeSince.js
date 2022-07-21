@@ -111,6 +111,7 @@ function timeSince(timeStamp) {
     if (secondsPast > 172800) { // After two days
         let timeString;
 
+
         if (secondsPast <= 604800)
             timeString = formatDate(timeStamp, "dddd") + " at " + formatDate(timeStamp, "h:mm TT") // with in a week
         else if (now.getFullYear() > timeStamp.getFullYear())
