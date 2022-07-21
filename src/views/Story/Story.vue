@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="text-base font-PoppinsMedium" :class="darkMode?'text-white':''">
-                    <span class="uppercase">{{ $t('2003') }}</span>
+                    <span class="uppercase">{{ $t('2003') }}​​ </span>
                     <span>{{ token ? stProfile.first_name + " " + stProfile.last_name : $t('1127') }}</span>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                 <div class="w-full overflow-x-auto flex overflow-y-hidden box-list-story" @scroll="onScroll">
                     <div class="text-center text-sm mr-5 relative">
                         <div
-                                class="box-story relative h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center
+                                class="box-story h-36 w-24 rounded-lg cursor-pointer flex flex-col items-center
                                 justify-center relative">
                             <div
                                     @click="goToGallery('gallery')"
@@ -31,7 +31,7 @@
                                     class="h-full w-full bg-cover bg-center rounded-lg"
                                     v-if="currentStory.hasOwnProperty('photo')"></div>
                             <div
-                                    @click="addStory()"
+                                    @click="goToGallery('gallery')"
                                     v-else
                                     class="h-full w-full bg-cover bg-center rounded-lg"
                                     :style="{backgroundImage:`url(${stProfile.photo})`}"></div>
@@ -62,7 +62,10 @@
                         <div
                                 class="box-story relative h-36 bg-black w-24 p bg-center rounded-lg cursor-pointer
                                 flex flex-col items-center justify-center overflow-hidden relative">
-                            <img :src="my_story.photo.url" alt="" :id="my_story._id">
+                            <img
+
+                                    :src="my_story.photo.url?my_story.photo.url:'/poster.png'" alt=""
+                                    :id="my_story._id">
                             <div class="absolute w-full h-full bg-black bg-opacity-30"></div>
                         </div>
                         <p class="mt-3 whitespace-nowrap flex justify-between space-x-4"

@@ -6,7 +6,7 @@
             <div class="md:w-96 2xl:w-100 text-gray-300 bg-secondary rounded-lg flex flex-col justify-between relative"
                  style="height:90%;">
                 <div class="flex justify-between p-5">
-                    <div class="flex items-center">¬
+                    <div class="flex items-center">
                         <div class="w-12 h-12 rounded-full bg-cover mr-3 bg-center"
                              v-if="storyDetail.user && storyDetail.user.photo"
                              :style="{backgroundImage:`url(${storyDetail.user.photo})`}"></div>
@@ -65,7 +65,7 @@
                      class="absolute z-50 left-0 w-full h-full overflow-y-scroll  rounded-xl shadow-md"
                      @scroll="onScroll"
                      v-if="showViewer">
-                    <div class="md:w-96 2xl:w-100 top-0 sticky relative flex justify-between px-3 py-9"
+                    <div class="md:w-96 2xl:w-100 top-0 sticky flex justify-between px-3 py-9"
                          :class="darkMode?`bg-secondary`:`text-black bg-white`">
                         <div class="flex ml-5 text-xs font-semibold items-center">
                             <span><Eye :fill="darkMode?'#ffffff':'#000000'"/></span>
@@ -82,8 +82,9 @@
                         <div v-for="(viewer,index) in storyDetail.viewer" :key="index"
                              class="text-black text-xs font-semibold">
                             <div class="flex items-center mb-5 px-5">
-                                <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center"
+                                <div class="w-12 h-12 rounded-full bg-cover bg-gray-200 mr-5 bg-center cursor-pointer"
                                      v-if="viewer.photo"
+                                     @click="getUser(viewer._id)"
                                      :style="{backgroundImage:`url(${viewer.photo})`}"></div>
                                 <div :class="darkMode?'text-textSecondary':''" v-if="viewer.name">{{ viewer.name }}
                                 </div>
@@ -122,7 +123,7 @@
                              :key="index" class="cursor-pointer"
                              :id="gallery._id"
                              @click="viewImg(gallery,index)">
-                            <img :src="gallery.photo.url" v-if="gallery.photo">
+                            <img :src="gallery.photo.url?gallery.photo.url:'/poster.png'" v-if="gallery.photo">
                         </div>
                     </div>
                 </div>
@@ -189,6 +190,9 @@
         methods: {
             ...mapActions('gallery', ['getGallery']),
             ...mapActions('auth', ['viewStory']),
+            getUser(user_id) {
+                this.$router.push({name: 'user', params: {user_id}})
+            },
             deleteMyStory() {
                 if (this.currentStory.hasOwnProperty('photo')) {
                     if (this.deletedStory.photo.url == this.currentStory.photo.url) {

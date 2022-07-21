@@ -38,6 +38,48 @@ export default {
                 })
             })
         },
+        uploadPdf({commit}, payload) {
+            const conf = {
+                onUploadProgress: function (progressEvent) {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    commit("progress", percentCompleted)
+                }
+            }
+            commit("loading", true)
+            return new Promise((resolve, reject) => {
+                axios.post(config.microserviceUrl + `upload/pdf`, payload, conf).then(res => {
+                    commit("loading", false)
+                    resolve(res.data)
+                }).catch(err => {
+                    commit("loading", false)
+                    if (err.response.status == 504 || err.response.status == 502) {
+                        helper.errorMessage(err.response.status)
+                    }
+                    reject(err)
+                })
+            })
+        },
+        uploadSound({commit}, payload) {
+            const conf = {
+                onUploadProgress: function (progressEvent) {
+                    let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    commit("progress", percentCompleted)
+                }
+            }
+            commit("loading", true)
+            return new Promise((resolve, reject) => {
+                axios.post(config.microserviceUrl + `upload/sound`, payload, conf).then(res => {
+                    commit("loading", false)
+                    resolve(res.data)
+                }).catch(err => {
+                    commit("loading", false)
+                    if (err.response.status == 504 || err.response.status == 502) {
+                        helper.errorMessage(err.response.status)
+                    }
+                    reject(err)
+                })
+            })
+        },
         multiUpload({commit}, payload) {
             commit("loading", true)
             const conf = {

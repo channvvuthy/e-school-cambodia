@@ -27,10 +27,6 @@
                      :class="darkMode ? `bg-button`: `bg-softGray`">
                     <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"/>
                 </div>
-                <div class="w-10 h-10 rounded-full flex items-center justify-center  text-sm fot-semibold cursor-pointer"
-                     :class="darkMode ? `bg-button text-lightGray `: `bg-softGray text-primary`">
-                    Live
-                </div>
             </div>
             <template v-if="isPost">
                 <CreatePost
@@ -199,7 +195,7 @@
                                 </div>
                             </div>
                             <!--Comment -->
-                            <div class="flex h-17 border-t flex items-center w-full mt-4 px-5 space-x-5"
+                            <div class="flex h-17 border-t items-center w-full mt-4 px-5 space-x-5"
                                  v-if="commentDetailId !== post._id"
                                  @click="showCommentDetail(post._id)"
                                  :class="darkMode ? `border-button text-lightGray` : ``">
@@ -648,7 +644,7 @@
                                 copyText.select()
                                 copyText.setSelectionRange(0, 99999)
                                 document.execCommand("copy")
-                                helper.success("Copied")
+                                helper.success("0013")
                                 this.actionId = null
                             }, 100)
                         }

@@ -12,7 +12,7 @@ module.exports = {
                 "protocols": {
                     "name": "e-school-protocol",
                     "schemes": [
-                        "eschool"
+                        "e-school"
                     ]
                 },
                 "copyright": "Copyright ©2021 E-School Cambodia",
@@ -25,7 +25,7 @@ module.exports = {
                 },
                 "mac": {
                     "category": "public.app-category.education",
-                    "target": ["pkg", "dmg"],
+                    "target": ["pkg"],
                     "icon": "build/icons/icon.icns",
                 },
                 "win": {

@@ -47,8 +47,14 @@
                          :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
                         <div v-for="(view,index) in favoritedVideo"
                              :id="view._id"
-                             class="cursor-pointer rounded overflow-hidden"
+                             class="cursor-pointer rounded overflow-hidden relative"
                              :key="index" :class="darkMode?'text-textSecondary':'bg-white shadow'">
+                            <div class="absolute top-3 left-3 z-50" v-if="view.is_buy">
+                                <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
+                                     :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
+                                    <span>✓</span>
+                                </div>
+                            </div>
                             <div class="relative" @mouseover="hideAndShowDuration(view._id)"
                                  @mouseleave="hideAndShowDuration('')" @click="viewVideo(view)">
                                 <div class="absolute z-30 w-full h-full flex justify-center items-center">

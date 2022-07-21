@@ -11,11 +11,11 @@
             <div v-for="(st, index) in story" :key="index" class="cursor-pointer relative rounded-xl overflow-hidden"
                  @click="getStoryDetail(st, index)">
               <div
-                  class="bg-cover bg-center w-11 h-11 border-3 rounded-full bg-cover absolute z-40 left-2 top-2 flex justify-center items-center bg-white cursor-pointer"
+                  class="bg-cover bg-center w-11 h-11 border-3 rounded-full absolute z-40 left-2 top-2 flex justify-center items-center bg-white cursor-pointer"
                   :class="darkMode?`border-fb`:`border-fb`"
                   :style="{backgroundImage:`url(${st.user.photo})`}">
               </div>
-              <div class="h-64 w-full bg-cover bg-center" :style="{backgroundImage:`url(${st.photo.url})`}"></div>
+              <div class="h-64 w-full bg-cover bg-center" :style="{backgroundImage:`url(${st.photo.url || `/poster.png`})`}"></div>
               <div
                   class="mt-3 whitespace-nowrap absolute bottom-0 left-0 w-full bg-gradient-to-t from-black h-full text-white flex justify-start items-end text-sm p-3"
                   :title="st.user.name">

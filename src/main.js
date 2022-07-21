@@ -27,7 +27,7 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(function (response) {
-    if (response.data && response.data.status === 1) {
+    if (response.data && response.data.status == 1) {
         helper.errorMessage(response.data.msg)
     }
     return response;

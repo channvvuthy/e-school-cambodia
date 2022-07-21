@@ -52,6 +52,11 @@ const routes = [
         component: Home,
     },
     {
+        path:"/refr",
+        name:"refr",
+        component:()=>import('../views/refreshHome.vue')
+    },
+    {
         path: '/my-course',
         name: 'my-course',
         component: MyCourse,

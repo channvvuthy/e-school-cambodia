@@ -31,7 +31,8 @@ const kFormatter = (num) => {
     if (!num) {
         return 0
     }
-    return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k' : Math.sign(num) * Math.abs(num)
+    return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) + 'k'
+        : Math.sign(num) * Math.abs(num)
 };
 // Get device id
 const deviceId = () => {
@@ -127,6 +128,15 @@ const linkify = (inputText) => {
     return replacedText
 }
 
+const dataURLtoBlob = (dataurl) =>{
+    let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});
+}
+
 const khmerNumber = (str) => {
     let string = str.toString()
     return string.replace(/1/g, "១")
@@ -157,6 +167,7 @@ export default {
     success,
     osVersion,
     khmerNumber,
-    linkify
+    linkify,
+    dataURLtoBlob
 
 }
