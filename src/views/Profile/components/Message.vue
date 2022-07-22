@@ -36,13 +36,11 @@
                 }
             },
             size: {
-                type: Number,
                 default: () => {
                     return 60;
                 }
             },
             hide: {
-                type: Boolean,
                 default: function () {
                     return false
                 }

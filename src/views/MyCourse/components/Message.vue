@@ -46,19 +46,16 @@
         name: "Message",
         props: {
             message: {
-                type: String,
                 default: () => {
                     return 'សូមធ្វើការទិញថ្នាក់នេះជាមុនសិន'
                 }
             },
             size: {
-                type: Number,
                 default: () => {
                     return 60;
                 }
             },
             hide: {
-                type: Boolean,
                 default: function () {
                     return false
                 }

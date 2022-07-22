@@ -27,13 +27,11 @@
         name:"ForgotPassword",
         props:{
             message:{
-                type:String,
                 default:() =>{
                     return null
                 }
             },
             size:{
-                type:Number,
                 default:()=>{
                     return 60;
                 }

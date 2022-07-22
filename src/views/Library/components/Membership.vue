@@ -30,7 +30,7 @@
               <div class="text-base">{{ pk.title }}</div>
               <div class="flex mt-1 items-center justify-between w-full">
                 <div class="font-extralight">
-                  <span> {{ pk.total_book }} {{ $t('2202') }}{{ plurals(pk.total_book) }}</span>
+                  <span> {{ pk.total_item }} {{ $t('2202') }}{{ plurals(pk.total_item) }}</span>
                 </div>
                 <div class="h-3 w-0 border-l border-white mx-4"></div>
                 <div class="font-extralight">

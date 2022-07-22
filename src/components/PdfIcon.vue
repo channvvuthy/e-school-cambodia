@@ -23,7 +23,7 @@
             },
             size:{
                 default: () => {
-                    return 35
+                    return 42
                 }
             }
         },

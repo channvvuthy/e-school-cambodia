@@ -1,17 +1,17 @@
 <template>
   <div>
     <ViewBook
-            v-if="preview" @close="close"
-            @readingBook="readingBook"
-            @listenAudio="listenAudio"
-            @listVideo="listVideo"
-            @shopNow="shopNow"
-            :is_favorite="true"/>
+        v-if="preview" @close="close"
+        @readingBook="readingBook"
+        @listenAudio="listenAudio"
+        @listVideo="listVideo"
+        @shopNow="shopNow"
+        :is_favorite="true"/>
     <ReadingBook
-            v-if="reading"
-            @closeReading="closeReading"/>
+        v-if="reading"
+        @closeReading="closeReading"/>
     <LibraryAudio
-            v-if="showAudio"/>
+        v-if="showAudio"/>
     <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
       <div class="px-5 pt-7 shadow-md"
            :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
@@ -134,9 +134,9 @@
       </div>
     </div>
     <BuyMsg
-            v-if="showMsg"
-            :msg="msg" @cancelModal="() => {this.showMsg = false}"
-            @yes="yes"/>
+        v-if="showMsg"
+        :msg="msg" @cancelModal="() => {this.showMsg = false}"
+        @yes="yes"/>
   </div>
 </template>
 <script>

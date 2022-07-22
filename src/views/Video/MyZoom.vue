@@ -1,21 +1,21 @@
 <template>
   <div class="my-course font-siemreap">
     <div class="px-5 mt-5 h-screen overflow-y-scroll pb-40" @scroll="onScroll">
-      <div v-if="loadingCourse " class="flex justify-center items-center h-screen relative -top-5">
+      <div v-if="loadingMyZoom" class="flex justify-center items-center h-screen relative -top-5">
         <h1 class="text-sm font-semibold font-khmer_os relative -top-32">
           <loading></loading>
         </h1>
       </div>
-      <div class="flex justify-center items-center  h-screen pb-40" v-if="!isEmpty(myCourses.list)">
+      <div class="flex justify-center items-center  h-screen pb-40" v-if="!isEmpty(zooms.list)">
         <div class="text-center relative">
           <Empty></Empty>
         </div>
       </div>
-      <div class="mb-5" v-if="myCourses.package && myCourses.package.length">
-        <Pkg :packages="myCourses.package"></Pkg>
+      <div class="mb-5" v-if="zooms.package && zooms.package.length">
+        <Pkg :packages="zooms.package"></Pkg>
       </div>
       <div class="grid gap-4" :class="isHide?`md:grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-4`">
-        <div v-for="(video, index) in myCourses.list" :key="index">
+        <div v-for="(video, index) in zooms.list" :key="index">
           <div class="relative rounded-xl cursor-pointer my-course-view"
                :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
                :style="minHeight?{minHeight:`${minHeight}px`}:{}">
@@ -36,9 +36,8 @@
               <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover"
                      :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
-                <div class="text-sm font-semibold mt-4">{{ video.teacher.name }} ({{
-                    cutString(video.title, 30)
-                  }})
+                <div class="text-sm font-semibold mt-4">
+                  {{ video.teacher.name }}({{cutString(video.title, 30)}})
                 </div>
                 <div class="flex items-end w-full justify-between mt-4 text-center text-sm">
                   <div class="cursor-pointer">
@@ -48,7 +47,7 @@
                     </div>
                   </div>
                   <div class="cursor-pointer">
-                    <PdfIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
+                    <PdfIcon :fill="darkMode?`#909090`:`#000000`"/>
                     <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
                       {{ video.total_pdf ? video.total_pdf : 0 }}
                     </div>
@@ -80,7 +79,8 @@
               <div class="flex justify-between items-center w-full relative top-5">
                 <div class="text-sm">{{ $t('date_expired') }} : <span>{{ formatDate(video.deadline) }}</span></div>
                 <div @click="addToCart(video)">
-                  <CartIcon :fill="darkMode?`#909090`:`#000000`" v-if="!video.is_in_cart"></CartIcon>
+                  <CartIcon
+                      :fill="darkMode?`#909090`:`#000000`" v-if="!video.is_in_cart"/>
                 </div>
               </div>
 
@@ -89,10 +89,14 @@
         </div>
       </div>
     </div>
-    <Cart v-if="showCart" @closeCart="() =>{this.showCart = false}" @showInvoice="showInvoice($event)"></Cart>
+    <Cart v-if="showCart"
+          @closeCart="() =>{this.showCart = false}"
+          @showInvoice="showInvoice($event)"/>
     <!-- Receipt info -->
-    <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail"
-                 @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
+    <ReceiptInfo
+        v-if="showReceipt"
+        :receiptDetail="receiptDetail"
+        @closeInfo="() =>{this.showReceipt = false}"/>
   </div>
 </template>
 
@@ -115,7 +119,6 @@ import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
 import Pkg from "@/views/MyCourse/Pkg";
 
 export default {
-  name: "MyCourse",
   components: {
     Loading,
     eHeader,
@@ -139,7 +142,6 @@ export default {
       active: 1,
       showView: false,
       showReading: false,
-      loading: false,
       bookReading: "",
       bookDetail: {},
       minHeight: 0,
@@ -148,13 +150,14 @@ export default {
       receiptDetail: {},
       page: 1,
       enableScroll: true,
+      loadingMyZoom: false,
 
 
     }
   },
 
   computed: {
-    ...mapState('course', ['myCourses', 'loadingCourse']),
+    ...mapState('zoom', ['zooms']),
     ...mapState("setting", ["darkMode", "isHide"]),
     query() {
       return this.$store.state.course.s
@@ -169,6 +172,7 @@ export default {
   },
   methods: {
     ...mapActions('course', ['myCourseList', 'filterByQueryString', 'readBook', 'setLessonTitle']),
+    ...mapActions('zoom', ['getMyZoom']),
     ...mapActions('cart', ['addCart', 'getCart']),
     handleResize() {
       this.window.width = window.innerWidth;
@@ -228,9 +232,9 @@ export default {
         payload.p = this.page
 
         if (this.enableScroll) {
-          this.myCourseList(payload).then(response => {
-            if (response.data.msg == undefined)
-              if (response.data.data.list.length <= 0)
+          this.getMyZoom(payload).then(res => {
+            if (res.data.msg == undefined)
+              if (res.data.list.length <= 0)
                 this.enableScroll = false
 
           })
@@ -244,20 +248,23 @@ export default {
     })
   },
   created() {
+    this.loadingMyZoom = true
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
 
-    this.myCourseList({
+    this.getMyZoom({
       p: this.page
+    }).then(()=>{
+      this.loadingMyZoom =false
     })
   },
   watch: {
     query: function () {
-      this.myCourseList(this.active)
+      this.getMyZoom(this.active)
     },
 
     gradeID: function () {
-      this.myCourseList(this.active)
+      this.getMyZoom(this.active)
     }
   }
 }

@@ -37,13 +37,11 @@
         },
         props: {
             message: {
-                type: String,
                 default: () => {
                     return 'តើអ្នកចង់លុបវាមែនទេ?'
                 }
             },
             size: {
-                type: Number,
                 default: () => {
                     return 60;
                 }

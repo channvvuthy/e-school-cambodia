@@ -788,6 +788,7 @@ export default {
       this.selectedBackground(index);
     },
     removePicture(indexed) {
+      this.$refs["multiple-photo"].value = null
       if (this.isEdit) {
         if (this.editPost.photo[indexed] && this.editPost.photo[indexed].name) {
           this.selectedFiles = this.selectedFiles.filter(
@@ -1038,10 +1039,13 @@ export default {
         !this.videoPreview
       ) {
         this.postSocial(this.payload).then((res) => {
-          if (res.caption) {
-            helper.success("0012");
-          }
           this.loading = false;
+
+          if (res == undefined) {
+            return
+          }
+          helper.success("0012");
+
           this.resetCaption();
           this.closeCreate();
         });

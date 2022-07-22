@@ -40,7 +40,6 @@
                 }
             },
             size: {
-                type: Number,
                 default: () => {
                     return 60;
                 }

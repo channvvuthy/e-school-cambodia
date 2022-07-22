@@ -1,6 +1,6 @@
 <template>
     <div class="fixed flex items-center justify-center z-50 w-full h-full top-0 left-0 bg-black bg-opacity-90">
-            <div class="w-2/5">
+            <div class="w-3/4">
                 <div @click="closeTermAndCondition"  :class="darkMode?`bg-secondary text-gray-400`:`bg-gray-100 text-youtube border-t`" class="p-5 rounded-xl relative shadow-md">
                     <div class="absolute top-3 right-3 cursor-pointer" @click="closeTermAndCondition"> <CloseIcon :fill="darkMode?`#D1D5DB`:`#000000`" :width="20"></CloseIcon></div>
                     <div v-if="loadingTerm" class="p-5 flex items-center justify-center h-85">
@@ -12,7 +12,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </template>
 
 <script>

@@ -25,13 +25,11 @@ export default {
   components: {CloseIcon},
   props: {
     message: {
-      type: String,
       default: () => {
         return 'សូមធ្វើការទិញថ្នាក់នេះជាមុនសិន'
       }
     },
     hide: {
-      type: Boolean,
       default: function () {
         return false
       }
