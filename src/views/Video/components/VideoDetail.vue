@@ -90,7 +90,7 @@
                 >
                   <div v-if="feed.caption.length > 100">
                     <span class="less" @click="seeMore">
-                      {{ cutString(feed.caption, 100) }}
+                      <span v-html="linkify(cutString(feed.caption, 100))"></span>
                       <span
                         class="capitalize cursor-pointer"
                         :class="darkMode ? `text-gray-300` : `text-primary`"
@@ -98,13 +98,9 @@
                         {{ $t("see_more") }}
                       </span>
                     </span>
-                    <span class="more hidden">
-                      {{ feed.caption }}
-                    </span>
+                    <span class="more hidden" v-html="linkify(feed.caption)"></span>
                   </div>
-                  <div v-else>
-                    {{ feed.caption }}
-                  </div>
+                  <div v-else v-html="linkify(feed.caption)"></div>
                 </div>
               </div>
 
@@ -492,6 +488,9 @@ export default {
           user_id: user._id,
         },
       });
+    },
+    linkify(text){
+      return helper.linkify(text)
     },
     formatDate(day) {
       let currentDate = new Date();

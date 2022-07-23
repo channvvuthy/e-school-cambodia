@@ -188,7 +188,7 @@
                 >
                   <div v-if="post.caption.length > 100">
                     <span class="less" @click="seeMore">
-                      {{ cutString(post.caption, 100) }}
+                      <span v-html="linkify(cutString(post.caption, 100) )"></span>
                       <span
                           class="capitalize cursor-pointer"
                           :class="darkMode ? `text-gray-300` : `text-primary`"
@@ -196,13 +196,9 @@
                         {{ $t("see_more") }}
                       </span>
                     </span>
-                    <span class="more hidden">
-                      {{ post.caption }}
-                    </span>
+                    <span class="more hidden" v-html="linkify(post.caption)"></span>
                   </div>
-                  <div v-else>
-                    {{ post.caption }}
-                  </div>
+                  <div v-else v-html="linkify(post.caption)"></div>
                 </div>
               </div>
               <div
@@ -637,6 +633,9 @@ export default {
     },
     reply(comment) {
       this.commentId = comment._id;
+    },
+    linkify(text){
+      return helper.linkify(text)
     },
     postComment() {
       this.comment.id = this.replyId ? this.commentId : this.post._id;
