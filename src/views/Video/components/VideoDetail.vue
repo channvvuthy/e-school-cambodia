@@ -1,7 +1,12 @@
 <template>
   <div>
     <Modal @dismiss="dismiss($event)" width="w-11/12" radius="none">
-      <div class="flex justify-between" style="height: 40rem">
+      <div class="flex justify-between relative" style="height: 40rem">
+        <div
+            @click="dismiss($event)"
+            class="rounded-full w-8 h-8 shadow bg-primary -right-3 -top-5 absolute flex items-center justify-center cursor-pointer">
+          <CloseIcon fill="#dadada"/>
+        </div>
         <div class="w-3/5 p-5 relative">
           <div v-if="loadingNext">
             <div
@@ -384,6 +389,7 @@ import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import moment from "moment";
 import SendMessageIcon from "@/components/SendMessageIcon";
 import Cropper from "@/views/Component/Cropper/Cropper";
+import CloseIcon from "../../../components/CloseIcon";
 const fac = new FastAverageColor();
 export default {
   name: "PostDetail",
@@ -396,6 +402,7 @@ export default {
   },
   mixins: [mode],
   components: {
+    CloseIcon,
     SendMessageIcon,
     MediaPlayer,
     StickerView,
