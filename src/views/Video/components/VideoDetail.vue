@@ -3,11 +3,25 @@
     <Modal @dismiss="dismiss($event)" width="w-11/12" radius="none">
       <div class="flex justify-between relative" style="height: 40rem">
         <div
-            @click="dismiss($event)"
-            class="rounded-full w-8 h-8 shadow bg-primary -right-3 -top-5 absolute flex items-center justify-center cursor-pointer">
-          <CloseIcon fill="#dadada"/>
+          @click="dismiss($event)"
+          class="
+            rounded-full
+            w-8
+            h-8
+            shadow
+            bg-primary
+            -right-3
+            -top-5
+            absolute
+            flex
+            items-center
+            justify-center
+            cursor-pointer
+          "
+        >
+          <CloseIcon fill="#dadada" />
         </div>
-        <div class="w-3/5 p-5 relative">
+        <div class="w-3/5 p-5 relative overflow-hidden h-full">
           <div v-if="loadingNext">
             <div
               class="
@@ -491,14 +505,23 @@ export default {
       }
     },
     ended(data) {
-      this.loadingNext = true;
-      this.payload.p++;
-      this.payload.id = data._id;
-      this.viewVideo(this.payload).then((res) => {
-        this.feed = res.next_video;
+      try {
+        this.loadingNext = true;
+        this.payload.p++;
+        this.payload.id = data._id;
+        this.viewVideo(this.payload).then((res) => {
+          if(res.next_video == undefined){
+            this.feed = res.video
+          }else{
+            this.feed = res.next_video;
+          }
+          
+          this.loadingNext = false;
+          this.getComment();
+        });
+      } catch (e) {
         this.loadingNext = false;
-        this.getComment();
-      });
+      }
     },
     setParentColor(postIndex) {
       let interval = setInterval(() => {
@@ -647,15 +670,19 @@ export default {
       this.$emit("dismiss", true);
     },
     getComment() {
-      this.loading = true;
-      this.$store
-        .dispatch("social/getComment", {
-          id: this.feed._id,
-          type: this.feed.type,
-        })
-        .then((res) => {
-          this.loading = false;
-        });
+      try {
+        this.loading = true;
+        this.$store
+          .dispatch("social/getComment", {
+            id: this.feed._id,
+            type: this.feed.type,
+          })
+          .then((res) => {
+            this.loading = false;
+          });
+      } catch (e) {
+        this.loading = false;
+      }
     },
   },
   created() {

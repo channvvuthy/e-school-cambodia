@@ -103,7 +103,7 @@
               :class="original ? `flex items-center justify-center` : ``"
               v-for="(photo, index) in post.photo"
               :key="index"
-              v-if="index === currentSlide"
+              v-if="index == currentSlide"
           >
             {{ setParentColor(`postDetail${index}`) }}
             <img
