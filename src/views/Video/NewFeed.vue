@@ -386,7 +386,24 @@
           @yes="()=>{this.$router.push('/login')}"
           @cancelModal="() => {
                         this.isLoginRequire = false;
-                    }"/>
+          }"/>
+      <Modal v-if="isTerm">
+        <div class="py-1 px-1 relative h-100 relative">
+          <div
+              @click="()=>{this.isTerm = false}"
+              class="rounded-full w-8 h-8 shadow bg-primary -right-3 -top-5 absolute flex items-center justify-center cursor-pointer">
+            <CloseIcon fill="#dadada"/>
+          </div>
+          <div class="w-56 h-7 bg-white absolute left-4 top-1"></div>
+          <div class="w-full h-8 bg-transparent absolute left-0 top-0"></div>
+          <iframe src="https://admin.e-schoolcambodia.com/page/social_privacy" class="h-full w-full"></iframe>
+        </div>
+        <div class="flex justify-end items-center p-5 font-PoppinsMedium">
+          <button class="bg-primary text-white rounded-md px-10 py-3" @click="acceptTerm()">
+            {{$t('accept')}}
+          </button>
+        </div>
+      </Modal>
     </div>
   </div>
 </template>
@@ -428,6 +445,8 @@ import ChatIcon from "@/components/ChatIcon";
 import TestIcon from "@/components/TestIcon";
 import BuyMsg from "@/views/Component/BuyMsg";
 import timeSince from "../../helper/timeSince";
+import Modal from "../../components/Modal";
+import CloseIcon from "../../components/CloseIcon";
 
 Vue.use(VueObserveVisibility)
 
@@ -441,6 +460,7 @@ export default {
     }
   },
   components: {
+    CloseIcon,
     CartIcon,
     CertificateIcon,
     YoutubeIcon,
@@ -467,11 +487,13 @@ export default {
     ImageIcon,
     CreatePost,
     Liker,
-    BuyMsg
+    BuyMsg,
+    Modal
   },
   mixins: [mode],
   data() {
     return {
+      isTerm: false,
       isLiker: false,
       isLoginRequire: false,
       link: null,
@@ -755,7 +777,16 @@ export default {
       this.isPost = false
       this.getPost()
     },
+    acceptTerm(){
+      localStorage.setItem("accept_term", 1);
+      this.isTerm = false;
+      this.createPost()
+    },
     createPost() {
+      if(localStorage.getItem("accept_term") != 1){
+        this.isTerm = true;
+        return;
+      }
       this.isPost = true
     },
     getPost() {
