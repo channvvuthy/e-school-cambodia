@@ -7,7 +7,7 @@
                 </h1>
             </div>
             <div class="relative px-3" v-else>
-                <div v-html="term" class="w-full h-screen overflow-y-scroll pb-40"></div>
+              <iframe src="https://admin.e-schoolcambodia.com/page/social_privacy" class="h-full w-full"></iframe>
             </div>
         </div>
     </div>
