@@ -9,17 +9,18 @@
           </div>
         </div>
         <vue-cropper
-          :autoCropArea="1"
-          ref="cropper"
-          :src="imgSrc"
-          alt="Source Image"
-          @cropend="cropend"
+            :autoCropArea="1"
+            ref="cropper"
+            :src="imgSrc"
+            alt="Source Image"
+            :img-style="{ 'max-height': '600px' }"
+            @cropend="cropend"
         >
         </vue-cropper>
         <div class="flex justify-end">
           <button
-            @click="cropped"
-            class="
+              @click="cropped"
+              class="
               text-white
               outline-none
               bg-primary
@@ -43,7 +44,7 @@ import ModalVue from "../../../components/Modal.vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
 import CloseIcon from "../../../components/CloseIcon.vue";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
   components: {
