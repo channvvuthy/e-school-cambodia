@@ -44,7 +44,7 @@
                         <Empty></Empty>
                     </div>
                     <div class="grid gap-5"
-                         :class="isHide?'md:grid-cols-4 2xl:grid-cols-5':'md:grid-cols-3 2xl:grid-cols-4'">
+                         :class="isHide?'md:grid-cols-4 2xl:grid-cols-4':'md:grid-cols-3 2xl:grid-cols-4'">
                         <div v-for="(view,index) in favoritedVideo"
                              :id="view._id"
                              class="cursor-pointer rounded overflow-hidden relative"

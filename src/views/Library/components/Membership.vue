@@ -24,7 +24,8 @@
                 <span>✓</span>
               </div>
             </div>
-            <div class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer"
+            <div
+                class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer"
                  @click="showConfirm(pk)"></div>
             <div class="px-5 py-3 text-white relative z-50 w-full">
               <div class="text-base">{{ pk.title }}</div>
@@ -48,8 +49,10 @@
                   </div>
                 </div>
                 <div class="flex-1 flex justify-end">
-                  <span class="cursor-pointer" @click="addToCart(pk)" :id="pk._id">
-                      <CartIcon fill="#FFFFFF"></CartIcon>
+                  <span class="cursor-pointer"
+                        v-if="pk.price.year"
+                        @click="addToCart(pk)" :id="pk._id">
+                      <CartIcon fill="#FFFFFF"/>
                   </span>
                 </div>
               </div>
@@ -59,11 +62,16 @@
 
       </vue-horizontal>
     </div>
-    <BuyMsg v-if="showMsg" @cancelModal="() => {this.showMsg = false}" @yes="yes()" :msg="msg"></BuyMsg>
+    <BuyMsg v-if="showMsg"
+            @cancelModal="() => {this.showMsg = false}"
+            @yes="yes()" :msg="msg"/>
     <!-- Receipt info -->
-    <ReceiptInfo v-if="showReceipt" :receiptDetail="receiptDetail"
-                 @closeInfo="() =>{this.showReceipt = false}"></ReceiptInfo>
-    <Cart v-if="showCart" @closeCart="() => {this.showCart = false}" @showInvoice="showInvoice($event)"></Cart>
+    <ReceiptInfo v-if="showReceipt"
+                 :receiptDetail="receiptDetail"
+                 @closeInfo="() =>{this.showReceipt = false}"/>
+    <Cart v-if="showCart"
+          @closeCart="() => {this.showCart = false}"
+          @showInvoice="showInvoice($event)"/>
   </div>
 </template>
 <script>
@@ -142,10 +150,10 @@ export default {
       this.showCart = false
     },
     showConfirm(pk) {
-      // this.getDetail(pk)
+      this.getDetail(pk)
     },
     getDetail(pk) {
-      // this.$emit("getDetail", pk)
+      this.$emit("getDetail", pk)
     }
   }
 }

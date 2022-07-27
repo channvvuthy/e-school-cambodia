@@ -36,7 +36,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="cursor-pointer" @click="getMyQr()">
+                <div class="cursor-pointer" @click="getMyQr()" v-if="token">
                     <div>
                         <QRIcon/>
                     </div>

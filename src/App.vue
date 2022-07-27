@@ -417,4 +417,29 @@ export default {
     z-index: 40;
   }
 }
+.liker-6 {
+  .circle-4 {
+    right: -1rem;
+    z-index: 10;
+  }
+  .circle-3 {
+    right: -2rem;
+    z-index: 20;
+  }
+
+  .circle-2 {
+    right: -3rem;
+    z-index: 30;
+  }
+
+  .circle-1 {
+    right: -4rem;
+    z-index: 40;
+  }
+
+  .circle-0 {
+    right: -5rem;
+    z-index: 50;
+  }
+}
 </style>

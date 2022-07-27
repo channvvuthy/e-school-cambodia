@@ -175,6 +175,9 @@ export default {
         getStory({commit}, page = 1) {
             commit("loadingStory", true)
             return new Promise((resolve, reject) => {
+                if (page == 1) {
+                    page = "";
+                }
                 axios.get(config.apiUrl + `story?p=${page}`).then(response => {
                     commit("loadingStory", false);
                     if (page > 1) {

@@ -181,7 +181,7 @@
                       v-if="post.liker && post.liker.length">
                     <div
                         @click="showLiker(post)"
-                        v-if="index < 6"
+                        v-if="index <= 4"
                         :title="liker.name"
                         v-for="(liker, index) in post.liker"
                         :class="`circle-${index} ${likerClass()}`"

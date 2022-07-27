@@ -46,7 +46,7 @@
                         <BorderBottom :bg="darkMode?`bg-white`:`bg-primary`"/>
                     </template>
                 </div>
-                <template v-if="token">
+                <template>
                     <div class="flex flex-col justify-center items-center cursor-pointer" @click="goTo('partner')">
                         <div v-if="$route.name === 'partner'">
                             <PartnershipFillIcon

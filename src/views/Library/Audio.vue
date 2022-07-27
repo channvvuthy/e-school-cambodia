@@ -94,9 +94,11 @@
                          :class="darkMode?`border-button`:``" v-for="(ad, index) in details.list" :key="index"
                          @click="selectingAudio(ad,index)">
                         <div class="flex items-center">
-                            <div class="h-10 w-10 rounded-full flex justify-center items-center"
-                                 :class="darkMode?`bg-pass`:`bg-primary`">
-                                <HeadphoneIcon fill="#ffffff" :size="20"/>
+                            <div class="h-10 w-10"
+                                 >
+                                <div class="h-10 w-10 rounded-full rounded-full flex justify-center items-center" :class="darkMode?`bg-pass`:`bg-primary`">
+                                  <HeadphoneIcon fill="#ffffff" :size="20"/>
+                                </div>
                             </div>
                             <div class="ml-5">{{ ad.title }}</div>
                         </div>

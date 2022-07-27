@@ -66,7 +66,7 @@
           <Empty/>
         </div>
         <div class="grid gap-6"
-             :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-4 2xl:grid-cols-6`">
+             :class="type != `sound`?`${isHide?`md:grid-cols-3 2xl:grid-cols-4`:`md:grid-cols-2 2xl:grid-cols-3`}`:`md:grid-cols-2`">
           <div v-for="(book, index) in libraries.list" :key="index">
             <!-- Book & Video -->
             <template v-if="type != 'sound'">
@@ -97,34 +97,28 @@
               </div>
             </template>
             <template v-else>
-              <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white`"
-                   class="rounded-xl overflow-hidden shadow-md pb-3 relative">
-                <div class="absolute top-2 left-2" v-if="book.is_new">
-                  <NewIcon></NewIcon>
-                </div>
-                <div class="absolute top-2 left-2" v-if="book.is_buy">
-                  <div class="h-7 w-7 rounded-full flex justify-center items-center text-white text-base"
-                       :class="darkMode?`bg-heart`:`bg-primary border border-textSecondary`">&#10003;
+              <div class="flex rounded-xl shadow p-4" :class="darkMode?`bg-secondary text-gray-300`:`bg-white`">
+                <img :src="book.thumbnail" class="rounded-xl max-h-36 cursor-pointer" @click="getDetail(book)"/>
+
+                <div class="px-3 flex flex-col justify-between">
+                  <div>
+                    <div class="text-sm cursor-pointer" @click="getDetail(book)">
+                      {{ cutString(book.title, 30) }}
+                    </div>
+                    <div v-if="book.des" class="text-xs my-2">{{ cutString(book.des, 150) }}</div>
+                  </div>
+                  <div class="text-xs"><span v-if="book.price.year">{{ $t('1006') }}:</span>
+                    <span
+                        :class="darkMode?``:`text-heart`">{{
+                        book.price.year ? `${book.price.year}$` : `${$t('1007')}`
+                      }}</span>
                   </div>
                 </div>
-                <div class="cursor-pointer" @click="getDetail(book)">
-                  <img :src="book.thumbnail" class="view  m-auto" :style="minHeight?{height:`${minHeight}px`}:{}">
-                </div>
-                <div class="mt-5 px-3">
-                  <div :class="darkMode?`text-white`:``">{{ cutString(book.title, 30) }}</div>
-                  <div class="flex justify-between items-center mt-3 text-xs h-8">
-                    <template v-if="book.price.year">
-                      <div>{{ $t('1006') }}: <span class="font-bold"
-                                                   :class="darkMode?``:`text-heart`">{{ book.price.year }}$</span></div>
-                      <div @click="addToCart(book)" class="cursor-pointer" v-if="book.price.year">
-                        <div v-if="book.is_in_cart === 0">
-                          <CartIcon :fill="darkMode?`#909090`:`#000000`"/>
-                        </div>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div>{{ $t('1007') }}</div>
-                    </template>
+                <div class="flex flex-col justify-end flex-1 items-end">
+                  <div v-if="book.price.year" @click="addToCart(book)" class="cursor-pointer">
+                    <div v-if="!book.is_in_cart">
+                      <CartIcon :fill="darkMode?`#909090`:`#4A4A4A`"/>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -182,7 +176,8 @@ export default {
       isPackage: false,
       packageId: null,
       showMsg: false,
-      msg: "2006"
+      msg: "2006",
+      pk: {},
     }
   },
   computed: {
@@ -248,9 +243,22 @@ export default {
         }
         payload.p = this.page
 
+
         if (this.enableScroll) {
-          this.getLibraryPagination(payload).then(response => {
-            if (response.data.data.list.length <= 0) {
+          if (this.isPackage) {
+            this.getMyPackage({
+              id: this.pk._id,
+              type: this.type,
+              p: this.page
+            }).then(res => {
+              if (res.data.data.list.length <= 0) {
+                this.enableScroll = false
+              }
+            })
+            return
+          }
+          this.getLibraryPagination(payload).then(res => {
+            if (res.data.data.list.length <= 0) {
               this.enableScroll = false
             }
           })
@@ -307,11 +315,15 @@ export default {
       })
     },
     getPackage(pk) {
+      this.enableScroll = true
+      this.page = 1
+      this.pk = pk
       this.isPackage = true
       this.packageId = pk._id
       this.getMyPackage({
         id: pk._id,
-        type: this.type
+        type: this.type,
+        p: this.page
       })
     },
     shopNow() {

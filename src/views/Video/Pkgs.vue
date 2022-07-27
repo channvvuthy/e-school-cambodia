@@ -8,7 +8,7 @@
                 <Loading/>
             </div>
 
-            <div v-else class="grid gap-4" :class="isHide?`grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-5`">
+            <div v-else class="grid gap-4" :class="isHide?`grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-4`">
                 <div v-for="(video, index) in packages.list" :key="index">
                     <div class="relative cursor-pointer view"
                          :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"

@@ -1,15 +1,15 @@
 <template>
   <div>
     <ViewBook
-            v-if="preview" @close="close"
-            @readingBook="readingBook"
-            @listenAudio="listenAudio"
-            @listVideo="listVideo"
-            @shopNow="shopNow"
-            :is_favorite="true"/>
+        v-if="preview" @close="close"
+        @readingBook="readingBook"
+        @listenAudio="listenAudio"
+        @listVideo="listVideo"
+        @shopNow="shopNow"
+        :is_favorite="true"/>
     <ReadingBook
-            v-if="reading"
-            @closeReading="closeReading"/>
+        v-if="reading"
+        @closeReading="closeReading"/>
     <LibraryAudio v-if="showAudio"/>
 
     <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">

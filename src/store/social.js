@@ -98,7 +98,7 @@ export default {
                 state.favorites = state.favorites.filter(item => {
                     if (item._id == payload.id) {
                         item.is_like = 1
-                        item.liker.push(user)
+                        item.liker.unshift(user)
                         item.total.like = parseInt(item.total.like) + 1
                     }
                     return item
@@ -107,7 +107,7 @@ export default {
                 state.social = state.social.filter(item => {
                     if (item._id == payload.id) {
                         item.is_like = 1
-                        item.liker.push(user)
+                        item.liker.unshift(user)
                         item.total.like = parseInt(item.total.like) + 1
                     }
                     return item

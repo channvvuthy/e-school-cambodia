@@ -88,14 +88,8 @@
               left-10
             "
           >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="#abaeb3"
-            >
-              <path d="M24 13h-4v-9h-9v-4h13v13zm-24 11h13v-4h-9v-9h-4v13z"/>
+            <svg aria-label="Select crop" class="_ab6-" color="#ffffff" fill="#ffffff" height="16" role="img" viewBox="0 0 24 24" width="16">
+              <path d="M10 20H4v-6a1 1 0 00-2 0v7a1 1 0 001 1h7a1 1 0 000-2zM20.999 2H14a1 1 0 000 2h5.999v6a1 1 0 002 0V3a1 1 0 00-1-1z"></path>
             </svg>
           </div>
           <div
@@ -109,7 +103,7 @@
             <img
                 :id="`postDetail${index}`"
                 :src="photo.url"
-                :class="original ? `h-full` : `w-full object-cover h-full`"
+                :class="original ? `object-contain h-full w-full` : `w-full object-cover h-full`"
             />
           </div>
           <div
@@ -757,7 +751,6 @@ export default {
   },
   created() {
     this.getComment();
-    this.original = false;
   },
 };
 </script>

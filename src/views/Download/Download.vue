@@ -6,7 +6,7 @@
                 <Empty/>
             </div>
             <div class="flex justify-start font-siemreap h-screen overflow-y-scroll pb-40" v-else>
-                <div class="grid gap-4" :class="isHide?`md:grid-cols-4 2xl:grid-cols-5`:`md:grid-cols-3 2xl:grid-cols-4`">
+                <div class="grid gap-4" :class="isHide?`md:grid-cols-4 2xl:grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-4`">
                     <div class="flex-col mb-5 relative" v-for="(video, key) in downloaded" :key="key">
                         <div :class="darkMode?`bg-secondary text-gray-300`:`bg-white shadow-md`" class="rounded-xl">
                             <div class="relative">

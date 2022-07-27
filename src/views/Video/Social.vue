@@ -334,6 +334,7 @@ import TestIcon from "@/components/TestIcon";
 import BuyMsg from "@/views/Component/BuyMsg";
 import BackMenuIcon from "../../components/BackMenuIcon";
 import Empty from "../Component/Empty";
+import timeSince from "../../helper/timeSince";
 
 Vue.use(VueObserveVisibility)
 
@@ -643,15 +644,7 @@ export default {
       })
     },
     formatDate(day) {
-      let currentDate = new Date()
-      let today = moment(currentDate)
-      let postDay = moment(day)
-      let result = today.diff(postDay, 'days')
-      if (result === 1 || result === 0) {
-        return moment(day).startOf('hour').fromNow()
-      } else {
-        return moment(day).format('LLL')
-      }
+      return timeSince.timeSince(day)
     },
     closeCreate() {
       this.isEdit = false

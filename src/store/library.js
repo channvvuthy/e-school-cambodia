@@ -15,6 +15,11 @@ export default {
         readingPdf: ''
     },
     mutations: {
+        getPackageDetailPaging(state, payload) {
+            for (let i = 0; i < payload.list.length; i++) {
+                state.libraries.list.push(payload.list[i])
+            }
+        },
         setType(state, payload) {
             state.type = payload
         },
@@ -196,12 +201,18 @@ export default {
 
         },
         getMyPackage({commit}, payload) {
-            commit("gettingPackage", true)
+            if (payload.p <= 1) {
+                commit("gettingPackage", true)
+            }
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `library/package?${helper.q(payload)}`).then(response => {
                     resolve(response)
-                    commit("gettingPackage", false)
-                    commit("getPackageDetail", response.data.data)
+                    if (payload.p == undefined || payload.p <= 1) {
+                        commit("gettingPackage", false)
+                        commit("getPackageDetail", response.data.data)
+                    } else {
+                        commit("getPackageDetailPaging", response.data.data)
+                    }
                 }).catch(err => {
                     reject(err)
                     commit("gettingPackage", false)
