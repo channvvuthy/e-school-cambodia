@@ -82,7 +82,7 @@
                         {{ darkMode ? $t('light_mode') : $t('1133') }}
                     </div>
                 </div>
-                <div class="text-center flex flex-col justify-center items-center">
+                <div class="text-center flex flex-col justify-center items-center khmer_os">
                     <div class="flex-col flex justify-center items-center  cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('')"
                          @click="setLocalization(localize==='kh'?'en':'kh')">
