@@ -19,6 +19,10 @@
       <source src="message.mp3" type="audio/mpeg"/>
       Your browser does not support the audio element.
     </audio>
+    <audio controls id="exam-sound" class="absolute" style="z-index: -1">
+      <source src="smartphone.mp3" type="audio/mpeg"/>
+      Your browser does not support the audio element.
+    </audio>
     <div
         class="h-full overflow-y-scroll pb-40"
         :class="darkMode ? `bg-secondary` : `bg-white`"
@@ -46,7 +50,7 @@
         <div
             :class="darkMode ? `bg-button` : `bg-white`"
             class="
-            rounded-md
+            rounded-xl
             overflow-hidden
             e-shadow
             absolute
@@ -192,21 +196,7 @@
               </div>
               <div v-if="contact.type == 'exam'">
                 <div
-                    class="
-                    bg-gradient-to-r
-                    from-indigo-500
-                    via-purple-500
-                    to-pink-500
-                    h-10
-                    flex
-                    items-center
-                    justify-center
-                    text-white
-                    rounded-full
-                    w-24
-                    cursor-pointer
-                    tracking-wide
-                  "
+                    :class="btnCounter"
                 >
                   <div v-if="loadingExam">
                     <div class="loading"></div>
@@ -336,20 +326,7 @@
               v-if="contact.type == 100 && !isExpired"
           >
             <div
-                class="
-                bg-gradient-to-r
-                from-indigo-500
-                via-purple-500
-                to-pink-500
-                h-10
-                flex
-                items-center
-                justify-center
-                text-white
-                rounded-full
-                w-24
-                tracking-wide
-              "
+                :class="btnCounter"
             >
               <div v-if="loadingExam">
                 <div class="loading"></div>
@@ -1488,30 +1465,44 @@
             "
               v-if="isRead"
           >
-            <div class="bg-white w-2/5 h-5/6 overflow-y-hidden rounded">
+            <div class="w-2/4 h-5/6">
               <div
-                  class="flex justify-between items-center p-4"
-                  :class="darkMode ? `bg-fb` : `bg-primary`"
+                  class="flex items-center p-4 relative rounded-t-xl"
+                  :class="darkMode ? `bg-primary` : `bg-primary`"
               >
                 <div
-                    class="border border-white cursor-pointer"
-                    style="padding: 1px"
+                    class="cursor-pointer rounded-full"
                     @click="openFullscreen"
                 >
                   <EnlargeIcon :size="16"/>
                 </div>
                 <div
-                    class="cursor-pointer"
+                    class="flex justify-end items-center flex-1"
+                    v-if="contact.type == 100 && !isExpired"
+                >
+                  <div
+                      :class="btnCounter"
+                  >
+                    <div v-if="loadingExam">
+                      <div class="loading"></div>
+                    </div>
+                    <div class="font-PoppinsMedium" v-else>
+                      {{ countDownTime(examMilliseconds, "expired") }}
+                    </div>
+                  </div>
+                </div>
+                <div
+                    class="cursor-pointer absolute -right-3 rounded-full w-8 h-8 bg-button shadow flex items-center justify-center -top-5"
                     @click="
                     () => {
                       this.isRead = false;
                     }
                   "
                 >
-                  <CloseIcon fill="#ffffff"/>
+                  <CloseIcon fill="#ffffff" :width="20"/>
                 </div>
               </div>
-              <div id="fullScreen" class="h-full overflow-y-scroll pb-10">
+              <div id="fullScreen" class="h-full overflow-y-scroll pb-10 rounded-b-xl">
                 <SinglePdf :pdfUrl="pdfUrl" :darkMode="darkMode"/>
               </div>
             </div>
@@ -1745,6 +1736,7 @@ export default {
       contact: {
         type: 0,
       },
+      btnCounter: "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-10 flex items-center justify-center text-white rounded-full w-24 tracking-wide",
       uploadingFile: false,
       loadingAds: false,
       isPostDetail: false,
@@ -2517,6 +2509,9 @@ export default {
         }
       });
     },
+    payExamSound() {
+      document.getElementById("exam-sound").play();
+    },
     paySound() {
       document.getElementById("message-sound").play();
     },
@@ -2617,8 +2612,10 @@ export default {
   mounted() {
     clearInterval(this.counting);
     document.querySelector(".needsInitiation").click();
+
     this.isReadMessage();
     this.loadingExam = true;
+
     setTimeout(() => {
       this.loadingExam = false;
       if (this.contacts[0].type == "exam") {
@@ -2629,6 +2626,7 @@ export default {
         this.milliseconds = this.contacts[0].exam.remaining_time;
         this.counting = setInterval(() => {
           this.milliseconds = this.milliseconds - this.startCounting;
+
           if (this.milliseconds <= 0) {
             this.isCanExam = true;
             clearInterval(this.counting);
@@ -2647,6 +2645,13 @@ export default {
     });
   },
   watch: {
+    "examMilliseconds": function (milliseconds) {
+      const seconds = Math.floor((milliseconds / 1000) % 60);
+      const minutes = Math.floor((milliseconds / 1000 / 60) % 60);
+      if ((minutes == 15 || minutes == 3) && seconds <= 30) {
+        this.payExamSound();
+      }
+    },
     contactActive: function (value) {
       if (value) {
         this.getMessage({

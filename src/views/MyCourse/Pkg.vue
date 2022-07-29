@@ -23,7 +23,7 @@
               <div class="font-semibold">
                 <span> {{ $t('date_expired') }}:</span>
                 <span class="pl-3"></span>
-                <span>{{formatDate(pkg.deadline)}}</span>
+                <span>{{ formatDate(pkg.deadline) }}</span>
               </div>
               <div class="flex-1 flex justify-end">
                   <span class="cursor-pointer" :id="pkg._id" @click="addToCart(pkg)">
@@ -89,6 +89,15 @@ export default {
       })
     },
     pkgDetail(pkg) {
+      if(this.$route.name == 'my-zoom'){
+        this.$router.push({
+          name: "zoom-package",
+          params: {
+            pkg
+          }
+        })
+        return;
+      }
       this.$router.push({
         name: "packages",
         params: {

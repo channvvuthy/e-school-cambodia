@@ -447,6 +447,7 @@ import BuyMsg from "@/views/Component/BuyMsg";
 import timeSince from "../../helper/timeSince";
 import Modal from "../../components/Modal";
 import CloseIcon from "../../components/CloseIcon";
+import NewIcon from "../../components/NewIcon";
 
 Vue.use(VueObserveVisibility)
 
@@ -460,6 +461,7 @@ export default {
     }
   },
   components: {
+    NewIcon,
     CloseIcon,
     CartIcon,
     CertificateIcon,

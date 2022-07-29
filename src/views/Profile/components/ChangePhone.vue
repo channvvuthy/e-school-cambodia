@@ -93,8 +93,9 @@
                 this.loading = true
                 this.$store.dispatch("auth/updatePhone", this.payload).then(res => {
                     this.loading = false
+                    this.$emit('close')
                     if (res.msg) {
-                        helper.errMessage(res.msg)
+                        helper.errorMessage(res.msg)
                         return
                     }
                     helper.success('review_change_name')
