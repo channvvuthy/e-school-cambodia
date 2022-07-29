@@ -17,11 +17,12 @@
     />
     <audio controls id="message-sound" class="absolute" style="z-index: -1">
       <source src="message.mp3" type="audio/mpeg"/>
-      Your browser does not support the audio element.
     </audio>
-    <audio controls id="exam-sound" class="absolute" style="z-index: -1">
-      <source src="smartphone.mp3" type="audio/mpeg"/>
-      Your browser does not support the audio element.
+    <audio controls id="5-sound" class="absolute" style="z-index: -1">
+      <source src="5min.wav" type="audio/mpeg"/>
+    </audio>
+    <audio controls id="15-sound" class="absolute" style="z-index: -1">
+      <source src="15min.wav" type="audio/mpeg"/>
     </audio>
     <div
         class="h-full overflow-y-scroll pb-40"
@@ -1803,6 +1804,8 @@ export default {
       isCanExam: false,
       isTypeExam: false,
       isExpired: true,
+      isFivePlay: false,
+      isFifteenPlay: false,
     };
   },
   computed: {
@@ -2168,6 +2171,8 @@ export default {
       });
     },
     selectedContact(contact, index) {
+      this.isFivePlay = false
+      this.isFifteenPlay = false
       if (contact.type == "exam") {
         this.isTypeExam = true;
         if (!this.isCanExam) {
@@ -2509,8 +2514,11 @@ export default {
         }
       });
     },
-    payExamSound() {
-      document.getElementById("exam-sound").play();
+    fiveMinSound() {
+      document.getElementById("5-sound").play();
+    },
+    fifteenMinSound() {
+      document.getElementById("15-sound").play();
     },
     paySound() {
       document.getElementById("message-sound").play();
@@ -2648,8 +2656,17 @@ export default {
     "examMilliseconds": function (milliseconds) {
       const seconds = Math.floor((milliseconds / 1000) % 60);
       const minutes = Math.floor((milliseconds / 1000 / 60) % 60);
-      if ((minutes == 15 || minutes == 3) && seconds <= 30) {
-        this.payExamSound();
+      if (minutes == 5) {
+        if(this.isFivePlay == false){
+          this.isFifteenPlay();
+          this.isFivePlay = true;
+        }
+      }
+      if (minutes == 15) {
+        if(this.isFifteenPlay == false){
+          this.isFifteenPlay();
+          this.isFifteenPlay = true;
+        }
       }
     },
     contactActive: function (value) {
