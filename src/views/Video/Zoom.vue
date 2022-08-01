@@ -260,6 +260,7 @@ export default {
       this.$store.commit("zoom/addToCart", video._id)
     },
     gotToPlayList(videoCourse) {
+
       videoCourse.package_id = ""
       if (localStorage.getItem('token') == null) {
         this.showMsg = true

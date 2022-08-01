@@ -455,5 +455,6 @@
   },
   "my_zoom": "My Zoom",
   "2134": "Please wait, the session has not started yet",
-  "accept": "Accept"
+  "accept": "Accept",
+  "no_video": "Don't have the video right now"
 }

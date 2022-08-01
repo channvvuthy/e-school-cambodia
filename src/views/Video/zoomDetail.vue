@@ -25,7 +25,7 @@
             <template v-if="detail.price.highlight">
               {{ $t('1006') }}:
               <span class="mr-3">
-                $ <del>{{ khmerNumber(detail.price.highlight)}}</del>
+                $ <del>{{ khmerNumber(detail.price.highlight) }}</del>
               </span>
               <span class="text-red-600 font-semibold">$ {{ khmerNumber(detail.price.year) }}</span>
             </template>
@@ -151,10 +151,14 @@ export default {
   },
   methods: {
     ...mapActions('favorite', ['add']),
-    ...mapActions('zoom', ['getPlaylist','getZoomAttendant']),
+    ...mapActions('zoom', ['getPlaylist', 'getZoomAttendant']),
     addToFavorite() {
     },
     gotToPlayList() {
+      if (this.detail.list.length <= 0) {
+        helper.errorMessage('no_video')
+      }
+      return;
       if (localStorage.getItem('token') === null) {
         this.showMsg = true
         return;
@@ -190,17 +194,18 @@ export default {
       this.loading = true
       this.getPlaylist(this.payload).then((res) => {
         this.detail.zoom_link = res.data.data.course.zoom_link
+        this.detail.list = res.data.data.list
         this.loading = false
         this.reportWatch()
       })
     },
-    zoomAttendant(){
+    zoomAttendant() {
       let payload = {
         id: this.detail._id
       }
-      this.getZoomAttendant(payload).then(res =>{
-        if(res.msg == undefined){
-          window.open(this.detail.zoom_link,"_blank")
+      this.getZoomAttendant(payload).then(res => {
+        if (res.msg == undefined) {
+          window.open(this.detail.zoom_link, "_blank")
         }
       })
     }
