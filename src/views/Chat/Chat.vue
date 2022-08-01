@@ -2173,6 +2173,7 @@ export default {
     selectedContact(contact, index) {
       this.isFivePlay = false
       this.isFifteenPlay = false
+
       if (contact.type == "exam") {
         this.isTypeExam = true;
         if (!this.isCanExam) {
@@ -2654,17 +2655,19 @@ export default {
   },
   watch: {
     "examMilliseconds": function (milliseconds) {
-      const seconds = Math.floor((milliseconds / 1000) % 60);
       const minutes = Math.floor((milliseconds / 1000 / 60) % 60);
-      if (minutes == 5) {
+      const hours = Math.floor(milliseconds / 1000 / 60 / 60);
+
+      if (minutes == 5 && hours <= 0) {
         if(this.isFivePlay == false){
-          this.isFifteenPlay();
+          this.fiveMinSound();
           this.isFivePlay = true;
         }
       }
-      if (minutes == 15) {
+
+      if (minutes == 15 && hours <= 0) {
         if(this.isFifteenPlay == false){
-          this.isFifteenPlay();
+          this.fifteenMinSound();
           this.isFifteenPlay = true;
         }
       }
