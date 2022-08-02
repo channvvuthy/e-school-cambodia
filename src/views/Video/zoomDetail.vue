@@ -157,8 +157,8 @@ export default {
     gotToPlayList() {
       if (this.detail.list.length <= 0) {
         helper.errorMessage('no_video')
+        return;
       }
-      return;
       if (localStorage.getItem('token') === null) {
         this.showMsg = true
         return;

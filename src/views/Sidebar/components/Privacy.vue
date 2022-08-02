@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('change-password')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('change-password')">
             <div>
               <LockIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"/>
