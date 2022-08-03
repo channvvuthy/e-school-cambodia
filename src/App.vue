@@ -7,6 +7,9 @@
     >
       <Splash />
     </div>
+    <div v-if="isStart">
+      <Introduction @started="()=>{this.isStart = false}"/>
+    </div>
     <div class="font-khmer_os" :class="darkMode ? `bg-youtube` : ``">
       <!-- Cart -->
       <Cart
@@ -167,6 +170,7 @@ import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue";
 import helper from "./helper/helper";
 import { mapActions, mapState } from "vuex";
 import Splash from "./views/Splash/Splash.vue";
+import Introduction from "@/views/Introduction/Introduction";
 
 const { ipcRenderer } = require("electron");
 export default {
@@ -182,10 +186,12 @@ export default {
       window: {
         wwidth: null,
       },
+      isStart: false
     };
   },
 
   components: {
+    Introduction,
     Sidebar,
     Menu,
     Cart,
@@ -345,6 +351,9 @@ export default {
     }
     setTimeout(() => {
       this.isSplashScreen = false;
+      if(localStorage.getItem("started") != 1){
+        this.isStart = true;
+      }
     }, 4000);
   },
 };
