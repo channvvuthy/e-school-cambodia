@@ -19,10 +19,10 @@
       <source src="message.mp3" type="audio/mpeg"/>
     </audio>
     <audio controls id="5-sound" class="absolute" style="z-index: -1">
-      <source src="5min.wav" type="audio/mpeg"/>
+      <source src="https://space.e-schoolcambodia.com/e-talk/min5.mp3" type="audio/mpeg"/>
     </audio>
     <audio controls id="15-sound" class="absolute" style="z-index: -1">
-      <source src="15min.wav" type="audio/mpeg"/>
+      <source src="https://space.e-schoolcambodia.com/e-talk/min15.mp3" type="audio/mpeg"/>
     </audio>
     <div
         class="h-full overflow-y-scroll pb-40"
