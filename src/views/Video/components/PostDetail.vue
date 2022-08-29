@@ -88,8 +88,10 @@
               left-10
             "
           >
-            <svg aria-label="Select crop" class="_ab6-" color="#ffffff" fill="#ffffff" height="16" role="img" viewBox="0 0 24 24" width="16">
-              <path d="M10 20H4v-6a1 1 0 00-2 0v7a1 1 0 001 1h7a1 1 0 000-2zM20.999 2H14a1 1 0 000 2h5.999v6a1 1 0 002 0V3a1 1 0 00-1-1z"></path>
+            <svg aria-label="Select crop" class="_ab6-" color="#ffffff" fill="#ffffff" height="16" role="img"
+                 viewBox="0 0 24 24" width="16">
+              <path
+                  d="M10 20H4v-6a1 1 0 00-2 0v7a1 1 0 001 1h7a1 1 0 000-2zM20.999 2H14a1 1 0 000 2h5.999v6a1 1 0 002 0V3a1 1 0 00-1-1z"></path>
             </svg>
           </div>
           <div
@@ -468,7 +470,6 @@
 <script>
 import Modal from "@/components/Modal";
 import Avatar from "@/Avatar";
-import ChevronDown from "@/views/MyCourse/components/Chevron";
 import {mapActions, mapState} from "vuex";
 import helper from "@/helper/helper";
 import Eye from "@/components/Eye";
@@ -481,7 +482,6 @@ import SmileEmoji from "@/views/Video/components/SmileEmoji";
 import Comment from "@/views/Video/components/Comment";
 import LoadingWhite from "@/components/LoadingWhite";
 import Sticker from "@/views/Video/components/Sticker";
-import mode from "@/mixins/mode";
 import PhotoView from "@/views/Video/components/PhotoView";
 import ReplyComment from "@/views/Video/components/ReplyComment";
 import StickerView from "@/views/Video/components/StickerView";
@@ -501,7 +501,6 @@ export default {
       },
     },
   },
-  mixins: [mode],
   components: {
     CloseIcon,
     SendMessageIcon,
@@ -518,13 +517,12 @@ export default {
     Eye,
     Avatar,
     Modal,
-    ChevronDown,
     ChevronIcon,
     PhotoView,
     Cropper,
   },
   computed: {
-    ...mapState("setting", ["darkMode"]),
+    ...mapState("setting", ["darkMode", "className"]),
     ...mapState("auth", ["stProfile"]),
     ...mapState("social", ["comments", "replies"]),
   },
@@ -621,14 +619,14 @@ export default {
         id,
       };
       this.loadingReply = true;
-      this.$store.dispatch("social/getReply", payload).then((res) => {
+      this.$store.dispatch("social/getReply", payload).then(() => {
         this.loadingReply = false;
       });
     },
     reply(comment) {
       this.commentId = comment._id;
     },
-    linkify(text){
+    linkify(text) {
       return helper.linkify(text)
     },
     postComment() {
@@ -676,7 +674,7 @@ export default {
             }
           });
         } else {
-          this.addComment(this.comment).then((res) => {
+          this.addComment(this.comment).then(() => {
             this.comment.text = "";
             this.$delete(this.comment, "sticker");
             this.$delete(this.comment, "photo");
@@ -699,12 +697,12 @@ export default {
     cutString(text, limit) {
       return helper.cutString(text, limit);
     },
-    next(postIndex) {
+    next() {
       if (this.currentSlide < this.post.photo.length - 1) {
         this.currentSlide++;
       }
     },
-    previous(postIndex) {
+    previous() {
       if (this.currentSlide > 0) {
         this.currentSlide--;
       }
@@ -744,7 +742,7 @@ export default {
             id: this.post._id,
             type: this.post.type,
           })
-          .then((res) => {
+          .then(() => {
             this.loading = false;
           });
     },

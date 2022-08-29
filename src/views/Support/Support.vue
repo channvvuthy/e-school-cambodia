@@ -78,7 +78,7 @@
     </div>
 </template>
 <script>
-    import {mapState, mapActions} from "vuex"
+    import {mapState} from "vuex"
     import AttachFileIcon from "./../../components/AttachFileIcon.vue"
     import ImageIcon from "./../../components/AddImageIcon.vue"
 

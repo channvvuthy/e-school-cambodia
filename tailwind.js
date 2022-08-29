@@ -8,6 +8,8 @@ module.exports = {
             sm: '640px', md: '768px', lg: '1024px', xl: '1280px', '2xl': '1536px',
         },
         colors: {
+            wallet: "#eff3f6",
+            wallet1: "#bcced7",
             transparent: 'transparent',
             success: "#5E9919",
             successCheck: "#58B948",
@@ -51,7 +53,7 @@ module.exports = {
             indigo: colors.indigo,
             purple: colors.violet,
             pink: colors.pink,
-            fb:"#2d89ff"
+            fb: "#2d89ff"
         },
         spacing: {
             px: '1px',
@@ -195,6 +197,8 @@ module.exports = {
             mono: ['Poppins', 'Kantumruy-Regular',],
             khmer_os: ['Poppins', 'Kantumruy-Light', 'Kantumruy-Regular'],
             PoppinsMedium: ['Poppins-Medium', 'Kantumruy-Regular'],
+            Ubuntu: ['Ubuntu'],
+            UbuntuLight: ['UbuntuLight'],
 
 
         },

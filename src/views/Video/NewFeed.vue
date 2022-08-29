@@ -3,12 +3,12 @@
       :class="darkMode ? `bg-secondary`: `bg-white`">
     <div class="px-5 flex items-center h-24"
          v-if="token"
-         :class="mode(darkMode ?`border-b border-button` : ``)">
+         :class="darkMode ?`border-b border-button` : `border-b`">
       <Avatar
           :avatar-url="stProfile.photo"
           :size="16"></Avatar>
       <textarea
-          :class="mode()"
+          :class="darkMode ?`border-b border-button` : `border-b`"
           readonly
           @click="()=>{this.isPost = true}"
           v-model="payload.caption"
@@ -229,11 +229,12 @@
       <!-- Ads -->
       <div class="w-35 pl-5">
         <div
-            v-for="index in 6" :key="index + Math.random()"
-            v-if="loadingRecomment"
-            class="border py-3 px-4 mb-4"
-            :class="darkMode ? `border-button text-lightGray` : ``">
-          <Loading :grid="true" :number-of-columns="1"/>
+            v-for="index in 6" :key="index + Math.random()">
+          <div v-if="loadingRecomment"
+               class="border py-3 px-4 mb-4"
+               :class="darkMode ? `border-button text-lightGray` : ``">
+            <Loading :grid="true" :number-of-columns="1"/>
+          </div>
         </div>
         <div v-if="!loadingRecomment"
              class="border py-3 px-4 mb-4"
@@ -400,7 +401,7 @@
         </div>
         <div class="flex justify-end items-center p-5 font-PoppinsMedium">
           <button class="bg-primary text-white rounded-md px-10 py-3" @click="acceptTerm()">
-            {{$t('accept')}}
+            {{ $t('accept') }}
           </button>
         </div>
       </Modal>
@@ -409,7 +410,6 @@
 </template>
 <script>
 import Avatar from "@/Avatar";
-import mode from "@/mixins/mode";
 import {mapActions, mapState} from "vuex";
 import PostVideoIcon from "@/components/PostVideoIcon";
 import ImageIcon from "@/components/ImageIcon";
@@ -418,7 +418,6 @@ import CreatePost from "@/views/Component/Post/CreatePost";
 import PhotoGrid from "@/views/Video/components/PhotoGrid";
 import LikeIcon from "@/components/LikeIcon";
 import Eye from "@/components/Eye";
-import Next from "@/views/Component/Post/Next";
 import helper from "@/helper/helper";
 import Loading from "@/components/Loading";
 import LikeFillIcon from "@/components/LikeFillIcon";
@@ -426,13 +425,11 @@ import CommentDetail from "@/views/Video/components/CommentDetail";
 import PostDetail from "@/views/Video/components/PostDetail";
 import Action from "@/views/Video/components/Action";
 import ActionList from "@/views/Video/components/ActionList";
-import Pause from "@/views/Component/Post/Pause";
 import FastAverageColor from "fast-average-color";
 
 const fac = new FastAverageColor();
 import Vue from 'vue'
 import VueObserveVisibility from 'vue-observe-visibility'
-import Video from "@/views/Video/Video";
 import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
 import Report from "@/views/Video/components/Report.vue";
@@ -454,7 +451,7 @@ Vue.use(VueObserveVisibility)
 export default {
   computed: {
     ...mapState('auth', ['stProfile', 'token']),
-    ...mapState('setting', ['darkMode', 'isHide']),
+    ...mapState('setting', ['darkMode', 'isHide', 'className']),
     ...mapState('social', ['social', 'loadingMore', 'recomments']),
     storyDetail() {
       return this.$store.state.story.storyDetail
@@ -472,15 +469,12 @@ export default {
     Report,
     VideoDetail,
     MediaPlayer,
-    Video,
-    Pause,
     ActionList,
     Action,
     PostDetail,
     CommentDetail,
     LikeFillIcon,
     Loading,
-    Next,
     Eye,
     LikeIcon,
     PhotoGrid,
@@ -492,7 +486,6 @@ export default {
     BuyMsg,
     Modal
   },
-  mixins: [mode],
   data() {
     return {
       isTerm: false,
@@ -779,13 +772,13 @@ export default {
       this.isPost = false
       this.getPost()
     },
-    acceptTerm(){
+    acceptTerm() {
       localStorage.setItem("accept_term", 1);
       this.isTerm = false;
       this.createPost()
     },
     createPost() {
-      if(localStorage.getItem("accept_term") != 1){
+      if (localStorage.getItem("accept_term") != 1) {
         this.isTerm = true;
         return;
       }
@@ -799,9 +792,6 @@ export default {
         this.loadingNewFeed = false
       })
     }
-  },
-  mounted() {
-    this.mode()
   },
   created() {
     this.getPost()

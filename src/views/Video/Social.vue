@@ -296,17 +296,14 @@
 </template>
 <script>
 import Avatar from "@/Avatar";
-import mode from "@/mixins/mode";
 import {mapActions, mapState} from "vuex";
 import PostVideoIcon from "@/components/PostVideoIcon";
 import ImageIcon from "@/components/ImageIcon";
 import CreatePost from "@/views/Component/Post/CreatePost";
-import moment from "moment";
 
 import PhotoGrid from "@/views/Video/components/PhotoGrid";
 import LikeIcon from "@/components/LikeIcon";
 import Eye from "@/components/Eye";
-import Next from "@/views/Component/Post/Next";
 import helper from "@/helper/helper";
 import Loading from "@/components/Loading";
 import LikeFillIcon from "@/components/LikeFillIcon";
@@ -314,23 +311,15 @@ import CommentDetail from "@/views/Video/components/CommentDetail";
 import PostDetail from "@/views/Video/components/PostDetail";
 import Action from "@/views/Video/components/Action";
 import ActionList from "@/views/Video/components/ActionList";
-import Pause from "@/views/Component/Post/Pause";
 import FastAverageColor from "fast-average-color";
 
 const fac = new FastAverageColor();
 import Vue from 'vue'
 import VueObserveVisibility from 'vue-observe-visibility'
-import Video from "@/views/Video/Video";
 import MediaPlayer from "@/views/Video/components/MediaPlayer";
 import VideoDetail from "@/views/Video/components/VideoDetail";
 import Report from "@/views/Video/components/Report.vue";
 import Liker from "@/views/Video/components/Liker";
-import CartIcon from "@/components/CartIcon";
-import CertificateIcon from "@/components/CertificateIcon";
-import YoutubeIcon from "@/components/YoutubeIcon";
-import PdfIcon from "@/components/PdfIcon";
-import ChatIcon from "@/components/ChatIcon";
-import TestIcon from "@/components/TestIcon";
 import BuyMsg from "@/views/Component/BuyMsg";
 import BackMenuIcon from "../../components/BackMenuIcon";
 import Empty from "../Component/Empty";
@@ -341,7 +330,7 @@ Vue.use(VueObserveVisibility)
 export default {
   computed: {
     ...mapState('auth', ['stProfile', 'token']),
-    ...mapState('setting', ['darkMode', 'isHide']),
+    ...mapState('setting', ['darkMode', 'isHide','className']),
     ...mapState('social', ['social', 'loadingMore', 'recomments']),
     storyDetail() {
       return this.$store.state.story.storyDetail
@@ -350,24 +339,15 @@ export default {
   components: {
     Empty,
     BackMenuIcon,
-    CartIcon,
-    CertificateIcon,
-    YoutubeIcon,
-    PdfIcon,
-    ChatIcon,
-    TestIcon,
     Report,
     VideoDetail,
     MediaPlayer,
-    Video,
-    Pause,
     ActionList,
     Action,
     PostDetail,
     CommentDetail,
     LikeFillIcon,
     Loading,
-    Next,
     Eye,
     LikeIcon,
     PhotoGrid,
@@ -378,7 +358,6 @@ export default {
     Liker,
     BuyMsg
   },
-  mixins: [mode],
   data() {
     return {
       isLiker: false,
@@ -664,7 +643,6 @@ export default {
     }
   },
   mounted() {
-    this.mode()
     this.getPost()
   },
   created() {

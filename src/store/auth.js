@@ -470,7 +470,7 @@ export default {
                 })
             })
         },
-        getNames({commit}, payload) {
+        getNames({commit}) {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `me/update-name`).then(res => {
                     resolve(res.data)
@@ -479,7 +479,7 @@ export default {
                 })
             })
         },
-        getPhoneUpdate({commit}, payload) {
+        getPhoneUpdate({commit}) {
             return new Promise((resolve, reject) => {
                 axios.get(config.apiUrl + `me/update-phone`).then(res => {
                     resolve(res.data)

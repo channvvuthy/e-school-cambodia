@@ -1,5 +1,6 @@
 'use strict';
 import path from 'path'
+
 let fs = require("fs");
 import {
     app,
@@ -14,48 +15,9 @@ import {
     createProtocol
 } from 'vue-cli-plugin-electron-builder/lib'
 
-
-import axios from "axios"
-
 // Setup logger
 // autoUpdater.logger = require('electron-log')
 // autoUpdater.logger.transports.file.level = 'info'
-
-const downloadFile = async (fileUrl, info) => {
-    // Get the file name
-    const fileName = info._id
-    // The path of the downloaded file on our machine
-    const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", fileName);
-    //write something to root installation folder
-    let dir = path.join(app.getAppPath(), "..", "..", "electronjs");
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-    }
-    try {
-        const response = await axios({
-            method: "GET",
-            url: fileUrl,
-            responseType: "stream",
-        })
-        await response.data.pipe(fs.createWriteStream(myInstalledDir).on('finish', () => {
-            let input = fs.createReadStream(myInstalledDir);
-            const output = fs.createWriteStream(`${myInstalledDir}.enc`);
-            input.pipe(cipher).pipe(output);
-
-            output.on("finish", () => {
-                fs.unlink(myInstalledDir, (err) => {
-                    if (err) throw err
-                })
-                info.url = path.join(app.getAppPath(), "..", "..", "electronjs")
-                mainWindow.webContents.send("downloaded", info)
-                output.close()
-            })
-        }))
-    } catch (err) {
-        mainWindow.webContents.send("fail", info)
-        throw new Error(err);
-    }
-};
 
 // import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -72,57 +34,19 @@ ipcMain.on("update", async (event, arg) => {
     shell.openExternal(arg)
 });
 
-ipcMain.on("decypt", async (event, arg) => {
-    const myInstalledDir = path.join(app.getAppPath(), "..", "..", "electronjs", arg);
-    let input = fs.createReadStream(`${myInstalledDir}.enc`);
-    let output = fs.createWriteStream(myInstalledDir);
-    input.pipe(decipheriv).pipe(output);
-
-    output.on('finish', () => {
-        console.log("File has been decipher")
-        event.reply("decypted", true)
-        output.close()
-    })
-});
 
 ipcMain.on("updateVersion", async (event, arg) => {
     autoUpdater.checkForUpdates()
 })
-ipcMain.on("downloadLocation", (event, arg) => {
-    event.reply("getDownloadLocation", path.join(app.getAppPath(), "..", "..", "electronjs"))
-})
 
-ipcMain.on("download", (event, arg) => {
-
-    downloadFile(arg.videoUrl, arg).catch(err => {
-        event.reply("downloadFailed", arg)
-        throw new Error(err);
-    })
-});
-ipcMain.on("nextDownload", (event, arg) => {
-    event.reply('nextDownload', arg)
-})
-
-ipcMain.on("removeDownload", (event, arg) => {
-    let dir = path.join(app.getAppPath(), "..", "..", "electronjs", arg)
-    fs.unlink(dir, (err) => {
-        if (err) {
-            console.error(err)
-
-        }
-    })
-})
 
 ipcMain.on("openLink", async (event, arg) => {
     shell.openExternal(arg)
 })
 
 ipcMain.on("deeplink", (event, arg) => {
-    event.reply("deeplink", { deeplink })
+    event.reply("deeplink", {deeplink})
 })
-
-
-
 
 let mainWindow
 let deeplink;
@@ -130,6 +54,7 @@ let deeplink;
 ipcMain.on("gradeFilter", async (event, arg) => {
     event.reply('resetGrade', arg)
 })
+
 async function createWindow() {
 
     // Create the browser window.
@@ -214,9 +139,9 @@ app.name = "E-SCHOOL"
 app.on("open-url", (event, data) => {
     event.preventDefault();
     setTimeout(() => {
-        mainWindow.webContents.send('deeplink', { deeplink: data });
+        mainWindow.webContents.send('deeplink', {deeplink: data});
     }, 3000)
-   
+
 });
 
 app.setAsDefaultProtocolClient("e-school");

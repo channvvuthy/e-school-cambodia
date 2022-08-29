@@ -1,7 +1,11 @@
 module.exports = {
     lintOnSave: false,
     devServer: {
-        proxy: 'http://localhost:8080'
+        proxy: 'http://localhost:8080',
+        overlay: {
+            warnings: true,
+            errors: false
+        }
     },
     pluginOptions: {
         electronBuilder: {
@@ -40,8 +44,8 @@ module.exports = {
                     ],
                     "icon": "build/icons/icon.ico"
                 },
-                "linux":{
-                    "target":"deb"
+                "linux": {
+                    "target": "deb"
                 }
             }
         }

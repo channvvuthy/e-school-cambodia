@@ -28,7 +28,6 @@
     import Loading from "./../../components/Loading"
     import eHeader from "./../Video/components/Header.vue"
 
-    const {ipcRenderer} = require('electron')
     export default {
         name: "Help",
         components: {

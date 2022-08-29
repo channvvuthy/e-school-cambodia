@@ -108,8 +108,6 @@ import InvoiceIcon from "./../../../components/BillInvoiceIcon.vue"
 import LogoutIcon from "./../../../components/LogoutIcon"
 import OtherIcon from "./../../../components/OtherIcon.vue"
 
-const {ipcRenderer} = require('electron')
-
 export default {
   components: {
     ProfileIcon,

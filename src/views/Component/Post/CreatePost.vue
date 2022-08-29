@@ -1,23 +1,23 @@
 <template>
   <div :class="className">
     <div
-      class="shadow rounded-xl w-2/5"
-      :class="darkMode ? `bg-secondary text-lightGray` : `bg-white`"
+        class="shadow rounded-xl w-2/5"
+        :class="darkMode ? `bg-secondary text-lightGray` : `bg-white`"
     >
       <!-- Start header -->
       <div
-        :class="darkMode ? `border-b border-facebook` : `border-b`"
-        class="h-14 flex items-center justify-between px-5 text-lg"
+          :class="darkMode ? `border-b border-facebook` : `border-b`"
+          class="h-14 flex items-center justify-between px-5 text-lg"
       >
         <div
-          class="cursor-pointer"
-          @click="
+            class="cursor-pointer"
+            @click="
             () => {
               this.$emit('dismissPost');
             }
           "
         >
-          <CloseIcon :fill="darkMode ? `#909090` : `#000000`" />
+          <CloseIcon :fill="darkMode ? `#909090` : `#000000`"/>
         </div>
         <div class="w-full text-center">
           <div>
@@ -30,20 +30,20 @@
           </div>
         </div>
         <button
-          @click="post"
-          :disabled="loading"
-          class="outline-none bg-transparent flex items-center"
+            @click="post"
+            :disabled="loading"
+            class="outline-none bg-transparent flex items-center"
         >
           <div v-if="loading" class="relative">
             <span v-if="progress < 100"> {{ progress }}% </span>
             <span v-else>
-              <LoadingWhite />
+              <LoadingWhite/>
             </span>
           </div>
           <div
-            class="cursor-pointer"
-            :class="darkMode ? `text-lightGray` : `text-primary`"
-            v-else
+              class="cursor-pointer"
+              :class="darkMode ? `text-lightGray` : `text-primary`"
+              v-else
           >
             <span v-if="isEdit">
               {{ $t("update") }}
@@ -57,16 +57,16 @@
       <!-- End of header -->
 
       <div
-        class="h-1"
-        :class="darkMode ? `bg-green-600` : `bg-loading`"
-        v-if="loading"
-        :style="{ width: `${progress}%` }"
+          class="h-1"
+          :class="darkMode ? `bg-green-600` : `bg-loading`"
+          v-if="loading"
+          :style="{ width: `${progress}%` }"
       ></div>
 
       <!-- Body -->
       <div>
         <div class="flex space-x-5 mb-5 m-5">
-          <Avatar :size="16" :avatar-url="stProfile.photo" />
+          <Avatar :size="16" :avatar-url="stProfile.photo"/>
           <div>
             <div class="flex space-x-1 items-center">
               <span>{{ stProfile.first_name }}</span>
@@ -74,13 +74,13 @@
             </div>
             <div>
               <div
-                style="border-radius: 3px"
-                :class="
+                  style="border-radius: 3px"
+                  :class="
                   darkMode
                     ? `border-button text-lightGray`
                     : `border-roundBorder`
                 "
-                class="
+                  class="
                   flex
                   items-center
                   border
@@ -96,8 +96,8 @@
                 <span class="capitalize">{{ $t(type) }}</span>
                 <div>
                   <ChevronDown
-                    :fill="darkMode ? `#909090` : `#000000`"
-                    :size="15"
+                      :fill="darkMode ? `#909090` : `#000000`"
+                      :size="15"
                   />
                 </div>
               </div>
@@ -106,13 +106,13 @@
         </div>
 
         <div
-          class="preview pb-5"
-          :class="isBackground ? `` : `overflow-y-scroll relative`"
-          style="height: 26rem"
+            class="preview pb-5"
+            :class="isBackground ? `` : `overflow-y-scroll relative`"
+            style="height: 26rem"
         >
           <div v-if="isBackground" class="relative">
             <div
-              class="
+                class="
                 absolute
                 flex
                 items-center
@@ -125,7 +125,7 @@
               "
             >
               <div
-                class="
+                  class="
                   m-auto
                   overflow-y-scroll
                   whitespace-pre-wrap
@@ -134,50 +134,50 @@
                 "
               >
                 <textarea
-                  cols="100"
-                  id="background"
-                  :style="{ color: `${color}` }"
-                  ref="caption"
-                  v-model="payload.caption"
-                  :placeholder="$t('say_something')"
-                  @input="resize($event)"
-                  @focus="resize($event)"
-                  class="outline-none bg-transparent text-center w-full"
-                  style="resize: none"
+                    cols="100"
+                    id="background"
+                    :style="{ color: `${color}` }"
+                    ref="caption"
+                    v-model="payload.caption"
+                    :placeholder="$t('say_something')"
+                    @input="resize($event)"
+                    @focus="resize($event)"
+                    class="outline-none bg-transparent text-center w-full"
+                    style="resize: none"
                 />
               </div>
             </div>
-            <img :src="backgroundPhoto" alt="" id="image" />
+            <img :src="backgroundPhoto" alt="" id="image"/>
           </div>
           <div class="px-5" v-else>
             <textarea
-              id="caption"
-              ref="caption"
-              v-model="payload.caption"
-              :placeholder="$t('say_something')"
-              @input="resize($event)"
-              @focus="resize($event)"
-              class="w-full outline-none bg-transparent"
-              style="resize: none"
+                id="caption"
+                ref="caption"
+                v-model="payload.caption"
+                :placeholder="$t('say_something')"
+                @input="resize($event)"
+                @focus="resize($event)"
+                class="w-full outline-none bg-transparent"
+                style="resize: none"
             />
             <div class="relative flex items-center justify-center">
               <!-- Picture -->
               <template v-if="isEdit">
                 <div v-if="editPost.photo && editPost.photo.length">
                   <div
-                    class="container"
-                    @mouseleave="
+                      class="container"
+                      @mouseleave="
                       () => {
                         this.currentHoverPhoto = null;
                       }
                     "
                   >
                     <figure
-                      v-for="(pic, key) in editPost.photo"
-                      :key="key"
-                      @mouseover="activeRemove(key)"
-                      class="relative cursor-pointer figure"
-                      :class="
+                        v-for="(pic, key) in editPost.photo"
+                        :key="key"
+                        @mouseover="activeRemove(key)"
+                        class="relative cursor-pointer figure"
+                        :class="
                         (key === 0 && editPost.photo.length === 1) ||
                         (key === 0 && editPost.photo.length > 2)
                           ? `span-2`
@@ -185,19 +185,19 @@
                       "
                     >
                       <img
-                        :src="`${pic.url}`"
-                        :alt="key"
-                        @click="previewPhoto(pic.url)"
+                          :src="`${pic.url}`"
+                          :alt="key"
+                          @click="previewPhoto(pic.url)"
                       />
                       <div
-                        v-if="currentHoverPhoto === key"
-                        @click="removePicture(key)"
-                        :class="
+                          v-if="currentHoverPhoto === key"
+                          @click="removePicture(key)"
+                          :class="
                           darkMode
                             ? `bg-secondary text-lightGray`
                             : `bg-gray-50`
                         "
-                        class="
+                          class="
                           w-8
                           h-8
                           flex
@@ -212,7 +212,7 @@
                           shadow
                         "
                       >
-                        <CloseIcon :fill="darkMode ? `#909090` : `#000000`" />
+                        <CloseIcon :fill="darkMode ? `#909090` : `#000000`"/>
                       </div>
                     </figure>
                   </div>
@@ -220,11 +220,11 @@
               </template>
               <template v-else-if="singlePhotoPreview">
                 <div
-                  @click="clearData"
-                  :class="
+                    @click="clearData"
+                    :class="
                     darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`
                   "
-                  class="
+                    class="
                     absolute
                     w-8
                     h-8
@@ -238,26 +238,26 @@
                     top-2
                   "
                 >
-                  <CloseIcon :fill="darkMode ? `#909090` : `#000000`" />
+                  <CloseIcon :fill="darkMode ? `#909090` : `#000000`"/>
                 </div>
-                <img :src="singlePhotoPreview" alt="picture" />
+                <img :src="singlePhotoPreview" alt="picture"/>
               </template>
               <!-- Multiple picture -->
               <template v-if="multiPhotoPreview.length">
                 <div
-                  class="container"
-                  @mouseleave="
+                    class="container"
+                    @mouseleave="
                     () => {
                       this.currentHoverPhoto = null;
                     }
                   "
                 >
                   <figure
-                    v-for="(picture, index) in multiPhotoPreview"
-                    :key="index"
-                    @mouseover="activeRemove(index)"
-                    class="relative cursor-pointer figure"
-                    :class="
+                      v-for="(picture, index) in multiPhotoPreview"
+                      :key="index"
+                      @mouseover="activeRemove(index)"
+                      class="relative cursor-pointer figure"
+                      :class="
                       (index === 0 && multiPhotoPreview.length === 1) ||
                       (index === 0 && multiPhotoPreview.length > 2)
                         ? `span-2`
@@ -265,17 +265,17 @@
                     "
                   >
                     <img
-                      :src="`file://${picture}`"
-                      :alt="index"
-                      @click="previewPhoto(picture)"
+                        :src="`file://${picture}`"
+                        :alt="index"
+                        @click="previewPhoto(picture)"
                     />
                     <div
-                      v-if="currentHoverPhoto === index"
-                      @click="removePicture(index)"
-                      :class="
+                        v-if="currentHoverPhoto === index"
+                        @click="removePicture(index)"
+                        :class="
                         darkMode ? `bg-secondary text-lightGray` : `bg-gray-50`
                       "
-                      class="
+                        class="
                         w-8
                         h-8
                         flex
@@ -290,7 +290,7 @@
                         shadow
                       "
                     >
-                      <CloseIcon :fill="darkMode ? `#909090` : `#000000`" />
+                      <CloseIcon :fill="darkMode ? `#909090` : `#000000`"/>
                     </div>
                   </figure>
                 </div>
@@ -299,32 +299,32 @@
               <!-- Preview video -->
               <template v-if="videoPreview">
                 <div
-                  class="relative w-full"
-                  @mouseenter="
+                    class="relative w-full"
+                    @mouseenter="
                     () => {
                       this.isVideo = true;
                     }
                   "
-                  @mouseleave="
+                    @mouseleave="
                     () => {
                       this.isVideo = false;
                     }
                   "
                 >
                   <video
-                    id="video"
-                    class="w-full object-cover"
-                    :poster="
+                      id="video"
+                      class="w-full object-cover"
+                      :poster="
                       isEdit && editPost.thumbnail != undefined
                         ? editPost.thumbnail.url
                         : ``
                     "
                   >
-                    <source :src="`${videoPreview}`" v-if="isEdit" />
-                    <source :src="`file://${videoPreview}`" v-else />
+                    <source :src="`${videoPreview}`" v-if="isEdit"/>
+                    <source :src="`file://${videoPreview}`" v-else/>
                   </video>
                   <div
-                    class="
+                      class="
                       w-full
                       h-full
                       flex
@@ -335,10 +335,10 @@
                       top-0
                       left-0
                     "
-                    v-if="isVideo"
+                      v-if="isVideo"
                   >
                     <div
-                      class="
+                        class="
                         h-14
                         text-white
                         w-14
@@ -353,10 +353,10 @@
                       "
                     >
                       <div class="ml-2" v-if="!isPlay" @click="playPause()">
-                        <Next fill="#FFF" :size="30" />
+                        <Next fill="#FFF" :size="30"/>
                       </div>
                       <div @click="playPause()" v-else>
-                        <Pause fill="#FFF" :size="30" />
+                        <Pause fill="#FFF" :size="30"/>
                       </div>
                     </div>
                   </div>
@@ -369,16 +369,16 @@
 
       <!-- Footer -->
       <div
-        class="h-24 border-t flex items-center space-x-10 px-5"
-        :class="darkMode ? `border-facebook` : ``"
+          class="h-24 border-t flex items-center space-x-10 px-5"
+          :class="darkMode ? `border-facebook` : ``"
       >
         <template v-if="isBackground">
           <div
-            class="flex overflow-x-scroll preview space-x-3 w-full flex-nowrap"
+              class="flex overflow-x-scroll preview space-x-3 w-full flex-nowrap"
           >
             <div class="h-16 w-16">
               <div
-                class="
+                  class="
                   cursor-pointer
                   flex
                   items-center
@@ -387,24 +387,24 @@
                   w-16
                   rounded-full
                 "
-                :class="darkMode ? `bg-black` : `bg-none text-iconColor`"
-                @click="closeBackground"
+                  :class="darkMode ? `bg-black` : `bg-none text-iconColor`"
+                  @click="closeBackground"
               >
                 None
               </div>
             </div>
             <div
-              v-for="(bg, index) in background"
-              :key="index"
-              class="h-16 w-16"
+                v-for="(bg, index) in background"
+                :key="index"
+                class="h-16 w-16"
             >
               <div
-                ref="background"
-                @click="selectedBackground(index)"
-                :class="
+                  ref="background"
+                  @click="selectedBackground(index)"
+                  :class="
                   backgroundActive === index ? `border-loading border-4` : ``
                 "
-                class="
+                  class="
                   bg-cover bg-center
                   cursor-pointer
                   flex
@@ -414,12 +414,12 @@
                   w-16
                   rounded-full
                 "
-                :style="{ backgroundImage: `url(${bg.photo})` }"
+                  :style="{ backgroundImage: `url(${bg.photo})` }"
               ></div>
             </div>
             <div class="h-16 w-16" @click="moreBackground">
               <div
-                class="
+                  class="
                   cursor-pointer
                   flex
                   items-center
@@ -428,9 +428,9 @@
                   w-16
                   rounded-full
                 "
-                :class="darkMode ? `bg-primary text-gray-300` : `bg-more`"
+                  :class="darkMode ? `bg-primary text-gray-300` : `bg-more`"
               >
-                <LoadingWhite v-if="loadingBackground" />
+                <LoadingWhite v-if="loadingBackground"/>
                 <span v-else>{{ $t("more") }}</span>
               </div>
             </div>
@@ -438,7 +438,7 @@
         </template>
         <template v-else>
           <div
-            class="
+              class="
               w-10
               h-10
               rounded-full
@@ -447,23 +447,23 @@
               justify-center
               cursor-pointer
             "
-            :class="darkMode ? `bg-button` : `bg-softGray`"
-            @click="choosePhoto"
+              :class="darkMode ? `bg-button` : `bg-softGray`"
+              @click="choosePhoto"
           >
             <div>
-              <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`" />
+              <ImageIcon :size="20" :fill="darkMode ? `#909090` : `#055174`"/>
             </div>
             <input
-              type="file"
-              class="hidden"
-              multiple
-              accept="image/*"
-              ref="multiple-photo"
-              @change="selectFiles"
+                type="file"
+                class="hidden"
+                multiple
+                accept="image/*"
+                ref="multiple-photo"
+                @change="selectFiles"
             />
           </div>
           <div
-            class="
+              class="
               w-10
               h-10
               rounded-full
@@ -472,24 +472,24 @@
               justify-center
               cursor-pointer
             "
-            :class="darkMode ? `bg-button` : `bg-softGray`"
-            @click="chooseFileAndClear"
+              :class="darkMode ? `bg-button` : `bg-softGray`"
+              @click="chooseFileAndClear"
           >
             <div>
-              <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`" />
+              <PostVideoIcon :fill="darkMode ? `#909090` : `#055174`"/>
             </div>
             <input
-              type="file"
-              accept="video/*"
-              @click="resetVideo"
-              ref="upload-video"
-              class="hidden"
-              @change="selectVideo"
+                type="file"
+                accept="video/*"
+                @click="resetVideo"
+                ref="upload-video"
+                class="hidden"
+                @change="selectVideo"
             />
           </div>
           <div
-            @click="showBackground"
-            class="
+              @click="showBackground"
+              class="
               w-10
               h-10
               rounded-full
@@ -498,27 +498,27 @@
               justify-center
               cursor-pointer
             "
-            :class="darkMode ? `bg-button` : `bg-softGray`"
+              :class="darkMode ? `bg-button` : `bg-softGray`"
           >
-            <BackgroundIcon :fill="darkMode ? `#909090` : `#055174`" />
+            <BackgroundIcon :fill="darkMode ? `#909090` : `#055174`"/>
           </div>
         </template>
       </div>
     </div>
     <template v-if="isCamera">
       <Camera
-        @closeCamera="
+          @closeCamera="
           () => {
             this.isCamera = false;
           }
         "
-        @pictureTaken="pictureTaken($event)"
+          @pictureTaken="pictureTaken($event)"
       />
     </template>
     <template v-if="isMessage">
       <Message
-        :message="$t('limit_photo')"
-        @closeMessage="
+          :message="$t('limit_photo')"
+          @closeMessage="
           () => {
             this.isMessage = false;
           }
@@ -527,20 +527,20 @@
     </template>
     <template v-if="isConfirm">
       <ConfirmDelete
-        :message="$t(confirmMessage)"
-        @closeMessage="
+          :message="$t(confirmMessage)"
+          @closeMessage="
           () => {
             this.isConfirm = false;
           }
         "
-        @ConfirmDeleteCart="confirmDeleteFile"
+          @ConfirmDeleteCart="confirmDeleteFile"
       >
       </ConfirmDelete>
     </template>
     <template v-if="isPreviewPhoto">
       <PreviewPhoto
-        :img-url="imgUrl"
-        @closeIcon="
+          :img-url="imgUrl"
+          @closeIcon="
           () => {
             this.isPreviewPhoto = false;
           }
@@ -551,14 +551,13 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import CloseIcon from "@/components/CloseIcon";
 import Avatar from "@/Avatar";
 import ImageIcon from "@/components/ImageIcon";
 import PostVideoIcon from "@/components/PostVideoIcon";
 import ChevronDown from "@/views/MyCourse/components/Chevron";
 import BackgroundIcon from "@/components/BackgroundIcon";
-import mode from "@/mixins/mode";
 import Camera from "@/views/Component/Post/Camera";
 import LoadingWhite from "@/components/LoadingWhite";
 import Next from "@/views/Component/Post/Next";
@@ -591,7 +590,11 @@ export default {
     LoadingWhite,
   },
   props: {
-    isEdit: false,
+    isEdit: {
+      default: () => {
+        return false;
+      }
+    },
     editDetail: {
       type: Object,
       default: () => {
@@ -600,7 +603,7 @@ export default {
     },
   },
   computed: {
-    ...mapState("setting", ["darkMode"]),
+    ...mapState("setting", ["darkMode", "className"]),
     ...mapState("upload", ["progress"]),
     ...mapState("auth", ["stProfile"]),
     ...mapState("background", ["background", "loadingBackground"]),
@@ -618,9 +621,9 @@ export default {
       isBackground: false,
       backgroundActive: 0,
       backgroundPhoto:
-        this.isEdit && this.editDetail.type == 1 && this.editDetail.thumbnail
-          ? this.editDetail.thumbnail.url
-          : null,
+          this.isEdit && this.editDetail.type == 1 && this.editDetail.thumbnail
+              ? this.editDetail.thumbnail.url
+              : null,
       backgroundColor: "",
       isConfirm: false,
       confirmMessage: "remove_selected_image",
@@ -632,7 +635,7 @@ export default {
       singlePhotoPreview: null,
       multiPhotoPreview: [],
       videoPreview:
-        this.isEdit && this.editDetail.video ? this.editDetail.video.url : null,
+          this.isEdit && this.editDetail.video ? this.editDetail.video.url : null,
       selectedFiles: [],
       loading: false,
       isCamera: false,
@@ -644,7 +647,6 @@ export default {
       },
     };
   },
-  mixins: [mode],
   methods: {
     ...mapActions("upload", ["singleUpload", "multiUpload", "videoUpload"]),
     ...mapActions("social", ["postSocial", "editSocial"]),
@@ -688,8 +690,8 @@ export default {
         this.selectedType = "video";
         this.confirmMessage = "remove_selected_image";
         if (
-          this.singlePhotoPreview ||
-          (this.editPost.photo && this.editPost.photo.length)
+            this.singlePhotoPreview ||
+            (this.editPost.photo && this.editPost.photo.length)
         ) {
           this.isConfirm = true;
         } else {
@@ -762,20 +764,20 @@ export default {
         this.backgroundPhoto = this.background[index].photo;
         setTimeout(() => {
           fac
-            .getColorAsync(document.querySelector("#image"))
-            .then((color) => {
-              this.backgroundColor = color.rgba;
-              this.color = color.isDark ? "#fff" : "#000";
-              let element = document.getElementById("background");
-              if (color.isDark) {
-                element.classList.remove("placeholder-black");
-                element.classList.add("placeholder-white");
-              } else {
-                element.classList.remove("placeholder-white");
-                element.classList.add("placeholder-black");
-              }
-            })
-            .catch((error) => error);
+              .getColorAsync(document.querySelector("#image"))
+              .then((color) => {
+                this.backgroundColor = color.rgba;
+                this.color = color.isDark ? "#fff" : "#000";
+                let element = document.getElementById("background");
+                if (color.isDark) {
+                  element.classList.remove("placeholder-black");
+                  element.classList.add("placeholder-white");
+                } else {
+                  element.classList.remove("placeholder-white");
+                  element.classList.add("placeholder-black");
+                }
+              })
+              .catch((error) => error);
         }, 100);
       }
     },
@@ -792,7 +794,7 @@ export default {
       if (this.isEdit) {
         if (this.editPost.photo[indexed] && this.editPost.photo[indexed].name) {
           this.selectedFiles = this.selectedFiles.filter(
-            (item) => item.name != this.editPost.photo[indexed].name
+              (item) => item.name != this.editPost.photo[indexed].name
           );
         }
         this.editPost.photo = this.editPost.photo.filter((item, index) => {
@@ -912,42 +914,42 @@ export default {
             payload.append("photo", this.selectedFiles[i]);
           }
           this.multiUpload(payload)
-            .then((res) => {
-              let photo = [];
+              .then((res) => {
+                let photo = [];
 
-              for (let i = 0; i < this.editPost.photo.length; i++) {
-                if (!this.editPost.photo[i].name) {
-                  photo.push(this.editPost.photo[i]);
+                for (let i = 0; i < this.editPost.photo.length; i++) {
+                  if (!this.editPost.photo[i].name) {
+                    photo.push(this.editPost.photo[i]);
+                  }
                 }
-              }
-              if (res.data && res.data.length) {
-                for (let j = 0; j < res.data.length; j++) {
-                  photo.push(res.data[j]);
+                if (res.data && res.data.length) {
+                  for (let j = 0; j < res.data.length; j++) {
+                    photo.push(res.data[j]);
+                  }
                 }
-              }
-              this.payload.photo = photo;
-              this.editSocial(this.payload).then(() => {
+                this.payload.photo = photo;
+                this.editSocial(this.payload).then(() => {
+                  this.loading = false;
+                  this.closeCreate();
+                });
+              })
+              .catch(() => {
                 this.loading = false;
-                this.closeCreate();
               });
-            })
-            .catch(() => {
-              this.loading = false;
-            });
         } else if (this.videoPreview) {
           this.payload.type = 3;
           this.videoUpload(payload)
-            .then((res) => {
-              this.payload["video"] = { url: res.data.url };
-              this.editSocial(this.payload).then(() => {
+              .then((res) => {
+                this.payload["video"] = {url: res.data.url};
+                this.editSocial(this.payload).then(() => {
+                  this.loading = false;
+                  this.resetCaption();
+                  this.closeCreate();
+                });
+              })
+              .catch(() => {
                 this.loading = false;
-                this.resetCaption();
-                this.closeCreate();
               });
-            })
-            .catch(() => {
-              this.loading = false;
-            });
         } else {
           this.payload.photo = this.editPost.photo;
           this.editSocial(this.payload).then(() => {
@@ -971,14 +973,14 @@ export default {
             payload.delete("photo");
             this.payload.photo = res.data;
             this.postSocial(this.payload)
-              .finally(() => {
-                this.loading = false;
-                this.resetCaption();
-                this.closeCreate();
-              })
-              .catch(() => {
-                this.loading = false;
-              });
+                .finally(() => {
+                  this.loading = false;
+                  this.resetCaption();
+                  this.closeCreate();
+                })
+                .catch(() => {
+                  this.loading = false;
+                });
           }
         });
       }
@@ -996,31 +998,31 @@ export default {
           this.payload.type = 2;
           this.payload.photo = res.data;
           this.postSocial(this.payload)
-            .then(() => {
-              this.loading = false;
-              this.resetCaption();
-              this.closeCreate();
-            })
-            .catch(() => {
-              this.loading = false;
-            });
+              .then(() => {
+                this.loading = false;
+                this.resetCaption();
+                this.closeCreate();
+              })
+              .catch(() => {
+                this.loading = false;
+              });
         });
       }
 
       if (this.videoPreview) {
         this.payload.type = 3;
         this.videoUpload(payload)
-          .then((res) => {
-            this.payload["video"] = { url: res.data.url };
-            this.postSocial(this.payload).then(() => {
+            .then((res) => {
+              this.payload["video"] = {url: res.data.url};
+              this.postSocial(this.payload).then(() => {
+                this.loading = false;
+                this.resetCaption();
+                this.closeCreate();
+              });
+            })
+            .catch(() => {
               this.loading = false;
-              this.resetCaption();
-              this.closeCreate();
             });
-          })
-          .catch(() => {
-            this.loading = false;
-          });
       }
 
       if (this.isBackground) {
@@ -1033,10 +1035,10 @@ export default {
       }
 
       if (
-        !this.singlePhotoPreview &&
-        !this.multiPhotoPreview.length &&
-        !this.isBackground &&
-        !this.videoPreview
+          !this.singlePhotoPreview &&
+          !this.multiPhotoPreview.length &&
+          !this.isBackground &&
+          !this.videoPreview
       ) {
         this.postSocial(this.payload).then((res) => {
           this.loading = false;

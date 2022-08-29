@@ -14,6 +14,7 @@ export default {
         page: 1,
         darkMode: false,
         feedWidth: 600,
+        className: "flex items-center justify-center fixed left-0 top-0 z-50 bg-black bg-opacity-80 w-full h-full"
     },
     mutations: {
         setFeedWidth(state, payload) {
@@ -93,7 +94,7 @@ export default {
                 })
             })
         },
-        checkForUpdate({commit}) {
+        checkForUpdate() {
             return new Promise((resolve, reject) => {
                 axios.get(config.checkingVersionUrl + `update`).then(res => {
                     resolve(res)

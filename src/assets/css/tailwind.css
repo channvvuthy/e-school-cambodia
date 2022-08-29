@@ -33,5 +33,13 @@
     font-family: 'Poppins-Medium';
     src: url('./../../../public/font/Poppins/Poppins-Medium.ttf');
 }
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('./../../../public/font/Ubuntu.ttf');
+}
+@font-face {
+    font-family: 'UbuntuLight';
+    src: url('./../../../public/font/UbuntuLight.ttf');
+}
 
 @tailwind utilities;

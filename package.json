@@ -69,6 +69,7 @@
     "vue-moments-ago": "^0.2.0",
     "vue-observe-visibility": "^1.0.0",
     "vue-pdf": "^4.2.0",
+    "vue-pincode-input": "^0.4.0",
     "vue-router": "^3.2.0",
     "vue-socket.io": "^3.0.10",
     "vue-sweetalert2": "^4.2.0",
@@ -83,7 +84,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-eslint": "^3.7.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "^4.5.13",

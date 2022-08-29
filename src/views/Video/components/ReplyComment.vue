@@ -126,7 +126,6 @@ import SmileEmoji from "@/views/Video/components/SmileEmoji";
 import Avatar from "@/Avatar";
 import PhotoView from "@/views/Video/components/PhotoView";
 import Sticker from "@/views/Video/components/Sticker";
-import mode from "@/mixins/mode";
 import StickerView from "@/views/Video/components/StickerView";
 import SendMessageIcon from "@/components/SendMessageIcon";
 import Cropper from "@/views/Component/Cropper/Cropper";
@@ -135,7 +134,7 @@ import helper from "@/helper/helper";
 export default {
   computed: {
     ...mapState("auth", ["stProfile"]),
-    ...mapState("setting", ["darkMode"]),
+    ...mapState("setting", ["darkMode","className"]),
   },
   components: {
     StickerView,
@@ -148,7 +147,6 @@ export default {
     Cropper,
     LoadingWhite,
   },
-  mixins: [mode],
   props: {
     id: {
       default: () => null,
@@ -218,7 +216,7 @@ export default {
             };
             this.$store
               .dispatch("social/replyComment", this.comment)
-              .then((res) => {
+              .then(() => {
                 this.comment.text = "";
                 this.$delete(this.comment, "sticker");
                 this.$delete(this.comment, "photo");
@@ -230,7 +228,7 @@ export default {
       } else {
         this.$store
           .dispatch("social/replyComment", this.comment)
-          .then((res) => {
+          .then(() => {
             this.comment.text = "";
             this.$delete(this.comment, "sticker");
             this.$delete(this.comment, "photo");

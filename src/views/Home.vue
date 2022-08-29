@@ -22,7 +22,6 @@
 
 <script>
 
-import FilterList from "./Filter/FilterList.vue"
 import NewFeed from "./Video/NewFeed.vue"
 import Story from "./Story/Story.vue"
 import {mapActions, mapState} from "vuex"
@@ -40,7 +39,6 @@ export default {
   components: {
     ScrollTopIcon,
     Story,
-    FilterList,
     NewFeed,
     Signin
   },

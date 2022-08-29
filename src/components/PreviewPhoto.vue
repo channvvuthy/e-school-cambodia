@@ -12,10 +12,13 @@
 </template>
 
 <script>
-import mode from "@/mixins/mode";
 import CloseIcon from "@/components/CloseIcon";
+import {mapState} from "vuex";
 
 export default {
+  computed: {
+    ...mapState('setting', ['className']),
+  },
   name: "PreviewPhoto",
   components: {CloseIcon},
   props: {
@@ -23,7 +26,6 @@ export default {
       default: () => null
     }
   },
-  mixins: [mode]
 }
 </script>
 

@@ -221,7 +221,7 @@ export default {
                 })
             })
         },
-        muteContact({}, payload) {
+        muteContact({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `etalk/contact/mute`, payload).then(response => {
                     resolve(response)
@@ -252,7 +252,7 @@ export default {
                 })
             })
         },
-        blockUser({}, payload) {
+        blockUser({commit}, payload) {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + `etalk/contact/block`, payload).then(response => {
                     resolve(response)

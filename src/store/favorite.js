@@ -181,7 +181,7 @@ export default {
                 axios.get(config.apiUrl + 'favorite?p=' + page).then(response => {
 
                     if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                        helper.errorMessage(response.data.msg)
                     }
 
                     resolve(response.data.data)

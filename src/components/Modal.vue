@@ -14,12 +14,10 @@
 </template>
 
 <script>
-import mode from "@/mixins/mode";
 import {mapState} from "vuex";
 
 export default {
   name: "Modal",
-  mixins: [mode],
   props: {
     isTransparent: {
       default: () => false
@@ -32,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('setting', ['darkMode'])
+    ...mapState('setting', ['darkMode', 'className'])
   },
   methods: {
     dismiss(event) {

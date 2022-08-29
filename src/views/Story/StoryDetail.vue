@@ -264,7 +264,7 @@ export default {
           this.backgroundColor = color.rgba;
           this.color = color.isDark ? "#fff" : "#000";
         })
-        .catch((e) => {});
+        .catch(() => {});
     },
     nextStory() {
       this.showViewer = false;
