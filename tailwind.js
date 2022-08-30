@@ -197,8 +197,8 @@ module.exports = {
             mono: ['Poppins', 'Kantumruy-Regular',],
             khmer_os: ['Poppins', 'Kantumruy-Light', 'Kantumruy-Regular'],
             PoppinsMedium: ['Poppins-Medium', 'Kantumruy-Regular'],
-            Ubuntu: ['Ubuntu'],
-            UbuntuLight: ['UbuntuLight'],
+            Ubuntu: ['Ubuntu', 'Kantumruy-Regular'],
+            UbuntuLight: ['UbuntuLight', 'Kantumruy-Regular'],
 
 
         },

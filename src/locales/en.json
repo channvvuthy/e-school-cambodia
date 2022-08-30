@@ -443,7 +443,7 @@
   "exam_start_soon": "Exam will start soon",
   "exam_has_started": "Exam has started",
   "exam_has_ended": "Exam has ended",
-  "submit_exam":"Submit Exam",
+  "submit_exam": "Submit Exam",
   "actions": {
     "delete": "Delete",
     "edit": "Edit",
@@ -456,5 +456,9 @@
   "my_zoom": "My Zoom",
   "2134": "Please wait, the session has not started yet",
   "accept": "Accept",
-  "no_video": "Don't have the video right now"
+  "no_video": "Don't have the video right now",
+  "top_up": "Topup",
+  "receive_from": "Receive from",
+  "send_to": "Send to",
+  "paid": "Paid"
 }

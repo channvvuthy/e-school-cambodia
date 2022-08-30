@@ -10,6 +10,7 @@ const checkingVersionUrl = process.env.VUE_APP_CHECKING_URL;
 const liveStreamUrl = process.env.VUE_APP_LIVE_STREAM;
 const microserviceUrl = process.env.VUE_APP_MICRO_SERVICE_URL
 const customProtocolUrl = process.env.VUE_APP_CUSTOM_PROTOCOL_URL
+const secretKey = process.env.VUE_APP_SECRET_KEY
 
 export default {
     apiUrl,
@@ -23,5 +24,6 @@ export default {
     checkingVersionUrl,
     liveStreamUrl,
     microserviceUrl,
-    customProtocolUrl
+    customProtocolUrl,
+    secretKey
 }
