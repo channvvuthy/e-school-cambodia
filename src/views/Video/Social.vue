@@ -17,7 +17,7 @@
             :avatar-url="stProfile.photo"
             :size="16"></Avatar>
         <textarea
-            :class="mode()"
+            :class="className"
             readonly
             @click="()=>{this.isPost = true}"
             v-model="payload.caption"

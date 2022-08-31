@@ -5,9 +5,10 @@ import 'vue-toast-notification/dist/theme-sugar.css';
 Vue.use(VueToast);
 import i18n from "./../i18n"
 import {machineIdSync} from 'node-machine-id'
+import config from "@/config";
 
 const os = require('os')
-
+const crypto = require('crypto')
 
 // Validate only number
 const isNumber = (evt) => {
@@ -151,7 +152,25 @@ const khmerNumber = (str) => {
         .replace(/0/g, "០")
 }
 
+const encrypt = (text) => {
+    let iv = Buffer.from(config.secretKey);
+    let key = Buffer.from(config.secretKey.toString('base64'));
+    const cipher = crypto.createCipheriv("aes-128-cbc", key, iv);
+    let encrypted = cipher.update(text, 'utf8', 'base64');
+    return encrypted + cipher.final('base64');
+}
+
+const decrypt = (text) =>{
+    let iv = Buffer.from(config.secretKey);
+    let key = Buffer.from(config.secretKey.toString('base64'));
+    const decipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
+    let decrypted = decipher.update(text, 'base64', 'utf8');
+    return decrypted + decipher.final('utf8');
+}
+
 export default {
+    encrypt,
+    decrypt,
     isNumber,
     cutString,
     kFormatter,

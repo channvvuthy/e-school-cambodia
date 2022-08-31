@@ -15,7 +15,7 @@
         props: {
             fill: {
                 default: function () {
-                    return "#000000"
+                    return "#4A4A4A"
                 }
             },
             size: {

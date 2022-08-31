@@ -460,5 +460,9 @@
   "top_up": "Topup",
   "receive_from": "Receive from",
   "send_to": "Send to",
-  "paid": "Paid"
+  "paid": "Paid",
+  "download": "Download",
+  "scan": "Scan",
+  "browse": "Browse",
+  "wallet": "Wallet"
 }

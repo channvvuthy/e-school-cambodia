@@ -1,42 +1,44 @@
 <template>
-  <div class="fixed font-khmer_os z-50" style="width: 350px;"
+  <div :class="darkMode?'bg-secondary text-gray-300':'bg-white text-black'"
        :style="isHide?{marginLeft:'-350px'}:{marginLeft:'0px'}"
-       :class="darkMode?'bg-secondary text-gray-300':'bg-white text-black'"
+       class="fixed font-khmer_os z-50"
+       style="width: 350px;"
 
   >
     <div class="sidebar relative h-screen shadow">
-      <div class="toggle absolute rounded py-4 top-8 cursor-pointer"
-           :class="!isHide?`pl-5 pr-2 -right-8 ${darkMode?`bg-darkBlue`:`bg-primary`}`:`pl-2 pr-6 -right-12 ${darkMode?`bg-darkBlue`:`bg-primary`}`"
-           @click="switchSidebar">
+      <div
+          :class="!isHide?`pl-5 pr-2 -right-8 ${darkMode?`bg-darkBlue`:`bg-primary`}`:`pl-2 pr-6 -right-12 ${darkMode?`bg-darkBlue`:`bg-primary`}`"
+          class="toggle absolute rounded py-4 top-8 cursor-pointer"
+          @click="switchSidebar">
         <template v-if="!isHide">
           <div class="bg-white rounded-full absolute h-3 w-3 left-0 top-5 flex justify-center items-center">
-            <BackIcon :width="8" :height="8"/>
+            <BackIcon :height="8" :width="8"/>
           </div>
-          <img src="/icon/Menu/menu.png" class="h-5">
+          <img class="h-5" src="/icon/Menu/menu.png">
         </template>
         <template v-else>
           <div
               class="bg-white rounded-full absolute h-3 w-3 right-2 top-5 flex justify-center items-center transform rotate-180">
-            <BackIcon :width="8" :height="8"/>
+            <BackIcon :height="8" :width="8"/>
           </div>
-          <img src="/icon/Menu/menu-rotate.png" class="h-5">
+          <img class="h-5" src="/icon/Menu/menu-rotate.png">
         </template>
       </div>
-      <div class="profile px-10 py-8 flex items-end text-white justify-between"
-           :class="darkMode?`bg-darkBlue`:`bg-primary`">
-        <div style="padding: 1px 0;" class="flex flex-col justify-center items-center">
-          <div class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
-               :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}"
+      <div :class="darkMode?`bg-darkBlue`:`bg-primary`"
+           class="profile px-10 py-8 flex items-end text-white justify-between">
+        <div class="flex flex-col justify-center items-center" style="padding: 1px 0;">
+          <div :style="{backgroundImage:`url(${token?stProfile['photo']:'/profile.png'})`}"
+               class="w-20 h-20 rounded-full bg-cover bg-center m-auto bg-white cursor-pointer relative"
                @click="() => {token? this.$router.push('/profile').catch(err=>{}):``}">
           </div>
-          <div class="flex justify-between items-end mt-3  cursor-pointer"
-               :class="localize==='en'?'text-xs':'text-xs'">
+          <div :class="localize==='en'?'text-xs':'text-xs'"
+               class="flex justify-between items-end mt-3  cursor-pointer">
             <p class="name font-PoppinsMedium">
               {{ token ? stProfile.first_name + " " + stProfile.last_name : $t('unname') }}
             </p>
           </div>
         </div>
-        <div class="cursor-pointer" @click="getMyQr()" v-if="token">
+        <div v-if="token" class="cursor-pointer" @click="getMyQr()">
           <div>
             <QRIcon/>
           </div>
@@ -67,27 +69,145 @@
                 class="absolute right-2 top-2 ads z-50 bg-primary flex items-center justify-center w-8 h-6 text-white bg-opacity-70 rounded text-xs">
               Ads
             </div>
-            <img :src="ads.banner" @click="openLink(ads.link)" class="cursor-pointer max-h-full"/>
+            <img :src="ads.banner" class="cursor-pointer max-h-full" @click="openLink(ads.link)"/>
           </div>
         </div>
       </div>
     </div>
     <!-- QR -->
-    <div class="fixed w-full h-full top-0 z-50 left-0 bg-black bg-opacity-95 flex items-center justify-center"
-         v-if="showQr">
-      <div class="absolute right-5 top-5 cursor-pointer" @click="()=>{this.showQr = false}">
-        <CloseIcon fill="#9CA3AF"></CloseIcon>
-      </div>
-      <div class="w-80">
-        <img :src="qrUrl" class="max-w-full rounded-t">
-        <input type="text" id="qrCode" class="absolute focus:outline-none" :value="profile_url"
-               style="z-index:-10">
-        <div class="bg-primary h-12 flex items-center justify-center px-3 rounded-b">
-          <div class="cursor-pointer text-white" @click="copyText">{{ $t('copy_link') }}</div>
+    <Modal v-if="showQr" :class="className" width="w-2/6">
+      <div class="relative">
+        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
+             @click="()=>{this.showQr = false}">
+          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
+        </div>
+        <div>
+          <div :class="darkMode ? `border-facebook`: ``" class="px-5 py-3 font-Ubuntu text-center border-b">
+            {{ $t(modalTitle) }}
+          </div>
+          <!--Content-->
+          <div :class="darkMode ?`border-facebook` : ``" class="border-b">
+            <!-- Profile -->
+            <div v-if="modalTitle == 'profile'" class="text-center">
+              <div class="font-Ubuntu text-primary mt-5">SCAN THIS QR</div>
+              <div class="font-UbuntuLight mb-5">To go to your profile!</div>
+              <div class="flex items-center justify-center">
+                <qrcode-vue :size="270" :value="encrypt()" level="H"/>
+              </div>
+
+              <div class="flex items-center justify-center my-7">
+                <input id="qrCode" :value="profile_url" class="absolute focus:outline-none" style="z-index:-10"
+                       type="text">
+                <div
+                    :class="darkMode ? `bg-wallet1` : `bg-gray-100`"
+                    class=" text-primary shadow cursor-pointer font-UbuntuLight rounded-md h-10 px-10 flex items-center justify-center"
+                    @click="copyText">
+                  <CopyIcon :size="22"/>
+                  <div class="w-2"></div>
+                  <div>{{ $t('copy_link') }}</div>
+                </div>
+                <div class="w-10"></div>
+                <div
+                    @click="downoad()"
+                    :class="darkMode ? `bg-wallet1` : `bg-gray-100`"
+                    class="text-primary shadow cursor-pointer font-UbuntuLight rounded-md h-10 px-10 flex items-center justify-center">
+                  <DownloadIcon :size="22"/>
+                  <div class="w-2"></div>
+                  <div>{{ $t('download') }}</div>
+                </div>
+              </div>
+            </div>
+            <!-- Scan -->
+            <div v-if="modalTitle == 'scan'" class="text-center">
+              <template v-if="!isPay">
+                <div class="flex items-center justify-center mt-5">
+                  <PaymentIcon/>
+                </div>
+              </template>
+              <template v-else>
+                <div class="font-Ubuntu text-primary mt-5">Scan QR Code</div>
+                <div class="font-UbuntuLight mb-5">
+                  Scan's only available for E-School Cambodia App!
+                </div>
+                <div class="hidden">
+                  <qrcode-capture ref="qrcode" @decode="onDecode"></qrcode-capture>
+                </div>
+                <div class="flex justify-center items-center">
+                  <div
+                      :class="darkMode ? `bg-wallet1` : `bg-gray-100`"
+                      class=" text-primary shadow cursor-pointer font-UbuntuLight rounded-md h-10 px-10 flex items-center justify-center"
+                      @click="browse()">
+                    <ImageIcon :size="22" fill="#055174"/>
+                    <div class="w-4"></div>
+                    <div class="flex items-center justify-center" v-if="loading">
+                      <div class="loader"></div>
+                    </div>
+                    <div>{{ $t('browse') }}</div>
+                  </div>
+                </div>
+              </template>
+              <div class="h-10"></div>
+            </div>
+            <!-- Wallet -->
+            <div v-if="modalTitle == 'wallet'" class="text-center">
+              <div class="font-Ubuntu text-primary mt-5">SCAN THIS QR</div>
+              <div class="font-UbuntuLight mb-5">
+                To receive money from another account!
+              </div>
+              <div class="flex justify-center items-center my-5">
+                <div class="bg-gray-100 flex rounded-lg px-5 py-3 font-Ubuntu">
+                  <div>$</div>
+                  <div class="w-2"></div>
+                  <input v-model="price" class="bg-transparent outline-none" type="number">
+                </div>
+              </div>
+              <div class="flex justify-center items-center">
+                <qrcode-vue :size="270" :value="encrypt()" level="H"/>
+              </div>
+              <div class="flex justify-center items-center my-5">
+                <div class="bg-gray-100 flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary">
+                  <div>
+                    {{ stProfile.first_name + ' ' + stProfile.last_name }}
+                  </div>
+                  <div>
+                    0{{ stProfile.phone }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <!--Tap-->
+          <div :class="darkMode ? `bg-secondary` : `bg-gray-50`"
+               class="flex justify-between items-center px-10 py-3 font-UbuntuLight rounded-b-lg">
+            <div class=" flex-col justify-center items-center text-center cursor-pointer" @click="onTap('profile')">
+              <div class="pl-2">
+                <template>
+                  <UserIcon :fill="modalTitle == 'profile' ? `#055174`: `#4A4A4A`"/>
+                </template>
+              </div>
+              <div :class="modalTitle == 'profile' ? `text-primary`: ``" class="text-sm">
+                {{ $t('profile') }}
+              </div>
+            </div>
+            <div class="flex-col justify-center items-center text-center cursor-pointer" @click="onTap('scan')">
+              <div class="pl-1">
+                <ScanIcon :fill="modalTitle == 'scan' ? `#055174`: `#4A4A4A`"/>
+              </div>
+              <div :class="modalTitle == 'scan' ? `text-primary`: ``" class="text-sm">
+                {{ $t('scan') }}
+              </div>
+            </div>
+            <div class="flex-col justify-center items-center text-center cursor-pointer" @click="onTap('wallet')">
+              <WalletIcon :fill="modalTitle == 'wallet' ? `#055174`: `#4A4A4A`"/>
+              <div :class="modalTitle == 'wallet' ? `text-primary`: ``" class="text-sm">
+                {{ $t('wallet') }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-    </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -101,10 +221,29 @@ import eSchool from "./components/eSchool.vue"
 import {mapActions, mapState} from "vuex"
 import helper from "./../../helper/helper"
 import MyBalance from "@/views/MyBalance/Balance"
+import Modal from "@/components/Modal";
+import UserIcon from "@/components/UserIcon";
+import ScanIcon from "@/components/ScanIcon";
+import WalletIcon from "@/components/WalletOutlineIcon";
+import CopyIcon from "@/components/CopyIcon";
+import DownloadIcon from "@/components/DownloadIcon";
+import ImageIcon from "@/components/ImageIcon";
+import {QrcodeCapture} from 'vue-qrcode-reader'
+import QrcodeVue from 'qrcode.vue'
+import PaymentIcon from "@/components/PaymentIcon";
 
 const {ipcRenderer} = require('electron')
 export default {
   components: {
+    PaymentIcon,
+    QrcodeVue,
+    QrcodeCapture,
+    ImageIcon,
+    DownloadIcon,
+    CopyIcon,
+    WalletIcon,
+    ScanIcon,
+    Modal,
     MyBalance,
     BackIcon,
     Privacy,
@@ -112,25 +251,74 @@ export default {
     Study,
     eSchool,
     QRIcon,
-    CloseIcon
+    CloseIcon,
+    UserIcon
   },
   data() {
     return {
       showQr: false,
       loading: false,
       qrUrl: "",
-      profile_url: ""
+      qrImage: "",
+      profile_url: "",
+      modalTitle: "profile",
+      price: 0,
+      qr: {},
+      isPay: true,
     }
   },
   computed: {
     ...mapState('auth', ['token', 'stProfile']),
-    ...mapState('setting', ['localize', 'darkMode', 'isHide']),
+    ...mapState('setting', ['localize', 'darkMode', 'isHide', 'className']),
     ...mapState('home', ['ads'])
   },
 
   methods: {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
     ...mapActions('upload', ['singleUpload']),
+    downoad() {
+      let canvas = document.getElementsByTagName('canvas')[0]
+      this.qrImage = canvas.toDataURL("image/png");
+      let a = document.createElement("a");
+      a.href = this.qrImage;
+      a.download = "myQrcode.png";
+      a.click()
+    },
+    onDecode(text) {
+      this.loading = true
+      try {
+        let decrypt = this.decrypt(text)
+        let data = JSON.parse(decrypt)
+        switch (data.type) {
+          case 0:
+            this.showQr = false
+            this.$router.push({
+              name: "user",
+              params: {user_id: data.user_id}
+            })
+            break;
+          default:
+
+        }
+
+
+      } catch (err) {
+        this.showQr = false
+        helper.errorMessage(err)
+      }
+    },
+    encrypt() {
+      let text = JSON.stringify(this.qr)
+      return helper.encrypt(text)
+    },
+    decrypt(text) {
+      return helper.decrypt(text)
+    },
+    browse() {
+      let e = this.$refs.qrcode
+      e.$el.click()
+    },
+
     switchSidebar() {
       if (this.isHide) {
         this.$store.commit('setting/toggleSidebar', false)
@@ -139,18 +327,46 @@ export default {
 
       }
     },
+    onTap(title) {
+      this.modalTitle = title
+      switch (title) {
+        case "wallet":
+          this.qr = {
+            type: 1,
+            user_id: this.stProfile._id,
+            name: this.stProfile.first_name + ' ' + this.stProfile.last_name,
+            price: parseFloat(this.price),
+            receipt_id: "0" + this.stProfile.phone
+          }
+          break
+        default:
+          this.qr = {
+            type: 0,
+            user_id: this.stProfile._id,
+            name: "",
+          }
+          break
+      }
+
+    },
     openLink(link) {
       ipcRenderer.send('openLink', link)
     },
+
+
     getMyQr() {
-      this.getQr().then(response => {
-        if (response.data.msg) {
-          helper.errorMessage(response.data.msg)
+      this.loading = true
+      this.getQr().then(res => {
+        this.loading = false
+        if (res.data.msg) {
+          helper.errorMessage(res.data.msg)
           return;
         }
-        this.qrUrl = response.data.data.qrcode_url
-        this.profile_url = response.data.data.profile_url
+        this.qrUrl = res.data.data.qrcode_url
+        this.profile_url = res.data.data.profile_url
         this.showQr = true
+      }).catch(err => {
+        helper.errorMessage(err.res.data.msg)
       })
     },
     copyText() {
@@ -170,11 +386,11 @@ export default {
           if (res.data) {
             let photo = new FormData()
             photo.append("photo", res.data.url)
-            this.changeProfilePhotoPhoto(photo).then(response => {
+            this.changeProfilePhotoPhoto(photo).then(res => {
               if (res.data) {
                 let stProfile = localStorage.getItem("stProfile")
                 stProfile = JSON.parse(stProfile)
-                stProfile.photo = response.data.photo
+                stProfile.photo = res.data.photo
                 this.$store.commit("auth/studentProfile", stProfile)
                 localStorage.setItem("stProfile", JSON.stringify(stProfile))
               }
@@ -182,14 +398,15 @@ export default {
             })
           }
           this.loading = false
-
         })
-
-
       }
     },
   },
-
+  watch: {
+    'price': function (val) {
+      this.qr.price = parseFloat(this.price)
+    }
+  }
 
 }
 </script>

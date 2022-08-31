@@ -204,18 +204,10 @@ export default {
 
   methods: {
     encrypt(text) {
-      let iv = Buffer.from(config.secretKey);
-      let key = Buffer.from(config.secretKey.toString('base64'));
-      const cipher = crypto.createCipheriv("aes-128-cbc", key, iv);
-      let encrypted = cipher.update(text, 'utf8', 'base64');
-      return encrypted += cipher.final('base64');
+      return helper.encrypt(text)
     },
     decrypt(text) {
-      let iv = Buffer.from(config.secretKey);
-      let key = Buffer.from(config.secretKey.toString('base64'));
-      const decipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
-      let decrypted = decipher.update(text, 'base64', 'utf8');
-      return decrypted += decipher.final('utf8');
+      return helper.decrypt(text)
     },
     getPin(password) {
       axios.get(config.apiUrl + `wallet/pin?password=${password}`).then(res => {
