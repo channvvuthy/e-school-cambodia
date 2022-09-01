@@ -119,9 +119,40 @@
             </div>
             <!-- Scan -->
             <div v-if="modalTitle == 'scan'" class="text-center">
-              <template v-if="!isPay">
+              <template v-if="isPay">
                 <div class="flex items-center justify-center mt-5">
                   <PaymentIcon/>
+                </div>
+                <div class="text-primary font-UbuntuLight my-5">You are about to transfer</div>
+                <div class="flex justify-center items-center my-5">
+                  <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
+                       :class="darkMode ?'bg-wallet1' : 'bg-gray-100'">
+                    <div class="font-Ubuntu text-primary text-lg">
+                      ${{ pay.price }}
+                    </div>
+                  </div>
+                </div>
+                <div class="border-b-2 border-dotted" :class="darkMode ? 'border-facebook': 'border-red-600'">
+                  <span class=" font-UbuntuLight relative top-3"
+                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">To account below</span>
+                </div>
+                <div class="flex justify-center items-center my-10">
+                  <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
+                       :class="darkMode ?'bg-wallet1' : 'bg-gray-100'">
+                    <div>
+                      {{ pay.name }}
+                    </div>
+                    <div>
+                      0{{ pay.receipt_id }}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <SwipeButton
+                      ref="swipeButton"
+                      class="swipe-button"
+                      @actionConfirmed="onActionConfirmed"
+                  />
                 </div>
               </template>
               <template v-else>
@@ -132,21 +163,25 @@
                 <div class="hidden">
                   <qrcode-capture ref="qrcode" @decode="onDecode"></qrcode-capture>
                 </div>
+                <div class="mb-7">
+                  <qrcode-stream @decode="onScan" @init="onInit"/>
+                </div>
                 <div class="flex justify-center items-center">
                   <div
                       :class="darkMode ? `bg-wallet1` : `bg-gray-100`"
-                      class=" text-primary shadow cursor-pointer font-UbuntuLight rounded-md h-10 px-10 flex items-center justify-center"
+                      class="text-primary shadow cursor-pointer font-UbuntuLight rounded h-10 px-10 flex items-center justify-center"
                       @click="browse()">
                     <ImageIcon :size="22" fill="#055174"/>
                     <div class="w-4"></div>
                     <div class="flex items-center justify-center" v-if="loading">
                       <div class="loader"></div>
                     </div>
+
                     <div>{{ $t('browse') }}</div>
                   </div>
                 </div>
               </template>
-              <div class="h-10"></div>
+              <div class="h-7"></div>
             </div>
             <!-- Wallet -->
             <div v-if="modalTitle == 'wallet'" class="text-center">
@@ -208,6 +243,38 @@
         </div>
       </div>
     </Modal>
+
+    <!-- Pin -->
+    <Modal :class="className" width="w-96" v-if="isPin">
+      <div class="relative">
+        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
+             @click="()=>{this.isPin = false}"
+        >
+          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
+        </div>
+        <div>
+          <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">
+            Passcode Lock
+          </div>
+          <div class="flex items-center justify-center m-auto" v-if="loading">
+            <div class="loader"></div>
+          </div>
+          <div class="p-5">
+            <div class="font-Ubuntu text-center text-primary">Input your passcode</div>
+            <div class="font-UbuntuLight pb-2 text-center">The passcode that you have set</div>
+            <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
+            <div class="input-wrapper text-center">
+              <PincodeInput
+                  :secure="true"
+                  v-model="passcode"
+                  placeholder="0"
+              />
+            </div>
+            <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer">Forget passcode?</div>
+          </div>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -228,13 +295,18 @@ import WalletIcon from "@/components/WalletOutlineIcon";
 import CopyIcon from "@/components/CopyIcon";
 import DownloadIcon from "@/components/DownloadIcon";
 import ImageIcon from "@/components/ImageIcon";
-import {QrcodeCapture} from 'vue-qrcode-reader'
+import {QrcodeCapture, QrcodeStream} from 'vue-qrcode-reader'
 import QrcodeVue from 'qrcode.vue'
 import PaymentIcon from "@/components/PaymentIcon";
+import SwipeButton from 'vue-swipe-button'
+import 'vue-swipe-button/dist/swipeButton.css'
+import PincodeInput from 'vue-pincode-input';
 
 const {ipcRenderer} = require('electron')
 export default {
   components: {
+    SwipeButton,
+    QrcodeStream,
     PaymentIcon,
     QrcodeVue,
     QrcodeCapture,
@@ -252,7 +324,8 @@ export default {
     eSchool,
     QRIcon,
     CloseIcon,
-    UserIcon
+    UserIcon,
+    PincodeInput
   },
   data() {
     return {
@@ -264,18 +337,37 @@ export default {
       modalTitle: "profile",
       price: 0,
       qr: {},
-      isPay: true,
+      isPay: false,
+      result: "",
+      error: "",
+      pay: {
+        price: 0,
+        name: "",
+        receipt_id: "",
+      },
+      isPin: false,
+      passcode: '',
+      isInvalid: false,
     }
   },
   computed: {
     ...mapState('auth', ['token', 'stProfile']),
     ...mapState('setting', ['localize', 'darkMode', 'isHide', 'className']),
-    ...mapState('home', ['ads'])
+    ...mapState('home', ['ads']),
+    ...mapState('wallet', ['wallet_loading'])
   },
 
   methods: {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
     ...mapActions('upload', ['singleUpload']),
+    ...mapActions('wallet', ['walletTransfer']),
+    onActionConfirmed() {
+      this.showQr = false
+      this.isPin = true
+    },
+    onScan(result) {
+      this.result = result;
+    },
     downoad() {
       let canvas = document.getElementsByTagName('canvas')[0]
       this.qrImage = canvas.toDataURL("image/png");
@@ -283,6 +375,26 @@ export default {
       a.href = this.qrImage;
       a.download = "myQrcode.png";
       a.click()
+    },
+    async onInit(promise) {
+      try {
+        await promise;
+      } catch (error) {
+        if (error.name === "NotAllowedError") {
+          this.error = "ERROR: you need to grant camera access permisson";
+        } else if (error.name === "NotFoundError") {
+          this.error = "ERROR: no camera on this device";
+        } else if (error.name === "NotSupportedError") {
+          this.error = "ERROR: secure context required (HTTPS, localhost)";
+        } else if (error.name === "NotReadableError") {
+          this.error = "ERROR: is the camera already in use?";
+        } else if (error.name === "OverconstrainedError") {
+          this.error = "ERROR: installed cameras are not suitable";
+        } else if (error.name === "StreamApiNotSupportedError") {
+          this.error = "ERROR: Stream API is not supported in this browser";
+        }
+        helper.errorMessage(this.error)
+      }
     },
     onDecode(text) {
       this.loading = true
@@ -298,10 +410,12 @@ export default {
             })
             break;
           default:
+            this.loading = false
+            this.isPay = true
+            this.pay = data
+            break;
 
         }
-
-
       } catch (err) {
         this.showQr = false
         helper.errorMessage(err)
@@ -352,8 +466,6 @@ export default {
     openLink(link) {
       ipcRenderer.send('openLink', link)
     },
-
-
     getMyQr() {
       this.loading = true
       this.getQr().then(res => {
@@ -402,9 +514,49 @@ export default {
       }
     },
   },
+  updated() {
+    if (this.isPay) {
+      try {
+        document.getElementsByClassName('slide-text')[0].innerText = "Slide To Pay"
+      } catch (e) {
+        this.error = e
+      }
+    }
+  },
   watch: {
     'price': function (val) {
       this.qr.price = parseFloat(this.price)
+    },
+    'result': function (text) {
+      if (text) {
+        this.onDecode(text)
+      }
+    },
+    'passcode': function (val) {
+      let pin = this.decrypt(localStorage.getItem("pin"))
+      if (val.length == 4) {
+        if (pin == val) {
+          this.isInvalid = false
+          let data = new FormData()
+          data.append("id", this.pay.user_id)
+          data.append("amount", this.pay.price)
+
+          this.walletTransfer(data).then(res => {
+            if (res.data.msg == undefined) {
+              helper.success('transfer_success')
+            } else {
+              // this.isPin = false
+              // this.isPay = false
+            }
+
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          this.isInvalid = true
+        }
+      }
+
     }
   }
 

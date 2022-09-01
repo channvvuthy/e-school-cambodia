@@ -160,7 +160,7 @@ const encrypt = (text) => {
     return encrypted + cipher.final('base64');
 }
 
-const decrypt = (text) =>{
+const decrypt =  (text) =>{
     let iv = Buffer.from(config.secretKey);
     let key = Buffer.from(config.secretKey.toString('base64'));
     const decipher = crypto.createDecipheriv('aes-128-cbc', key, iv);

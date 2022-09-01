@@ -53,8 +53,7 @@
             </template>
             <template v-else>
               <div class="font-UbuntuLight text-center" :class="isInvalid ? `` : `pb-2`">Confirm your passcode</div>
-              <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode
-              </div>
+              <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
               <div class="input-wrapper text-center">
                 <PincodeInput
                     :secure="true"
@@ -117,12 +116,13 @@
             <li class="flex items-center justify-center" v-if="loading">
               <div class="loader"></div>
             </li>
+
             <li v-for="(trans, index) in groupTransaction" :key="index">
               <div class="px-5 py-2 font-UbuntuLight mb-2"
                    :class="darkMode ? `bg-primary text-textSecondary` : `bg-wallet`">
                 {{ trans.date }}
               </div>
-              <div class="flex items-center mb-2 px-5 justify-between pb-2 border-b"
+              <div class="flex items-center px-5 justify-between py-2 border-b"
                    :class="darkMode ? `border-facebook`: ``" v-for="(l, key) in trans.transaction" :key="key">
                 <div class="h-16 w-16 rounded-full flex items-center justify-center text-white font-Ubuntu text-lg"
                      :style="{backgroundColor:`${colorRandom()}`}">
@@ -321,7 +321,7 @@ export default {
 
     groupBy() {
       let myTransaction = this.wallet_transaction.filter(item => {
-        item.transactionDate = moment(item.transactionDate).format()
+        item.transactionDate = moment(item.date).format()
         return item
       })
       const groups = myTransaction.reduce((groups, transaction) => {

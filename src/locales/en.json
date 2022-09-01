@@ -464,5 +464,7 @@
   "download": "Download",
   "scan": "Scan",
   "browse": "Browse",
-  "wallet": "Wallet"
+  "wallet": "Wallet",
+  "transfer_success": "Transfer success",
+  "2400": "Balance not enough"
 }

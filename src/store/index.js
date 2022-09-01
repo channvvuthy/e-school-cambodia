@@ -35,6 +35,7 @@ import background from "./background";
 import report from "./report";
 import story from "./story";
 import zoom from "./zoom"
+import wallet from "@/store/wallet";
 Vue.use(Vuex);
 export default new Vuex.Store({
     modules: {
@@ -72,6 +73,7 @@ export default new Vuex.Store({
         background,
         report,
         story,
-        zoom
+        zoom,
+        wallet
     }
 });
