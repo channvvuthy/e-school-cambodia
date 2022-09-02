@@ -1,6 +1,5 @@
 import axios from "axios"
 import config from "@/config";
-
 export default {
     namespaced: true,
     state: {
@@ -37,7 +36,16 @@ export default {
                     reject(err)
                 })
             })
-        }
+        },
+        getPin({commit}, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get(config.apiUrl + `wallet/pin?password=${payload}`).then(res => {
+                    resolve(res.data)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        },
     }
 
 

@@ -78,7 +78,7 @@
     <Modal v-if="showQr" :class="className" width="w-2/6">
       <div class="relative">
         <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
-             @click="()=>{this.showQr = false}">
+             @click="()=>{this.showQr = false; this.isPay = false}">
           <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
         </div>
         <div>
@@ -120,6 +120,9 @@
             <!-- Scan -->
             <div v-if="modalTitle == 'scan'" class="text-center">
               <template v-if="isPay">
+                <div class="pt-3 pl-2 cursor-pointer" @click="()=>{this.isPay = false}">
+                  <BackIcon :width="20"/>
+                </div>
                 <div class="flex items-center justify-center mt-5">
                   <PaymentIcon/>
                 </div>
@@ -128,7 +131,7 @@
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
                        :class="darkMode ?'bg-wallet1' : 'bg-gray-100'">
                     <div class="font-Ubuntu text-primary text-lg">
-                      ${{ pay.price }}
+                      $<input type="number" class="bg-transparent outline-none w-12" v-model="pay.price" min="1">
                     </div>
                   </div>
                 </div>
@@ -183,6 +186,7 @@
               </template>
               <div class="h-7"></div>
             </div>
+
             <!-- Wallet -->
             <div v-if="modalTitle == 'wallet'" class="text-center">
               <div class="font-Ubuntu text-primary mt-5">SCAN THIS QR</div>
@@ -270,11 +274,49 @@
                   placeholder="0"
               />
             </div>
-            <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer">Forget passcode?</div>
+            <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer"
+                 @click="()=>{this.isPin = false; this.isResetPin = true}">Forget passcode?
+            </div>
           </div>
         </div>
       </div>
     </Modal>
+    <!-- Reset pin -->
+    <Modal :class="className" width="w-96" v-if="isResetPin">
+      <div class="relative">
+        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
+             @click="()=>{this.isPin = true; this.isResetPin = false}"
+        >
+          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
+        </div>
+        <div>
+          <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">
+            Confirm password
+          </div>
+
+          <div class="p-5">
+            <div class="font-UbuntuLight pb-2 text-center">Input your password to continue</div>
+            <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
+            <div class="relative">
+              <input :type="inputType" class="h-10 border rounded-md w-full px-3 mt-3" placeholder="Password" v-model="password">
+              <div class="bg-primary text-center text-white h-10 rounded-md mt-5 flex cursor-pointer items-center justify-center">
+                <span>Continue</span>
+              </div>
+              <div class="absolute right-3 top-5">
+                <div v-if="inputType == 'password'" @click="()=>{this.inputType ='text'}">
+                  <ViewBlanceIcon/>
+                </div>
+                <div v-else @click="()=>{this.inputType ='password'}">
+                  <EyeSecureIcon/>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </Modal>
+
   </div>
 </template>
 <script>
@@ -301,10 +343,14 @@ import PaymentIcon from "@/components/PaymentIcon";
 import SwipeButton from 'vue-swipe-button'
 import 'vue-swipe-button/dist/swipeButton.css'
 import PincodeInput from 'vue-pincode-input';
+import EyeSecureIcon from "@/components/EyeSecureIcon";
+import ViewBlanceIcon from "@/components/ViewBlanceIcon";
 
 const {ipcRenderer} = require('electron')
 export default {
   components: {
+    ViewBlanceIcon,
+    EyeSecureIcon,
     SwipeButton,
     QrcodeStream,
     PaymentIcon,
@@ -348,6 +394,9 @@ export default {
       isPin: false,
       passcode: '',
       isInvalid: false,
+      isResetPin: false,
+      inputType: "password",
+      password:""
     }
   },
   computed: {
@@ -361,6 +410,7 @@ export default {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
     ...mapActions('upload', ['singleUpload']),
     ...mapActions('wallet', ['walletTransfer']),
+
     onActionConfirmed() {
       this.showQr = false
       this.isPin = true
@@ -494,6 +544,7 @@ export default {
         const file = event.target.files[0];
         let formData = new FormData();
         formData.append("photo", file)
+
         this.singleUpload(formData).then(res => {
           if (res.data) {
             let photo = new FormData()
@@ -544,11 +595,12 @@ export default {
           this.walletTransfer(data).then(res => {
             if (res.data.msg == undefined) {
               helper.success('transfer_success')
+              this.isPay = false
             } else {
-              // this.isPin = false
-              // this.isPay = false
+              this.isPay = true
+              this.showQr = true
             }
-
+            this.isPin = false
           }).catch(err => {
             console.log(err)
           })
@@ -557,8 +609,12 @@ export default {
         }
       }
 
+    },
+    'pay.price': function (val) {
+      if (val == 0) {
+        this.pay.price = 1
+      }
     }
   }
-
 }
 </script>

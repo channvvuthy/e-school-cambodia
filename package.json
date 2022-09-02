@@ -19,14 +19,6 @@
     "release": "electron-builder build --publish always"
   },
   "main": "background.js",
-  "mas": {
-    "hardenedRuntime": false,
-    "provisioningProfile": "build/embedded.provisionprofile",
-    "entitlements": "build/entitlements.mas.plist",
-    "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-    "gatekeeperAssess": false,
-    "asarUnpack": []
-  },
   "dependencies": {
     "@loquiry/vue-record-audio": "^0.4.0",
     "@tailwindcss/postcss7-compat": "^2.0.2",

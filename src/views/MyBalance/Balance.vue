@@ -53,7 +53,8 @@
             </template>
             <template v-else>
               <div class="font-UbuntuLight text-center" :class="isInvalid ? `` : `pb-2`">Confirm your passcode</div>
-              <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
+              <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode
+              </div>
               <div class="input-wrapper text-center">
                 <PincodeInput
                     :secure="true"
@@ -209,19 +210,17 @@ export default {
     decrypt(text) {
       return helper.decrypt(text)
     },
-    getPin(password) {
-      axios.get(config.apiUrl + `wallet/pin?password=${password}`).then(res => {
-        console.log(res)
-      }).catch(err => {
-        helper.errorMessage(err.response.data.msg)
-      })
-    },
     setPin(action = 'view_balance') {
       this.code = ""
       this.p = 1
       this.enableScroll = true
       this.action = action
+
       if (this.checkPin()) {
+        if (action == 'view_wallet' && this.isShowPin) {
+          this.getWallet()
+          return
+        }
         this.isAlreadyPin = true
       } else {
         this.isSetPin = true
@@ -360,6 +359,7 @@ export default {
             localStorage.setItem("pin", this.encrypt(this.code))
             this.loading = false
             this.isSetPin = false
+            this.getBalance()
           }).catch(err => {
             this.loading = false
             helper.errorMessage(err.response.data.msg)

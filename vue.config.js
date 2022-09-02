@@ -31,6 +31,14 @@ module.exports = {
                     "category": "public.app-category.education",
                     "target": ["pkg"],
                     "icon": "build/icons/icon.icns",
+                    "extendInfo": {
+                        "NSMicrophoneUsageDescription": "We need access to your microphone so people you talk to in a Grape Call can hear you.",
+                        "NSCameraUsageDescription": "Allow your conversational partners to see you in a Grape Call. You can turn off your video anytime during a call."
+                    }
+                },
+                "mas": {
+                    "entitlements": "build/entitlements.mas.plist",
+                    "entitlementsInherit": "build/entitlements.mas.inherit.plist"
                 },
                 "win": {
                     "target": [
