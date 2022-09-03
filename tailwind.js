@@ -195,8 +195,8 @@ module.exports = {
         fontFamily: {
             serif: ['ui-serif', 'Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
             mono: ['Poppins', 'Kantumruy-Regular',],
-            khmer_os: ['Poppins', 'Kantumruy-Light', 'Kantumruy-Regular'],
-            PoppinsMedium: ['Poppins-Medium', 'Kantumruy-Regular'],
+            khmer_os: ['UbuntuLight', 'Kantumruy-Regular'],
+            PoppinsMedium: ['Ubuntu', 'Kantumruy-Regular'],
             Ubuntu: ['Ubuntu', 'Kantumruy-Regular'],
             UbuntuLight: ['UbuntuLight', 'Kantumruy-Regular'],
 

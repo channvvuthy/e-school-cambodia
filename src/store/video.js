@@ -1,6 +1,7 @@
 import axios from "axios";
 import helper from "../helper/helper";
 import config from "./../config";
+import store from "@/store/index";
 
 export default {
     namespaced: true,
@@ -67,6 +68,12 @@ export default {
 
         receivingVideo(state, payload) {
             state.videos = payload
+            if (payload.filter) {
+                store.commit("home/getFilter", {
+                    filter: payload.filter
+                })
+            }
+
         },
         gettingVideowithPagination(state, payload) {
             state.loadingMore = payload

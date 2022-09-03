@@ -464,5 +464,15 @@
   "browse": "ស្វែងរករូប",
   "wallet": "កាបូប",
   "transfer_success": "ផ្ទេរប្រាក់ជោគជ័យ",
-  "2400": "ទឹកប្រាក់មិនគ្រប់គ្រាន់"
+  "2400": "ទឹកប្រាក់មិនគ្រប់គ្រាន់",
+  "set_passcode": "កំណត់លេខសម្ងាត់",
+  "input_new_passcode": "បញ្ចូលលេខសម្ងាត់ថ្មី",
+  "confirm_your_passcode": "ផ្ទៀងផ្ទាត់លេខសម្ងាត់",
+  "input_your_passcode": "បញ្ចូលលេខសម្ងាត់",
+  "invalid_passcode": "លេខសម្ងាត់មិនត្រឹមត្រូវ",
+  "passcode_that_you_set_previously": "សូមបញ្ចូលលេខសម្ងាត់របស់អ្នកពីមុន",
+  "transaction": "ប្រតិបត្តិការ",
+  "my_balance": "តុល្យភាពរបស់ខ្ញុំ",
+  "the_passcode_that_you_have_set": "លេខកូដសម្ងាត់ដែលអ្នកបានកំណត់",
+  "forget_password": "ភ្លេចពាក្យសម្ងាត់"
 }

@@ -249,38 +249,39 @@
     </Modal>
 
     <!-- Pin -->
-    <Modal :class="className" width="w-96" v-if="isPin">
-      <div class="relative">
-        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
-             @click="()=>{this.isPin = false}"
-        >
-          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
-        </div>
-        <div>
-          <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">
-            Passcode Lock
-          </div>
-          <div class="flex items-center justify-center m-auto" v-if="loading">
-            <div class="loader"></div>
-          </div>
-          <div class="p-5">
-            <div class="font-Ubuntu text-center text-primary">Input your passcode</div>
-            <div class="font-UbuntuLight pb-2 text-center">The passcode that you have set</div>
-            <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
-            <div class="input-wrapper text-center">
-              <PincodeInput
-                  :secure="true"
-                  v-model="passcode"
-                  placeholder="0"
-              />
-            </div>
-            <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer"
-                 @click="()=>{this.isPin = false; this.isResetPin = true}">Forget passcode?
-            </div>
-          </div>
-        </div>
+    <PinCodeModal
+        v-if="isPin" @closeModal="()=>{this.isPin = false}"
+        :modal-title="$t('passcode_lock')"
+        :title="$t('input_your_passcode')"
+        :sub_title="$t('the_passcode_that_you_have_set')"
+        :is-invalid="isInvalid"
+        :error="$t('invalid_confirm_passcode')"
+        @code="passcodeChange($event)"
+    >
+      <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer"
+           @click="()=>{this.isPin = false; this.isResetPin = true}">{{ $t('forget_password') }}?
       </div>
-    </Modal>
+    </PinCodeModal>
+
+    <PinCodeModal
+        v-if="isNewPin" @closeModal="()=>{this.isNewPin = false}"
+        :modal-title="$t('set_passcode')"
+        :title="$t('input_new_passcode')"
+        :is-invalid="isInvalid"
+        :error="$t('invalid_passcode')"
+    >
+    </PinCodeModal>
+
+    <PinCodeModal
+        v-if="isConfirmPin" @closeModal="()=>{this.isConfirmPin = false}"
+        :modal-title="$t('set_passcode')"
+        :title="$t('confirm_your_passcode')"
+        :is-invalid="isInvalid"
+        :error="$t('invalid_confirm_passcode')"
+    >
+    </PinCodeModal>
+
+
     <!-- Reset pin -->
     <Modal :class="className" width="w-96" v-if="isResetPin">
       <div class="relative">
@@ -297,10 +298,15 @@
           <div class="p-5">
             <div class="font-UbuntuLight pb-2 text-center">Input your password to continue</div>
             <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
-            <div class="relative">
-              <input :type="inputType" class="h-10 border rounded-md w-full px-3 mt-3" placeholder="Password" v-model="password">
-              <div class="bg-primary text-center text-white h-10 rounded-md mt-5 flex cursor-pointer items-center justify-center">
-                <span>Continue</span>
+            <div class="relative font-UbuntuLight">
+              <input
+                  ref="password"
+                  :type="inputType" class="h-10 border rounded-md w-full px-3 mt-3" placeholder="Password"
+                  v-model="password">
+              <div
+                  @click="resetPin()"
+                  class="bg-primary text-center text-white h-10 rounded-md mt-5 flex cursor-pointer items-center justify-center">
+                <span>{{ loading ? `Checking...` : `Continue` }}</span>
               </div>
               <div class="absolute right-3 top-5">
                 <div v-if="inputType == 'password'" @click="()=>{this.inputType ='text'}">
@@ -345,10 +351,12 @@ import 'vue-swipe-button/dist/swipeButton.css'
 import PincodeInput from 'vue-pincode-input';
 import EyeSecureIcon from "@/components/EyeSecureIcon";
 import ViewBlanceIcon from "@/components/ViewBlanceIcon";
+import PinCodeModal from "@/views/Component/PinCodeModal";
 
 const {ipcRenderer} = require('electron')
 export default {
   components: {
+    PinCodeModal,
     ViewBlanceIcon,
     EyeSecureIcon,
     SwipeButton,
@@ -377,6 +385,8 @@ export default {
     return {
       showQr: false,
       loading: false,
+      isNewPin: false,
+      isConfirmPin: false,
       qrUrl: "",
       qrImage: "",
       profile_url: "",
@@ -396,7 +406,7 @@ export default {
       isInvalid: false,
       isResetPin: false,
       inputType: "password",
-      password:""
+      password: ""
     }
   },
   computed: {
@@ -411,12 +421,26 @@ export default {
     ...mapActions('upload', ['singleUpload']),
     ...mapActions('wallet', ['walletTransfer']),
 
+    passcodeChange(passcode) {
+      this.passcode = passcode
+    },
     onActionConfirmed() {
       this.showQr = false
       this.isPin = true
     },
     onScan(result) {
       this.result = result;
+    },
+    resetPin() {
+      if (this.password) {
+        this.loading = true
+        this.$store.dispatch('wallet/getPin', this.password).then(res => {
+          console.log(res)
+          this.loading = false
+        })
+      } else {
+        this.$refs.password.focus()
+      }
     },
     downoad() {
       let canvas = document.getElementsByTagName('canvas')[0]

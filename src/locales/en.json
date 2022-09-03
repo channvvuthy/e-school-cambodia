@@ -466,5 +466,16 @@
   "browse": "Browse",
   "wallet": "Wallet",
   "transfer_success": "Transfer success",
-  "2400": "Balance not enough"
+  "2400": "Balance not enough",
+  "set_passcode": "Se Passcode",
+  "input_new_passcode": "Input new Passcode",
+  "confirm_your_passcode": "Confirm your Password",
+  "input_your_passcode": "Input your passcode",
+  "invalid_passcode": "Invalid passcode",
+  "passcode_that_you_set_previously": "Passcode that you set previously",
+  "transaction": "Transaction",
+  "my_balance": "My Balance",
+  "the_passcode_that_you_have_set": "The passcode that you have set",
+  "forget_password": "Forget Password",
+  "invalid_confirm_passcode": "Invalid confirm passcode"
 }

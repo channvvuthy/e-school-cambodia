@@ -14,7 +14,7 @@
                         <div class="relative cursor-pointer view"
                              :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
                              :style="minHeight?{minHeight:`${minHeight}px`}:{}">
-                            <div class="absolute left-3 top-3 z-50" v-if="video.is_new && video.is_buy === 0">
+                            <div class="absolute left-3 top-3 z-40" v-if="video.is_new && video.is_buy === 0">
                                 <NewIcon/>
                             </div>
                             <div class="absolute top-3 left-3" v-if="video.is_buy">

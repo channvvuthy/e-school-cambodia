@@ -24,81 +24,35 @@
         <WalletIcon/>
       </div>
       <div class="px-1"></div>
-      <div class="text-primary">Wallet</div>
+      <div class="text-primary">{{ $t('wallet') }}</div>
     </div>
     <!-- Set new pin-->
-    <Modal v-if="isSetPin" :class="className" width="w-96">
-      <div class="relative">
-        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
-             @click="()=>{this.isSetPin = false}">
-          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
-        </div>
-        <div>
-          <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">Set
-            Passcode
-          </div>
-          <div class="flex items-center justify-center m-auto" v-if="loading">
-            <div class="loader"></div>
-          </div>
-          <div class="p-5">
-            <template v-if="!isConfirmPin">
-              <div class="font-UbuntuLight pb-2 text-center">Input new passcode</div>
-              <div class="input-wrapper text-center">
-                <PincodeInput
-                    :secure="true"
-                    v-model="code"
-                    placeholder="0"
-                />
-              </div>
-            </template>
-            <template v-else>
-              <div class="font-UbuntuLight text-center" :class="isInvalid ? `` : `pb-2`">Confirm your passcode</div>
-              <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode
-              </div>
-              <div class="input-wrapper text-center">
-                <PincodeInput
-                    :secure="true"
-                    v-model="confirmCode"
-                    placeholder="0"
-                />
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-    </Modal>
+    <PinCodeModal
+        v-if="isSetPin" :modal-title="$t('set_passcode')"
+        :title="$t('input_new_passcode')"
+        @code="codeChange($event)"
+        @closeModal="()=>{this.isSetPin = false}"
+        :loading="loading"/>
+    <PinCodeModal
+        :error="err"
+        :is-confirm="true"
+        v-if="isConfirmPin" :modal-title="$t('set_passcode')"
+        :title="$t('confirm_your_passcode')"
+        @confirmCode="confirmModel($event)"
+        @closeModal="()=>{this.isConfirmPin = false}"
+        :is-invalid="isInvalid"
+        :loading="loading"/>
+
     <!-- Input your pin-->
-    <Modal v-if="isAlreadyPin" :class="className" width="w-96">
-      <div class="relative">
-        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
-             @click="()=>{this.isAlreadyPin = false}">
-          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
-        </div>
-        <div>
-          <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">Input your
-            Passcode
-          </div>
-          <div class="flex items-center justify-center m-auto" v-if="loading">
-            <div class="loader"></div>
-          </div>
-          <div class="p-5">
-            <template>
-              <div class="font-UbuntuLight text-center" :class="isInvalid ? `` : `pb-2`">Passcode that you set
-                previously
-              </div>
-              <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid passcode</div>
-              <div class="input-wrapper text-center">
-                <PincodeInput
-                    :secure="true"
-                    v-model="passcode"
-                    placeholder="0"
-                />
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-    </Modal>
+    <PinCodeModal
+        :error="$t('invalid_passcode')"
+        v-if="isAlreadyPin" :modal-title="$t('input_your_passcode')"
+        :title="$t('passcode_that_you_set_previously')"
+        @code="passcodeChange($event)"
+        :is-invalid="isInvalid"
+        @closeModal="()=>{this.isAlreadyPin = false}"
+        :loading="loading"/>
+
     <!-- View wallet-->
     <Modal v-if="isWallet" :class="className" width="w-96">
       <div class="relative">
@@ -107,10 +61,12 @@
           <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
         </div>
         <div>
-          <div class="px-5 py-3 text-center border-b" :class="darkMode ? `border-facebook`: ``">Transaction</div>
+          <div class="px-5 py-3 text-center border-b" :class="darkMode ? `border-facebook`: ``">
+            {{ $t('transaction') }}
+          </div>
           <ul class="font-khmer_os pb-5 overflow-y-scroll h-100" @scroll="onScroll">
             <li class="text-center py-2" :class="darkMode ? `bg-secondary`: `bg-gray-50`">
-              <div>My Balance</div>
+              <div>{{ $t('my_balance') }}</div>
               <span class="font-Ubuntu text-primary"
                     :class="darkMode ? `text-green-600` : ``">${{ parseFloat(balance).toFixed(2) }}</span>
             </li>
@@ -161,6 +117,7 @@ import config from "@/config";
 import helper from "@/helper/helper";
 import ViewBlanceIcon from "@/components/ViewBlanceIcon";
 import moment from "moment";
+import PinCodeModal from "@/views/Component/PinCodeModal";
 
 const crypto = require('crypto')
 
@@ -170,6 +127,7 @@ export default {
     ...mapState('setting', ['darkMode', 'className'])
   },
   components: {
+    PinCodeModal,
     ViewBlanceIcon,
     CloseIcon,
     Modal,
@@ -193,6 +151,7 @@ export default {
       isPaging: false,
       balance: "",
       action: 'view_balance',
+      err: "Invalid Passcode",
       p: 1,
       enableScroll: true,
       wallet_transaction: [],
@@ -204,6 +163,15 @@ export default {
   },
 
   methods: {
+    passcodeChange(passcode) {
+      this.passcode = passcode
+    },
+    codeChange(code) {
+      this.code = code
+    },
+    confirmModel(confirmCode) {
+      this.confirmCode = confirmCode
+    },
     encrypt(text) {
       return helper.encrypt(text)
     },
@@ -345,6 +313,7 @@ export default {
     'code': function (val) {
       if (val.length == 4) {
         this.isConfirmPin = true
+        this.isSetPin = false
       }
     },
 
@@ -358,7 +327,7 @@ export default {
           axios.post(config.apiUrl + 'wallet/pin', form).then(() => {
             localStorage.setItem("pin", this.encrypt(this.code))
             this.loading = false
-            this.isSetPin = false
+            this.isConfirmPin = false
             this.getBalance()
           }).catch(err => {
             this.loading = false
