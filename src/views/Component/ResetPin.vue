@@ -8,12 +8,12 @@
       </div>
       <div>
         <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">
-          {{$t('confirm_password')}}
+          {{ $t('confirm_password') }}
         </div>
 
         <div class="p-5">
-          <div class="font-UbuntuLight pb-2 text-center">{{$t('0015')}}</div>
-          <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">{{$t('0016')}}</div>
+          <div class="font-UbuntuLight pb-2 text-center">{{ $t('0015') }}</div>
+          <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">{{ $t('0016') }}</div>
           <div class="relative font-UbuntuLight">
             <input
                 ref="password"

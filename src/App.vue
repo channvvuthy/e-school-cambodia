@@ -1,11 +1,11 @@
 <template>
   <div>
     <div
-      v-if="isSplashScreen"
-      class="fixed top-0 left-0 w-full h-full"
-      style="z-index: 100"
+        v-if="isSplashScreen"
+        class="fixed top-0 left-0 w-full h-full"
+        style="z-index: 100"
     >
-      <Splash />
+      <Splash/>
     </div>
     <div v-if="isStart">
       <Introduction @started="()=>{this.isStart = false}"/>
@@ -13,57 +13,64 @@
     <div class="font-khmer_os" :class="darkMode ? `bg-youtube` : ``">
       <!-- Cart -->
       <Cart
-        v-if="showCart"
-        @closeCart="
+          v-if="showCart"
+          @closeCart="
           () => {
             this.showCart = false;
           }
         "
-        @showInvoice="showInvoice"
+          @showInvoice="showInvoice"
       />
       <!-- Receipt info -->
       <ReceiptInfo
-        v-if="showReceipt"
-        :receiptDetail="receiptDetail"
-        @closeInfo="
-          () => {
+          @onPay="onPay($event)"
+          @closeModal="()=>{
+            this.showReceipt = false
+          }"
+          v-if="showReceipt"
+          :receiptDetail="receiptDetail"
+          @closeInfo="() => {
             this.showReceipt = false;
           }
         "
       />
+      <Bill
+          :receiptDetail="receiptDetail"
+          v-if="isBill"
+          @closeModal="()=>{this.isBill = false; this.showReceipt = true;}"/>
       <!-- Notification -->
       <Notification
-        v-if="showNotification"
-        @closeNotification="
+          v-if="showNotification"
+          @closeNotification="
           () => {
             this.showNotification = false;
           }
         "
-        @readNotification="readNotification($event)"
+          @readNotification="readNotification($event)"
       />
       <!-- NotificationDetail -->
       <NotificationDetail
-        v-if="showNotificationDetail"
-        @closeNotificationDetail="closeNotificationDetail"
+          v-if="showNotificationDetail"
+          @closeNotificationDetail="closeNotificationDetail"
       />
       <div class="flex" v-if="!escapeRoute()">
         <div>
           <!--Sidebar-->
-          <Sidebar />
+          <Sidebar/>
         </div>
         <div
-          class="w-full border border-t-0 h-32 flex items-end"
-          v-if="!hideMenu()"
-          :class="
+            class="w-full border border-t-0 h-32 flex items-end"
+            v-if="!hideMenu()"
+            :class="
             darkMode
               ? 'bg-secondary border-secondary text-textSecondary'
               : 'bg-white border-gray-300'
           "
-          :style="isHide ? { marginLeft: '0px' } : { marginLeft: '350px' }"
+            :style="isHide ? { marginLeft: '0px' } : { marginLeft: '350px' }"
         >
           <Menu
-            @showItemIncart="showItemIncart"
-            @notification="
+              @showItemIncart="showItemIncart"
+              @notification="
               () => {
                 this.showNotification = true;
               }
@@ -72,64 +79,33 @@
         </div>
       </div>
       <div
-        :style="isHide ? { marginLeft: '0px' } : { marginLeft: '350px' }"
-        id="main"
+          :style="isHide ? { marginLeft: '0px' } : { marginLeft: '350px' }"
+          id="main"
       >
         <router-view></router-view>
       </div>
     </div>
     <!-- If update available -->
     <div
-      class="
-        fixed
-        w-full
-        h-full
-        left-0
-        top-0
-        z-50
-        flex
-        justify-center
-        items-center
-        bg-black
-      "
-      v-if="isUpdate"
+        class="fixed w-full h-full left-0 top-0 z-50 flex justify-center items-center bg-black"
+        v-if="isUpdate"
     >
       <div class="bg-white shadow-lg rounded-xl p-5 relative">
         <div
-          class="
-            absolute
-            rounded-full
-            flex
-            items-center
-            justify-center
-            w-7
-            h-7
-            right-2
-            top-2
-            cursor-pointer
-          "
-          @click="
+            class="absolute rounded-full flex items-center justify-center w-7 h-7 right-2 top-2 cursor-pointer"
+            @click="
             () => {
               this.isUpdate = false;
             }
           "
         >
-          <CloseIcon :width="50" />
+          <CloseIcon :width="50"/>
         </div>
         <div class="flex items-center justify-between">
           <div>
             <div
-              class="
-                update
-                w-16
-                h-16
-                flex
-                items-center
-                justify-center
-                rounded-full
-              "
-            >
-              <UpdateIcon />
+                class="update w-16 h-16 flex items-center justify-center rounded-full">
+              <UpdateIcon/>
             </div>
           </div>
           <div class="w-full ml-5">
@@ -139,18 +115,8 @@
         </div>
         <div class="flex justify-center items-center">
           <button
-            class="
-              update
-              text-white
-              px-4
-              py-2
-              rounded-full
-              mt-5
-              outline-none
-              font-semibold
-            "
-            @click="update"
-          >
+              class="update text-white px-4 py-2 rounded-full mt-5 outline-none font-semibold"
+              @click="update">
             Update Now
           </button>
         </div>
@@ -168,14 +134,16 @@ import CloseIcon from "./components/CloseIcon.vue";
 import UpdateIcon from "./components/UpdateIcon.vue";
 import ReceiptInfo from "./views/MyCourse/components/ReceiptInfo.vue";
 import helper from "./helper/helper";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import Splash from "./views/Splash/Splash.vue";
 import Introduction from "@/views/Introduction/Introduction";
+import Bill from "@/views/Component/Bill";
 
-const { ipcRenderer } = require("electron");
+const {ipcRenderer} = require("electron");
 export default {
   data() {
     return {
+      isBill: false,
       showCart: false,
       showNotification: false,
       showReceipt: false,
@@ -191,6 +159,7 @@ export default {
   },
 
   components: {
+    Bill,
     Introduction,
     Sidebar,
     Menu,
@@ -211,17 +180,21 @@ export default {
     ...mapActions("auth", ["getUser"]),
     ...mapActions("etalk", ["join", "getContact"]),
     ...mapActions("setting", ["checkForUpdate"]),
+    onPay(rc) {
+      this.showReceipt = false
+      this.isBill = true
+    },
     hideMenu() {
       return (
-        this.$route.name === "library-video" ||
-        this.$route.name === "course-quiz" ||
-        this.$route.name === "story-list" ||
-        this.$route.name === "document-detail" ||
-        this.$route.name === "download-detail" ||
-        this.$route.name === "activity-detail" ||
-        this.$route.name === "attendant" ||
-        this.$route.name === "watch-detail" ||
-        this.$route.name === "read-book-detail"
+          this.$route.name === "library-video" ||
+          this.$route.name === "course-quiz" ||
+          this.$route.name === "story-list" ||
+          this.$route.name === "document-detail" ||
+          this.$route.name === "download-detail" ||
+          this.$route.name === "activity-detail" ||
+          this.$route.name === "attendant" ||
+          this.$route.name === "watch-detail" ||
+          this.$route.name === "read-book-detail"
       );
     },
     showItemIncart() {
@@ -229,10 +202,10 @@ export default {
     },
     escapeRoute() {
       if (
-        this.$route.name === "login" ||
-        this.$route.name === "register" ||
-        this.$route.name === "forgot-password" ||
-        this.$route.name === "splash"
+          this.$route.name === "login" ||
+          this.$route.name === "register" ||
+          this.$route.name === "forgot-password" ||
+          this.$route.name === "splash"
       ) {
         this.$store.commit("setting/toggleSidebar", true);
         return true;
@@ -259,14 +232,14 @@ export default {
     },
     checkUpdate() {
       this.checkForUpdate()
-        .then((res) => {
-          if (res.data.status == 1) {
-            this.isUpdate = true;
-          }
-        })
-        .catch((err) => {
-          console.log(err.response.data);
-        });
+          .then((res) => {
+            if (res.data.status == 1) {
+              this.isUpdate = true;
+            }
+          })
+          .catch((err) => {
+            console.log(err.response.data);
+          });
     },
   },
 
@@ -280,7 +253,7 @@ export default {
           if (deeplink[3].includes("profile")) {
             this.$router.push({
               name: "user",
-              params: { user_id: deeplink.pop() },
+              params: {user_id: deeplink.pop()},
             });
           } else if (deeplink[3].includes("video")) {
             let payload = {
@@ -306,7 +279,7 @@ export default {
 
               this.$router.push({
                 name: "overview",
-                params: { course: course },
+                params: {course: course},
               });
             });
           } else {
@@ -328,13 +301,13 @@ export default {
                   }
                 }
               });
-              this.$router.push({ name: "chat" }).catch((err) => {
+              this.$router.push({name: "chat"}).catch((err) => {
                 err;
               });
             });
           }
         } else {
-          this.$router.push({ name: "home" }).catch((err) => {
+          this.$router.push({name: "home"}).catch((err) => {
             err;
           });
         }
@@ -351,7 +324,7 @@ export default {
     }
     setTimeout(() => {
       this.isSplashScreen = false;
-      if(localStorage.getItem("started") != 1){
+      if (localStorage.getItem("started") != 1) {
         this.isStart = true;
       }
     }, 4000);
@@ -361,11 +334,11 @@ export default {
 <style lang="scss">
 .update {
   background-image: linear-gradient(
-    150deg,
-    #000046 0%,
-    #055174,
-    33%,
-    #1cb5e0 100%
+          150deg,
+          #000046 0%,
+          #055174,
+          33%,
+          #1cb5e0 100%
   );
 }
 
@@ -426,11 +399,13 @@ export default {
     z-index: 40;
   }
 }
+
 .liker-6 {
   .circle-4 {
     right: -1rem;
     z-index: 10;
   }
+
   .circle-3 {
     right: -2rem;
     z-index: 20;

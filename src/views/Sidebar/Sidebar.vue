@@ -89,8 +89,8 @@
           <div :class="darkMode ?`border-facebook` : ``" class="border-b">
             <!-- Profile -->
             <div v-if="modalTitle == 'profile'" class="text-center">
-              <div class="font-Ubuntu text-primary mt-5">{{$t('0019')}}</div>
-              <div class="font-UbuntuLight mb-5">{{$t('0020')}}</div>
+              <div class="font-Ubuntu text-primary mt-5">{{ $t('0019') }}</div>
+              <div class="font-UbuntuLight mb-5">{{ $t('0020') }}</div>
               <div class="flex items-center justify-center">
                 <qrcode-vue :size="270" :value="encrypt()" level="H"/>
               </div>
@@ -126,7 +126,7 @@
                 <div class="flex items-center justify-center mt-5">
                   <PaymentIcon/>
                 </div>
-                <div class="text-primary font-UbuntuLight my-5">{{$t('0025')}}</div>
+                <div class="text-primary font-UbuntuLight my-5">{{ $t('0025') }}</div>
                 <div class="flex justify-center items-center my-5">
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
                        :class="darkMode ?'bg-wallet1' : 'bg-gray-100'">
@@ -137,7 +137,7 @@
                 </div>
                 <div class="border-b-2 border-dotted" :class="darkMode ? 'border-facebook': 'border-red-600'">
                   <span class=" font-UbuntuLight relative top-3"
-                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">{{$t('0026')}}</span>
+                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">{{ $t('0026') }}</span>
                 </div>
                 <div class="flex justify-center items-center my-10">
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
@@ -159,9 +159,9 @@
                 </div>
               </template>
               <template v-else>
-                <div class="font-Ubuntu text-primary mt-5">{{$t('0021')}}</div>
+                <div class="font-Ubuntu text-primary mt-5">{{ $t('0021') }}</div>
                 <div class="font-UbuntuLight mb-5">
-                  {{$t('0022')}}
+                  {{ $t('0022') }}
                 </div>
                 <div class="hidden">
                   <qrcode-capture ref="qrcode" @decode="onDecode"></qrcode-capture>
@@ -189,9 +189,9 @@
 
             <!-- Wallet -->
             <div v-if="modalTitle == 'wallet'" class="text-center">
-              <div class="font-Ubuntu text-primary mt-5">{{$t('0023')}}</div>
+              <div class="font-Ubuntu text-primary mt-5">{{ $t('0023') }}</div>
               <div class="font-UbuntuLight mb-5">
-                {{$t('0024')}}
+                {{ $t('0024') }}
               </div>
               <div class="flex justify-center items-center my-5">
                 <div class="bg-gray-100 flex rounded-lg px-5 py-3 font-Ubuntu">

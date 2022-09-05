@@ -1,5 +1,5 @@
 <template>
-  <div :class="className" id="dismiss" @click="dismiss">
+  <div :class="className" id="dismiss" @click="dismiss" style="z-index: 70;">
     <div :class="width">
       <div v-if="isTransparent">
         <slot></slot>
@@ -18,6 +18,9 @@ import {mapState} from "vuex";
 
 export default {
   name: "Modal",
+  computed: {
+    ...mapState('setting', ['darkMode', 'className'])
+  },
   props: {
     isTransparent: {
       default: () => false
@@ -29,9 +32,7 @@ export default {
       default: () => 'w-1/2'
     }
   },
-  computed: {
-    ...mapState('setting', ['darkMode', 'className'])
-  },
+
   methods: {
     dismiss(event) {
       if (event.target.id == 'dismiss') {
