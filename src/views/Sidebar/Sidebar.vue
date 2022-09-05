@@ -89,8 +89,8 @@
           <div :class="darkMode ?`border-facebook` : ``" class="border-b">
             <!-- Profile -->
             <div v-if="modalTitle == 'profile'" class="text-center">
-              <div class="font-Ubuntu text-primary mt-5">SCAN THIS QR</div>
-              <div class="font-UbuntuLight mb-5">To go to your profile!</div>
+              <div class="font-Ubuntu text-primary mt-5">{{$t('0019')}}</div>
+              <div class="font-UbuntuLight mb-5">{{$t('0020')}}</div>
               <div class="flex items-center justify-center">
                 <qrcode-vue :size="270" :value="encrypt()" level="H"/>
               </div>
@@ -126,7 +126,7 @@
                 <div class="flex items-center justify-center mt-5">
                   <PaymentIcon/>
                 </div>
-                <div class="text-primary font-UbuntuLight my-5">You are about to transfer</div>
+                <div class="text-primary font-UbuntuLight my-5">{{$t('0025')}}</div>
                 <div class="flex justify-center items-center my-5">
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
                        :class="darkMode ?'bg-wallet1' : 'bg-gray-100'">
@@ -137,7 +137,7 @@
                 </div>
                 <div class="border-b-2 border-dotted" :class="darkMode ? 'border-facebook': 'border-red-600'">
                   <span class=" font-UbuntuLight relative top-3"
-                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">To account below</span>
+                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">{{$t('0026')}}</span>
                 </div>
                 <div class="flex justify-center items-center my-10">
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
@@ -159,9 +159,9 @@
                 </div>
               </template>
               <template v-else>
-                <div class="font-Ubuntu text-primary mt-5">Scan QR Code</div>
+                <div class="font-Ubuntu text-primary mt-5">{{$t('0021')}}</div>
                 <div class="font-UbuntuLight mb-5">
-                  Scan's only available for E-School Cambodia App!
+                  {{$t('0022')}}
                 </div>
                 <div class="hidden">
                   <qrcode-capture ref="qrcode" @decode="onDecode"></qrcode-capture>
@@ -189,9 +189,9 @@
 
             <!-- Wallet -->
             <div v-if="modalTitle == 'wallet'" class="text-center">
-              <div class="font-Ubuntu text-primary mt-5">SCAN THIS QR</div>
+              <div class="font-Ubuntu text-primary mt-5">{{$t('0023')}}</div>
               <div class="font-UbuntuLight mb-5">
-                To receive money from another account!
+                {{$t('0024')}}
               </div>
               <div class="flex justify-center items-center my-5">
                 <div class="bg-gray-100 flex rounded-lg px-5 py-3 font-Ubuntu">
@@ -274,8 +274,7 @@
         :is-invalid="isInvalid"
         :error="$t('invalid_passcode')"
         @code="newPasscodeChange($event)"
-    >
-    </PinCodeModal>
+    />
 
     <PinCodeModal
         v-if="isConfirmPin" @closeModal="()=>{this.isConfirmPin = false}"
@@ -285,50 +284,16 @@
         :error="$t('invalid_confirm_passcode')"
         :is-confirm="true"
         @confirmCode="confirmCodeChange($event)"
-    >
-    </PinCodeModal>
-
+    />
     <!-- Reset pin -->
-    <Modal :class="className" width="w-96" v-if="isResetPin">
-      <div class="relative">
-        <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
-             @click="()=>{this.isPin = true; this.isResetPin = false}"
-        >
-          <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
-        </div>
-        <div>
-          <div class="px-5 py-3 font-Ubuntu text-center border-b" :class="darkMode ? `border-facebook`: ``">
-            Confirm password
-          </div>
-
-          <div class="p-5">
-            <div class="font-UbuntuLight pb-2 text-center">Input your password to continue</div>
-            <div class="font-UbuntuLight text-center text-red-600 pb-2" v-if="isInvalid">Invalid confirm passcode</div>
-            <div class="relative font-UbuntuLight">
-              <input
-                  ref="password"
-                  :type="inputType" class="h-10 border rounded-md w-full px-3 mt-3" placeholder="Password"
-                  v-model="password">
-              <div
-                  @click="resetPin()"
-                  class="bg-primary text-center text-white h-10 rounded-md mt-5 flex cursor-pointer items-center justify-center">
-                <span>{{ loading ? `Checking...` : `Continue` }}</span>
-              </div>
-              <div class="absolute right-3 top-5">
-                <div v-if="inputType == 'password'" @click="()=>{this.inputType ='text'}">
-                  <ViewBlanceIcon/>
-                </div>
-                <div v-else @click="()=>{this.inputType ='password'}">
-                  <EyeSecureIcon/>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </Modal>
-
+    <ResetPin
+        v-if="isResetPin"
+        @resetPin="resetPin()"
+        @password="watchPassword($event)"
+        :is-invalid="isInvalid"
+        :loading="loading"
+        @closeModal="()=>{this.isPin = true; this.isResetPin = false;}"
+    />
   </div>
 </template>
 <script>
@@ -360,10 +325,12 @@ import ViewBlanceIcon from "@/components/ViewBlanceIcon";
 import PinCodeModal from "@/views/Component/PinCodeModal";
 import axios from "axios";
 import config from "@/config";
+import ResetPin from "@/views/Component/ResetPin";
 
 const {ipcRenderer} = require('electron')
 export default {
   components: {
+    ResetPin,
     PinCodeModal,
     ViewBlanceIcon,
     EyeSecureIcon,
@@ -430,6 +397,10 @@ export default {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
     ...mapActions('upload', ['singleUpload']),
     ...mapActions('wallet', ['walletTransfer']),
+
+    watchPassword(password) {
+      this.password = password
+    },
     confirmCodeChange(passcode) {
       this.confirmPasscode = passcode
     },
@@ -506,7 +477,6 @@ export default {
             this.isPay = true
             this.pay = data
             break;
-
         }
       } catch (err) {
         this.showQr = false
@@ -530,7 +500,6 @@ export default {
         this.$store.commit('setting/toggleSidebar', false)
       } else {
         this.$store.commit('setting/toggleSidebar', true)
-
       }
     },
     onTap(title) {
@@ -553,7 +522,6 @@ export default {
           }
           break
       }
-
     },
     openLink(link) {
       ipcRenderer.send('openLink', link)
@@ -610,7 +578,7 @@ export default {
   updated() {
     if (this.isPay) {
       try {
-        document.getElementsByClassName('slide-text')[0].innerText = "Slide To Pay"
+        document.getElementsByClassName('slide-text')[0].innerText = this.$i18n.t('0027')
       } catch (e) {
         this.error = e
       }
@@ -684,7 +652,6 @@ export default {
         }
       }
     },
-
   }
 }
 </script>

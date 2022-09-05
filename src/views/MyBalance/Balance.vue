@@ -33,6 +33,7 @@
         @code="codeChange($event)"
         @closeModal="()=>{this.isSetPin = false}"
         :loading="loading"/>
+
     <PinCodeModal
         :error="err"
         :is-confirm="true"
@@ -51,7 +52,21 @@
         @code="passcodeChange($event)"
         :is-invalid="isInvalid"
         @closeModal="()=>{this.isAlreadyPin = false}"
-        :loading="loading"/>
+        :loading="loading">
+      <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer"
+           @click="()=>{
+             this.isReset = true;
+             this.isAlreadyPin = false;
+           }">{{ $t('forget_password') }}?
+      </div>
+    </PinCodeModal>
+
+    <!-- Reset pin -->
+    <ResetPin v-if="isReset"
+              :loading="loading"
+              @resetPin="resetPin"
+              @password="passwordChange($event)"
+              @closeModal="()=>{this.isReset = false}"/>
 
     <!-- View wallet-->
     <Modal v-if="isWallet" :class="className" width="w-96">
@@ -102,6 +117,7 @@
         </div>
       </div>
     </Modal>
+
   </div>
 </template>
 <script>
@@ -118,6 +134,7 @@ import helper from "@/helper/helper";
 import ViewBlanceIcon from "@/components/ViewBlanceIcon";
 import moment from "moment";
 import PinCodeModal from "@/views/Component/PinCodeModal";
+import ResetPin from "@/views/Component/ResetPin";
 
 const crypto = require('crypto')
 
@@ -127,6 +144,7 @@ export default {
     ...mapState('setting', ['darkMode', 'className'])
   },
   components: {
+    ResetPin,
     PinCodeModal,
     ViewBlanceIcon,
     CloseIcon,
@@ -144,6 +162,7 @@ export default {
       isConfirmPin: false,
       isInvalid: false,
       isWallet: false,
+      isReset: false,
       code: "",
       passcode: "",
       confirmCode: "",
@@ -155,6 +174,7 @@ export default {
       p: 1,
       enableScroll: true,
       wallet_transaction: [],
+      password: "",
       groupTransaction: [],
       color: ['#713f12', '#7f1d1d', '#064e3b', '#7c2d12', '#2dd4bf', '#86efac', '#164e63', '#5eead4', '#0c4a6e', '#1e3a8a'
         , '#312e81', '#4c1d95', '#581c87', '#701a75', '#831843', '#881337']
@@ -163,6 +183,23 @@ export default {
   },
 
   methods: {
+    resetPin() {
+      if (this.password) {
+        this.loading = true
+        this.$store.dispatch('wallet/getPin', this.password).then(res => {
+          if (res.msg == undefined) {
+            this.isSetPin = true
+            this.isReset = false
+          }
+          this.loading = false
+        })
+      } else {
+        this.$refs.password.focus()
+      }
+    },
+    passwordChange(password) {
+      this.password = password
+    },
     passcodeChange(passcode) {
       this.passcode = passcode
     },
@@ -172,6 +209,7 @@ export default {
     confirmModel(confirmCode) {
       this.confirmCode = confirmCode
     },
+
     encrypt(text) {
       return helper.encrypt(text)
     },
@@ -350,7 +388,6 @@ export default {
             default:
               this.getWallet()
           }
-
         } else {
           this.isInvalid = true
         }

@@ -478,5 +478,18 @@
   "the_passcode_that_you_have_set": "The passcode that you have set",
   "forget_password": "Forget Password",
   "invalid_confirm_passcode": "Invalid confirm passcode",
-  "passcode_lock": "Passcode lock"
+  "passcode_lock": "Passcode lock",
+  "confirm_password": "Confirm password",
+  "0015": "Input your password to continue",
+  "0016": "Invalid confirm passcode",
+  "0018": "Continue",
+  "0019": "SCAN THIS QR",
+  "0020": "To go to your profile!",
+  "0021": "Scan QR Code",
+  "0022": "សScan's only available for E-School Cambodia App!",
+  "0023": "SCAN THIS QR",
+  "0024": "To receive money from another account!",
+  "0025": "You are about to transfer",
+  "0026": "To account below",
+  "0027": "Slide To Pay"
 }
