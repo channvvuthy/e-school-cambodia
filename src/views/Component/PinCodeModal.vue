@@ -62,7 +62,7 @@ export default {
     },
     sub_title: {
       default: function () {
-        return "Sub title"
+        return ""
       }
     },
     error: {

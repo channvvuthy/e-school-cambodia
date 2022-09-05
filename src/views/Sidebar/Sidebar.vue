@@ -259,7 +259,11 @@
         @code="passcodeChange($event)"
     >
       <div class="font-UbuntuLight pb-2 text-center text-primary mt-5 cursor-pointer"
-           @click="()=>{this.isPin = false; this.isResetPin = true}">{{ $t('forget_password') }}?
+           @click="()=>{
+             this.isPin = false;
+             this.isResetPin = true;
+             this.isInvalid = false;
+           }">{{ $t('forget_password') }}?
       </div>
     </PinCodeModal>
 
@@ -269,6 +273,7 @@
         :title="$t('input_new_passcode')"
         :is-invalid="isInvalid"
         :error="$t('invalid_passcode')"
+        @code="newPasscodeChange($event)"
     >
     </PinCodeModal>
 
@@ -278,9 +283,10 @@
         :title="$t('confirm_your_passcode')"
         :is-invalid="isInvalid"
         :error="$t('invalid_confirm_passcode')"
+        :is-confirm="true"
+        @confirmCode="confirmCodeChange($event)"
     >
     </PinCodeModal>
-
 
     <!-- Reset pin -->
     <Modal :class="className" width="w-96" v-if="isResetPin">
@@ -352,6 +358,8 @@ import PincodeInput from 'vue-pincode-input';
 import EyeSecureIcon from "@/components/EyeSecureIcon";
 import ViewBlanceIcon from "@/components/ViewBlanceIcon";
 import PinCodeModal from "@/views/Component/PinCodeModal";
+import axios from "axios";
+import config from "@/config";
 
 const {ipcRenderer} = require('electron')
 export default {
@@ -386,7 +394,9 @@ export default {
       showQr: false,
       loading: false,
       isNewPin: false,
+      newPasscode: "",
       isConfirmPin: false,
+      confirmPasscode: "",
       qrUrl: "",
       qrImage: "",
       profile_url: "",
@@ -420,7 +430,12 @@ export default {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
     ...mapActions('upload', ['singleUpload']),
     ...mapActions('wallet', ['walletTransfer']),
-
+    confirmCodeChange(passcode) {
+      this.confirmPasscode = passcode
+    },
+    newPasscodeChange(passcode) {
+      this.newPasscode = passcode
+    },
     passcodeChange(passcode) {
       this.passcode = passcode
     },
@@ -435,7 +450,10 @@ export default {
       if (this.password) {
         this.loading = true
         this.$store.dispatch('wallet/getPin', this.password).then(res => {
-          console.log(res)
+          if (res.msg == undefined) {
+            this.isNewPin = true
+            this.isResetPin = false
+          }
           this.loading = false
         })
       } else {
@@ -638,7 +656,35 @@ export default {
       if (val == 0) {
         this.pay.price = 1
       }
-    }
+    },
+    'newPasscode': function (val) {
+      if (val.length == 4) {
+        this.isConfirmPin = true
+        this.isNewPin = false
+      }
+    },
+    'confirmPasscode': function (val) {
+      if (val.length == 4) {
+        if (this.newPasscode == val) {
+          this.isInvalid = false
+          let form = new FormData()
+          form.append("pin", helper.encrypt(this.newPasscode))
+          this.loading = true
+          axios.post(config.apiUrl + 'wallet/pin', form).then((res) => {
+            localStorage.setItem("pin", helper.encrypt(this.newPasscode))
+            this.loading = false
+            this.isConfirmPin = false
+            this.isPin = true
+          }).catch(err => {
+            this.loading = false
+            helper.errorMessage(err.response.data.msg)
+          })
+        } else {
+          this.isInvalid = true
+        }
+      }
+    },
+
   }
 }
 </script>

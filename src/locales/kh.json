@@ -474,5 +474,6 @@
   "transaction": "ប្រតិបត្តិការ",
   "my_balance": "តុល្យភាពរបស់ខ្ញុំ",
   "the_passcode_that_you_have_set": "លេខកូដសម្ងាត់ដែលអ្នកបានកំណត់",
-  "forget_password": "ភ្លេចពាក្យសម្ងាត់"
+  "forget_password": "ភ្លេចពាក្យសម្ងាត់",
+  "passcode_lock": "ចាក់សោលេខសម្ងាត់"
 }

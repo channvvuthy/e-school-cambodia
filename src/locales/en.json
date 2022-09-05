@@ -477,5 +477,6 @@
   "my_balance": "My Balance",
   "the_passcode_that_you_have_set": "The passcode that you have set",
   "forget_password": "Forget Password",
-  "invalid_confirm_passcode": "Invalid confirm passcode"
+  "invalid_confirm_passcode": "Invalid confirm passcode",
+  "passcode_lock": "Passcode lock"
 }
