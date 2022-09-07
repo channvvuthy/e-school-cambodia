@@ -46,6 +46,7 @@ module.exports = {
             red: colors.red,
             yellow: colors.amber,
             dce8d0: "#dce8d0",
+            d4eae8: "#d4eae8",
             none: "#D8D8D8",
             more: "#05517433",
             green: colors.emerald,

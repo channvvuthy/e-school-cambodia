@@ -55,3 +55,4 @@ Thumbs.db
 
 #Electron-builder output
 /dist_electron
+/src/config.js

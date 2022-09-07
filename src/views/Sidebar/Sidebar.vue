@@ -383,7 +383,8 @@ export default {
       isInvalid: false,
       isResetPin: false,
       inputType: "password",
-      password: ""
+      password: "",
+      isNoPin: false,
     }
   },
   computed: {
@@ -527,6 +528,12 @@ export default {
       ipcRenderer.send('openLink', link)
     },
     getMyQr() {
+      if (localStorage.getItem('pin') == null) {
+        this.isNewPin = true
+        this.isNoPin = true
+        return
+      }
+
       this.loading = true
       this.getQr().then(res => {
         this.loading = false
@@ -642,6 +649,12 @@ export default {
             localStorage.setItem("pin", helper.encrypt(this.newPasscode))
             this.loading = false
             this.isConfirmPin = false
+
+            if (this.isNoPin) {
+              this.isNoPin = false
+              this.getMyQr()
+              return;
+            }
             this.isPin = true
           }).catch(err => {
             this.loading = false
