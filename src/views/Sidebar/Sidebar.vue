@@ -126,18 +126,20 @@
                 <div class="flex items-center justify-center mt-5">
                   <PaymentIcon/>
                 </div>
-                <div class="text-primary font-UbuntuLight my-5">{{ $t('0025') }}</div>
+                <div class="text-primary font-UbuntuLight my-5">{{ action == 2 ? $t('0031') : $t('0025') }}</div>
                 <div class="flex justify-center items-center my-5">
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
                        :class="darkMode ?'bg-wallet1' : 'bg-gray-100'">
                     <div class="font-Ubuntu text-primary text-lg">
-                      $<input type="number" class="bg-transparent outline-none w-12" v-model="pay.price" min="1">
+                      $<input type="number" class="bg-transparent outline-none w-12" @keypress="isNumber($event)"
+                              v-model="pay.price" min="1">
                     </div>
                   </div>
                 </div>
                 <div class="border-b-2 border-dotted" :class="darkMode ? 'border-facebook': 'border-red-600'">
                   <span class=" font-UbuntuLight relative top-3"
-                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">{{ $t('0026') }}</span>
+                        :class="darkMode ?'bg-secondary text-primary' :'bg-white text-red-600'">
+                    {{ action == 2 ? $t('0032') : $t('0026') }}</span>
                 </div>
                 <div class="flex justify-center items-center my-10">
                   <div class="flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary"
@@ -150,7 +152,7 @@
                     </div>
                   </div>
                 </div>
-                <div>
+                <div class="font-khmer_os">
                   <SwipeButton
                       ref="swipeButton"
                       class="swipe-button"
@@ -197,7 +199,7 @@
                 <div class="bg-gray-100 flex rounded-lg px-5 py-3 font-Ubuntu">
                   <div>$</div>
                   <div class="w-2"></div>
-                  <input v-model="price" class="bg-transparent outline-none" type="number">
+                  <input v-model="price" class="bg-transparent outline-none" type="number" @keypress="isNumber($event)">
                 </div>
               </div>
               <div class="flex justify-center items-center">
@@ -219,28 +221,24 @@
           <!--Tap-->
           <div :class="darkMode ? `bg-secondary` : `bg-gray-50`"
                class="flex justify-between items-center px-10 py-3 font-UbuntuLight rounded-b-lg">
-            <div class=" flex-col justify-center items-center text-center cursor-pointer" @click="onTap('profile')">
-              <div class="pl-2">
-                <template>
-                  <UserIcon :fill="modalTitle == 'profile' ? `#055174`: `#4A4A4A`"/>
-                </template>
-              </div>
+            <div class=" flex-col flex justify-center items-center text-center cursor-pointer"
+                 @click="onTap('profile')">
+              <UserIcon :fill="modalTitle == 'profile' ? `#055174`: `#4A4A4A`"/>
               <div :class="modalTitle == 'profile' ? `text-primary`: ``" class="text-sm">
                 {{ $t('profile') }}
               </div>
             </div>
-            <div class="flex-col justify-center items-center text-center cursor-pointer" @click="onTap('scan')">
-              <div class="pl-1">
-                <ScanIcon :fill="modalTitle == 'scan' ? `#055174`: `#4A4A4A`"/>
-              </div>
+            <div class="flex-col flex justify-center items-center text-center cursor-pointer"
+                 @click="onTap('scan')">
+              <ScanIcon :fill="modalTitle == 'scan' ? `#055174`: `#4A4A4A`"/>
               <div :class="modalTitle == 'scan' ? `text-primary`: ``" class="text-sm">
                 {{ $t('scan') }}
               </div>
             </div>
-            <div class="flex-col justify-center items-center text-center cursor-pointer" @click="onTap('wallet')">
+            <div class="flex-col flex justify-center items-center text-center cursor-pointer" @click="onTap('wallet')">
               <WalletIcon :fill="modalTitle == 'wallet' ? `#055174`: `#4A4A4A`"/>
               <div :class="modalTitle == 'wallet' ? `text-primary`: ``" class="text-sm">
-                {{ $t('wallet') }}
+                {{ $t('0030') }}
               </div>
             </div>
           </div>
@@ -371,6 +369,7 @@ export default {
       price: 0,
       qr: {},
       isPay: false,
+      action: 0,
       result: "",
       error: "",
       pay: {
@@ -397,8 +396,10 @@ export default {
   methods: {
     ...mapActions('auth', ['changeProfilePhotoPhoto', 'getQr']),
     ...mapActions('upload', ['singleUpload']),
-    ...mapActions('wallet', ['walletTransfer']),
-
+    ...mapActions('wallet', ['walletTransfer', 'billPay']),
+    isNumber(evt) {
+      return helper.isNumber(evt)
+    },
     watchPassword(password) {
       this.password = password
     },
@@ -451,7 +452,7 @@ export default {
         } else if (error.name === "NotSupportedError") {
           this.error = "ERROR: secure context required (HTTPS, localhost)";
         } else if (error.name === "NotReadableError") {
-          this.error = "ERROR: is the camera already in use?";
+          this.error = "ERROR: cannot access your camera device";
         } else if (error.name === "OverconstrainedError") {
           this.error = "ERROR: installed cameras are not suitable";
         } else if (error.name === "StreamApiNotSupportedError") {
@@ -474,6 +475,7 @@ export default {
             })
             break;
           default:
+            this.action = data.type
             this.loading = false
             this.isPay = true
             this.pay = data
@@ -606,21 +608,38 @@ export default {
         if (pin == val) {
           this.isInvalid = false
           let data = new FormData()
-          data.append("id", this.pay.user_id)
-          data.append("amount", this.pay.price)
+          if (this.action == 2) {
+            data.append("bill_number", this.pay.receipt_id)
+            this.billPay(data).then(res => {
+              if (res.data.msg == undefined) {
+                helper.success('bill_success')
+                this.isPay = false
+              } else {
+                this.isPay = true
+                this.showQr = true
+              }
+              this.isPin = false
+            }).catch(err => {
+              console.log(err)
+            })
+          } else {
+            data.append("id", this.pay.user_id)
+            data.append("amount", this.pay.price)
 
-          this.walletTransfer(data).then(res => {
-            if (res.data.msg == undefined) {
-              helper.success('transfer_success')
-              this.isPay = false
-            } else {
-              this.isPay = true
-              this.showQr = true
-            }
-            this.isPin = false
-          }).catch(err => {
-            console.log(err)
-          })
+            this.walletTransfer(data).then(res => {
+              if (res.data.msg == undefined) {
+                helper.success('transfer_success')
+                this.isPay = false
+              } else {
+                this.isPay = true
+                this.showQr = true
+              }
+              this.isPin = false
+            }).catch(err => {
+              console.log(err)
+            })
+          }
+
         } else {
           this.isInvalid = true
         }

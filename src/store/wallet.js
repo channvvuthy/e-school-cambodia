@@ -30,7 +30,7 @@ export default {
             return new Promise((resolve, reject) => {
                 axios.post(config.apiUrl + 'wallet/bill/pay', payload).then(res => {
                     commit("loading", false)
-                    resolve(res.data.data)
+                    resolve(res)
                 }).catch(err => {
                     commit('loading', false)
                     reject(err)

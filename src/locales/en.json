@@ -460,7 +460,7 @@
   "top_up": "Topup",
   "receive_from": "Receive from",
   "send_to": "Send to",
-  "paid": "Paid",
+  "paid": "Paid for",
   "download": "Download",
   "scan": "Scan",
   "browse": "Browse",
@@ -493,5 +493,10 @@
   "0026": "To account below",
   "0027": "Slide To Pay",
   "0028": "To pay your bill, please use E-School Cambodia \n App Scann to scann this QR",
-  "0029": "Payment not available"
+  "0029": "Payment not available",
+  "0030": "Receive Money",
+  "0031": "You are about to pay",
+  "0032": "For invoice below",
+  "6005": "Course not allow pay by QR Code",
+  "bill_success": "Bill success"
 }

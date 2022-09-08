@@ -22,7 +22,6 @@ dist_electron
 
 # Maven
 target/
-dist/
 
 # JetBrains IDE
 .idea/
