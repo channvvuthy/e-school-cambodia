@@ -1,6 +1,7 @@
 import axios from "axios"
 import config from "./../config"
 import err from "./../helper/err"
+import helper from "@/helper/helper";
 
 export default {
     namespaced: true,
@@ -12,17 +13,17 @@ export default {
 
     },
     mutations: {
-        receivingYouTube(state, youtube_url) {
-            state.youtube_url = youtube_url
+        receivingYouTube(state, payload) {
+            state.youtube_url = payload
         },
-        loadingHelp(state, status) {
-            state.loadingHelp = status
+        loadingHelp(state, payload) {
+            state.loadingHelp = payload
         },
-        receivingHelp(state, other) {
-            state.help = other
+        receivingHelp(state, payload) {
+            state.help = payload
         },
-        gettingHelpDetail(state, status) {
-            state.loadingHelpDetail = status
+        gettingHelpDetail(state, payload) {
+            state.loadingHelpDetail = payload
         }
     },
 
@@ -30,16 +31,16 @@ export default {
         getHelp({commit}) {
             commit("loadingHelp", true)
             return new Promise((resolve, reject) => {
-                axios.get(config.apiUrl + "company/help").then(response => {
+                axios.get(config.apiUrl + "company/help").then(res => {
 
-                    if (response.data.status && response.data.status === 2) {
-                        err.err(response.data.msg)
+                    if (res.data.msg != undefined) {
+                        helper.errorMessage(res.data.msg)
+                        return
                     }
 
-
                     commit("loadingHelp", false)
-                    commit("receivingHelp", response.data.data)
-                    resolve(response)
+                    commit("receivingHelp", res.data.data)
+                    resolve(res)
                 }).catch(err => {
                     commit("loadingHelp", false)
                     reject(err)

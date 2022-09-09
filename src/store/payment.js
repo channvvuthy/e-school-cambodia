@@ -36,10 +36,10 @@ export default {
         checkout({commit}, params) {
             commit("loadingCheckout", true)
             return new Promise((resolve, reject) => {
-                axios.post(config.apiUrl + 'cart/checkout', params).then(response => {
+                axios.post(config.apiUrl + 'cart/checkout', params).then(res => {
                     commit("loadingCheckout", false)
-                    commit("getCheckout", response.data)
-                    resolve(response.data)
+                    commit("getCheckout", res.data)
+                    resolve(res.data)
                 }).catch(error => {
                     commit("loadingCheckout", false)
                     reject(error)
@@ -55,8 +55,8 @@ export default {
             commit("abaPaying", true)
             return new Promise((resolve, reject) => {
                 axios.get(apiUrlPay + `/aba?phone=${params.phone}&tran_id=${params.tran_id}&e_key=${params.e_key}&amount=${params.amount}&firstname=${params.firstname}&lastname=${params.lastname}&payment_option=${params.payment_option}`)
-                    .then(response => {
-                        resolve(response.data)
+                    .then(res => {
+                        resolve(res.data)
                     }).catch(err => {
                     reject(err)
                 })
@@ -67,9 +67,9 @@ export default {
             commit("wingPaying", true)
             return new Promise((resolve, reject) => {
                 axios.get(apiUrlPay + `/wing?phone=${params.phone}&tran_id=${params.tran_id}&e_key=${params.e_key}&amount=${params.amount}&firstname=${params.firstname}&lastname=${params.lastname}`)
-                    .then(response => {
+                    .then(res => {
                         commit("wingPaying", false)
-                        resolve(response.data)
+                        resolve(res.data)
                     }).catch(err => {
                     commit("wingPaying", false)
                     reject(err)

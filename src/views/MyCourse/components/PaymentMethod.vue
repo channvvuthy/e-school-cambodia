@@ -150,25 +150,26 @@ export default {
       this.checkout({
         courses: checkout,
         is_paylater: is_paylater
-      }).then(response => {
-        if (response.status === 4) {
-          this.errMessage = response.msg
+      }).then(res => {
+        console.log(res)
+        if (res.status === 4) {
+          this.errMessage = res.msg
           this.err = true
           this.hide = true
           return;
         }
-        if (response.status === 1) {
-          this.errMessage = response.msg
+        if (res.status === 1) {
+          this.errMessage = res.msg
           this.err = true
           this.hide = true
         } else {
-          this.getReceiptDetail(response.data.e_code).then(() => {
+          this.getReceiptDetail(res.data.e_code).then(() => {
             this.showReceipt = true
           })
 
         }
       }).catch(err => {
-        this.errMessage = err.response
+        this.errMessage = err.res
         this.err = true
         this.hide = true
       })

@@ -38,12 +38,12 @@
             </p>
           </div>
         </div>
-        <div v-if="token" class="cursor-pointer" @click="getMyQr()">
-          <div>
-            <QRIcon/>
+        <div v-if="token" class="cursor-pointer flex flex-col justify-center items-center" @click="getMyQr()">
+          <div class="rounded-full border w-12 h-12 flex items-center justify-center">
+            <ScanIcon fill="#FFFFFF" :size="30"/>
           </div>
           <div class="text-sm mt-2 font-PoppinsMedium">
-            My QR
+            {{$t('scan')}}
           </div>
         </div>
       </div>
@@ -78,7 +78,10 @@
     <Modal v-if="showQr" :class="className" width="w-2/6">
       <div class="relative">
         <div class="w-10 h-10 rounded-full items-center justify-center -right-0 top-2 absolute cursor-pointer"
-             @click="()=>{this.showQr = false; this.isPay = false}">
+             @click="()=>{
+               this.showQr = false;
+               this.isPay = false;
+               this.modalTitle = 'scan'}">
           <CloseIcon :fill="darkMode ? '#9999': `#000`"/>
         </div>
         <div>
@@ -190,7 +193,7 @@
             </div>
 
             <!-- Wallet -->
-            <div v-if="modalTitle == 'wallet'" class="text-center">
+            <div v-if="modalTitle == '0030'" class="text-center">
               <div class="font-Ubuntu text-primary mt-5">{{ $t('0023') }}</div>
               <div class="font-UbuntuLight mb-5">
                 {{ $t('0024') }}
@@ -235,7 +238,7 @@
                 {{ $t('scan') }}
               </div>
             </div>
-            <div class="flex-col flex justify-center items-center text-center cursor-pointer" @click="onTap('wallet')">
+            <div class="flex-col flex justify-center items-center text-center cursor-pointer" @click="onTap('0030')">
               <WalletIcon :fill="modalTitle == 'wallet' ? `#055174`: `#4A4A4A`"/>
               <div :class="modalTitle == 'wallet' ? `text-primary`: ``" class="text-sm">
                 {{ $t('0030') }}
@@ -365,7 +368,7 @@ export default {
       qrUrl: "",
       qrImage: "",
       profile_url: "",
-      modalTitle: "profile",
+      modalTitle: "scan",
       price: 0,
       qr: {},
       isPay: false,
@@ -508,7 +511,7 @@ export default {
     onTap(title) {
       this.modalTitle = title
       switch (title) {
-        case "wallet":
+        case "0030":
           this.qr = {
             type: 1,
             user_id: this.stProfile._id,

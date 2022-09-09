@@ -25,6 +25,7 @@
 <script>
 import CloseIcon from "./../../components/CloseIcon.vue"
 import {mapActions, mapState} from "vuex"
+import helper from "@/helper/helper";
 
 export default {
   data() {
@@ -61,9 +62,15 @@ export default {
       }
 
       let checkoutCourse = {courses}
-      this.cartCheckout(checkoutCourse).then(response => {
-        this.getReceiptDetail(response.data.data.e_code).then(response => {
-          this.$emit("showInvoice", response.data.data)
+
+      this.cartCheckout(checkoutCourse).then(res => {
+        if (res.data.msg != undefined) {
+          helper.errorMessage(res.data.msg)
+          return;
+        }
+
+        this.getReceiptDetail(res.data.data.e_code).then(res => {
+          this.$emit("showInvoice", res.data.data)
         })
       })
     },
