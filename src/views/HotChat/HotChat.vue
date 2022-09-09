@@ -72,7 +72,7 @@
               <li v-for="(message, index) in messages" :key="index" class="w-full relative"
                   @contextmenu="showReply(message)">
                 <div class="absolute w-full justify-center flex z-50"
-                     v-if="replyId._id === message._id">
+                     v-if="replyId._id === isId(message)">
                   <Reply
                       :contact="contact"
                       :message="message"
@@ -190,8 +190,10 @@
                        class="items-center">
                     <div :class="darkMode?`text-gray-500`:`text-gray-700`"
                          class="text-xs whitespace-nowrap mb-1">
-                      {{ getDay(message.date) }} <span v-if="!message.is_admin">
-                                            <isSeen :isRead="message.is_read"/></span>
+                      {{ getDay(message.date) }}
+                      <span v-if="!message.is_admin">
+                        <isSeen :isRead="message.is_read"/>
+                      </span>
                     </div>
                   </div>
                   <div :class="message.is_admin?`flex justify-start`:`flex justify-end`"
@@ -231,12 +233,10 @@
                           </div>
                           <div>
                             <span v-if="message.content.text">
-                                {{
-                                message.content.text.includes('.pdf') ? message.content.text : message.content.text + ".pdf"
-                              }}
+                                {{message.content.text.includes('.pdf') ? message.content.text : message.content.text + ".pdf" }}
                             </span>
                             <span v-else>
-                                {{ message._id }}.pdf
+                                {{ isId(message) }}.pdf
                             </span>
                           </div>
                         </div>
@@ -559,6 +559,7 @@ import PreviewImage from "./../Chat/components/PreviewImage.vue"
 
 const {ipcRenderer} = require('electron')
 import isSeen from "./../Chat/components/IsRead.vue"
+import PdfReply from "@/views/Chat/components/PdfReply";
 import VueTimeago from 'vue-timeago'
 
 Vue.use(VueTimeago, {
@@ -574,6 +575,7 @@ Vue.use(new VueSocketIO({
 }));
 export default {
   components: {
+    PdfReply,
     eHeader,
     MessagerIcon,
     TelegramIcon,
@@ -661,6 +663,13 @@ export default {
     ...mapActions('etalk', ['getMessage', 'hotChat', 'sendMessage', 'deleteMessage']),
     ...mapActions('auth', ['getStudentProfile', 'getToken']),
     ...mapActions('upload', ['singleUpload', 'multiUpload', 'uploadSound']),
+    isId(object) {
+      try {
+        return object._id
+      } catch (e) {
+        return 0
+      }
+    },
     isNumber(evt) {
       return helper.isNumber(evt)
     },
@@ -827,7 +836,7 @@ export default {
       ipcRenderer.send("saveFile", this.fileUrl)
     },
     replyTo(replyContact) {
-      if (replyContact.sender && replyContact.sender._id == this.stProfile._id) {
+      if (replyContact.sender && isId(replyContact.sender) == this.stProfile._id) {
         if (replyContact.is_admin != 1) {
           return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('yourself')
         }
@@ -928,23 +937,6 @@ export default {
         reader.readAsDataURL(input.files[0]);
       }
     },
-    // onSelectFile(event) {
-    //   this.isPreview = true
-    //   let input = event.target;
-    //   this.file = event.target.files[0]
-    //   if (this.getExtension(this.file.name) === "pdf") {
-    //     this.type = 2
-    //   } else {
-    //     this.type = 1
-    //   }
-    //   if (input.files && input.files[0]) {
-    //     let reader = new FileReader();
-    //     reader.onload = (e) => {
-    //       this.imgUrl = e.target.result
-    //     }
-    //     reader.readAsDataURL(input.files[0]);
-    //   }
-    // },
     senderName(message) {
       if (message.sender != undefined) {
         if (message.sender._id == this.stProfile._id) {
