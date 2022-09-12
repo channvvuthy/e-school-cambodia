@@ -104,7 +104,7 @@ export default {
               this.enableScroll = false
             }
           })
-        }else{
+        } else {
           this.loadingMore = false
         }
 

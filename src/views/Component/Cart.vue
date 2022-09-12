@@ -72,10 +72,8 @@
                   <div class="flex flex-col">
                     <div class="flex items-center justify-between">
                       <div :class="cart.price.month?'':`${darkMode?`text-white`:`text-heart`}`">
-                        {{
-                          durationCalculate((cart.price.duration ? cart.price.duration : 12),
-                              cart.price.month, cart.price.year)
-                        }}
+                        {{durationCalculate((cart.price.duration ? cart.price.duration : 12),
+                              cart.price.month, cart.price.year) }}
                       </div>
                       <div class="flex flex-col ml-2"
                            @click="cart.price.month?duration((cart.price.duration ? cart.price.duration : 12),cart._id):false">

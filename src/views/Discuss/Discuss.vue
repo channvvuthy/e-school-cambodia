@@ -100,7 +100,7 @@ import MediaLeft from "./components/MediaLeft"
 import MediaRight from "./components/MediaRight"
 import Loading from "./../../components/Loading"
 import VueRecord from '@codekraft-studio/vue-record'
-//    import axios from "axios"
+
 
 Vue.use(VueRecord)
 Vue.use(new VueSocketIO({

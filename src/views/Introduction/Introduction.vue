@@ -14,7 +14,9 @@
                  @click="showIntro(k)"></div>
           </div>
         </div>
-        <button class="bg-primary text-center text-white rounded-xl w-full mt-5 py-3" v-if="index == 4" @click="start()">ចាប់ផ្តើម</button>
+        <button class="bg-primary text-center text-white rounded-xl w-full mt-5 py-3" v-if="index == 4"
+                @click="start()">ចាប់ផ្តើម
+        </button>
       </div>
     </div>
     <div class="flex justify-end  w-full">
@@ -53,7 +55,7 @@ export default {
     showIntro(i) {
       this.index = i;
     },
-    start(){
+    start() {
       localStorage.setItem("started", 1);
       this.$emit("started")
     }

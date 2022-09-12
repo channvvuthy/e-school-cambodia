@@ -1,5 +1,7 @@
 <template>
-    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" :height="size" :width="size" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve">
+  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" :height="size" :width="size"
+       x="0px" y="0px" viewBox="0 0 512 512"
+       style="enable-background:new 0 0 512 512" xml:space="preserve">
         <g :fill="fill">
             <g>
             <path d="M256,0c-49.456,0-89.693,40.237-89.693,89.693v176.279c0,49.45,40.237,89.687,89.693,89.687
@@ -8,18 +10,18 @@
                     s52.321,23.47,52.315,52.321V266.583z"/>
             </g>
         </g>
-        <g :fill="fill">
+    <g :fill="fill">
             <g>
             <rect x="237.314" y="409.226" width="37.372" height="84.088"/>
             </g>
         </g>
-        <g :fill="fill">
+    <g :fill="fill">
             <g>
             <path d="M305.207,474.628h-98.414c-10.321,0-18.686,8.365-18.686,18.686c0,10.321,8.365,18.686,18.686,18.686h98.414
                     c10.321,0,18.686-8.365,18.686-18.686C323.893,482.993,315.528,474.628,305.207,474.628z"/>
             </g>
         </g>
-        <g :fill="fill">
+    <g :fill="fill">
             <g>
             <path d="M397.392,234.822c-10.321,0-18.686,8.365-18.686,18.686v14.949c0,67.656-55.049,122.706-122.706,122.706
                     c-67.662,0-122.706-55.049-122.706-122.706v-14.949c0-10.321-8.365-18.686-18.686-18.686s-18.686,8.365-18.686,18.686v14.949
@@ -27,23 +29,23 @@
                     C416.078,243.188,407.713,234.822,397.392,234.822z"/>
             </g>
         </g>
-        <g/>
+    <g/>
     </svg>
 
 </template>
 <script>
 export default {
-    props:{
-        fill:{
-            default:()=>{
-                return "#000000"
-            }
-        },
-        size:{
-            default:()=>{
-                return 24
-            }
-        }
+  props: {
+    fill: {
+      default: () => {
+        return "#000000"
+      }
+    },
+    size: {
+      default: () => {
+        return 24
+      }
     }
+  }
 }
 </script>

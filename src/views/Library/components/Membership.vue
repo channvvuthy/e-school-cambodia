@@ -26,7 +26,7 @@
             </div>
             <div
                 class="absolute w-full h-full bg-gradient-to-t from-black  rounded-xl cursor-pointer"
-                 @click="showConfirm(pk)"></div>
+                @click="showConfirm(pk)"></div>
             <div class="px-5 py-3 text-white relative z-50 w-full">
               <div class="text-base">{{ pk.title }}</div>
               <div class="flex mt-1 items-center justify-between w-full">

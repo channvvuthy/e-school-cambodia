@@ -1,36 +1,36 @@
 <template>
   <div>
     <a
-      :class="darkMode ? `text-gray-300` : `text-primary`"
-      @click="
+        :class="darkMode ? `text-gray-300` : `text-primary`"
+        @click="
         () => {
           this.$router.go(-1);
         }
       "
-      href="#"
-      class="absolute right-2 bottom-2"
+        href="#"
+        class="absolute right-2 bottom-2"
     >
-      <BackMenuIcon :fill="darkMode ? `#ffffff` : `#055174`" :width="30" />
+      <BackMenuIcon :fill="darkMode ? `#ffffff` : `#055174`" :width="30"/>
     </a>
 
     <div
-      :class="darkMode ? `bg-youtube` : `bg-gray-50`"
-      class="p-5 h-screen overflow-y-scroll"
+        :class="darkMode ? `bg-youtube` : `bg-gray-50`"
+        class="p-5 h-screen overflow-y-scroll"
     >
       <div
-        class="w-9/12"
-        :class="
+          class="w-9/12"
+          :class="
           darkMode
             ? `bg-youtube text-textSecondary`
             : `bg-white shadow rounded-b-xl`
         "
       >
         <div class="relative">
-          <img :src="detail.thumbnail" class="w-full m-auto" />
+          <img :src="detail.thumbnail" class="w-full m-auto"/>
           <div class="w-full absolute left-0 -bottom-5 flex justify-center">
             <button
-              @click="gotToPlayList"
-              class="
+                @click="gotToPlayList"
+                class="
                 flex
                 items-center
                 justify-center
@@ -44,7 +44,7 @@
                 text-xl
               "
             >
-              <VideoCameraIcon fill="#fff" :size="35" />
+              <VideoCameraIcon fill="#fff" :size="35"/>
               <span class="ml-3">{{ $t("1117") }}</span>
             </button>
           </div>
@@ -72,7 +72,7 @@
             <div class="flex items-center">
               <Eye :height="30"></Eye>
               <span v-if="loading">
-                <Loader :size="10" bg="#000" />
+                <Loader :size="10" bg="#000"/>
               </span>
               <span v-else>
                 <span class="pl-2">
@@ -82,28 +82,28 @@
             </div>
             <div class="cursor-pointer">
               <div v-if="playlist.is_favorite" @click="removeFavorite">
-                <FavoriteFill fill="#c0272d" :size="30" />
+                <FavoriteFill fill="#c0272d" :size="30"/>
               </div>
               <div v-else @click="addToFavorite">
-                <FavoriteIcon :size="30" />
+                <FavoriteIcon :size="30"/>
               </div>
             </div>
           </div>
         </div>
 
         <div
-          class="border-b border-t py-3 px-5"
-          :class="darkMode ? `border-button` : ``"
-          v-if="!loading"
+            class="border-b border-t py-3 px-5"
+            :class="darkMode ? `border-button` : ``"
+            v-if="!loading"
         >
           <div class="flex items-center text-center justify-between w-96">
             <div class="cursor-pointer" :title="$t('2108')">
               <YoutubeIcon
-                :fill="darkMode ? `#909090` : `#000000`"
-                :size="42"
+                  :fill="darkMode ? `#909090` : `#000000`"
+                  :size="42"
               />
               <div
-                class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                  class="h-6 mt-1 bg-transparent flex items-end justify-center"
               >
                 {{
                   playlist.course.total_video ? playlist.course.total_video : 0
@@ -111,42 +111,42 @@
               </div>
             </div>
             <div class="cursor-pointer" :title="$t('pdf')">
-              <PdfIcon :fill="darkMode ? `#909090` : `#000000`" :size="42" />
+              <PdfIcon :fill="darkMode ? `#909090` : `#000000`" :size="42"/>
               <div
-                class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                  class="h-6 mt-1 bg-transparent flex items-end justify-center"
               >
                 {{ playlist.course.total_pdf ? playlist.course.total_pdf : 0 }}
               </div>
             </div>
             <div class="cursor-pointer" :title="$t('support')">
-              <ChatIcon :fill="darkMode ? `#909090` : `#000000`" :size="42" />
+              <ChatIcon :fill="darkMode ? `#909090` : `#000000`" :size="42"/>
               <div
-                class="h-6 mt-1 bg-transparent flex items-end justify-center"
-                :class="darkMode ? `text-skyBlue` : `text-primary`"
+                  class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                  :class="darkMode ? `text-skyBlue` : `text-primary`"
               >
                 {{ playlist.course.has_support ? $t("1008") : $t("1009") }}
               </div>
             </div>
             <div
-              class="cursor-pointer text-center flex justify-center flex-col"
-              :title="$t('2111')"
+                class="cursor-pointer text-center flex justify-center flex-col"
+                :title="$t('2111')"
             >
-              <TestIcon :fill="darkMode ? `#909090` : `#000000`" :size="42" />
+              <TestIcon :fill="darkMode ? `#909090` : `#000000`" :size="42"/>
               <div
-                class="h-6 mt-1 bg-transparent"
-                :class="darkMode ? `text-skyBlue` : `text-primary`"
+                  class="h-6 mt-1 bg-transparent"
+                  :class="darkMode ? `text-skyBlue` : `text-primary`"
               >
                 {{ playlist.course.has_quiz ? $t("1008") : $t("1009") }}
               </div>
             </div>
             <div class="cursor-pointer" :title="$t('1114')">
               <CertificateIcon
-                :fill="darkMode ? `#909090` : `#000000`"
-                :size="42"
+                  :fill="darkMode ? `#909090` : `#000000`"
+                  :size="42"
               />
               <div
-                class="h-6 mt-1 bg-transparent flex items-end justify-center"
-                :class="darkMode ? `text-skyBlue` : `text-primary`"
+                  class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                  :class="darkMode ? `text-skyBlue` : `text-primary`"
               >
                 {{ playlist.course.has_certificate ? $t("1008") : $t("1009") }}
               </div>
@@ -155,15 +155,15 @@
         </div>
 
         <div
-          class="flex items-center justify-center my-10 pb-20"
-          v-if="!loading"
+            class="flex items-center justify-center my-10 pb-20"
+            v-if="!loading"
         >
           <div class="progressVideoDetail flex items-center justify-center">
             <div>
               <div class="barOverflowVideoDetail">
                 <div
-                  class="reportDetail"
-                  :style="{
+                    class="reportDetail"
+                    :style="{
                     transform: `rotate(${
                       45 + Math.round(report('percentage')) * 1.8
                     }deg)`,
@@ -171,7 +171,7 @@
                 ></div>
               </div>
               <div
-                class="
+                  class="
                   absolute
                   w-full
                   top-0
@@ -198,7 +198,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import VideoCameraIcon from "@/views/Video/components/VideoCameraIcon";
 import Eye from "@/components/Eye";
 import helper from "@/helper/helper";
@@ -245,14 +245,14 @@ export default {
     ...mapActions("video", ["getPlaylist"]),
     removeFavorite() {
       this.$store
-        .dispatch("favorite/removeFavorite", this.detail._id)
-        .then(() => {
-          helper.success("0011");
-          this.$store.commit("video/toggleFavorite", 0);
-        });
+          .dispatch("favorite/removeFavorite", this.detail._id)
+          .then(() => {
+            helper.success("0011");
+            this.$store.commit("video/toggleFavorite", 0);
+          });
     },
     addToFavorite() {
-      this.add(this.detail._id).then((res) => {
+      this.add(this.detail._id).then(() => {
         helper.success("0010");
         this.$store.commit("video/toggleFavorite", 1);
       });
@@ -264,7 +264,7 @@ export default {
       }
       this.$router.push({
         name: "video-detail",
-        params: { course: this.detail },
+        params: {course: this.detail},
       });
     },
     report(field) {
@@ -280,9 +280,9 @@ export default {
     reportWatch() {
       try {
         return (
-          this.playlist.course.report_watch.watch +
-          `/` +
-          this.playlist.course.report_watch.total
+            this.playlist.course.report_watch.watch +
+            `/` +
+            this.playlist.course.report_watch.total
         );
       } catch (err) {
         return "0/0";
@@ -308,7 +308,8 @@ export default {
       });
     },
   },
-  mounted() {},
+  mounted() {
+  },
   created() {
 
     this.detail = this.$route.params.course;

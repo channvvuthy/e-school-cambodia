@@ -125,6 +125,7 @@ export default {
           '<a href="$1" target="_blank" class="text-fb">$1</a>'
         );
 
+
         //URLs starting with "www." (without // before it, or it'd re-link the ones done above).
         replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
         replacedText = replacedText.replace(

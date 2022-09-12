@@ -80,7 +80,6 @@
 </template>
 
 <script>
-    import Loader from "./../../components/Loader"
     import Message from "./components/Message"
     import helper from "./../../helper/helper"
     import {mapActions, mapState} from "vuex"
@@ -89,9 +88,9 @@
     import PhoneIcon from "./../../components/PhoneIcon.vue"
     import LockIcon from "./../../components/LockIcon.vue"
 
+
     export default {
         components: {
-            Loader,
             PhoneIcon,
             Message,
             LockIcon

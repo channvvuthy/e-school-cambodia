@@ -57,7 +57,7 @@
                     <div v-for="(detail,index) in details.list" :key="index">
                         <div class="flex items-center py-3 rounded px-2  cursor-pointer hover:bg-button my-1 hover:text-gray-300" :class="order === index?`bg-button text-gray-300`:``" @click="changeChapter(detail,index)">
                             <div v-if="canRead(detail)" class="mr-3"><CheckIcon :height="20" fill="#5aa20a"></CheckIcon></div>
-                            <div v-else><XIcon fill="#ee3d3c" :width="20" :height="20" class="mr-3"></XIcon></div>
+                            <div v-else><CloseIcon fill="#ee3d3c" :width="20" :height="20" class="mr-3"></CloseIcon></div>
                             <div :class="darkMode?``:``">{{detail.title}}</div>
                         </div>
                     </div>
@@ -73,16 +73,14 @@ import ChevronIcon from "./../../../../components/ChevronIcon"
 import EnlargeIcon from "./../../../../components/EnlargeIcon"
 import ReadingBookIcon from "./../../../../components/ReadingBookIcon"
 import CheckIcon from "./../../../../components/CheckIcon"
-import XIcon from "./../../../../components/XIcon"
 import pdf from 'vue-pdf'
 export default {
     components:{
         EnlargeIcon,
-        CloseIcon,
         ChevronIcon,
         ReadingBookIcon,
         CheckIcon,
-        XIcon,
+        CloseIcon,
         pdf
     },
     data(){

@@ -1,42 +1,42 @@
 <template>
   <div class="flex h-screen m-5 text-sm">
     <div
-      class="w-80 h-full overflow-y-scroll pb-40"
-      :class="darkMode ? `bg-secondary text-gray-300` : `bg-white`"
-      @scroll="onScroll"
+        class="w-80 h-full overflow-y-scroll pb-40"
+        :class="darkMode ? `bg-secondary text-gray-300` : `bg-white`"
+        @scroll="onScroll"
     >
       <div
-        class="flex px-4 py-2 items-center justify-between relative"
-        :class="darkMode ? `text-gray-300` : `bg-white`"
+          class="flex px-4 py-2 items-center justify-between relative"
+          :class="darkMode ? `text-gray-300` : `bg-white`"
       >
         <div class="py-3 font-bold" :class="darkMode ? `` : `text-primary`">
           E-TALK
         </div>
         <div
-          class="cursor-pointer"
-          @click="
+            class="cursor-pointer"
+            @click="
             () => {
               this.eTalkOption = true;
             }
           "
         >
           <div
-            class="w-1 h-1 rounded-full mb-1"
-            :class="darkMode ? `bg-gray-400` : `bg-primary`"
+              class="w-1 h-1 rounded-full mb-1"
+              :class="darkMode ? `bg-gray-400` : `bg-primary`"
           ></div>
           <div
-            class="w-1 h-1 rounded-full mb-1"
-            :class="darkMode ? `bg-gray-400` : `bg-primary`"
+              class="w-1 h-1 rounded-full mb-1"
+              :class="darkMode ? `bg-gray-400` : `bg-primary`"
           ></div>
           <div
-            class="w-1 h-1 rounded-full"
-            :class="darkMode ? `bg-gray-400` : `bg-primary`"
+              class="w-1 h-1 rounded-full"
+              :class="darkMode ? `bg-gray-400` : `bg-primary`"
           ></div>
         </div>
         <!-- eTalk option -->
         <div
-          :class="darkMode ? `bg-button` : `bg-white`"
-          class="
+            :class="darkMode ? `bg-button` : `bg-white`"
+            class="
             rounded-md
             overflow-hidden
             e-shadow
@@ -45,43 +45,43 @@
             top-14
             cursor-pointer
           "
-          v-if="eTalkOption"
-          style="z-index: 55"
+            v-if="eTalkOption"
+            style="z-index: 55"
         >
           <div
-            class="px-8 h-12 flex items-center justify-center border-b"
-            :class="darkMode ? `border-youtube` : `border-gray-200`"
-            @click="goTo('network')"
+              class="px-8 h-12 flex items-center justify-center border-b"
+              :class="darkMode ? `border-youtube` : `border-gray-200`"
+              @click="goTo('network')"
           >
             {{ $t("connect_friend") }}
           </div>
           <div
-            class="px-8 h-12 flex items-center justify-center border-b"
-            :class="darkMode ? `border-youtube` : `border-gray-200`"
-            @click="goTo(`create-group`)"
-            id="group"
+              class="px-8 h-12 flex items-center justify-center border-b"
+              :class="darkMode ? `border-youtube` : `border-gray-200`"
+              @click="goTo(`create-group`)"
+              id="group"
           >
             {{ $t("create_group") }}
           </div>
           <div
-            class="px-8 h-12 flex items-center justify-center border-b"
-            :class="darkMode ? `border-youtube` : `border-gray-200`"
-            @click="goTo('hot-chat')"
+              class="px-8 h-12 flex items-center justify-center border-b"
+              :class="darkMode ? `border-youtube` : `border-gray-200`"
+              @click="goTo('hot-chat')"
           >
             {{ $t("need_support") }}
           </div>
           <div
-            class="px-8 h-12 flex items-center justify-center"
-            :class="darkMode ? `border-youtube` : `border-gray-400`"
+              class="px-8 h-12 flex items-center justify-center"
+              :class="darkMode ? `border-youtube` : `border-gray-400`"
           >
             {{ $t("mute_all") }}
           </div>
         </div>
         <!-- Overlay -->
         <div
-          class="fixed w-full h-full left-0 top-0 z-50"
-          v-if="eTalkOption || chatOption"
-          @click="
+            class="fixed w-full h-full left-0 top-0 z-50"
+            v-if="eTalkOption || chatOption"
+            @click="
             () => {
               this.eTalkOption = false;
               this.chatOption = false;
@@ -92,47 +92,47 @@
       <!-- Search -->
       <div class="relative mb-4 px-3">
         <input
-          type="text"
-          v-on:keyup.enter="searchContact"
-          v-model="searchQuery"
-          class="w-full rounded-md h-10 focus:outline-none pl-3"
-          :class="darkMode ? `bg-youtube text-gray-300` : `bg-softGray`"
-          :placeholder="$t('1001')"
+            type="text"
+            v-on:keyup.enter="searchContact"
+            v-model="searchQuery"
+            class="w-full rounded-md h-10 focus:outline-none pl-3"
+            :class="darkMode ? `bg-youtube text-gray-300` : `bg-softGray`"
+            :placeholder="$t('1001')"
         />
         <div class="absolute right-6 top-2">
-          <SearchIcon :fill="darkMode ? `#909090` : `#000`" />
+          <SearchIcon :fill="darkMode ? `#909090` : `#000`"/>
         </div>
       </div>
       <!-- List -->
       <div class="flex flex-col">
         <div
-          class="h-full flex items-center justify-center"
-          :class="darkMode ? `text-white` : ``"
-          v-if="loading"
+            class="h-full flex items-center justify-center"
+            :class="darkMode ? `text-white` : ``"
+            v-if="loading"
         >
           <div class="loader"></div>
         </div>
         <div v-else>
           <!-- Contact List -->
           <div
-            v-for="(contact, index) in contacts"
-            :key="index"
-            @click="selectedContact(contact, index)"
+              v-for="(contact, index) in contacts"
+              :key="index"
+              @click="selectedContact(contact, index)"
           >
             <div
-              class="flex items-center py-3 px-4 cursor-pointer"
-              :class="
+                class="flex items-center py-3 px-4 cursor-pointer"
+                :class="
                 darkMode
                   ? `border-b border-black ${
                       active === index ? `bg-button` : ``
                     }`
                   : `border-b ${active === index ? `bg-blue-100` : ``}`
               "
-              v-if="contact.type == 'chat'"
+                v-if="contact.type == 'chat'"
             >
               <div>
                 <div
-                  class="
+                    class="
                     h-13
                     w-13
                     rounded-full
@@ -141,24 +141,24 @@
                     bg-cover bg-gray-300
                     mr-3
                   "
-                  :style="{ backgroundImage: `url(${contact.chat.photo})` }"
+                    :style="{ backgroundImage: `url(${contact.chat.photo})` }"
                 ></div>
               </div>
               <div>
                 <div
-                  class="text-sm fon-medium"
-                  :class="darkMode ? `text-gray-300` : ``"
+                    class="text-sm fon-medium"
+                    :class="darkMode ? `text-gray-300` : ``"
                 >
                   {{ contact.chat.name }}
                 </div>
                 <div
-                  class="text-xs font-normal"
-                  :class="darkMode ? `text-gray-500` : `text-gray-400`"
+                    class="text-xs font-normal"
+                    :class="darkMode ? `text-gray-500` : `text-gray-400`"
                 >
                   {{
                     contact.chat.last == undefined
-                      ? $t("ticket") + " " + contact.chat.ticket
-                      : cutString(contact.chat.last.message, 20)
+                        ? $t("ticket") + " " + contact.chat.ticket
+                        : cutString(contact.chat.last.message, 20)
                   }}
                 </div>
               </div>
@@ -166,7 +166,7 @@
                 <div>
                   <div class="flex justify-center" v-if="contact.chat.unread">
                     <div
-                      class="
+                        class="
                         h-4
                         w-4
                         rounded-full
@@ -175,7 +175,7 @@
                         justify-center
                         text-xs
                       "
-                      :class="
+                        :class="
                         darkMode ? `bg-white text-black` : `bg-heart text-white`
                       "
                     >
@@ -183,13 +183,13 @@
                     </div>
                   </div>
                   <div
-                    class="text-xs mt-1"
-                    :class="darkMode ? `text-gray-500` : ``"
+                      class="text-xs mt-1"
+                      :class="darkMode ? `text-gray-500` : ``"
                   >
                     {{
                       contact.chat.last == undefined
-                        ? $t("unread") + " " + contact.chat.unread
-                        : formatTime(contact.chat.last.date)
+                          ? $t("unread") + " " + contact.chat.unread
+                          : formatTime(contact.chat.last.date)
                     }}
                   </div>
                 </div>
@@ -201,23 +201,23 @@
       </div>
     </div>
     <div
-      class="flex-1 w-full ml-2 h-screen flex flex-col"
-      :class="
+        class="flex-1 w-full ml-2 h-screen flex flex-col"
+        :class="
         darkMode ? `bg-youtube text-gray-300` : `${isNext ? `` : `bg-white`}`
       "
     >
       <div
-        :class="darkMode ? `bg-secondary text-gray-300` : `bg-white`"
-        class="px-4 py-3 flex text-sm items-center shadow relative"
+          :class="darkMode ? `bg-secondary text-gray-300` : `bg-white`"
+          class="px-4 py-3 flex text-sm items-center shadow relative"
       >
         <div class="h-12 flex items-center">
           <div
-            class="shadow-md px-2 py-1 rounded cursor-pointer"
-            :class="darkMode ? `bg-button` : `bg-white`"
-            @click="backTo()"
+              class="shadow-md px-2 py-1 rounded cursor-pointer"
+              :class="darkMode ? `bg-button` : `bg-white`"
+              @click="backTo()"
           >
             <div class="transform rotate-90">
-              <ChevronIcon :fill="darkMode ? `#909090` : `#555`" :size="18" />
+              <ChevronIcon :fill="darkMode ? `#909090` : `#555`" :size="18"/>
             </div>
           </div>
           <div class="ml-3">
@@ -230,26 +230,26 @@
         <div class="flex flex-col items-end cursor-pointer" @click="nextPage">
           <span :class="darkMode ? `` : `text-primary`" v-if="isNext">
             <div
-              v-if="creatingGroup"
-              class="flex items-center justify-center relative h-full"
+                v-if="creatingGroup"
+                class="flex items-center justify-center relative h-full"
             >
               <div class="loader absolute -top-7 right-5"></div>
             </div>
             <span v-else>{{ $t("done") }}</span>
           </span>
           <span :class="darkMode ? `` : `text-primary`" v-else>{{
-            $t("2125")
-          }}</span>
+              $t("2125")
+            }}</span>
         </div>
       </div>
       <div :class="isNext ? `my-2` : `m-5`">
         <template v-if="isNext">
           <div
-            class="flex shadow px-5 py-4 items-center"
-            :class="darkMode ? `bg-secondary` : `bg-white`"
+              class="flex shadow px-5 py-4 items-center"
+              :class="darkMode ? `bg-secondary` : `bg-white`"
           >
             <div
-              class="
+                class="
                 cursor-pointer
                 h-16
                 w-16
@@ -258,42 +258,42 @@
                 mr-3
                 bg-no-repeat
               "
-              @click="
+                @click="
                 () => {
                   this.$refs.groupLogo.click();
                 }
               "
-              :style="{
+                :style="{
                 backgroundImage: `url(${defaultBackground})`,
                 backgroundPosition: `center center`,
               }"
             ></div>
             <input
-              type="file"
-              ref="groupLogo"
-              class="hidden"
-              @change="onSelectedPhoto"
+                type="file"
+                ref="groupLogo"
+                class="hidden"
+                @change="onSelectedPhoto"
             />
             <div>
               <div
-                class="text-xs"
-                :class="darkMode ? `text-gray-300` : `text-gray-400`"
+                  class="text-xs"
+                  :class="darkMode ? `text-gray-300` : `text-gray-400`"
               >
                 {{ $t("name_your_group") }}
               </div>
               <div>
                 <input
-                  type="text"
-                  class="
+                    type="text"
+                    class="
                     bg-transparent
                     focus:outline-none
                     text-smm
                     py-2
                     font-semibold
                   "
-                  :placeholder="$t('group_name')"
-                  v-model="groupName"
-                  ref="groupName"
+                    :placeholder="$t('group_name')"
+                    v-model="groupName"
+                    ref="groupName"
                 />
               </div>
             </div>
@@ -302,15 +302,15 @@
         <template v-else>
           <div class="w-11/12 relative">
             <input
-              type="text"
-              class="focus:outline-none h-11 w-full rounded-md pl-4"
-              :placeholder="$t('search_member')"
-              :class="darkMode ? `bg-button text-gray-300` : `bg-softGray`"
-              v-model="search"
-              @keyup.enter="searchMember"
+                type="text"
+                class="focus:outline-none h-11 w-full rounded-md pl-4"
+                :placeholder="$t('search_member')"
+                :class="darkMode ? `bg-button text-gray-300` : `bg-softGray`"
+                v-model="search"
+                @keyup.enter="searchMember"
             />
             <div class="absolute right-4 top-2">
-              <SearchIcon :fill="darkMode ? `#909090` : `#000000`" />
+              <SearchIcon :fill="darkMode ? `#909090` : `#000000`"/>
             </div>
           </div>
 
@@ -321,37 +321,36 @@
           </div>
         </template>
         <div
-          v-if="loadingFriend"
-          class="flex items-center justify-center"
-          :class="darkMode ? `text-gray-300` : `text-black`"
+            v-if="loadingFriend"
+            class="flex items-center justify-center"
+            :class="darkMode ? `text-gray-300` : `text-black`"
         >
           <div class="loader"></div>
         </div>
         <!-- Group Member -->
         <template v-if="isNext">
           <div
-            class="mt-2 pb-5 h-screen"
-            :class="darkMode ? `bg-secondary` : `bg-white`"
+              class="mt-2 pb-5 h-screen"
+              :class="darkMode ? `bg-secondary` : `bg-white`"
           >
             <div class="pt-5 text-base px-5">Group Member</div>
-            ​
             <div>
               <div
-                v-for="(member, index) in selectedMember"
-                :key="index"
-                class="py-3 border-b px-5"
-                :class="darkMode ? `border-youtube` : `border-gray-200`"
+                  v-for="(member, index) in selectedMember"
+                  :key="index"
+                  class="py-3 border-b px-5"
+                  :class="darkMode ? `border-youtube` : `border-gray-200`"
               >
                 <div class="flex items-center">
                   <div
-                    class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300"
-                    :style="{ backgroundImage: `url(${member.photo})` }"
+                      class="h-14 w-14 rounded-full bg-cover mr-3 bg-gray-300"
+                      :style="{ backgroundImage: `url(${member.photo})` }"
                   ></div>
                   <div>
                     <div>{{ member.name }}</div>
                     <div
-                      class="text-xs font-normal"
-                      :class="darkMode ? `text-gray-500` : `text-gray-400`"
+                        class="text-xs font-normal"
+                        :class="darkMode ? `text-gray-500` : `text-gray-400`"
                     >
                       Online
                     </div>
@@ -364,24 +363,24 @@
         <!-- List friend -->
         <template v-else>
           <div
-            class="h-screen pb-96 overflow-y-scroll flex flex-col mt-2"
-            @scroll="onScroll"
+              class="h-screen pb-96 overflow-y-scroll flex flex-col mt-2"
+              @scroll="onScroll"
           >
             <div v-for="(friend, index) in friends.list" :key="index">
               <div
-                class="flex items-center justify-between border-b py-3"
-                :class="darkMode ? `border-button` : ``"
+                  class="flex items-center justify-between border-b py-3"
+                  :class="darkMode ? `border-button` : ``"
               >
                 <div class="flex items-center">
                   <div
-                    class="h-14 w-14 rounded-full bg-cover bg-gray-300"
-                    :style="{ backgroundImage: `url(${friend.photo})` }"
+                      class="h-14 w-14 rounded-full bg-cover bg-gray-300"
+                      :style="{ backgroundImage: `url(${friend.photo})` }"
                   ></div>
                   <div class="ml-3">
                     <div>{{ friend.name }}</div>
                     <div
-                      class="text-xs font-normal"
-                      :class="darkMode ? `text-gray-500` : `text-gray-400`"
+                        class="text-xs font-normal"
+                        :class="darkMode ? `text-gray-500` : `text-gray-400`"
                     >
                       Online
                     </div>
@@ -389,7 +388,7 @@
                 </div>
                 <div>
                   <div
-                    class="
+                      class="
                       h-5
                       w-5
                       rounded-full
@@ -398,10 +397,10 @@
                       justify-center
                       relative
                     "
-                    :class="darkMode ? `bg-pass` : `bg-primary`"
+                      :class="darkMode ? `bg-pass` : `bg-primary`"
                   >
                     <label
-                      class="
+                        class="
                         absolute
                         cursor-pointer
                         w-full
@@ -412,13 +411,13 @@
                       "
                     >
                       <input
-                        type="checkbox"
-                        :value="friend._id"
-                        @click="selectMember($event, friend)"
-                        class="hidden"
+                          type="checkbox"
+                          :value="friend._id"
+                          @click="selectMember($event, friend)"
+                          class="hidden"
                       />
                       <div v-if="isSelected(friend._id)">
-                        <CheckIcon :fill="darkMode ? `#212121` : `#FFFFFF`" />
+                        <CheckIcon :fill="darkMode ? `#212121` : `#FFFFFF`"/>
                       </div>
                     </label>
                   </div>
@@ -432,7 +431,7 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import {mapState, mapActions} from "vuex";
 import SearchIcon from "./../../components/SearchIcon.vue";
 import helper from "./../../helper/helper";
 import moment from "moment";
@@ -491,12 +490,12 @@ export default {
     },
     goTo(page) {
       this.$router
-        .push({
-          name: page,
-        })
-        .catch((err) => {
-          return err;
-        });
+          .push({
+            name: page,
+          })
+          .catch((err) => {
+            return err;
+          });
     },
 
     selectMember(event, friend) {
@@ -509,7 +508,7 @@ export default {
         this.selectedMember.push(member);
       } else {
         this.selectedMember = this.selectedMember.filter(
-          (item) => item.id !== friend._id
+            (item) => item.id !== friend._id
         );
       }
     },
@@ -534,7 +533,7 @@ export default {
       this.getContact(payload);
     },
 
-    onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+    onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
       if (scrollTop + clientHeight >= scrollHeight - 1) {
         this.page++;
         let payload = {};
@@ -564,15 +563,6 @@ export default {
         this.$router.push("chat");
       }
     },
-    goTo(page) {
-      this.$router
-        .push({
-          name: page,
-        })
-        .catch((err) => {
-          err;
-        });
-    },
     nextPage() {
       if (!this.isNext) {
         if (!this.selectedMember.length) {
@@ -593,16 +583,12 @@ export default {
 
         this.creatingGroup = true;
 
-        var form = new FormData();
+        const form = new FormData();
 
         form.append("name", this.groupName);
-        // form.append("photo", this.photo);
-
-        // form.append("member", this.stProfile._id);
         let member = [];
 
         for (let i = 0; i < this.selectedMember.length; i++) {
-          // form.append("member", this.selectedMember[i].id);
           member.push(this.selectedMember[i].id);
         }
         let formUpload = new FormData();
@@ -611,23 +597,23 @@ export default {
           this.creatingGroup = false;
 
           if (res.data) form.append("member", JSON.stringify(member));
-            form.append("photo", JSON.stringify(res.data));
-            this.createGroup(form)
-                .then((response) => {
+          form.append("photo", JSON.stringify(res.data));
+          this.createGroup(form)
+              .then((response) => {
                 if (response.data.msg != undefined) {
-                    helper.errorMessage(response.data.msg);
-                    return;
+                  helper.errorMessage(response.data.msg);
+                  return;
                 }
                 this.creatingGroup = false;
                 this.$store.commit("etalk/setActive", response.data.data._id);
                 this.$router.push("chat").catch((err) => {
-                    err;
+                  err;
                 });
-                })
-                .catch(() => {
+              })
+              .catch(() => {
                 this.creatingGroup = false;
-                });
-            });
+              });
+        });
       }
     },
   },

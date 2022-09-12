@@ -95,19 +95,19 @@
                 <div v-if="post.thumbnail && post.type === 1" class="relative">
                   <div class="absolute flex items-center h-full w-full justify-center top-0 left-0">
                     <div class="m-auto overflow-y-scroll p-5 whitespace-pre-wrap text-center max-h-full">
-                      <div v-if="post.caption && post.caption.length > 200">
+                      <div v-if="post.caption && post.caption.length > 200" class="overflow-hidden">
                             <span class="less" @click="seeMore">
                                 <span v-html="linkify(cutString(post.caption, 200))"></span>
                                 <span class="capitalize cursor-pointer font-bold">
                                     {{ $t('see_more') }}
                                 </span>
                             </span>
-                        <span class="more hidden">
+                        <span class="more hidden overflow-x-scroll">
                             <span v-html="linkify(post.caption)"></span>
                         </span>
                       </div>
                       <div v-else>
-                        <span v-html="linkify(post.caption)"></span>
+                        <span class="" v-html="linkify(post.caption)"></span>
                       </div>
                     </div>
                   </div>
@@ -121,7 +121,7 @@
                   <div v-if="post.caption && post.caption.length > 200">
                     <span class="less"
                           @click="seeMore">
-                      <span v-html="linkify(cutString(post.caption, 200))"></span>
+                      <span class="" v-html="linkify(cutString(post.caption, 200))"></span>
                       <span
                           class="capitalize cursor-pointer"
                           :class="darkMode ? `text-gray-300`: `text-primary`">
@@ -180,15 +180,16 @@
                       class="flex items-center justify-end"
                       v-if="post.liker && post.liker.length">
                     <div
-                        @click="showLiker(post)"
-                        v-if="index <= 4"
-                        :title="liker.name"
                         v-for="(liker, index) in post.liker"
-                        :class="`circle-${index} ${likerClass()}`"
-                        :key="index + Math.random()"
-                        class="rounded-full h-11 w-11 relative bg-cover bg-center border-2 cursor-pointer bg-gray-50"
-                        :style="{backgroundImage:`url(${liker.photo})`}"
-                    ></div>
+                        :key="index + Math.random()">
+                      <div @click="showLiker(post)"
+                           :class="`circle-${index} ${likerClass()}`"
+                           v-if="index <= 4"
+                           :title="liker.name"
+                           class="rounded-full h-11 w-11 relative bg-cover bg-center border-2 cursor-pointer bg-gray-50"
+                           :style="{backgroundImage:`url(${liker.photo})`}">
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

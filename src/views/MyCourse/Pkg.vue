@@ -89,7 +89,7 @@ export default {
       })
     },
     pkgDetail(pkg) {
-      if(this.$route.name == 'my-zoom'){
+      if (this.$route.name == 'my-zoom') {
         this.$router.push({
           name: "zoom-package",
           params: {

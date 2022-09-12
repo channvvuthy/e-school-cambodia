@@ -2,9 +2,9 @@
   <div class="p-5">
     <div class="relative w-28">
       <div
-        @click="removeSticker"
-        :class="darkMode ? `bg-button` : `bg-primary`"
-        class="
+          @click="removeSticker"
+          :class="darkMode ? `bg-button` : `bg-primary`"
+          class="
           absolute
           right-4
           -top-3
@@ -18,20 +18,20 @@
           shadow-md
         "
       >
-        <CloseIcon :fill="darkMode ? `#909090` : `#FFFFFF`" :width="18" />
+        <CloseIcon :fill="darkMode ? `#909090` : `#FFFFFF`" :width="18"/>
       </div>
-      <img :class="`w-${stickerHeight}`" :src="stickerUrl" class="rounded" />
+      <img :class="`w-${stickerHeight}`" :src="stickerUrl" class="rounded"/>
     </div>
   </div>
 </template>
 
 <script>
 import CloseIcon from "@/components/CloseIcon";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: "StickerView",
-  components: { CloseIcon },
+  components: {CloseIcon},
   props: {
     stickerUrl: {
       default: () => "",

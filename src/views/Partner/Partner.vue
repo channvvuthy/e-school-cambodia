@@ -30,8 +30,8 @@
                       <span>${{ pk.price.year }}</span></div>
                     <div class="cursor-pointer" v-if="pk.is_buy === 0" @click="addToCart(partner,pk)">
                       <CartIcon
-                              :fill="darkMode?`#909090`:`#000000`"
-                              v-if="pk.is_in_cart === 0"/>
+                          :fill="darkMode?`#909090`:`#000000`"
+                          v-if="pk.is_in_cart === 0"/>
                     </div>
                   </div>
                 </section>
@@ -41,9 +41,9 @@
               <div v-for="(pk, key) in partner.packages" :key="key" class="px-3 pb-3">
                 <div v-if="key === 0">
                   <img
-                          :src="pk.thumbnail" class="rounded cursor-pointer match-height m-auto"
-                          @click="openWebView(pk)"
-                          :style="minHeight?{height:`${minHeight}px`}:{}">
+                      :src="pk.thumbnail" class="rounded cursor-pointer match-height m-auto"
+                      @click="openWebView(pk)"
+                      :style="minHeight?{height:`${minHeight}px`}:{}">
                 </div>
               </div>
               <div class="flex px-3 items-center h-14 justify-between">
@@ -53,8 +53,8 @@
                 <div class="cursor-pointer" v-if="partner.packages[0].is_buy === 0"
                      @click="addToCart(partner,partner.packages[0])">
                   <CartIcon
-                          :fill="darkMode?`#909090`:`#000000`"
-                          v-if="partner.packages[0].is_in_cart === 0"/>
+                      :fill="darkMode?`#909090`:`#000000`"
+                      v-if="partner.packages[0].is_in_cart === 0"/>
                 </div>
               </div>
             </template>
@@ -64,13 +64,13 @@
 
     </div>
     <Cart
-            v-if="showCartForm"
-            @closeCart="closeCart"/>
+        v-if="showCartForm"
+        @closeCart="closeCart"/>
     <BuyMsg
-            v-if="errMessage"
-            :msg="errMessage"
-            @cancelModal="() =>{this.errMessage = ``}"
-            @yes="yes"/>
+        v-if="errMessage"
+        :msg="errMessage"
+        @cancelModal="() =>{this.errMessage = ``}"
+        @yes="yes"/>
   </div>
 </template>
 <script>

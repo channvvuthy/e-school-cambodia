@@ -1,6 +1,6 @@
 <template>
   <div
-    class="
+      class="
       ml-5
       pt-4
       h-screen
@@ -10,13 +10,13 @@
       bg-cover
       text-sm
     "
-    @scroll="onScroll"
-    :class="darkMode ? `` : `bg-white pl-4 border`"
+      @scroll="onScroll"
+      :class="darkMode ? `` : `bg-white pl-4 border`"
   >
     <div v-for="(list, index) in playlist.list" :key="index">
       <div
-        class="flex justify-between items-center p-4 mb-3 rounded-lg mr-4"
-        :class="
+          class="flex justify-between items-center p-4 mb-3 rounded-lg mr-4"
+          :class="
           list.order === order
             ? darkMode
               ? `bg-white`
@@ -25,31 +25,31 @@
             ? `bg-button text-textSecondary`
             : `bg-white border`
         "
-        :style="canWatch(list.free_watch) ? {} : { opacity: `1` }"
+          :style="canWatch(list.free_watch) ? {} : { opacity: `1` }"
       >
         <div class="relative w-2/5 mr-3">
           <img
-            :src="list.thumbnail"
-            onerror="this.onerror=null; this.src='/poster.png'"
-            class="rounded-md"
-            @click="nextVideo(list)"
-            :title="list.title"
-            :class="
+              :src="list.thumbnail"
+              onerror="this.onerror=null; this.src='/poster.png'"
+              class="rounded-md"
+              @click="nextVideo(list)"
+              :title="list.title"
+              :class="
               canWatch(list.free_watch) ? `cursor-pointer` : `cursor-default`
             "
           />
           <div
-            class="absolute left-0 h-1 bg-red-600 -mt-1"
-            v-if="list.last_watch"
-            :style="{ width: `${list.last_watch.percentage}%` }"
+              class="absolute left-0 h-1 bg-red-600 -mt-1"
+              v-if="list.last_watch"
+              :style="{ width: `${list.last_watch.percentage}%` }"
           ></div>
         </div>
         <div class="flex-1 flex flex-col justify-between">
           <div
-            class="font-semibold mb-3 text-sm"
-            @click="nextVideo(list)"
-            :title="list.title"
-            :class="
+              class="font-semibold mb-3 text-sm"
+              @click="nextVideo(list)"
+              :title="list.title"
+              :class="
               canWatch(list.free_watch)
                 ? `cursor-pointer ${
                     darkMode && list.order != order
@@ -68,20 +68,20 @@
           <div class="flex justify-between text-sm items-center">
             <div class="flex">
               <Eye
-                :width="20"
-                :height="20"
-                v-if="list.order === order"
-                :fill="darkMode ? `#181818` : `#4A4A4A`"
+                  :width="20"
+                  :height="20"
+                  v-if="list.order === order"
+                  :fill="darkMode ? `#181818` : `#4A4A4A`"
               />
               <Eye
-                :width="20"
-                :height="20"
-                v-else
-                :fill="darkMode ? `#E5E7EB` : `#4A4A4A`"
+                  :width="20"
+                  :height="20"
+                  v-else
+                  :fill="darkMode ? `#E5E7EB` : `#4A4A4A`"
               />
               <div
-                class="mx-2"
-                :class="
+                  class="mx-2"
+                  :class="
                   darkMode
                     ? list.order === order
                       ? `text-black`
@@ -92,7 +92,7 @@
                 {{ kFormatter(list.view) }}
               </div>
               <div
-                :class="
+                  :class="
                   darkMode
                     ? list.order === order
                       ? `text-youtube`
@@ -113,9 +113,9 @@
               </template>
               <div v-else>
                 <LockIcon
-                  :width="20"
-                  :height="20"
-                  :fill="
+                    :width="20"
+                    :height="20"
+                    :fill="
                     list.order != order && darkMode
                       ? `#E5E7EB`
                       : darkMode
@@ -134,9 +134,9 @@
     </div>
     <div class="flex items-center justify-center mt-2">
       <button
-        class="focus:outline-none text-xs rounded-full px-2 py-1"
-        :class="darkMode ? `bg-pass text-white` : `bg-primary text-white`"
-        @click="loadMore"
+          class="focus:outline-none text-xs rounded-full px-2 py-1"
+          :class="darkMode ? `bg-pass text-white` : `bg-primary text-white`"
+          @click="loadMore"
       >
         <div class="flex items-center justify-center">
           <div class="px-14 py-1" v-if="loading">
@@ -148,7 +148,7 @@
     </div>
     <!-- Download option -->
     <div
-      class="
+        class="
         fixed
         flex
         items-center
@@ -160,23 +160,23 @@
         bg-black bg-opacity-90
         z-50
       "
-      v-if="showOpt"
+        v-if="showOpt"
     >
       <div
-        class="w-80 rounded-xl shadow"
-        :class="darkMode ? `bg-secondary text-gray-300` : `bg-white`"
+          class="w-80 rounded-xl shadow"
+          :class="darkMode ? `bg-secondary text-gray-300` : `bg-white`"
       >
         <!-- Header -->
         <div class="py-3 text-center flex items-center justify-center">
           <span>{{ $t("choose_quality") }}</span>
         </div>
         <div
-          class="w-full h-1 border-b"
-          :class="darkMode ? `border-button` : `border-gray-3000`"
+            class="w-full h-1 border-b"
+            :class="darkMode ? `border-button` : `border-gray-3000`"
         ></div>
         <ul>
           <li
-            class="
+              class="
               w-full
               text-center
               h-12
@@ -187,13 +187,13 @@
               border-b
               cursor-pointer
             "
-            :class="darkMode ? `border-button` : `border-gray-300`"
-            @click="download(360)"
+              :class="darkMode ? `border-button` : `border-gray-300`"
+              @click="download(360)"
           >
             <span>360p</span>
           </li>
           <li
-            class="
+              class="
               w-full
               text-center
               h-12
@@ -204,16 +204,16 @@
               border-b
               cursor-pointer
             "
-            :class="darkMode ? `border-button` : `border-gray-300`"
-            @click="download(720)"
+              :class="darkMode ? `border-button` : `border-gray-300`"
+              @click="download(720)"
           >
             <span>720p</span>
           </li>
         </ul>
         <div
-          class="flex items-center justify-center py-3 cursor-pointer"
-          :class="darkMode ? `text-pass` : `text-heart`"
-          @click="
+            class="flex items-center justify-center py-3 cursor-pointer"
+            :class="darkMode ? `text-pass` : `text-heart`"
+            @click="
             () => {
               this.showOpt = false;
             }
@@ -224,14 +224,14 @@
       </div>
     </div>
     <BuyMsg
-      v-if="showConfirm"
-      :msg="msg"
-      @cancelModal="
+        v-if="showConfirm"
+        :msg="msg"
+        @cancelModal="
         () => {
           this.showConfirm = false;
         }
       "
-      @yes="removeDownload"
+        @yes="removeDownload"
     />
   </div>
 </template>
@@ -239,25 +239,17 @@
 <script>
 import Eye from "./../../../components/Eye.vue";
 import Loading from "./../../../components/LoadingWhite.vue";
-import DownloadIcon from "./../../../components/DownloadIcon.vue";
 import LockIcon from "./../../../components/LockIcon.vue";
-import CloseIcon from "./../../../components/CloseIcon.vue";
-import FavoriteIcon from "./../../../components/FavoriteIcon.vue";
-import FavoriteFill from "./../../../components/FavoriteFill.vue";
 import helper from "./../../../helper/helper";
 import BuyMsg from "./../../Component/BuyMsg.vue";
-import { mapActions, mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 
-const { ipcRenderer } = require("electron");
+const {ipcRenderer} = require("electron");
 export default {
   components: {
     Eye,
-    DownloadIcon,
-    FavoriteIcon,
-    FavoriteFill,
     LockIcon,
     Loading,
-    CloseIcon,
     BuyMsg,
   },
   data() {
@@ -305,15 +297,15 @@ export default {
         }).then((response) => {
           this.loading = false;
           if (
-            response.data.data.list != `undefined` &&
-            response.data.data.list.length <= 0
+              response.data.data.list != `undefined` &&
+              response.data.data.list.length <= 0
           ) {
             helper.success("no_more_result");
           }
         });
       }
     },
-    onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
+    onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
       let map = this.playlist.list.map((item) => item.order);
       let lastOrder = Math.max(...map);
       if (scrollTop + clientHeight >= scrollHeight) {
@@ -408,7 +400,7 @@ export default {
       this.downloading.push(this.list._id);
 
       let videoUrl = this.list.video.filter(
-        (item) => item.quality === `${qty}p`
+          (item) => item.quality === `${qty}p`
       )[0]["url"];
 
       let arg = {

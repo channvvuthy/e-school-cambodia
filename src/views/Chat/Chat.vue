@@ -340,16 +340,7 @@
           <!-- eTalk option -->
           <div
               :class="darkMode ? `bg-button` : `bg-white`"
-              class="
-              rounded-md
-              overflow-hidden
-              e-shadow
-              absolute
-              right-5
-              top-20
-              z-50
-              cursor-pointer
-            "
+              class=" rounded-md overflow-hidden e-shadow absolute right-5 top-20 z-50 cursor-pointer"
               v-if="chatOption"
           >
             <template v-if="contact.type === 0">
@@ -357,9 +348,8 @@
                   class="px-8 h-12 flex items-center border-b"
                   :class="darkMode ? `border-youtube` : `border-gray-200`"
               >
-                <span v-if="contact.is_mute" @click="deleteMuteContact">{{
-                    $t("unmute")
-                  }}</span>
+                <span v-if="contact.is_mute" @click="deleteMuteContact">
+                  {{$t("unmute") }}</span>
                 <span v-else @click="mute">{{ $t("mute") }}</span>
               </div>
             </template>
@@ -400,9 +390,8 @@
                   class="px-8 h-12 flex items-center border-b"
                   :class="darkMode ? `border-youtube` : `border-gray-200`"
               >
-                <span v-if="contact.is_mute" @click="deleteMuteContact">{{
-                    $t("unmute")
-                  }}</span>
+                <span v-if="contact.is_mute" @click="deleteMuteContact">
+                  {{$t("unmute") }}</span>
                 <span v-else @click="mute">{{ $t("mute") }}</span>
               </div>
             </template>
@@ -1646,7 +1635,6 @@ import CloseIcon from "./../../components/CloseIcon.vue";
 import DocumentIcon from "./../../components/DocumentIcon.vue";
 import PdfIcon from "./../../components/PdfIcon.vue";
 import ImageIcon from "./components/LinkIcon.vue";
-import ChevronIcon from "./../HotChat/components/ChevronIcon.vue";
 import helper from "./../../helper/helper";
 import config from "./../../config";
 import getBlobDuration from "get-blob-duration";
@@ -1708,7 +1696,6 @@ export default {
     MicIcon,
     SearchIcon,
     ImageIcon,
-    ChevronIcon,
     Rename,
     Member,
     BuyMsg,
@@ -1930,15 +1917,6 @@ export default {
       this.viewChat = true;
       this.previewUrl = previewUrl;
     },
-    replyUser(message) {
-      if (message.sender == undefined) {
-        if (message.is_admin) {
-          return this.contact.name;
-        }
-        return 1;
-      }
-      return replyContact.sender.name;
-    },
     replyTo(replyContact) {
       if (replyContact.sender == undefined) {
         if (replyContact.is_admin) {
@@ -2146,7 +2124,7 @@ export default {
         this.isUnblock = false;
       });
     },
-    selectedChat(chat) {
+    selectedChat() {
     },
     disconnect() {
       let form = new FormData();
@@ -2648,7 +2626,7 @@ export default {
     this.init();
     this.getMute();
     this.auth = this.stProfile._id;
-    ipcRenderer.on("fileSaved", (event, arg) => {
+    ipcRenderer.on("fileSaved", () => {
       helper.success("file_downloaded");
       this.fileUrl = "";
     });
@@ -2659,14 +2637,14 @@ export default {
       const hours = Math.floor(milliseconds / 1000 / 60 / 60);
 
       if (minutes == 5 && hours <= 0) {
-        if(this.isFivePlay == false){
+        if (this.isFivePlay == false) {
           this.fiveMinSound();
           this.isFivePlay = true;
         }
       }
 
       if (minutes == 15 && hours <= 0) {
-        if(this.isFifteenPlay == false){
+        if (this.isFifteenPlay == false) {
           this.fifteenMinSound();
           this.isFifteenPlay = true;
         }

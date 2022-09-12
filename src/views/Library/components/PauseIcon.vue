@@ -1,7 +1,8 @@
 <template>
-    
-    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" 
-        :height="size" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve">
+
+  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+       :height="size" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512"
+       style="enable-background:new 0 0 512 512" xml:space="preserve">
         <g :fill="fill">
             <g>
             <path d="M437.019,74.98C388.667,26.629,324.38,0,256,0C187.619,0,123.332,26.629,74.98,74.98C26.629,123.332,0,187.619,0,256
@@ -10,13 +11,13 @@
                     s226,101.383,226,226S380.617,482,256,482z"/>
             </g>
         </g>
-        <g :fill="fill">
+    <g :fill="fill">
             <g>
             <path d="M304.199,137.723c-8.284,0-15,6.716-15,15V359.28c0,8.284,6.716,15,15,15s15-6.716,15-15V152.723
                     C319.199,144.439,312.483,137.723,304.199,137.723z"/>
             </g>
         </g>
-        <g :fill="fill">
+    <g :fill="fill">
             <g>
             <path d="M207.799,137.723c-8.284,0-15,6.716-15,15V359.28c0,8.284,6.716,15,15,15s15-6.716,15-15V152.723
                     C222.799,144.439,216.083,137.723,207.799,137.723z"/>
@@ -28,17 +29,17 @@
 </template>
 <script>
 export default {
-     props:{
-        fill:{
-            default:() =>{
-                return "#ffffff"
-            }
-        },
-        size:{
-            default:() =>{
-                return 28
-            }
-        }
+  props: {
+    fill: {
+      default: () => {
+        return "#ffffff"
+      }
+    },
+    size: {
+      default: () => {
+        return 28
+      }
     }
+  }
 }
 </script>

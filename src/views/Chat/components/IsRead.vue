@@ -11,12 +11,12 @@
 </template>
 <script>
 export default {
-    props:{
-        isRead:{
-            default:()=>{
-                return 0
-            }
-        }
+  props: {
+    isRead: {
+      default: () => {
+        return 0
+      }
     }
+  }
 }
 </script>

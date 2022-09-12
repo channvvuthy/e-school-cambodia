@@ -4,8 +4,9 @@
       <div @click="closeTermAndCondition"
            :class="darkMode?`bg-secondary text-gray-400`:`bg-gray-100 text-youtube border-t`"
            class="p-5 rounded-xl relative shadow-md">
-        <div class="absolute -top-5 -right-3 cursor-pointer w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow"
-             @click="closeTermAndCondition">
+        <div
+            class="absolute -top-5 -right-3 cursor-pointer w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow"
+            @click="closeTermAndCondition">
           <CloseIcon fill="#FFF" :width="25"></CloseIcon>
         </div>
         <div class="w-7 h-7 bg-white absolute left-7 top-6"></div>

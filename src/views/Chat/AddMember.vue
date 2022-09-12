@@ -517,11 +517,7 @@ export default {
       }
     },
     isHasPermission() {
-      if (this.contact.create_by == this.stProfile._id) {
-        return true
-      }
-      return false
-
+      return this.contact.create_by == this.stProfile._id;
     },
     isMember(contact_id) {
       if (!this.members.length) {
@@ -649,7 +645,7 @@ export default {
       this.$router.push({name: "chat"})
     },
     nextPage() {
-      if(!this.selectedMember.length){
+      if (!this.selectedMember.length) {
         this.$router.push({name: "chat"})
         return;
       }

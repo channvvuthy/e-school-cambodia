@@ -1,5 +1,5 @@
 <template>
-  <svg  xmlns="http://www.w3.org/2000/svg" :width="size" :height="size"
+  <svg xmlns="http://www.w3.org/2000/svg" :width="size" :height="size"
        viewBox="0 0 395.000000 510.000000" preserveAspectRatio="xMidYMid meet">
     <g transform="translate(0.000000,510.000000) scale(0.100000,-0.100000)" :fill="fill" stroke="none">
       <path d="M250 5082 c-81 -40 -150 -143 -176 -265 -20 -92 -20 -4422 0 -4514

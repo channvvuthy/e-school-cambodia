@@ -37,7 +37,7 @@
                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover"
                      :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                 <div class="text-sm font-semibold mt-4">
-                  {{ video.teacher.name }}({{cutString(video.title, 30)}})
+                  {{ video.teacher.name }}({{ cutString(video.title, 30) }})
                 </div>
                 <div class="flex items-end w-full justify-between mt-4 text-center text-sm">
                   <div class="cursor-pointer">
@@ -105,7 +105,6 @@ import {mapState, mapActions} from "vuex"
 import helper from "./../../helper/helper"
 import moment from "moment"
 import Loading from "./../../components/Loading"
-import eHeader from "./../Video/components/Header.vue"
 import CertificateIcon from "./../../components/CertificateIcon.vue"
 import TestIcon from "./../../components/TestIcon.vue"
 import PdfIcon from "./../../components/PdfIcon.vue"
@@ -121,7 +120,6 @@ import Pkg from "@/views/MyCourse/Pkg";
 export default {
   components: {
     Loading,
-    eHeader,
     CertificateIcon,
     TestIcon,
     PdfIcon,
@@ -254,8 +252,8 @@ export default {
 
     this.getMyZoom({
       p: this.page
-    }).then(()=>{
-      this.loadingMyZoom =false
+    }).then(() => {
+      this.loadingMyZoom = false
     })
   },
   watch: {

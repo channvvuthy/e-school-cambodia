@@ -1,5 +1,5 @@
 <template>
-  <svg id="Layer_1" style="enable-background:new 0 0 16 16" :width="size" :height="size" viewBox="0 0 16 16" width="16px"
+  <svg id="Layer_1" style="enable-background:new 0 0 16 16" :width="size" :height="size" viewBox="0 0 16 16"
        xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
   <path
       :fill="fill"

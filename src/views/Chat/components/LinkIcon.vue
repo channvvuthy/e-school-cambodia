@@ -1,5 +1,7 @@
 <template>
-    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" :height="size" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 477.389 477.389" style="enable-background:new 0 0 477.389 477.389" xml:space="preserve">
+  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" :height="size"
+       xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 477.389 477.389"
+       style="enable-background:new 0 0 477.389 477.389" xml:space="preserve">
         <g :fill="fill">
             <g>
             <path d="M451.209,68.647c-16.787-16.799-39.564-26.234-63.312-26.226v0c-23.739-0.056-46.516,9.376-63.266,26.197L209.056,184.194
@@ -10,7 +12,7 @@
                     c16.951-3.575,32.494-12.007,44.732-24.269l115.576-115.558C486.114,160.243,486.134,103.598,451.209,68.647z"/>
             </g>
         </g>
-        <g :fill="fill">
+    <g :fill="fill">
             <g>
             <path d="M290.702,206.142c-2.559-9.072-11.988-14.352-21.06-11.793s-14.352,11.988-11.793,21.06
                     c5.388,19.271-0.018,39.95-14.148,54.118L128.125,385.103c-21.608,21.613-56.646,21.617-78.259,0.008
@@ -23,19 +25,19 @@
     </svg>
 </template>
 <script>
-    export default{
-        name: "ChevronIcon",
-        props: {
-            fill: {
-                default: function () {
-                    return "#666666"
-                }
-            },
-            size: {
-                default: function () {
-                    return 30
-                }
-            }
-        }
+export default {
+  name: "ChevronIcon",
+  props: {
+    fill: {
+      default: function () {
+        return "#666666"
+      }
+    },
+    size: {
+      default: function () {
+        return 30
+      }
     }
+  }
+}
 </script>

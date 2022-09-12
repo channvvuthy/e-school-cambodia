@@ -139,6 +139,7 @@ import Splash from "./views/Splash/Splash.vue";
 import Introduction from "@/views/Introduction/Introduction";
 import Bill from "@/views/Component/Bill";
 
+
 const {ipcRenderer} = require("electron");
 export default {
   data() {
@@ -180,10 +181,11 @@ export default {
     ...mapActions("auth", ["getUser"]),
     ...mapActions("etalk", ["join", "getContact"]),
     ...mapActions("setting", ["checkForUpdate"]),
-    onPay(rc) {
+    onPay() {
       this.showReceipt = false
       this.isBill = true
     },
+
     hideMenu() {
       return (
           this.$route.name === "library-video" ||

@@ -1,21 +1,21 @@
 <template>
   <ul>
     <li
-      @click="selectedAction(action)"
-      v-for="(action, key) in actions"
-      :key="key"
+        @click="selectedAction(action)"
+        v-for="(action, key) in actions"
+        :key="key"
     >
       <div
-        :class="key < actions.length - 1 ? `mb-4` : ``"
-        class="px-7 h-10 flex items-center space-x-4 cursor-pointer"
-        v-if="action.show"
+          :class="key < actions.length - 1 ? `mb-4` : ``"
+          class="px-7 h-10 flex items-center space-x-4 cursor-pointer"
+          v-if="action.show"
       >
         <div
-          style="background-color: rgba(5, 81, 116, 0.2)"
-          class="rounded-full h-10 w-10 cursor-pointer"
+            style="background-color: rgba(5, 81, 116, 0.2)"
+            class="rounded-full h-10 w-10 cursor-pointer"
         >
           <div class="rounded-full h-10 w-10 flex items-center justify-center">
-            <Icons :component-as-prop="action.icon" fill="#055174" :size="20" />
+            <Icons :component-as-prop="action.icon" fill="#055174" :size="20"/>
           </div>
         </div>
         <div>
@@ -27,15 +27,13 @@
 </template>
 
 <script>
-import DeleteIcon from "@/views/MyCourse/components/DeleteIcon";
 import Icons from "@/components/Icons";
-import { mapState } from "vuex";
+import {mapState} from "vuex";
 
 export default {
   name: "ActionList",
   components: {
     Icons,
-    DeleteIcon,
   },
   props: {
     post: {
@@ -67,11 +65,11 @@ export default {
         },
         {
           icon: this.post.is_favorite
-            ? () => import("@/components/FavoriteFill")
-            : () => import("@/components/FavoriteIcon"),
+              ? () => import("@/components/FavoriteFill")
+              : () => import("@/components/FavoriteIcon"),
           label: this.post.is_favorite
-            ? `actions.remove_favorite`
-            : "actions.add_to_favorite",
+              ? `actions.remove_favorite`
+              : "actions.add_to_favorite",
           show: true,
         },
         {

@@ -233,7 +233,9 @@
                           </div>
                           <div>
                             <span v-if="message.content.text">
-                                {{message.content.text.includes('.pdf') ? message.content.text : message.content.text + ".pdf" }}
+                                {{
+                                message.content.text.includes('.pdf') ? message.content.text : message.content.text + ".pdf"
+                              }}
                             </span>
                             <span v-else>
                                 {{ isId(message) }}.pdf
@@ -528,11 +530,9 @@
 </template>
 <script>
 import Vue from "vue"
-import eHeader from "../Video/components/Header.vue"
 import MessagerIcon from "./components/MessagerIcon.vue"
 import TelegramIcon from "./components/TelegramIcon.vue"
 import ImageIcon from "./../Chat/components/LinkIcon.vue"
-import ChevronIcon from "./components/ChevronIcon.vue"
 import VideoIcon from "./components/VideoIcon.vue"
 import CloseIcon from "./../../components/CloseIcon.vue"
 import MessageText from "./../Chat/components/Text.vue"
@@ -576,12 +576,10 @@ Vue.use(new VueSocketIO({
 export default {
   components: {
     PdfReply,
-    eHeader,
     MessagerIcon,
     TelegramIcon,
     VideoIcon,
     ImageIcon,
-    ChevronIcon,
     CloseIcon,
     MessageText,
     ReplyIcon,
@@ -836,12 +834,13 @@ export default {
       ipcRenderer.send("saveFile", this.fileUrl)
     },
     replyTo(replyContact) {
-      if (replyContact.sender && isId(replyContact.sender) == this.stProfile._id) {
+      if (replyContact.sender && this.isId(replyContact.sender) == this.stProfile._id) {
         if (replyContact.is_admin != 1) {
           return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('yourself')
         }
         return this.$i18n.t('you') + " " + this.$i18n.t('reply_to') + " " + this.$i18n.t('admin')
       }
+      return ""
     },
     getDay(oldDate) {
       if (helper.numDay(oldDate, moment().format()) === 0) {
@@ -857,9 +856,6 @@ export default {
         }
 
       }
-    },
-    senderPhoto(message) {
-      return "e-school-logo.png"
     },
     getMoreMessage({target: {scrollTop}}) {
       if (scrollTop === 0) {
@@ -1061,6 +1057,7 @@ export default {
         this.isInfo = true
       }
     } catch (err) {
+      return err
     }
   },
   created() {

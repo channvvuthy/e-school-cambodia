@@ -1,8 +1,8 @@
 <template>
-    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
-         height="34" x="0px" y="0px"
-         viewBox="0 0 412.72 412.72"
-         style="enable-background:new 0 0 412.72 412.72" xml:space="preserve">
+  <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+       height="34" x="0px" y="0px"
+       viewBox="0 0 412.72 412.72"
+       style="enable-background:new 0 0 412.72 412.72" xml:space="preserve">
         <g fill="#FFF">
             <path d="M404.72,82.944c-0.027,0-0.054,0-0.08,0h0h-27.12v-9.28c0.146-3.673-2.23-6.974-5.76-8
                     c-18.828-4.934-38.216-7.408-57.68-7.36c-32,0-75.6,7.2-107.84,40c-32-33.12-75.92-40-107.84-40
@@ -20,3 +20,8 @@
         </g>
     </svg>
 </template>
+<script>
+export default {
+  name: "BookIcon"
+}
+</script>

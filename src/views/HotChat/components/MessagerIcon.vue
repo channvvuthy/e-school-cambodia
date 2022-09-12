@@ -1,7 +1,6 @@
 <template>
   <svg width="34px" height="33px" viewBox="0 0 34 33" version="1.1" xmlns="http://www.w3.org/2000/svg"
        xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--Generator: sketchtool 52.5 (67469) - http://www.bohemiancoding.com/sketch-->
     <title>10CA71B4-0780-468C-B063-7CAB1932AF44</title>
     <desc>
       Created with sketchtool.

@@ -43,7 +43,7 @@
             <ScanIcon fill="#FFFFFF" :size="30"/>
           </div>
           <div class="text-sm mt-2 font-PoppinsMedium">
-            {{$t('scan')}}
+            {{ $t('scan') }}
           </div>
         </div>
       </div>
@@ -300,7 +300,6 @@
 <script>
 import BackIcon from "./../../components/BackIcon"
 import CloseIcon from "./../../components/CloseIcon.vue"
-import QRIcon from "./../../components/QRIcon.vue"
 import Study from "./components/Study.vue"
 import Report from "./components/Report.vue"
 import Privacy from "./components/Privacy.vue"
@@ -320,9 +319,6 @@ import QrcodeVue from 'qrcode.vue'
 import PaymentIcon from "@/components/PaymentIcon";
 import SwipeButton from 'vue-swipe-button'
 import 'vue-swipe-button/dist/swipeButton.css'
-import PincodeInput from 'vue-pincode-input';
-import EyeSecureIcon from "@/components/EyeSecureIcon";
-import ViewBlanceIcon from "@/components/ViewBlanceIcon";
 import PinCodeModal from "@/views/Component/PinCodeModal";
 import axios from "axios";
 import config from "@/config";
@@ -333,8 +329,6 @@ export default {
   components: {
     ResetPin,
     PinCodeModal,
-    ViewBlanceIcon,
-    EyeSecureIcon,
     SwipeButton,
     QrcodeStream,
     PaymentIcon,
@@ -352,10 +346,8 @@ export default {
     Report,
     Study,
     eSchool,
-    QRIcon,
     CloseIcon,
     UserIcon,
-    PincodeInput
   },
   data() {
     return {
@@ -597,7 +589,7 @@ export default {
     }
   },
   watch: {
-    'price': function (val) {
+    'price': function () {
       this.qr.price = parseFloat(this.price)
     },
     'result': function (text) {
@@ -667,7 +659,7 @@ export default {
           let form = new FormData()
           form.append("pin", helper.encrypt(this.newPasscode))
           this.loading = true
-          axios.post(config.apiUrl + 'wallet/pin', form).then((res) => {
+          axios.post(config.apiUrl + 'wallet/pin', form).then(() => {
             localStorage.setItem("pin", helper.encrypt(this.newPasscode))
             this.loading = false
             this.isConfirmPin = false
@@ -690,3 +682,5 @@ export default {
   }
 }
 </script>
+
+
