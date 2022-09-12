@@ -62,6 +62,7 @@
       <ReceiptInfo
           @onPay="onPay($event)"
           @closeModal="this.closeInfo"
+          @closeInfo="this.closeInfo"
           v-if="showInfo"
           :receiptDetail="receiptDetail"
           :message="message"
@@ -199,6 +200,7 @@ export default {
   watch: {
     'id': function (id) {
       if (id) {
+        this.success = true
         this.showInfo = true
       }
     }
