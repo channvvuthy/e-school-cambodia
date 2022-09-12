@@ -61,10 +61,9 @@
       </div>
       <ReceiptInfo
           @onPay="onPay($event)"
-          @closeModal="()=>{this.showInfo = false}"
+          @closeModal="this.closeInfo"
           v-if="showInfo"
           :receiptDetail="receiptDetail"
-          @closeInfo="closeInfo"
           :message="message"
           :success="success"/>
       <ConfirmDelete
@@ -147,6 +146,7 @@ export default {
     },
     closeInfo() {
       this.showInfo = false
+      this.$store.commit('receipt/getId', "")
     },
     removeReceipt(receiptId) {
       this.showConfirm = true
@@ -197,8 +197,10 @@ export default {
     })
   },
   watch: {
-    'id': function () {
-      this.showInfo = true
+    'id': function (id) {
+      if (id) {
+        this.showInfo = true
+      }
     }
   }
 }

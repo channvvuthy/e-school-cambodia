@@ -169,11 +169,12 @@ export default {
         this.getReceiptDetail(notification.content.transaction_id).then((res) => {
           this.$store.commit('receipt/getId', res.data.data._id)
           this.$emit('closeNotification')
-          this.$router.push({
-            name: "invoice"
-          }).catch(err => {
-            console.warn(err)
-          })
+          if(this.$route.name != 'invoice')
+            this.$router.push({
+              name: "invoice"
+            }).catch(err => {
+              console.warn(err)
+            })
         })
         return;
       }
