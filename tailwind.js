@@ -9,6 +9,8 @@ module.exports = {
         },
         colors: {
             wallet: "#eff3f6",
+            wallet_n:"#d6c4d0",
+            bill_n:"#e1dbc4",
             wallet1: "#bcced7",
             transparent: 'transparent',
             success: "#5E9919",

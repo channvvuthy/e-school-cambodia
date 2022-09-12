@@ -185,37 +185,10 @@
             </div>
           </div>
         </div>
-        <div
-            v-if="!showMenu"
-            class="
-            px-5
-            h-14
-            w-full
-            leading-14
-            text-lg
-            flex-1
-            ml-5
-            flex
-            justify-between
-            text-center
-            items-center
-          "
-            :class="darkMode ? `bg-secondary text-gray-300` : `bg-white border`"
-        >
-          <div
-              class="
-              shadow
-              rounded-md
-              flex
-              justify-center
-              items-center
-              h-8
-              px-2
-              mr-4
-              cursor-pointer
-            "
-              @click="backMenu"
-          >
+        <div v-if="!showMenu" class="px-5 h-14 w-full leading-14 text-lg flex-1 ml-5 flex justify-between text-center items-center"
+             :class="darkMode ? `bg-secondary text-gray-300` : `bg-white border`">
+          <div class="shadow rounded-md flex justify-center items-center h-8 px-2 mr-4 cursor-pointer "
+               @click="backMenu">
             <BackIcon
                 :width="20"
                 :height="20"

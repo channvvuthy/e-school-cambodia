@@ -19,6 +19,7 @@
     font-family: 'Kantumruy-Regular';
     src: url('./../../../public/font/Kantumruy-Regular.ttf');
 }
+
 @font-face {
     font-family: 'Kantumruy-Light';
     src: url('./../../../public/font/Kantumruy-Light.ttf');
@@ -33,10 +34,12 @@
     font-family: 'Poppins-Medium';
     src: url('./../../../public/font/Poppins/Poppins-Medium.ttf');
 }
+
 @font-face {
     font-family: 'Ubuntu';
     src: url('./../../../public/font/Ubuntu.ttf');
 }
+
 @font-face {
     font-family: 'UbuntuLight';
     src: url('./../../../public/font/UbuntuLight.ttf');

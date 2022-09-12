@@ -6,6 +6,7 @@ import helper from "./../helper/helper"
 export default {
     namespaced: true,
     state: {
+        id: "",
         receipts: [],
         receiptDetail: [],
         takingReceipt: false,
@@ -14,6 +15,9 @@ export default {
 
     },
     mutations: {
+        getId(state, payload) {
+            state.id = payload
+        },
         deletedReceipt(state, _id) {
             state.receipts = state.receipts.filter(item => item._id !== _id)
         },

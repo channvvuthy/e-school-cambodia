@@ -116,11 +116,12 @@ export default {
       success: false,
       msg: "delete",
       page: 1,
-      enableScroll: true
+      enableScroll: true,
+      message: "ពត៍មានបង់ប្រាក់",
     }
   },
   computed: {
-    ...mapState('receipt', ['receipts', 'takingReceipt', 'receiptDetail', 'loadingReceipt']),
+    ...mapState('receipt', ['receipts', 'takingReceipt', 'receiptDetail', 'loadingReceipt', 'id']),
     ...mapState('setting', ['darkMode', 'isHide'])
   },
   destroyed() {
@@ -185,13 +186,20 @@ export default {
     },
   },
   created() {
+    if (this.id) {
+      this.showInfo = true
+    }
     window.addEventListener('resize', this.handleResize);
     this.handleResize();
     this.getReceipt({
       type: 'all',
       p: this.page
     })
+  },
+  watch: {
+    'id': function () {
+      this.showInfo = true
+    }
   }
-
 }
 </script>

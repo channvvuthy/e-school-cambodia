@@ -19,7 +19,7 @@
         <ViewBlanceIcon :fill="darkMode ? `#FFF`: `#055174`"/>
       </div>
     </div>
-    <div class="flex items-center bg-wallet1 px-4 py-2 rounded-md cursor-pointer" @click="setPin('view_wallet')">
+    <div class="flex items-center bg-wallet1 px-4 py-2 rounded-md cursor-pointer" @click="setPin('view_wallet')" id="wallet">
       <div>
         <WalletIcon/>
       </div>

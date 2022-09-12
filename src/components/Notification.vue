@@ -8,7 +8,7 @@
           {{ $t('1012') }}
         </div>
         <div class="opacity-80 cursor-pointer" @click="closeNotification">
-          <CloseIcon :fill="darkMode?`#909090`:`#000000`"></CloseIcon>
+          <CloseIcon :fill="darkMode?`#909090`:`#000000`"/>
         </div>
       </div>
       <div class="body mt-5 flex-cols justify-start items-center font-khmer_os text-13px overflow-y-scroll"
@@ -28,7 +28,7 @@
                   @click="readNotification(notification)">
                 <div class="h-13 w-13 rounded-full flex justify-center items-center mr-3"
                      :class="bgColor(notification.type)">
-                  <div v-if="notification.type === 1 || notification.type === 41">
+                  <div v-if="notification.type == 1">
                     <svg version="1.0" xmlns="http://www.w3.org/2000/svg" height="25"
                          viewBox="0 0 512.000000 512.000000" preserveAspectRatio="xMidYMid meet">
                       <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
@@ -47,39 +47,37 @@
                       </g>
                     </svg>
                   </div>
-                  <div v-if="notification.type === 2">
-                    <NotificationCommentIcon></NotificationCommentIcon>
+                  <div v-if="notification.type == 2">
+                    <NotificationCommentIcon/>
                   </div>
-                  <div v-if="notification.type === 3 || notification.type === 5">
-                    <ChatIcon fill="#ffffff"></ChatIcon>
+                  <div v-if="notification.type == 3 || notification.type == 5">
+                    <ChatIcon fill="#ffffff"/>
                   </div>
-                  <div v-if="notification.type === 4">
-                    <DollarIcon fill="#ffffff"></DollarIcon>
+                  <div v-if="notification.type == 8">
+                    <InsuranceIcon fill="#ffffff"/>
                   </div>
-
-                  <div v-if="notification.type === 8">
-                    <InsuranceIcon fill="#ffffff"></InsuranceIcon>
+                  <div v-if="notification.type == 9">
+                    <AddFriendIcon fill="#ffffff"/>
                   </div>
-                  <div v-if="notification.type === 9">
-                    <AddFriendIcon fill="#ffffff"></AddFriendIcon>
+                  <div v-if="notification.type == 41">
+                    <NotificationWalletIcon/>
                   </div>
-                  <div v-if="notification.type ===10">
-                    <FriendRequestIcon :fill="fillColor(notification.type)"></FriendRequestIcon>
+                  <div v-if="notification.type == 4">
+                    <NotificationBillIcon :size="52.8"/>
+                  </div>
+                  <div v-if="notification.type ==10">
+                    <FriendRequestIcon :fill="fillColor(notification.type)"/>
                   </div>
                 </div>
                 <div class="flex-cols justify-start items-center flex-1">
                   <div class="font-semibold mb-1">{{ cutString(notification.title, 25) }}</div>
-                  <div>{{ cutString(notification.content.text, 40) }}</div>
-                </div>
-                <div class="text-right opacity-50 text-xs flex flex-col items-end justify-end ml-10 h-full">
-                  <span> {{ formatDate(notification.date) }}</span>
+                  <div class="opacity-50">{{ formatDate(notification.date) }}</div>
                 </div>
               </li>
             </ul>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -90,15 +88,14 @@ import ChatIcon from "./../components/ChatIcon.vue"
 import RequestIcon from "./../components/RequestIcon.vue"
 import InsuranceIcon from "./../components/InsuranceIcon.vue"
 import AddFriendIcon from "./../components/AddFriendIcon.vue"
-import AskIcon from "./../components/AskIcon.vue"
 import NotificationCommentIcon from "./../components/NotificationCommentIcon.vue"
 import FriendRequestIcon from "./../components/FriendRequestIcon.vue"
-import DollarIcon from "./../components/DollarIcon.vue"
 import CommentIcon from "./../components/CommentIcon.vue"
 import helper from "./../helper/helper"
 import moment from "moment"
 import Loading from "./Loading"
-import NotificationIcon from "./NotificationIcon"
+import NotificationBillIcon from "@/views/Video/components/NotificationBillIcon";
+import NotificationWalletIcon from "@/views/Video/components/NotificationWalletIcon";
 
 export default {
   name: "Notification",
@@ -122,31 +119,38 @@ export default {
   components: {
     CloseIcon,
     Loading,
-    NotificationIcon,
     ChatIcon,
-    DollarIcon,
     RequestIcon,
     InsuranceIcon,
     CommentIcon,
     AddFriendIcon,
     FriendRequestIcon,
     NotificationCommentIcon,
-    AskIcon
+    NotificationWalletIcon,
+    NotificationBillIcon
   },
   computed: {
     ...mapState('auth', ['loadingNotification', 'notifications']),
-    ...mapState('setting', ['darkMode'])
+    ...mapState('setting', ['darkMode']),
+    ...mapState('receipt', ['receiptDetail']),
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     ...mapActions('auth', ['getNotification', 'readingNotification']),
+    ...mapActions('receipt', ['getReceiptDetail']),
     handleResize() {
       this.window.width = window.innerWidth;
       this.window.height = window.innerHeight;
     },
-
+    onPay(rc) {
+      this.isBill = true
+      this.showInfo = false
+    },
+    closeInfo() {
+      this.showInfo = false
+    },
     onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
       if (scrollTop + clientHeight >= scrollHeight) {
         this.page++
@@ -156,12 +160,29 @@ export default {
       }
     },
     readNotification(notification) {
+      if (notification.type == 41) {
+        this.$emit('closeNotification')
+        document.getElementById("wallet").click()
+        return;
+      }
+      if (notification.type == 4) {
+        this.getReceiptDetail(notification.content.transaction_id).then((res) => {
+          this.$store.commit('receipt/getId', res.data.data._id)
+          this.$emit('closeNotification')
+          this.$router.push({
+            name: "invoice"
+          }).catch(err => {
+            console.warn(err)
+          })
+        })
+        return;
+      }
       if (notification.type == 10) {
         this.$store.commit("network/switchTab", "friend")
         this.$router.push({
           name: "network"
         }).catch(err => {
-          err
+          console.warn(err)
         })
       }
       if (notification.type == 9) {
@@ -169,7 +190,7 @@ export default {
         this.$router.push({
           name: "network"
         }).catch(err => {
-          err
+          console.warn(err)
         })
       }
 
@@ -193,8 +214,8 @@ export default {
         this.$emit('closeNotification')
       }
 
-      this.readingNotification(notification._id).then(response => {
-        this.$emit('readNotification', response.data.data)
+      this.readingNotification(notification._id).then(res => {
+        this.$emit('readNotification', res.data.data)
       })
 
     },
@@ -228,6 +249,12 @@ export default {
       }
       if (type == 9) {
         return "bg-d4eae8"
+      }
+      if (type == 41) {
+        return 'bg-wallet_n'
+      }
+      if (type == 4) {
+        return ''
       }
       return "bg-blue-400"
     }
