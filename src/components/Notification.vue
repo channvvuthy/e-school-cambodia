@@ -161,11 +161,13 @@ export default {
     },
     readNotification(notification) {
       if (notification.type == 41) {
+        this.readingNotification(notification._id)
         this.$emit('closeNotification')
         document.getElementById("wallet").click()
         return;
       }
       if (notification.type == 4) {
+        this.readingNotification(notification._id)
         this.getReceiptDetail(notification.content.transaction_id).then((res) => {
           this.$store.commit('receipt/getId', res.data.data._id)
           this.$emit('closeNotification')
