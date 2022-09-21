@@ -122,7 +122,7 @@ import PdfIcon from "@/components/PdfIcon";
 import ChatIcon from "@/components/ChatIcon";
 import YoutubeIcon from "@/components/YoutubeIcon";
 import TVIcon from "@/components/TVIcon";
-
+const { ipcRenderer } = require("electron");
 export default {
   components: {
     YoutubeIcon,
@@ -205,7 +205,7 @@ export default {
       }
       this.getZoomAttendant(payload).then(res => {
         if (res.msg == undefined) {
-          window.open(this.detail.zoom_link, "_blank")
+          ipcRenderer.send("openLink",this.detail.zoom_link)
         }
       })
     }
