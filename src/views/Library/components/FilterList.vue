@@ -6,7 +6,7 @@
         <div class="rounded-full flex justify-center items-center w-8 h-8" :class="darkMode?`bg-youtube`:`bg-primary`">
           <WatchVideoIcon fill="#fff" :size="18"></WatchVideoIcon>
         </div>
-        <div class="text-left flex-1 ml-5">{{ $t('all') }}</div>
+        <div class="text-left flex-1 ml-5" :class="darkMode ? `text-gray-300` : ``">{{ $t('all') }}</div>
         <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center">
           <div class="w-2 h-2 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`"
                v-if="filter_id === `all` || filter_id === ``"></div>
@@ -19,7 +19,7 @@
                :class="darkMode?`bg-youtube`:`bg-primary`">
             <WatchVideoIcon fill="#fff" :size="18"></WatchVideoIcon>
           </div>
-          <div class="text-left flex-1 ml-5">{{ library.name }}</div>
+          <div class="text-left flex-1 ml-5" :class="darkMode ? `text-gray-300` : ``">{{ library.name }}</div>
           <div class="h-5 w-5 rounded-full border border-gray-300 flex justify-center items-center">
             <div class="w-2 h-2 rounded-full" :class="darkMode?`bg-gray-300`:`bg-primary`"
                  v-if="filter_id === library._id "></div>

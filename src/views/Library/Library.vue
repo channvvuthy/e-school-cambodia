@@ -14,7 +14,7 @@
         v-if="showAudio"/>
     <div class="mt-3 overflow-y-scroll h-screen text-sm pb-72" @scroll="onScroll">
       <div class="px-5 pt-7 shadow-md"
-           :class="darkMode?`bg-secondary border-t border-b border-button text-textSecondary`:`bg-white text-black`">
+           :class="darkMode?`bg-secondary border-t border-b border-button text-gray-300`:`bg-white text-black`">
         <FilterData/>
         <!-- Tab -->
         <div class="mt-7" v-if="!showList">
