@@ -498,5 +498,7 @@
   "0031": "You are about to pay",
   "0032": "For invoice below",
   "6005": "Course not allow pay by QR Code",
-  "bill_success": "Bill success"
+  "bill_success": "Bill success",
+  "6006":"Please enter number of money",
+  "6007":"In valid QR Code"
 }

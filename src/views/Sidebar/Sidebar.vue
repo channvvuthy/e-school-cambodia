@@ -49,7 +49,9 @@
       </div>
 
       <div class="overflow-y-scroll h-screen pb-40 flex flex-col justify-between">
-        <MyBalance v-if="token"/>
+        <template v-if="token">
+          <MyBalance v-if="isMerchant"/>
+        </template>
         <div class="h-5"></div>
         <div class="px-5 flex-1">
           <template v-if="token">
@@ -206,7 +208,10 @@
                 </div>
               </div>
               <div class="flex justify-center items-center">
-                <qrcode-vue :size="270" :value="encrypt()" level="H"/>
+                <qrcode-vue :size="270" :value="encrypt()" level="H" v-if="price > 0"/>
+                <div style="width:270px; height:270px;" v-else class="bg-primary flex items-center justify-center text-white">
+                  {{ $t('6006') }}
+                </div>
               </div>
               <div class="flex justify-center items-center my-5">
                 <div class="bg-gray-100 flex flex-col rounded-md px-5 py-3 font-Ubuntu text-primary">
@@ -238,7 +243,7 @@
                 {{ $t('scan') }}
               </div>
             </div>
-            <div class="flex-col flex justify-center items-center text-center cursor-pointer" @click="onTap('0030')">
+            <div class="flex-col flex justify-center items-center text-center cursor-pointer" @click="onTap('0030')" v-if="isMerchant">
               <WalletIcon :fill="modalTitle == 'wallet' ? `#055174`: `#4A4A4A`"/>
               <div :class="modalTitle == 'wallet' ? `text-primary`: ``" class="text-sm">
                 {{ $t('0030') }}
@@ -382,7 +387,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('auth', ['token', 'stProfile']),
+    ...mapState('auth', ['token', 'stProfile','isMerchant']),
     ...mapState('setting', ['localize', 'darkMode', 'isHide', 'className']),
     ...mapState('home', ['ads']),
     ...mapState('wallet', ['wallet_loading'])
@@ -470,6 +475,10 @@ export default {
             })
             break;
           default:
+            if(this.isMerchant == 0){
+              helper.errorMessage("6007")
+              return;
+            }
             this.action = data.type
             this.loading = false
             this.isPay = true
@@ -567,7 +576,7 @@ export default {
               if (res.data) {
                 let stProfile = localStorage.getItem("stProfile")
                 stProfile = JSON.parse(stProfile)
-                stProfile.photo = res.data.photo
+                stProfile['photo'] = res.data.photo
                 this.$store.commit("auth/studentProfile", stProfile)
                 localStorage.setItem("stProfile", JSON.stringify(stProfile))
               }
@@ -588,6 +597,13 @@ export default {
       }
     }
   },
+
+  created(){
+    if(this.isMerchant == 0){
+      this.modalTitle = 'profile'
+    }
+  },
+  
   watch: {
     'price': function () {
       this.qr.price = parseFloat(this.price)

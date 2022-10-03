@@ -47,7 +47,7 @@
                     <button
                             class="relative focus:outline-none h-11 p-3 text-center flex
                             justify-center items-center text-white rounded-lg w-full
-                            text-sm outline-none text-sm cursor-pointer font-khmer_os"
+                            text-sm outline-none cursor-pointer font-khmer_os"
                             :class="darkMode?`bg-button`:`bg-primary`"
                             @click="studentLogin" :disabled="loginLoading">
                         <div class="pl-2">
@@ -170,8 +170,19 @@
                         stProfile.last_name = data.last_name ? data.last_name : ""
                         stProfile.my_cart = data.my_cart ? data.my_cart : ""
                         stProfile.phone = data.phone ? data.phone : ""
-                        stProfile.photo = data.photo ? data.photo : ""
+                        stProfile['photo'] = data.photo ? data.photo : ""
                         stProfile.photo_cover = data.photo_cover ? data.photo_cover : ""
+
+                        if(data.pin){
+                            localStorage.setItem('pin', data.pin);
+                        }
+
+                        if(data.is_merchant){
+                            localStorage.setItem('isMerchant', data.is_merchant)
+                            this.$store.commit("auth/checkIsMerchant", 1)
+                        }else{
+                            this.$store.commit("auth/checkIsMerchant", 0)
+                        }
 
                         if (data.province) {
                             stProfile.province = data.province

@@ -6,7 +6,7 @@
     <div class="px-3 mt-8">
       <div class="grid grid-cols-4 gap-x-11 gap-y-4">
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('profile')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('profile')">
             <div>
               <ProfileIcon fill="#FFFFFF" :size="24" v-if="$route.name === `profile`"/>
@@ -31,7 +31,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('parent')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('parent')">
             <div>
               <GuardianIcon fill="#FFFFFF" v-if="$route.name === `parent`"/>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('insurance')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('insurance')">
             <div>
               <InsuranceIcon fill="#FFFFFF" v-if="$route.name === `insurance`"/>
@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('invoice')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('invoice')">
             <div>
               <InvoiceIcon fill="#FFFFFF" v-if="$route.name === `invoice`"/>
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('other')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('other')">
             <div>
               <OtherIcon fill="#FFFFFF" v-if="$route.name === `other` || $route.name === `other-refresh`"/>
@@ -83,7 +83,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="logoutUser">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('')">
             <div>
               <LogoutIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"/>
@@ -126,8 +126,10 @@ export default {
     logoutUser() {
       this.logout().finally(() => {
         this.$store.commit("auth/receivingToken", null)
+        this.$store.commit("auth/isMerchant", 0)
         this.$store.dispatch("auth/clearLogout")
         this.$router.push('/logout').catch(err => err)
+        
       })
     },
     goTo(page) {

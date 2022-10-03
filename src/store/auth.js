@@ -34,6 +34,7 @@ export default {
         imgUrl: "",
         addingStory: false,
         userDetails: {},
+        isMerchant: 0,
         notify: {
             notifications: 0,
             carts: 0,
@@ -42,6 +43,9 @@ export default {
     },
 
     mutations: {
+        checkIsMerchant(state, payload){
+            state.isMerchant =payload
+        },
         getNotify(state, payload) {
             state.notify = payload
         },
