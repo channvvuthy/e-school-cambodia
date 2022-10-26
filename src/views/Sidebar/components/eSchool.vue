@@ -6,7 +6,7 @@
     <div class="px-3 my-3 mt-7">
       <div class="grid grid-cols-4 gap-x-11 gap-y-4">
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('hot-chat')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('hot-chat')">
             <div>
               <ChatIcon fill="#FFFFFF" v-if="$route.name === `hot-chat`"/>
@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('policy')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('policy')">
             <div>
               <PolicyIcon fill="#FFFFFF" v-if="$route.name === `policy`"/>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('help')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('help')">
             <div>
               <HelpIcon fill="#FFFFFF" v-if="$route.name === `help`"/>
@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="goTo('about')">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('about')">
             <div>
               <AboutIcon fill="#FFFFFF" v-if="$route.name === `about`"/>
@@ -59,7 +59,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="shareApp">
-          <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('')">
             <div>
               <ShareIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"/>
@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="text-center flex flex-col justify-center items-center" @click="setDarkMode(darkMode)">
-          <div class="flex-col rounded flex justify-center items-center  cursor-pointer h-13 w-13 rounded-full"
+          <div class="flex-col flex justify-center items-center  cursor-pointer h-13 w-13 rounded-full"
                :class="activeClass('')">
             <div>
               <ModeIcon :fill="darkMode?`#FFFFFF`:`#4A4A4A`"/>

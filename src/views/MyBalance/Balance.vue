@@ -21,7 +21,7 @@
     </div>
     <div class="flex items-center bg-wallet1 px-4 py-2 rounded-md cursor-pointer" @click="setPin('view_wallet')" id="wallet">
       <div>
-        <WalletIcon/>
+        <EpayIcon/>
       </div>
       <div class="px-1"></div>
       <div class="text-primary">{{ $t('wallet') }}</div>
@@ -123,7 +123,7 @@
 <script>
 import DollarIcon from "@/components/DollarIcon";
 import EyeSecureIcon from "@/components/EyeSecureIcon";
-import WalletIcon from "@/components/WalletIcon";
+import EpayIcon from "@/components/EpayIcon";
 import Modal from "@/components/Modal";
 import {mapState} from "vuex";
 import CloseIcon from "@/components/CloseIcon";
@@ -149,7 +149,7 @@ export default {
     ViewBlanceIcon,
     CloseIcon,
     Modal,
-    WalletIcon,
+    EpayIcon,
     EyeSecureIcon,
     DollarIcon,
     PincodeInput

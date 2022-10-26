@@ -16,7 +16,7 @@
             <div class="absolute left-3 top-3" v-if="video.is_new && video.is_buy === 0">
               <NewIcon/>
             </div>
-            <div class="absolute top-3 left-3 z-50" v-if="video.is_buy">
+            <div class="absolute top-3 left-3 z-40" v-if="video.is_buy">
               <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
                    :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
                 <span>✓</span>

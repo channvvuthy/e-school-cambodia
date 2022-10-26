@@ -209,7 +209,7 @@
               </div>
               <div class="flex justify-center items-center">
                 <qrcode-vue :size="270" :value="encrypt()" level="H" v-if="price > 0"/>
-                <div style="width:270px; height:270px;" v-else class="bg-primary flex items-center justify-center text-white">
+                <div style="width:270px; height:270px;" v-else class="bg-primary flex items-center justify-center text-white rounded">
                   {{ $t('6006') }}
                 </div>
               </div>
@@ -244,8 +244,9 @@
               </div>
             </div>
             <div class="flex-col flex justify-center items-center text-center cursor-pointer" @click="onTap('0030')" v-if="isMerchant">
-              <WalletIcon :fill="modalTitle == 'wallet' ? `#055174`: `#4A4A4A`"/>
-              <div :class="modalTitle == 'wallet' ? `text-primary`: ``" class="text-sm">
+              <EpayIcon v-if="modalTitle == '0030'"/>
+              <EpayIcon fill1="#9b9b9b" fill2="#e2bb16" fill3="#9b9b9b" v-else/>
+              <div :class="modalTitle == '0030' ? `text-primary`: ``" class="text-sm">
                 {{ $t('0030') }}
               </div>
             </div>
@@ -315,7 +316,7 @@ import MyBalance from "@/views/MyBalance/Balance"
 import Modal from "@/components/Modal";
 import UserIcon from "@/components/UserIcon";
 import ScanIcon from "@/components/ScanIcon";
-import WalletIcon from "@/components/WalletOutlineIcon";
+import EpayIcon from "@/components/EpayIcon";
 import CopyIcon from "@/components/CopyIcon";
 import DownloadIcon from "@/components/DownloadIcon";
 import ImageIcon from "@/components/ImageIcon";
@@ -342,7 +343,7 @@ export default {
     ImageIcon,
     DownloadIcon,
     CopyIcon,
-    WalletIcon,
+    EpayIcon,
     ScanIcon,
     Modal,
     MyBalance,

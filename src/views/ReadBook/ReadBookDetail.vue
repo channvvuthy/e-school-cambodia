@@ -16,7 +16,7 @@
             </div>
             <div class="progressBookDetail">
               <div>
-                <div class="relative z-50 relative flex justify-between" style="top:170px;">
+                <div class="relative z-50 flex justify-between" style="top:170px;">
                   <div class="text-xs -ml-1" :class="darkMode?`text-gray-400`:`text-gray-500`">0%</div>
                   <div class="text-xs -mr-3" :class="darkMode?`text-gray-400`:`text-gray-500`">100%</div>
                 </div>

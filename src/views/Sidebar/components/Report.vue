@@ -6,7 +6,7 @@
         <div class="px-3 mt-7">
             <div class="grid grid-cols-4 gap-x-11 gap-y-4">
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('activity')">
-                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+                    <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('activity activity-detail')">
                         <div>
                             <ActivityIcon
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('watch-video')">
-                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+                    <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('watch-video watch-detail')">
                         <div>
                             <WatchVideoIcon
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('read-book')">
-                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+                    <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('read-book')">
                         <div>
                             <BookIcon
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="text-center flex flex-col justify-center items-center" @click="goTo('relative')">
-                    <div class="flex-col rounded flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
+                    <div class="flex-col flex justify-center items-center cursor-pointer h-13 w-13 rounded-full"
                          :class="activeClass('relative')">
                         <div>
                             <RelativeIcon
