@@ -6,115 +6,139 @@
           <loading></loading>
         </h1>
       </div>
-      <div class="flex justify-center items-center  h-screen pb-40" v-if="!isEmpty(zooms.list)">
+
+      <div class="mb-5" v-if="zooms.package && zooms.package.length">
+        <Pkg :packages="zooms.package"></Pkg>
+      </div>
+      <div class="flex justify-center items-center pb-40" v-else>
         <div class="text-center relative">
           <Empty></Empty>
         </div>
       </div>
-      <div class="mb-5" v-if="zooms.package && zooms.package.length">
-        <Pkg :packages="zooms.package"></Pkg>
-      </div>
       <div class="grid gap-4" :class="isHide?`md:grid-cols-4`:`md:grid-cols-3 2xl:grid-cols-4`">
         <div v-for="(video, index) in zooms.list" :key="index">
-          <div class="relative rounded-xl cursor-pointer my-course-view"
-               :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
-               :style="minHeight?{minHeight:`${minHeight}px`}:{}">
+          <div
+            class="relative rounded-xl cursor-pointer my-course-view"
+            :class="darkMode?`bg-secondary text-white`:`bg-white shadow`"
+            :style="minHeight?{minHeight:`${minHeight}px`}:{}"
+          >
             <div class="absolute left-3 top-3" v-if="video.is_new">
               <NewIcon></NewIcon>
             </div>
             <div class="absolute top-3 left-3">
-              <div class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
-                   :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`">
+              <div
+                class="h-6 w-6 rounded-full flex justify-center items-center text-white text-base"
+                :class="darkMode?`bg-primary`:`bg-primary border border-textSecondary`"
+              >
                 <span>✓</span>
               </div>
             </div>
-            <img :src="video.thumbnail" @click="zoomCourseDetail(video)" class="rounded-t-xl m-auto"
-                 onerror="this.onerror=null; this.src='/poster.png'"/>
-            <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1"
-                 :style="{width:`${video.last_watch.percentage}%`}"></div>
+            <img
+              :src="video.thumbnail"
+              @click="zoomCourseDetail(video)"
+              class="rounded-t-xl m-auto"
+              onerror="this.onerror=null; this.src='/poster.png'"
+            />
+            <div
+              v-if="video.last_watch"
+              class="h-1 absolute bg-red-600 -mt-1"
+              :style="{width:`${video.last_watch.percentage}%`}"
+            ></div>
             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
-              <div @click="zoomCourseDetail(video)" class="flex flex-col relative w-full justify-center items-center">
-                <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover"
-                     :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
-                <div class="text-sm font-semibold mt-4">
-                  {{ video.teacher.name }}({{ cutString(video.title, 30) }})
-                </div>
+              <div
+                @click="zoomCourseDetail(video)"
+                class="flex flex-col relative w-full justify-center items-center"
+              >
+                <div
+                  class="w-14 h-14 rounded-md bg-gray-300 bg-cover"
+                  :style="{backgroundImage:`url(${video.teacher.photo})`}"
+                ></div>
+                <div
+                  class="text-sm font-semibold mt-4"
+                >{{ video.teacher.name }}({{ cutString(video.title, 30) }})</div>
                 <div class="flex items-end w-full justify-between mt-4 text-center text-sm">
                   <div class="cursor-pointer">
-                    <YoutubeIcon :fill="darkMode?`#909090`:`#000000`"/>
-                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
-                      {{ video.total_video ? video.total_video : 0 }}
-                    </div>
+                    <YoutubeIcon :fill="darkMode?`#909090`:`#000000`" />
+                    <div
+                      class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                    >{{ video.total_video ? video.total_video : 0 }}</div>
                   </div>
                   <div class="cursor-pointer">
-                    <PdfIcon :fill="darkMode?`#909090`:`#000000`"/>
-                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center">
-                      {{ video.total_pdf ? video.total_pdf : 0 }}
-                    </div>
+                    <PdfIcon :fill="darkMode?`#909090`:`#000000`" />
+                    <div
+                      class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                    >{{ video.total_pdf ? video.total_pdf : 0 }}</div>
                   </div>
                   <div class="cursor-pointer">
-                    <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
-                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
-                         :class="darkMode?`text-skyBlue`:`text-primary`">
-                      {{ video.has_support ? $t('1008') : $t('1009') }}
-                    </div>
+                    <ChatIcon :fill="darkMode?`#909090`:`#000000`" :size="42" />
+                    <div
+                      class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                      :class="darkMode?`text-skyBlue`:`text-primary`"
+                    >{{ video.has_support ? $t('1008') : $t('1009') }}</div>
                   </div>
                   <div class="cursor-pointer">
-                    <TestIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
-                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
-                         :class="darkMode?`text-skyBlue`:`text-primary`">
-                      {{ video.has_quiz ? $t('1008') : $t('1009') }}
-                    </div>
+                    <TestIcon :fill="darkMode?`#909090`:`#000000`" :size="42" />
+                    <div
+                      class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                      :class="darkMode?`text-skyBlue`:`text-primary`"
+                    >{{ video.has_quiz ? $t('1008') : $t('1009') }}</div>
                   </div>
                   <div class="cursor-pointer">
-                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`" :size="42"/>
-                    <div class="h-6 mt-1 bg-transparent flex items-end justify-center"
-                         :class="darkMode?`text-skyBlue`:`text-primary`">
-                      {{ video.has_certificate ? $t('1008') : $t('1009') }}
-                    </div>
+                    <CertificateIcon :fill="darkMode?`#909090`:`#000000`" :size="42" />
+                    <div
+                      class="h-6 mt-1 bg-transparent flex items-end justify-center"
+                      :class="darkMode?`text-skyBlue`:`text-primary`"
+                    >{{ video.has_certificate ? $t('1008') : $t('1009') }}</div>
                   </div>
                 </div>
               </div>
-              <div class="mt-5 border-t w-full h-1" :class="darkMode?`border-button`:`border-gray-300`"></div>
+              <div
+                class="mt-5 border-t w-full h-1"
+                :class="darkMode?`border-button`:`border-gray-300`"
+              ></div>
               <div class="flex justify-between items-center w-full relative top-5">
-                <div class="text-sm">{{ $t('date_expired') }} : <span>{{ formatDate(video.deadline) }}</span></div>
+                <div class="text-sm">
+                  {{ $t('date_expired') }} :
+                  <span>{{ formatDate(video.deadline) }}</span>
+                </div>
                 <div @click="addToCart(video)">
-                  <CartIcon
-                      :fill="darkMode?`#909090`:`#000000`" v-if="!video.is_in_cart"/>
+                  <CartIcon :fill="darkMode?`#909090`:`#000000`" v-if="!video.is_in_cart" />
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
     </div>
-    <Cart v-if="showCart"
-          @closeCart="() =>{this.showCart = false}"
-          @showInvoice="showInvoice($event)"/>
+    <Cart
+      v-if="showCart"
+      @closeCart="() =>{this.showCart = false}"
+      @showInvoice="showInvoice($event)"
+    />
     <!-- Receipt info -->
     <ReceiptInfo
-        v-if="showReceipt"
-        :receiptDetail="receiptDetail"
-        @closeInfo="() =>{this.showReceipt = false}"/>
+      v-if="showReceipt"
+      :receiptDetail="receiptDetail"
+      @closeInfo="() =>{this.showReceipt = false}"
+    />
   </div>
 </template>
 
 <script>
-import {mapState, mapActions} from "vuex"
-import helper from "./../../helper/helper"
-import moment from "moment"
-import Loading from "./../../components/Loading"
-import CertificateIcon from "./../../components/CertificateIcon.vue"
-import TestIcon from "./../../components/TestIcon.vue"
-import PdfIcon from "./../../components/PdfIcon.vue"
-import ChatIcon from "./../../components/ChatIcon.vue"
-import CartIcon from "./../../components/CartIcon.vue"
-import YoutubeIcon from "./../../components/YoutubeIcon.vue"
-import NewIcon from "./../../components/NewIcon.vue"
-import Cart from "./../Component/Cart.vue"
-import Empty from "./../Component/Empty.vue"
-import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue"
+import { mapState, mapActions } from "vuex";
+import helper from "./../../helper/helper";
+import moment from "moment";
+import Loading from "./../../components/Loading";
+import CertificateIcon from "./../../components/CertificateIcon.vue";
+import TestIcon from "./../../components/TestIcon.vue";
+import PdfIcon from "./../../components/PdfIcon.vue";
+import ChatIcon from "./../../components/ChatIcon.vue";
+import CartIcon from "./../../components/CartIcon.vue";
+import YoutubeIcon from "./../../components/YoutubeIcon.vue";
+import NewIcon from "./../../components/NewIcon.vue";
+import Cart from "./../Component/Cart.vue";
+import Empty from "./../Component/Empty.vue";
+import ReceiptInfo from "./../MyCourse/components/ReceiptInfo.vue";
 import Pkg from "@/views/MyCourse/Pkg";
 
 export default {
@@ -135,7 +159,7 @@ export default {
   data() {
     return {
       window: {
-        width: 0,
+        width: 0
       },
       active: 1,
       showView: false,
@@ -148,124 +172,127 @@ export default {
       receiptDetail: {},
       page: 1,
       enableScroll: true,
-      loadingMyZoom: false,
-
-
-    }
+      loadingMyZoom: false
+    };
   },
 
   computed: {
-    ...mapState('zoom', ['zooms']),
+    ...mapState("zoom", ["zooms"]),
     ...mapState("setting", ["darkMode", "isHide"]),
     query() {
-      return this.$store.state.course.s
+      return this.$store.state.course.s;
     },
 
     gradeID() {
-      return this.$store.state.course.gradeID
+      return this.$store.state.course.gradeID;
     }
   },
   destroyed() {
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    ...mapActions('course', ['myCourseList', 'filterByQueryString', 'readBook', 'setLessonTitle']),
-    ...mapActions('zoom', ['getMyZoom']),
-    ...mapActions('cart', ['addCart', 'getCart']),
+    ...mapActions("course", [
+      "myCourseList",
+      "filterByQueryString",
+      "readBook",
+      "setLessonTitle"
+    ]),
+    ...mapActions("zoom", ["getMyZoom"]),
+    ...mapActions("cart", ["addCart", "getCart"]),
     handleResize() {
       this.window.width = window.innerWidth;
     },
     isEmpty(list) {
       try {
-        return list.length
+        return list.length;
       } catch (err) {
-        return false
+        return false;
       }
     },
     zoomCourseDetail(videoCourse) {
-      videoCourse.is_buy = 1
-      this.$router.push({name: 'zoom-course-detail', params: {course: videoCourse}})
+      videoCourse.is_buy = 1;
+      this.$router.push({
+        name: "zoom-course-detail",
+        params: { course: videoCourse }
+      });
     },
 
-
     matchHeight() {
-      let arr = []
+      let arr = [];
       let interval = setInterval(() => {
-        let box = document.getElementsByClassName('my-course-view')
+        let box = document.getElementsByClassName("my-course-view");
         if (box) {
           for (let i = 0; i < box.length; i++) {
-            arr.push(box[i].clientHeight)
+            arr.push(box[i].clientHeight);
           }
-          this.minHeight = Math.max(...arr)
-          clearInterval(interval)
+          this.minHeight = Math.max(...arr);
+          clearInterval(interval);
         }
-      }, 1000)
+      }, 1000);
     },
 
     cutString(text, limit) {
-      return helper.cutString(text, limit)
+      return helper.cutString(text, limit);
     },
     formatDate(date) {
-      moment.locale('en');
-      return moment(date).format('ll');
+      moment.locale("en");
+      return moment(date).format("ll");
     },
     addToCart(video) {
-      let payload = {}
-      payload.id = video._id
+      let payload = {};
+      payload.id = video._id;
       this.addCart(payload).then(() => {
-        this.showCart = true
-      })
+        this.showCart = true;
+      });
     },
     showInvoice(data) {
-      this.receiptDetail = data
-      this.showReceipt = true
-      this.showCart = false
+      this.receiptDetail = data;
+      this.showReceipt = true;
+      this.showCart = false;
     },
-    onScroll({target: {scrollTop, clientHeight, scrollHeight}}) {
+    onScroll({ target: { scrollTop, clientHeight, scrollHeight } }) {
       if (scrollTop + clientHeight >= scrollHeight - 1) {
-        this.page++
+        this.page++;
 
-        let payload = {}
+        let payload = {};
 
-        payload.p = this.page
+        payload.p = this.page;
 
         if (this.enableScroll) {
           this.getMyZoom(payload).then(res => {
             if (res.data.msg == undefined)
-              if (res.data.list.length <= 0)
-                this.enableScroll = false
-
-          })
+              if (res.data.list.length <= 0) this.enableScroll = false;
+          });
         }
       }
-    },
+    }
   },
   mounted() {
     this.$nextTick(() => {
-      this.matchHeight()
-    })
+      this.matchHeight();
+    });
   },
   created() {
-    this.loadingMyZoom = true
-    window.addEventListener('resize', this.handleResize);
+    this.loadingMyZoom = true;
+    window.addEventListener("resize", this.handleResize);
     this.handleResize();
 
     this.getMyZoom({
       p: this.page
     }).then(() => {
-      this.loadingMyZoom = false
-    })
+      this.loadingMyZoom = false;
+    });
   },
   watch: {
-    query: function () {
-      this.getMyZoom(this.active)
+    query: function() {
+      this.getMyZoom(this.active);
     },
 
-    gradeID: function () {
-      this.getMyZoom(this.active)
+    gradeID: function() {
+      this.getMyZoom(this.active);
     }
   }
-}
+};
 </script>
 
 <style scoped>
