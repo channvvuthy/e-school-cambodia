@@ -282,8 +282,6 @@ import Quiz from "./components/Quiz.vue";
 import ModalPhoto from "./components/ModalPhoto.vue";
 import ForumComment from "./components/ForumComment.vue";
 import Forum from "./components/Forum.vue";
-import FavoriteIcon from "./../../components/FavoriteIcon.vue";
-import FavoriteFill from "./../../components/FavoriteFill.vue";
 import BorderBottom from "./../../components/BorderBottom.vue";
 import Eye from "./../../components/Eye.vue";
 import VideoPlaylist from "./ads/VideoPlaylist.vue";
@@ -325,10 +323,8 @@ export default {
   },
   components: {
     VideoPlaylist,
-    FavoriteIcon,
     Eye,
     Playlist,
-    FavoriteFill,
     Document,
     SinglePdf,
     EnlargeIcon,

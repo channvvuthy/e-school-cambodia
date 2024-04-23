@@ -310,6 +310,11 @@ const routes = [
         component: () => import('../views/Video/MyZoom'),
     },
     {
+        path: '/zoom-course-detail:course',
+        name: 'zoom-course-detail',
+        component: () => import('../views/Video/ZoomCourseDetail'),
+    },
+    {
         path: '/overview',
         name: 'overview',
         component: () => import('../views/Video/Overview'),

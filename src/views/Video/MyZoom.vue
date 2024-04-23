@@ -28,12 +28,12 @@
                 <span>✓</span>
               </div>
             </div>
-            <img :src="video.thumbnail" @click="gotToPlayList(video)" class="rounded-t-xl m-auto"
+            <img :src="video.thumbnail" @click="zoomCourseDetail(video)" class="rounded-t-xl m-auto"
                  onerror="this.onerror=null; this.src='/poster.png'"/>
             <div v-if="video.last_watch" class="h-1 absolute bg-red-600 -mt-1"
                  :style="{width:`${video.last_watch.percentage}%`}"></div>
             <div class="flex flex-col relative w-full justify-center items-center -top-10 px-5">
-              <div @click="gotToPlayList(video)" class="flex flex-col relative w-full justify-center items-center">
+              <div @click="zoomCourseDetail(video)" class="flex flex-col relative w-full justify-center items-center">
                 <div class="w-14 h-14 rounded-md bg-gray-300 bg-cover"
                      :style="{backgroundImage:`url(${video.teacher.photo})`}"></div>
                 <div class="text-sm font-semibold mt-4">
@@ -182,9 +182,9 @@ export default {
         return false
       }
     },
-    gotToPlayList(videoCourse) {
+    zoomCourseDetail(videoCourse) {
       videoCourse.is_buy = 1
-      this.$router.push({name: 'video-detail', params: {course: videoCourse}})
+      this.$router.push({name: 'zoom-course-detail', params: {course: videoCourse}})
     },
 
 

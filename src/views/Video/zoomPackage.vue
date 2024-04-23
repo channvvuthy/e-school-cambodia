@@ -200,7 +200,6 @@ export default {
       return helper.cutString(text, limit)
     },
     gotToPlayList(videoCourse) {
-
       videoCourse.package_id = this.packages.package._id
       if (localStorage.getItem('token') == null) {
         this.showMsg = true
