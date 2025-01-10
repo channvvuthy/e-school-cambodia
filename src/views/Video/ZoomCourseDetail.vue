@@ -100,7 +100,7 @@
                                     :style="{ transform: `rotate(${45 + (Math.round(report('percentage')) * 1.8)}deg)` }">
                                 </div>
                             </div>
-                            <div class="absolute w-full top-0 h-full flex flex-col justify-end items-center">
+                            <div class="w-full top-0 h-full flex flex-col justify-end items-center">
                                 <div class="text-xl">
                                     {{ $t('1117') }}
                                 </div>
